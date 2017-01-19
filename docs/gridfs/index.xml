@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gridfs on Monstache</title>
+    <link>https://rwynn.github.io/monstache-site/gridfs/index.xml</link>
+    <description>Recent content in Gridfs on Monstache</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <atom:link href="https://rwynn.github.io/monstache-site/gridfs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Indexing GridFS Files</title>
+      <link>https://rwynn.github.io/monstache-site/gridfs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/gridfs/</guid>
+      <description>&lt;p&gt;Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full
+text search.  This feature requires that you install an elasticsearch plugin which enables the field type &lt;code&gt;attachment&lt;/code&gt;.
+For versions of elasticsearch prior to version 5 you should install the
+&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html&#34;&gt;mapper-attachments&lt;/a&gt; plugin.
+For version 5 or later of elasticsearch you should instead install the
+&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html&#34;&gt;ingest-attachment&lt;/a&gt; plugin.&lt;/p&gt;
+
+&lt;p&gt;Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is
+as simple as configuring monstache.  You will want to enable the &lt;code&gt;index-files&lt;/code&gt; option and also tell monstache the
+namespace of all collections which will hold GridFS files. For example in your TOML config file,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;index-files = true
+
+file-namespaces = [&amp;quot;users.fs.files&amp;quot;, &amp;quot;posts.fs.files&amp;quot;]
+
+file-highlighting = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above configuration tells monstache that you wish to index the raw content of GridFS files in the &lt;code&gt;users&lt;/code&gt; and &lt;code&gt;posts&lt;/code&gt;
+mongodb databases. By default, mongodb uses a bucket named &lt;code&gt;fs&lt;/code&gt;, so if you just use the defaults your collection name will
+be &lt;code&gt;fs.files&lt;/code&gt;.  However, if you have customized the bucket name, then your file collection would be something like &lt;code&gt;mybucket.files&lt;/code&gt;
+and the entire namespace would be &lt;code&gt;users.mybucket.files&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When you configure monstache this way it will perform an additional operation at startup to ensure the destination indexes in
+elasticsearch have a field named &lt;code&gt;file&lt;/code&gt; with a type mapping of &lt;code&gt;attachment&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the example TOML configuration above, monstache would initialize 2 indices in preparation for indexing into
+elasticsearch by issuing the following REST commands:&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;POST /users.fs.files
+{
+  &amp;quot;mappings&amp;quot;: {
+    &amp;quot;fs.files&amp;quot;: {
+      &amp;quot;properties&amp;quot;: {
+    &amp;quot;file&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;attachment&amp;quot; }
+}}}}
+
+POST /posts.fs.files
+{
+  &amp;quot;mappings&amp;quot;: {
+    &amp;quot;fs.files&amp;quot;: {
+      &amp;quot;properties&amp;quot;: {
+    &amp;quot;file&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;attachment&amp;quot; }
+}}}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;PUT /_ingest/pipeline/attachment
+{
+  &amp;quot;description&amp;quot; : &amp;quot;Extract file information&amp;quot;,
+  &amp;quot;processors&amp;quot; : [
+    {
+      &amp;quot;attachment&amp;quot; : {
+    &amp;quot;field&amp;quot; : &amp;quot;file&amp;quot;
+      }
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When a file is inserted into mongodb via GridFS, monstache will detect the new file, use the mongodb api to retrieve the raw
+content, and index a document into elasticsearch with the raw content stored in a &lt;code&gt;file&lt;/code&gt; field as a base64
+encoded string. The elasticsearch plugin will then extract text content from the raw content using
+&lt;a href=&#34;https://tika.apache.org/&#34;&gt;Apache Tika&lt;/a&gt;, tokenize the text content, and allow you to query on the content of the file.&lt;/p&gt;
+
+&lt;p&gt;To test this feature of monstache you can simply use the &lt;a href=&#34;https://docs.mongodb.com/manual/reference/program/mongofiles/&#34;&gt;mongofiles&lt;/a&gt;
+command to quickly add a file to mongodb via GridFS.  Continuing the example above one could issue the following command to put a
+file named &lt;code&gt;resume.docx&lt;/code&gt; into GridFS and after a short time this file should be searchable in elasticsearch in the index &lt;code&gt;users.fs.files&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mongofiles -d users put resume.docx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After a short time you should be able to query the contents of resume.docx in the users index in elasticsearch&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -XGET &#39;http://localhost:9200/users.fs.files/_search?q=golang&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you would like to see the text extracted by Apache Tika you can project the appropriate sub-field&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;fields&amp;quot;: [ &amp;quot;file.content&amp;quot; ],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;_all&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;_source&amp;quot;: [ &amp;quot;attachment.content&amp;quot; ],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;_all&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When &lt;code&gt;file-highlighting&lt;/code&gt; is enabled you can add a highlight clause to your query&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;fields&amp;quot;: [&amp;quot;file.content&amp;quot;],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;file.content&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    },
+    &amp;quot;highlight&amp;quot;: {
+        &amp;quot;fields&amp;quot;: {
+            &amp;quot;file.content&amp;quot;: {
+            }
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;_source&amp;quot;: [&amp;quot;attachment.content&amp;quot;],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;attachment.content&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    },
+    &amp;quot;highlight&amp;quot;: {
+        &amp;quot;fields&amp;quot;: {
+            &amp;quot;attachment.content&amp;quot;: {
+            }
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The highlight response will contain emphasis on the matching terms&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;hits&amp;quot; : [ {
+    &amp;quot;highlight&amp;quot; : {
+        &amp;quot;file.content&amp;quot; : [ &amp;quot;I like to program in &amp;lt;em&amp;gt;golang&amp;lt;/em&amp;gt;.\n\n&amp;quot; ]
+    }
+} ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;hits&amp;quot; : [{
+    &amp;quot;highlight&amp;quot; : {
+        &amp;quot;attachment.content&amp;quot; : [ &amp;quot;I like to program in &amp;lt;em&amp;gt;golang&amp;lt;/em&amp;gt;.&amp;quot; ]
+    }
+}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

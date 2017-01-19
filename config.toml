@@ -1,0 +1,102 @@
+baseurl = "https://rwynn.github.io/monstache-site"
+publishDir = "docs"
+languageCode = "en-us"
+title = "Monstache"
+theme = "hugo-material-docs"
+metadataformat = "yaml"
+canonifyurls = true
+# Enable Google Analytics by entering your tracking id
+googleAnalytics = ""
+
+[params]
+	# General information
+	author = "Ryan Wynn"
+	description = "a go daemon which syncs mongodb to elasticsearch in neal realtime"
+	copyright = "Released under the MIT license"
+
+	# Repository
+	provider = "GitHub"
+	repo_url = "https://github.com/rwynn/monstache"
+
+	version = "2.9.1"
+	logo = "/images/monstache.png"
+	favicon = ""
+
+	permalink = "#"
+
+	# Custom assets
+	custom_css = []
+	custom_js  = []
+
+	# Syntax highlighting theme
+	highlight_css  = ""
+
+	[params.palette]
+    	primary = "indigo"
+    	accent  = "red"
+
+    [params.font]
+    	text = "Work Sans"
+    	code = "Space Mono"
+
+
+[social]
+	twitter = ""
+	github  = "rwynn"
+	email   = ""
+
+[[menu.main]]
+	name   = "Monstache"
+	url    = "/"
+	weight = 1
+
+[[menu.main]]
+	name   = "Getting started"
+	url    = "getting-started/"
+	weight = 10
+
+[[menu.main]]
+	name   = "Options"
+	url    = "options/"
+	weight = 20
+
+[[menu.main]]
+	name   = "Namespaces"
+	url    = "namespaces/"
+	weight = 21
+
+[[menu.main]]
+	name   = "Index Mapping"
+	url    = "index-mapping/"
+	weight = 30
+
+[[menu.main]]
+	name   = "Transform and Filter"
+	url    = "transform-filter/"
+	weight = 40
+
+[[menu.main]]
+	name   = "Indexing GridFS Files"
+	url    = "gridfs/"
+	weight = 50
+
+[[menu.main]]
+	name   = "Workers"
+	url    = "workers/"
+	weight = 60
+
+[[menu.main]]
+	name   = "High Availability"
+	url    = "high-availability/"
+	weight = 70
+
+[[menu.main]]
+	name   = "License"
+	url    = "license/"
+	weight = 80
+
+[blackfriday]
+	smartypants	= true
+	fractions = true
+	smartDashes = true
+	plainIDAnchors = true

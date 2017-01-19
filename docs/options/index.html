@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>Options - Monstache</title>
+    <meta name="generator" content="Hugo 0.19-DEV" />
+
+    
+    <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
+    
+    <link rel="canonical" href="https://rwynn.github.io/monstache-site/options/">
+    
+    <meta name="author" content="Ryan Wynn">
+    
+
+    <meta property="og:url" content="https://rwynn.github.io/monstache-site/options/">
+    <meta property="og:title" content="Monstache">
+    <meta property="og:image" content="https://rwynn.github.io/images/monstache.png">
+    <meta name="apple-mobile-web-app-title" content="Monstache">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://rwynn.github.io/monstache-site/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://rwynn.github.io/monstache-site/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('https://rwynn.github.io/monstache-site/fonts/icon.eot');
+        src: url('https://rwynn.github.io/monstache-site/fonts/icon.eot')
+               format('embedded-opentype'),
+             url('https://rwynn.github.io/monstache-site/fonts/icon.woff')
+               format('woff'),
+             url('https://rwynn.github.io/monstache-site/fonts/icon.ttf')
+               format('truetype'),
+             url('https://rwynn.github.io/monstache-site/fonts/icon.svg')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://rwynn.github.io/monstache-site/stylesheets/application.css">
+    <link rel="stylesheet" href="https://rwynn.github.io/monstache-site/stylesheets/temporary.css">
+    <link rel="stylesheet" href="https://rwynn.github.io/monstache-site/stylesheets/palettes.css">
+    <link rel="stylesheet" href="https://rwynn.github.io/monstache-site/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Work%20Sans:400,700|Space&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Work Sans', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Space Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <script src="https://rwynn.github.io/monstache-site/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-indigo palette-accent-red">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Options
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/rwynn" title="@rwynn on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/rwynn/monstache" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="https://rwynn.github.io/monstache-site/images/monstache.png">
+        </div>
+      
+      <div class="name">
+        <strong>Monstache <span class="version">2.9.1</span></strong>
+        
+          <br>
+          rwynn/monstache
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/rwynn/monstache/releases" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/rwynn/monstache/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+	<hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Monstache" href="https://rwynn.github.io/monstache-site/">
+	
+	Monstache
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Getting started" href="https://rwynn.github.io/monstache-site/getting-started/">
+	
+	Getting started
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Options" href="https://rwynn.github.io/monstache-site/options/">
+	
+	Options
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Namespaces" href="https://rwynn.github.io/monstache-site/namespaces/">
+	
+	Namespaces
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Index Mapping" href="https://rwynn.github.io/monstache-site/index-mapping/">
+	
+	Index Mapping
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Transform and Filter" href="https://rwynn.github.io/monstache-site/transform-filter/">
+	
+	Transform and Filter
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Indexing GridFS Files" href="https://rwynn.github.io/monstache-site/gridfs/">
+	
+	Indexing GridFS Files
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Workers" href="https://rwynn.github.io/monstache-site/workers/">
+	
+	Workers
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="High Availability" href="https://rwynn.github.io/monstache-site/high-availability/">
+	
+	High Availability
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="License" href="https://rwynn.github.io/monstache-site/license/">
+	
+	License
+</a>
+
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">Author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/rwynn" target="_blank" title="@rwynn on GitHub">
+              @rwynn on GitHub
+            </a>
+          </li>
+          
+
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Options </h1>
+
+			
+
+<p>Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
+Options specified as program arguments take precedance over the same option in the TOML config file.</p>
+
+<h2 id="gzip">gzip</h2>
+
+<h3 id="boolean-default-false">boolean (default false)</h3>
+
+<p>When <code>gzip</code> is true, monstache will compress requests to elasticsearch to increase performance.
+If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also
+need to update the elasticsearch config file to set http.compression: true. In elasticsearch
+version 5 and above http.compression is enabled by default. Enabling gzip is recommended
+especially if you enable the index-files setting.</p>
+
+<h2 id="resume">resume</h2>
+
+<h3 id="boolean-default-false-1">boolean (default false)</h3>
+
+<p>When <code>resume</code> is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
+to the collection <code>monstache.monstache</code>.  It also reads this value from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. monstache uses the value of <code>resume-name</code> as a key when
+storing and retrieving timestamps.  If <code>resume</code> is true but <code>resume-name</code> is not set the key defaults to <code>default</code>.
+In the case where <code>resume</code> is true and <code>worker</code> is set but <code>resume-name</code> is not set the key defaults to the name of the
+worker. Note when using multiple monstache processes it is always best to ensure that <code>resume-name</code> is set to a unique
+value for each process.  This ensures that each process will not overwrite the timestamp information of another.</p>
+
+<h2 id="resume-from-timestamp">resume-from-timestamp</h2>
+
+<h3 id="int64-default-0">int64 (default 0)</h3>
+
+<p>When <code>resume-from-timestamp</code> (a 64 bit timestamp where the first 32 bytes represent the time since epoch and the last 32 bits
+represent an offset) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have
+a specific timestamp from the oplog and would like to start syncing from after this event.</p>
+
+<h2 id="replay">replay</h2>
+
+<h3 id="boolean-default-false-2">boolean (default false)</h3>
+
+<p>When <code>replay</code> is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.</p>
+
+<p>When <code>resume</code> and <code>replay</code> are both true, monstache replays all events from the beginning of the mongodb oplog, syncs them
+to elasticsearch and also writes the timestamp of processed events to <code>monstache.monstache</code>.</p>
+
+<p>When neither <code>resume</code> nor <code>replay</code> are true, monstache reads the last timestamp in the oplog and starts listening for events
+occurring after this timestamp.  Timestamps are not written to <code>monstache.monstache</code>.  This is the default behavior.</p>
+
+<h2 id="resume-write-unsafe">resume-write-unsafe</h2>
+
+<h3 id="boolean-default-false-3">boolean (default false)</h3>
+
+<p>When <code>resume-write-unsafe</code> is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
+This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
+of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
+and do not stop execution it&rsquo;s not unreasonable to set this to true to get a speedup.</p>
+
+<h2 id="namespace-regex">namespace-regex</h2>
+
+<h3 id="regexp-default">regexp (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>namespace-regex</code> is given this regex is tested against the namespace, <code>database.collection</code>, of the event. If
+the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+processes events in all databases and all collections with the exception of the reserved database <code>monstache</code>, any
+collections suffixed with <code>.chunks</code>, and the system collections. For more information see the section <a href="https://rwynn.github.io/monstache-site/namespaces/">Namespaces</a>.</p>
+
+<h2 id="namespace-exclude-regex">namespace-exclude-regex</h2>
+
+<h3 id="regex-default">regex (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>namespace-exclude-regex</code> is given this regex is tested against the namespace, <code>database.collection</code>, of the event. If
+the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+processes events in all databases and all collections with the exception of the reserved database <code>monstache</code>, any
+collections suffixed with <code>.chunks</code>, and the system collections. For more information see the section <a href="https://rwynn.github.io/monstache-site/namespaces/">Namespaces</a>.</p>
+
+<h2 id="gtm-channel-size">gtm-channel-size</h2>
+
+<h3 id="int-default-100">int (default 100)</h3>
+
+<p>When <code>gtm-channel-size</code> is given it controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.</p>
+
+<h2 id="mongo-url">mongo-url</h2>
+
+<h3 id="string-default-localhost">string (default localhost)</h3>
+
+<p>The URL to connect to MongoDB which must follow the <a href="https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format">Standard Connection String Format</a></p>
+
+<h2 id="mongo-pem-file">mongo-pem-file</h2>
+
+<h3 id="string-default">string (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>mongo-pem-file</code> is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.</p>
+
+<h2 id="mongo-validate-pem">mongo-validate-pem</h2>
+
+<h3 id="boolean-default-true">boolean (default true)</h3>
+
+<p>When <code>mongo-validate-pem-file</code> is false TLS will be configured to skip verification</p>
+
+<h2 id="mongo-oplog-database-name">mongo-oplog-database-name</h2>
+
+<h3 id="string-default-local">string (default local)</h3>
+
+<p>When <code>mongo-oplog-database-name</code> is given monstache will look for the mongodb oplog in the supplied database</p>
+
+<h2 id="mongo-oplog-collection-name">mongo-oplog-collection-name</h2>
+
+<h3 id="string-default-oplog-main">string (default $oplog.main)</h3>
+
+<p>When <code>mongo-oplog-collection-name</code> is given monstache will look for the mongodb oplog in the supplied collection</p>
+
+<h2 id="mongo-cursor-timeout">mongo-cursor-timeout</h2>
+
+<h3 id="string-default-100s">string (default 100s)</h3>
+
+<p>When <code>mongo-cursor-timeout</code> is given monstache will time out and re-query the oplog after the supplied duration.
+Duration values are expected in the form <code>50s</code>.</p>
+
+<h2 id="index-files">index-files</h2>
+
+<h3 id="boolean-default-false-4">boolean (default false)</h3>
+
+<p>When <code>index-files</code> is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
+By default <code>index-files</code> is false meaning that monstache will only index metadata associated with files stored in GridFS.
+In order for <code>index-files</code> to index the raw content of files stored in GridFS you must install a plugin for elasticsearch.
+For versions of elasticsearch prior to version 5, you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html">mapper-attachments</a> plugin.  In version 5 or greater
+of elasticsearch the mapper-attachment plugin is deprecated and you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin instead.
+For further information on how to configure monstache to index content from GridFS, see the section <a href="https://rwynn.github.io/monstache-site/gridfs/">Indexing Gridfs Files</a>.</p>
+
+<h2 id="max-file-size">max-file-size</h2>
+
+<h3 id="int-default-0">int (default 0)</h3>
+
+<p>When <code>max-file-size</code> is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.</p>
+
+<h2 id="file-namespaces">file-namespaces</h2>
+
+<h3 id="string-default-nil">[]string (default nil)</h3>
+
+<p>The <code>file-namespaces</code> config must be set when <code>index-files</code> is enabled.  <code>file-namespaces</code> must be set to an array of mongodb
+namespace strings.  Files uploaded through gridfs to any of the namespaces in <code>file-namespaces</code> will be retrieved and their
+raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin.</p>
+
+<h2 id="file-highlighting">file-highlighting</h2>
+
+<h3 id="boolean-default-false-5">boolean (default false)</h3>
+
+<p>When <code>file-highlighting</code> is true monstache will enable the ability to return highlighted keywords in the extracted text of files
+for queries on files which were indexed in elasticsearch from gridfs.</p>
+
+<h2 id="verbose">verbose</h2>
+
+<h3 id="boolean-default-false-6">boolean (default false)</h3>
+
+<p>When <code>verbose</code> is true monstache with enable debug logging including a trace of requests to elasticsearch</p>
+
+<h2 id="elasticsearch-url">elasticsearch-url</h2>
+
+<h3 id="string-default-http-localhost-9200">string (default <a href="http://localhost:9200">http://localhost:9200</a>)</h3>
+
+<p>The URL of the ElasticSearch REST Interface</p>
+
+<h2 id="elasticsearch-retry-seconds">elasticsearch-retry-seconds</h2>
+
+<h3 id="int-default-0-1">int (default 0)</h3>
+
+<p>When <code>elasticseach-retry-seconds</code> is greater than 0 a failed request to elasticsearch with retry the request after the given number of seconds</p>
+
+<h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
+
+<h3 id="int-default-0-2">int (default 0)</h3>
+
+<p>When <code>elasticsearch-max-docs</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
+
+<h2 id="elasticsearch-max-bytes">elasticsearch-max-bytes</h2>
+
+<h3 id="int-default-0-3">int (default 0)</h3>
+
+<p>When <code>elasticsearch-max-bytes</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes</p>
+
+<h2 id="elasticsearch-max-seconds">elasticsearch-max-seconds</h2>
+
+<h3 id="int-default-0-4">int (default 0)</h3>
+
+<p>When <code>elasticsearch-max-seconds</code> is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds</p>
+
+<h2 id="elasticsearch-pem-file">elasticsearch-pem-file</h2>
+
+<h3 id="string-default-1">string (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>elasticsearch-pem-file</code> is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.</p>
+
+<h2 id="elasticsearch-validate-pem">elasticsearch-validate-pem</h2>
+
+<h3 id="boolean-default-true-1">boolean (default true)</h3>
+
+<p>When <code>elasticsearch-validate-pem-file</code> is false TLS will be configured to skip verification</p>
+
+<h2 id="elasticsearch-hosts">elasticsearch-hosts</h2>
+
+<h3 id="string-default-nil-1">[]string (default nil)</h3>
+
+<p>When <code>elasticsearch-hosts</code> is given monstache will set the hosts array on the <code>elastigo</code> client connection. You must duplicate and include in this array value
+the host that you already configured in the <code>elasticsearch-url</code> option along with any other hosts. Use this option if you have a cluster with multiple nodes
+and would like index requests to be intelligently distributed between the cluster nodes.  Note that index requests will go to only one of the configured hosts
+within a cluster.  If you have multiple elasticsearch clusters you should use one dedicated monstache process per cluster.  This configures the hosts within
+a single cluster and not across clusters.</p>
+
+<h2 id="dropped-databases">dropped-databases</h2>
+
+<h3 id="boolean-default-true-2">boolean (default true)</h3>
+
+<p>When <code>dropped-databases</code> is false monstache will not delete the mapped indexes in elasticsearch if a mongodb database is dropped</p>
+
+<h2 id="dropped-collections">dropped-collections</h2>
+
+<h3 id="boolean-default-true-3">boolean (default true)</h3>
+
+<p>When <code>dropped-collections</code> is false monstache will not delete the mapped index in elasticsearch if a mongodb collection is dropped</p>
+
+<h2 id="worker">worker</h2>
+
+<h3 id="string-default-2">string (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>worker</code> is given monstache will enter multi-worker mode and will require you to also provide the config option <code>workers</code>.  Use this mode to run
+multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
+same worker and none of the other workers. See the section <a href="https://rwynn.github.io/monstache-site/workers/">workers</a> for more information.</p>
+
+<h2 id="workers">workers</h2>
+
+<h3 id="string-default-nil-2">[]string (default nil)</h3>
+
+<p>An array of worker names to be used in conjunction with the <code>worker</code> option.</p>
+
+<h2 id="cluster-name">cluster-name</h2>
+
+<h3 id="string-default-3">string (default &ldquo;&rdquo;)</h3>
+
+<p>When <code>cluster-name</code> is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
+processes in a cluster will be sync changes.  The other process will be in a paused state.  If the process which is syncing changes goes down for some reason
+one of the processes in paused state will take control and start syncing.  See the section <a href="https://rwynn.github.io/monstache-site/high-availability/">high availability</a> for more information.</p>
+
+<h2 id="script">script</h2>
+
+<h3 id="object-default-nil">[]object (default nil)</h3>
+
+<p>When <code>script</code> is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section <a href="https://rwynn.github.io/monstache-site/transform-filter/">Transform and Filter</a>
+for more information.</p>
+
+<hr />
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2017 Released under the MIT license &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="https://rwynn.github.io/monstache-site/getting-started/" title="Getting started">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Getting started
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+  
+      <a href="https://rwynn.github.io/monstache-site/namespaces/" title="Namespaces">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Namespaces
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'https:\/\/rwynn.github.io\/monstache-site';
+      var repo_id  = 'rwynn\/monstache';
+    
+    </script>
+
+    <script src="https://rwynn.github.io/monstache-site/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

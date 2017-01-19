@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Monstache</title>
+    <link>https://rwynn.github.io/monstache-site/index.xml</link>
+    <description>Recent content on Monstache</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <atom:link href="https://rwynn.github.io/monstache-site/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Monstache</title>
+      <link>https://rwynn.github.io/monstache-site/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/</guid>
+      <description>
+
+&lt;h2 id=&#34;sync-mongodb-to-elasticsearch-in-near-realtime&#34;&gt;Sync MongoDB to ElasticSearch in near realtime&lt;/h2&gt;
+
+&lt;p&gt;Monstache is a sync daemon written in Go that keeps your MongoDB collections synchronized with your
+ElasticSearch indices.&lt;/p&gt;
+
+&lt;h2 id=&#34;quick-start&#34;&gt;Quick start&lt;/h2&gt;
+
+&lt;p&gt;Install with go get:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;go get -v github.com/rwynn/monstache
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Select only the collections you want to sync&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Transform and filter documents before indexing using JavaScript&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Index the content of GridFS files&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Support for database and collection drops&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Stateful resume feature&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Worker and Clustering modes for High Availability&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Single binary with a light footprint&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;See the &lt;a href=&#34;https://rwynn.github.io/monstache-site/getting-started/&#34;&gt;Getting started guide&lt;/a&gt; for instructions how to get
+it up and running.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting started</title>
+      <link>https://rwynn.github.io/monstache-site/getting-started/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
+      <description>
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the &lt;a href=&#34;https://github.com/rwynn/monstache/releases&#34;&gt;latest version&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
+# 2.7.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
+
+&lt;p&gt;Monstache uses the MongoDB &lt;a href=&#34;https://docs.mongodb.com/manual/core/replica-set-oplog/&#34;&gt;oplog&lt;/a&gt; as an event source. You will need to make sure that MongoDB is configured to
+produce an oplog.  The oplog can be enabled by&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Setting up &lt;a href=&#34;http://docs.mongodb.org/manual/tutorial/deploy-replica-set/&#34;&gt;replica sets&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Passing &amp;ndash;master to the mongod process&lt;/li&gt;
+&lt;li&gt;Setting the following in /etc/mongod.conf&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;master = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
+and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.&lt;/p&gt;
+
+&lt;p&gt;Monstache uses the &lt;a href=&#34;https://github.com/toml-lang/toml&#34;&gt;TOML&lt;/a&gt; format for its configuration.  You can run
+monstache with an explicit configuration by passing the -f flag.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -f /path/to/config.toml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A sample configuration looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;gzip = true
+mongo-url = &amp;quot;mongodb://someuser:password@localhost:40001&amp;quot;
+mongo-pem-file = &amp;quot;/path/to/mongoCert.pem&amp;quot;
+mongo-validate-pem-file = false
+elasticsearch-url = &amp;quot;http://someuser:password@localhost:9200&amp;quot;
+elasticsearch-max-conns = 10
+elasticsearch-pem-file = &amp;quot;/path/to/elasticCert.pem&amp;quot;
+elastic-validate-pem-file = true
+elasticsearch-hosts = [&amp;quot;localhost&amp;quot;, &amp;quot;example.com&amp;quot;]
+dropped-collections = true
+dropped-databases = true
+replay = false
+resume = true
+resume-write-unsafe = false
+resume-name = &amp;quot;default&amp;quot;
+namespace-regex = &amp;quot;^mydb\.(mycollection|\$cmd)$&amp;quot;
+namespace-exclude-regex = &amp;quot;^mydb\.(ignorecollection|\$cmd)$&amp;quot;
+gtm-channel-size = 200
+index-files = true
+file-highlighting = true
+file-namespaces = [&amp;quot;users.fs.files&amp;quot;]
+verbose = true
+cluster-name = &#39;apollo&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;See the &lt;a href=&#34;https://rwynn.github.io/monstache-site/options/&#34;&gt;Options guide&lt;/a&gt; for details about each configuration
+option.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Options</title>
+      <link>https://rwynn.github.io/monstache-site/options/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/options/</guid>
+      <description>
+
+&lt;p&gt;Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
+Options specified as program arguments take precedance over the same option in the TOML config file.&lt;/p&gt;
+
+&lt;h2 id=&#34;gzip&#34;&gt;gzip&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;gzip&lt;/code&gt; is true, monstache will compress requests to elasticsearch to increase performance.
+If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also
+need to update the elasticsearch config file to set http.compression: true. In elasticsearch
+version 5 and above http.compression is enabled by default. Enabling gzip is recommended
+especially if you enable the index-files setting.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume&#34;&gt;resume&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-1&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume&lt;/code&gt; is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
+to the collection &lt;code&gt;monstache.monstache&lt;/code&gt;.  It also reads this value from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. monstache uses the value of &lt;code&gt;resume-name&lt;/code&gt; as a key when
+storing and retrieving timestamps.  If &lt;code&gt;resume&lt;/code&gt; is true but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to &lt;code&gt;default&lt;/code&gt;.
+In the case where &lt;code&gt;resume&lt;/code&gt; is true and &lt;code&gt;worker&lt;/code&gt; is set but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to the name of the
+worker. Note when using multiple monstache processes it is always best to ensure that &lt;code&gt;resume-name&lt;/code&gt; is set to a unique
+value for each process.  This ensures that each process will not overwrite the timestamp information of another.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume-from-timestamp&#34;&gt;resume-from-timestamp&lt;/h2&gt;
+
+&lt;h3 id=&#34;int64-default-0&#34;&gt;int64 (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume-from-timestamp&lt;/code&gt; (a 64 bit timestamp where the first 32 bytes represent the time since epoch and the last 32 bits
+represent an offset) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have
+a specific timestamp from the oplog and would like to start syncing from after this event.&lt;/p&gt;
+
+&lt;h2 id=&#34;replay&#34;&gt;replay&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-2&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;replay&lt;/code&gt; is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.&lt;/p&gt;
+
+&lt;p&gt;When &lt;code&gt;resume&lt;/code&gt; and &lt;code&gt;replay&lt;/code&gt; are both true, monstache replays all events from the beginning of the mongodb oplog, syncs them
+to elasticsearch and also writes the timestamp of processed events to &lt;code&gt;monstache.monstache&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When neither &lt;code&gt;resume&lt;/code&gt; nor &lt;code&gt;replay&lt;/code&gt; are true, monstache reads the last timestamp in the oplog and starts listening for events
+occurring after this timestamp.  Timestamps are not written to &lt;code&gt;monstache.monstache&lt;/code&gt;.  This is the default behavior.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume-write-unsafe&#34;&gt;resume-write-unsafe&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-3&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume-write-unsafe&lt;/code&gt; is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
+This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
+of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
+and do not stop execution it&amp;rsquo;s not unreasonable to set this to true to get a speedup.&lt;/p&gt;
+
+&lt;h2 id=&#34;namespace-regex&#34;&gt;namespace-regex&lt;/h2&gt;
+
+&lt;h3 id=&#34;regexp-default&#34;&gt;regexp (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;namespace-regex&lt;/code&gt; is given this regex is tested against the namespace, &lt;code&gt;database.collection&lt;/code&gt;, of the event. If
+the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+processes events in all databases and all collections with the exception of the reserved database &lt;code&gt;monstache&lt;/code&gt;, any
+collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system collections. For more information see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/namespaces/&#34;&gt;Namespaces&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;namespace-exclude-regex&#34;&gt;namespace-exclude-regex&lt;/h2&gt;
+
+&lt;h3 id=&#34;regex-default&#34;&gt;regex (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;namespace-exclude-regex&lt;/code&gt; is given this regex is tested against the namespace, &lt;code&gt;database.collection&lt;/code&gt;, of the event. If
+the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+processes events in all databases and all collections with the exception of the reserved database &lt;code&gt;monstache&lt;/code&gt;, any
+collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system collections. For more information see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/namespaces/&#34;&gt;Namespaces&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;gtm-channel-size&#34;&gt;gtm-channel-size&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;gtm-channel-size&lt;/code&gt; is given it controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-url&#34;&gt;mongo-url&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-localhost&#34;&gt;string (default localhost)&lt;/h3&gt;
+
+&lt;p&gt;The URL to connect to MongoDB which must follow the &lt;a href=&#34;https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format&#34;&gt;Standard Connection String Format&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-pem-file&#34;&gt;mongo-pem-file&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-pem-file&lt;/code&gt; is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-validate-pem&#34;&gt;mongo-validate-pem&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-validate-pem-file&lt;/code&gt; is false TLS will be configured to skip verification&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-oplog-database-name&#34;&gt;mongo-oplog-database-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-local&#34;&gt;string (default local)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-oplog-database-name&lt;/code&gt; is given monstache will look for the mongodb oplog in the supplied database&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-oplog-collection-name&#34;&gt;mongo-oplog-collection-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-oplog-main&#34;&gt;string (default $oplog.main)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-oplog-collection-name&lt;/code&gt; is given monstache will look for the mongodb oplog in the supplied collection&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-cursor-timeout&#34;&gt;mongo-cursor-timeout&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-100s&#34;&gt;string (default 100s)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-cursor-timeout&lt;/code&gt; is given monstache will time out and re-query the oplog after the supplied duration.
+Duration values are expected in the form &lt;code&gt;50s&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;index-files&#34;&gt;index-files&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-4&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;index-files&lt;/code&gt; is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
+By default &lt;code&gt;index-files&lt;/code&gt; is false meaning that monstache will only index metadata associated with files stored in GridFS.
+In order for &lt;code&gt;index-files&lt;/code&gt; to index the raw content of files stored in GridFS you must install a plugin for elasticsearch.
+For versions of elasticsearch prior to version 5, you should install the &lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html&#34;&gt;mapper-attachments&lt;/a&gt; plugin.  In version 5 or greater
+of elasticsearch the mapper-attachment plugin is deprecated and you should install the &lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html&#34;&gt;ingest-attachment&lt;/a&gt; plugin instead.
+For further information on how to configure monstache to index content from GridFS, see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/gridfs/&#34;&gt;Indexing Gridfs Files&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;max-file-size&#34;&gt;max-file-size&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;max-file-size&lt;/code&gt; is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-namespaces&#34;&gt;file-namespaces&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;file-namespaces&lt;/code&gt; config must be set when &lt;code&gt;index-files&lt;/code&gt; is enabled.  &lt;code&gt;file-namespaces&lt;/code&gt; must be set to an array of mongodb
+namespace strings.  Files uploaded through gridfs to any of the namespaces in &lt;code&gt;file-namespaces&lt;/code&gt; will be retrieved and their
+raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-highlighting&#34;&gt;file-highlighting&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-5&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;file-highlighting&lt;/code&gt; is true monstache will enable the ability to return highlighted keywords in the extracted text of files
+for queries on files which were indexed in elasticsearch from gridfs.&lt;/p&gt;
+
+&lt;h2 id=&#34;verbose&#34;&gt;verbose&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-6&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;verbose&lt;/code&gt; is true monstache with enable debug logging including a trace of requests to elasticsearch&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-url&#34;&gt;elasticsearch-url&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-http-localhost-9200&#34;&gt;string (default &lt;a href=&#34;http://localhost:9200&#34;&gt;http://localhost:9200&lt;/a&gt;)&lt;/h3&gt;
+
+&lt;p&gt;The URL of the ElasticSearch REST Interface&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-retry-seconds&#34;&gt;elasticsearch-retry-seconds&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-1&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticseach-retry-seconds&lt;/code&gt; is greater than 0 a failed request to elasticsearch with retry the request after the given number of seconds&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-docs&#34;&gt;elasticsearch-max-docs&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-2&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-docs&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-bytes&#34;&gt;elasticsearch-max-bytes&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-3&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-bytes&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-seconds&#34;&gt;elasticsearch-max-seconds&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-4&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-seconds&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-pem-file&#34;&gt;elasticsearch-pem-file&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-1&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-pem-file&lt;/code&gt; is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-validate-pem&#34;&gt;elasticsearch-validate-pem&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-1&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-validate-pem-file&lt;/code&gt; is false TLS will be configured to skip verification&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-hosts&#34;&gt;elasticsearch-hosts&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil-1&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-hosts&lt;/code&gt; is given monstache will set the hosts array on the &lt;code&gt;elastigo&lt;/code&gt; client connection. You must duplicate and include in this array value
+the host that you already configured in the &lt;code&gt;elasticsearch-url&lt;/code&gt; option along with any other hosts. Use this option if you have a cluster with multiple nodes
+and would like index requests to be intelligently distributed between the cluster nodes.  Note that index requests will go to only one of the configured hosts
+within a cluster.  If you have multiple elasticsearch clusters you should use one dedicated monstache process per cluster.  This configures the hosts within
+a single cluster and not across clusters.&lt;/p&gt;
+
+&lt;h2 id=&#34;dropped-databases&#34;&gt;dropped-databases&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-2&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;dropped-databases&lt;/code&gt; is false monstache will not delete the mapped indexes in elasticsearch if a mongodb database is dropped&lt;/p&gt;
+
+&lt;h2 id=&#34;dropped-collections&#34;&gt;dropped-collections&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-3&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;dropped-collections&lt;/code&gt; is false monstache will not delete the mapped index in elasticsearch if a mongodb collection is dropped&lt;/p&gt;
+
+&lt;h2 id=&#34;worker&#34;&gt;worker&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-2&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;worker&lt;/code&gt; is given monstache will enter multi-worker mode and will require you to also provide the config option &lt;code&gt;workers&lt;/code&gt;.  Use this mode to run
+multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
+same worker and none of the other workers. See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/workers/&#34;&gt;workers&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h2 id=&#34;workers&#34;&gt;workers&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil-2&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;An array of worker names to be used in conjunction with the &lt;code&gt;worker&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;h2 id=&#34;cluster-name&#34;&gt;cluster-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-3&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;cluster-name&lt;/code&gt; is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
+processes in a cluster will be sync changes.  The other process will be in a paused state.  If the process which is syncing changes goes down for some reason
+one of the processes in paused state will take control and start syncing.  See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/high-availability/&#34;&gt;high availability&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h2 id=&#34;script&#34;&gt;script&lt;/h2&gt;
+
+&lt;h3 id=&#34;object-default-nil&#34;&gt;[]object (default nil)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;script&lt;/code&gt; is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/transform-filter/&#34;&gt;Transform and Filter&lt;/a&gt;
+for more information.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Namespaces</title>
+      <link>https://rwynn.github.io/monstache-site/namespaces/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/namespaces/</guid>
+      <description>&lt;p&gt;When a document is inserted, updated, or deleted in mongodb a document is appended to the oplog representing the event.  This document has a field &lt;code&gt;ns&lt;/code&gt; which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for &lt;code&gt;use test; db.foo.insert({hello: &amp;quot;world&amp;quot;});&lt;/code&gt; the namespace for the event in the oplog would be &lt;code&gt;test.foo&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in mongodb an event is appended to the oplog.  Like the other types of changes this event has a field &lt;code&gt;ns&lt;/code&gt; representing the namespace.  However, for drops the namespace is the database name and the string &lt;code&gt;$cmd&lt;/code&gt; joined by a dot.  E.g. for &lt;code&gt;use test; db.foo.drop()&lt;/code&gt; the namespace for the event in the oplog would be &lt;code&gt;test.$cmd&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When configuring namespaces in monstache you will need to account for both cases.  Specifically, be careful if you have configured &lt;code&gt;dropped-databases|dropped-collections=true&lt;/code&gt; AND you also have a &lt;code&gt;namespace-regex&lt;/code&gt; set.  If your namespace regex does not take into account the &lt;code&gt;db.$cmd&lt;/code&gt; namespace the event may be filtered and the elasticsearch index not deleted on a drop.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Index Mapping</title>
+      <link>https://rwynn.github.io/monstache-site/index-mapping/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/index-mapping/</guid>
+      <description>&lt;p&gt;When indexing documents from mongodb into elasticsearch the mapping is as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-txt&#34;&gt;mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name
+mongodb collection name -&amp;gt; elasticsearch type
+mongodb document _id -&amp;gt; elasticsearch document _id
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If these default won&amp;rsquo;t work for some reason you can override the index and collection mapping on a per collection basis by adding
+the following to your TOML config file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[mapping]]
+namespace = &amp;quot;test.test&amp;quot;
+index = &amp;quot;index1&amp;quot;
+type = &amp;quot;type1&amp;quot;
+
+[[mapping]]
+namespace = &amp;quot;test.test2&amp;quot;
+index = &amp;quot;index2&amp;quot;
+type = &amp;quot;type2&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With the configuration above documents in the &lt;code&gt;test.test&lt;/code&gt; namespace in mongodb are indexed into the &lt;code&gt;index1&lt;/code&gt;
+index in elasticsearch with the &lt;code&gt;type1&lt;/code&gt; type.&lt;/p&gt;
+
+&lt;p&gt;Make sure that automatic index creation is not disabled in elasticsearch.yml.&lt;/p&gt;
+
+&lt;p&gt;If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.&lt;/p&gt;
+
+&lt;p&gt;Note that when monstache maps index and type names for ElasticSearch it does normalization based on the
+&lt;a href=&#34;https://github.com/elastic/elasticsearch/issues/6736&#34;&gt;Validity Rules&lt;/a&gt;.  This includes making sure index names are
+all lowercase and that index, types, and ids do not being with an underscore.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Transform and Filter</title>
+      <link>https://rwynn.github.io/monstache-site/transform-filter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
+      <description>
+
+&lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
+
+&lt;p&gt;monstache uses the amazing &lt;a href=&#34;https://github.com/robertkrimen/otto&#34;&gt;otto&lt;/a&gt; library to provide transformation at the document field
+level in javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+added to your TOML config file, for example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
+namespace = &amp;quot;mydb.mycollection&amp;quot;
+script = &amp;quot;&amp;quot;&amp;quot;
+var counter = 1;
+module.exports = function(doc) {
+	doc.foo += &amp;quot;test&amp;quot; + counter;
+	counter++;
+	return _.omit(doc, &amp;quot;password&amp;quot;, &amp;quot;secret&amp;quot;);
+}
+&amp;quot;&amp;quot;&amp;quot;
+
+[[script]]
+namespace = &amp;quot;anotherdb.anothercollection&amp;quot;
+script = &amp;quot;&amp;quot;&amp;quot;
+var counter = 1;
+module.exports = function(doc) {
+	doc.foo += &amp;quot;test2&amp;quot; + counter;
+	counter++;
+	return doc;
+}
+&amp;quot;&amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The example TOML above configures 2 scripts. The first is applied to &lt;code&gt;mycollection&lt;/code&gt; in &lt;code&gt;mydb&lt;/code&gt; while the second is applied
+to &lt;code&gt;anothercollection&lt;/code&gt; in &lt;code&gt;anotherdb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
+&lt;code&gt;script&lt;/code&gt;.  The javascript assigned to script must assign a function to the exports property of the &lt;code&gt;module&lt;/code&gt; object.  This
+function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can
+manipulate the document to drop fields, add fields, or augment the existing fields.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;this&lt;/code&gt; reference in the mapping function is assigned to the document from mongodb.&lt;/p&gt;
+
+&lt;p&gt;When the return value from the mapping function is an &lt;code&gt;object&lt;/code&gt; then that mapped object is what actually gets indexed in elasticsearch.
+For these purposes an object is a javascript non-primitive, excluding &lt;code&gt;Function&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Number&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Date&lt;/code&gt;, &lt;code&gt;Error&lt;/code&gt; and &lt;code&gt;RegExp&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;filtering&#34;&gt;Filtering&lt;/h3&gt;
+
+&lt;p&gt;If the return value from the mapping function is not an &lt;code&gt;object&lt;/code&gt; per the definition above then the result is converted into a &lt;code&gt;boolean&lt;/code&gt;
+and if the boolean value is &lt;code&gt;false&lt;/code&gt; then that indicates to monstache that you would not like to index the document. If the boolean value is &lt;code&gt;true&lt;/code&gt; then
+the original document from mongodb gets indexed in elasticsearch.&lt;/p&gt;
+
+&lt;p&gt;This allows you to return false or null if you have implemented soft deletes in mongodb.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
+namespace = &amp;quot;db.collection&amp;quot;
+script = &amp;quot;&amp;quot;&amp;quot;
+module.exports = function(doc) {
+	if (!!doc.deletedAt) {
+		return false;
+	}
+	return true;
+}
+&amp;quot;&amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the above example monstache will index any document except the ones with a &lt;code&gt;deletedAt&lt;/code&gt; property.  If the document is first
+inserted without a &lt;code&gt;deletedAt&lt;/code&gt; property, but later updated to include the &lt;code&gt;deletedAt&lt;/code&gt; property then monstache will remove the
+previously indexed document from the elasticsearch index.&lt;/p&gt;
+
+&lt;p&gt;Note you could also return &lt;code&gt;doc&lt;/code&gt; above instead of returning &lt;code&gt;true&lt;/code&gt; and get the same result, however, it&amp;rsquo;s a slight performance gain
+to simply return &lt;code&gt;true&lt;/code&gt; when not changing the document because you are not copying data in that case.&lt;/p&gt;
+
+&lt;p&gt;You may have noticed that in the first example above the exported mapping function closes over a var named &lt;code&gt;counter&lt;/code&gt;.  You can
+use closures to maintain state between invocations of your mapping function.&lt;/p&gt;
+
+&lt;p&gt;Finally, since Otto makes it so easy, the venerable &lt;a href=&#34;http://underscorejs.org/&#34;&gt;Underscore&lt;/a&gt; library is included for you at
+no extra charge.  Feel free to abuse the power of the &lt;code&gt;_&lt;/code&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Indexing GridFS Files</title>
+      <link>https://rwynn.github.io/monstache-site/gridfs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/gridfs/</guid>
+      <description>&lt;p&gt;Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full
+text search.  This feature requires that you install an elasticsearch plugin which enables the field type &lt;code&gt;attachment&lt;/code&gt;.
+For versions of elasticsearch prior to version 5 you should install the
+&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html&#34;&gt;mapper-attachments&lt;/a&gt; plugin.
+For version 5 or later of elasticsearch you should instead install the
+&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html&#34;&gt;ingest-attachment&lt;/a&gt; plugin.&lt;/p&gt;
+
+&lt;p&gt;Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is
+as simple as configuring monstache.  You will want to enable the &lt;code&gt;index-files&lt;/code&gt; option and also tell monstache the
+namespace of all collections which will hold GridFS files. For example in your TOML config file,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;index-files = true
+
+file-namespaces = [&amp;quot;users.fs.files&amp;quot;, &amp;quot;posts.fs.files&amp;quot;]
+
+file-highlighting = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above configuration tells monstache that you wish to index the raw content of GridFS files in the &lt;code&gt;users&lt;/code&gt; and &lt;code&gt;posts&lt;/code&gt;
+mongodb databases. By default, mongodb uses a bucket named &lt;code&gt;fs&lt;/code&gt;, so if you just use the defaults your collection name will
+be &lt;code&gt;fs.files&lt;/code&gt;.  However, if you have customized the bucket name, then your file collection would be something like &lt;code&gt;mybucket.files&lt;/code&gt;
+and the entire namespace would be &lt;code&gt;users.mybucket.files&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When you configure monstache this way it will perform an additional operation at startup to ensure the destination indexes in
+elasticsearch have a field named &lt;code&gt;file&lt;/code&gt; with a type mapping of &lt;code&gt;attachment&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the example TOML configuration above, monstache would initialize 2 indices in preparation for indexing into
+elasticsearch by issuing the following REST commands:&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;POST /users.fs.files
+{
+  &amp;quot;mappings&amp;quot;: {
+    &amp;quot;fs.files&amp;quot;: {
+      &amp;quot;properties&amp;quot;: {
+    &amp;quot;file&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;attachment&amp;quot; }
+}}}}
+
+POST /posts.fs.files
+{
+  &amp;quot;mappings&amp;quot;: {
+    &amp;quot;fs.files&amp;quot;: {
+      &amp;quot;properties&amp;quot;: {
+    &amp;quot;file&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;attachment&amp;quot; }
+}}}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;PUT /_ingest/pipeline/attachment
+{
+  &amp;quot;description&amp;quot; : &amp;quot;Extract file information&amp;quot;,
+  &amp;quot;processors&amp;quot; : [
+    {
+      &amp;quot;attachment&amp;quot; : {
+    &amp;quot;field&amp;quot; : &amp;quot;file&amp;quot;
+      }
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When a file is inserted into mongodb via GridFS, monstache will detect the new file, use the mongodb api to retrieve the raw
+content, and index a document into elasticsearch with the raw content stored in a &lt;code&gt;file&lt;/code&gt; field as a base64
+encoded string. The elasticsearch plugin will then extract text content from the raw content using
+&lt;a href=&#34;https://tika.apache.org/&#34;&gt;Apache Tika&lt;/a&gt;, tokenize the text content, and allow you to query on the content of the file.&lt;/p&gt;
+
+&lt;p&gt;To test this feature of monstache you can simply use the &lt;a href=&#34;https://docs.mongodb.com/manual/reference/program/mongofiles/&#34;&gt;mongofiles&lt;/a&gt;
+command to quickly add a file to mongodb via GridFS.  Continuing the example above one could issue the following command to put a
+file named &lt;code&gt;resume.docx&lt;/code&gt; into GridFS and after a short time this file should be searchable in elasticsearch in the index &lt;code&gt;users.fs.files&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mongofiles -d users put resume.docx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After a short time you should be able to query the contents of resume.docx in the users index in elasticsearch&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -XGET &#39;http://localhost:9200/users.fs.files/_search?q=golang&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you would like to see the text extracted by Apache Tika you can project the appropriate sub-field&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;fields&amp;quot;: [ &amp;quot;file.content&amp;quot; ],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;_all&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;_source&amp;quot;: [ &amp;quot;attachment.content&amp;quot; ],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;_all&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When &lt;code&gt;file-highlighting&lt;/code&gt; is enabled you can add a highlight clause to your query&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;fields&amp;quot;: [&amp;quot;file.content&amp;quot;],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;file.content&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    },
+    &amp;quot;highlight&amp;quot;: {
+        &amp;quot;fields&amp;quot;: {
+            &amp;quot;file.content&amp;quot;: {
+            }
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl localhost:9200/users.fs.files/_search?pretty -d &#39;{
+    &amp;quot;_source&amp;quot;: [&amp;quot;attachment.content&amp;quot;],
+    &amp;quot;query&amp;quot;: {
+        &amp;quot;match&amp;quot;: {
+            &amp;quot;attachment.content&amp;quot;: &amp;quot;golang&amp;quot;
+        }
+    },
+    &amp;quot;highlight&amp;quot;: {
+        &amp;quot;fields&amp;quot;: {
+            &amp;quot;attachment.content&amp;quot;: {
+            }
+        }
+    }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The highlight response will contain emphasis on the matching terms&lt;/p&gt;
+
+&lt;p&gt;For elasticsearch versions prior to version 5&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;hits&amp;quot; : [ {
+    &amp;quot;highlight&amp;quot; : {
+        &amp;quot;file.content&amp;quot; : [ &amp;quot;I like to program in &amp;lt;em&amp;gt;golang&amp;lt;/em&amp;gt;.\n\n&amp;quot; ]
+    }
+} ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For elasticsearch version 5 and above&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;quot;hits&amp;quot; : [{
+    &amp;quot;highlight&amp;quot; : {
+        &amp;quot;attachment.content&amp;quot; : [ &amp;quot;I like to program in &amp;lt;em&amp;gt;golang&amp;lt;/em&amp;gt;.&amp;quot; ]
+    }
+}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Workers</title>
+      <link>https://rwynn.github.io/monstache-site/workers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/workers/</guid>
+      <description>&lt;p&gt;You can run multiple monstache processes and distribute the work between them.  First configure
+the names of all the workers in a shared config.toml file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this case we have 3 workers.  Now we can start 3 monstache processes and give each one of the worker
+names.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;monstache -f config.toml -worker Tom
+monstache -f config.toml -worker Dick
+monstache -f config.toml -worker Harry
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;monstache will hash the id of each document using consistent hashing so that each id is handled by only
+one of the available workers.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>High Availability</title>
+      <link>https://rwynn.github.io/monstache-site/high-availability/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/high-availability/</guid>
+      <description>&lt;p&gt;You can run monstache in high availability mode by starting multiple processes with the same value for &lt;code&gt;cluster-name&lt;/code&gt;.
+Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.&lt;/p&gt;
+
+&lt;p&gt;High availability works by ensuring a active process in the &lt;code&gt;monstache.cluster&lt;/code&gt; collection in mongodb. Only the processes in
+this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the
+&lt;code&gt;monstache.cluster&lt;/code&gt; collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
+the collection by mongodb and another process in the cluster will then have a chance to write to the collection and become the
+new active process.&lt;/p&gt;
+
+&lt;p&gt;When &lt;code&gt;cluster-name&lt;/code&gt; is supplied the &lt;code&gt;resume&lt;/code&gt; feature is automatically turned on and the &lt;code&gt;resume-name&lt;/code&gt; becomes the name of the cluster.
+This is to ensure that each of the processes is able to pick up syncing where the last one left off.&lt;/p&gt;
+
+&lt;p&gt;You can combine the HA feature with the workers feature.  For 3 cluster nodes with 3 workers per node you would have something like the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// config.toml
+workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]
+
+// on host A
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+
+// on host B
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+
+// on host C
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When the clustering feature is combined with workers then the &lt;code&gt;resume&lt;/code&gt; name becomes the cluster name concatenated with the worker name.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>https://rwynn.github.io/monstache-site/license/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/license/</guid>
+      <description>&lt;p&gt;The MIT License (MIT)&lt;/p&gt;
+
+&lt;p&gt;Copyright &amp;copy; 2016 Ryan Wynn&lt;/p&gt;
+
+&lt;p&gt;Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &amp;ldquo;Software&amp;rdquo;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:&lt;/p&gt;
+
+&lt;p&gt;The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.&lt;/p&gt;
+
+&lt;p&gt;THE SOFTWARE IS PROVIDED &amp;ldquo;AS IS&amp;rdquo;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Options on Monstache</title>
+    <link>https://rwynn.github.io/monstache-site/options/index.xml</link>
+    <description>Recent content in Options on Monstache</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <atom:link href="https://rwynn.github.io/monstache-site/options/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Options</title>
+      <link>https://rwynn.github.io/monstache-site/options/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/options/</guid>
+      <description>
+
+&lt;p&gt;Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
+Options specified as program arguments take precedance over the same option in the TOML config file.&lt;/p&gt;
+
+&lt;h2 id=&#34;gzip&#34;&gt;gzip&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;gzip&lt;/code&gt; is true, monstache will compress requests to elasticsearch to increase performance.
+If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also
+need to update the elasticsearch config file to set http.compression: true. In elasticsearch
+version 5 and above http.compression is enabled by default. Enabling gzip is recommended
+especially if you enable the index-files setting.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume&#34;&gt;resume&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-1&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume&lt;/code&gt; is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
+to the collection &lt;code&gt;monstache.monstache&lt;/code&gt;.  It also reads this value from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. monstache uses the value of &lt;code&gt;resume-name&lt;/code&gt; as a key when
+storing and retrieving timestamps.  If &lt;code&gt;resume&lt;/code&gt; is true but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to &lt;code&gt;default&lt;/code&gt;.
+In the case where &lt;code&gt;resume&lt;/code&gt; is true and &lt;code&gt;worker&lt;/code&gt; is set but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to the name of the
+worker. Note when using multiple monstache processes it is always best to ensure that &lt;code&gt;resume-name&lt;/code&gt; is set to a unique
+value for each process.  This ensures that each process will not overwrite the timestamp information of another.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume-from-timestamp&#34;&gt;resume-from-timestamp&lt;/h2&gt;
+
+&lt;h3 id=&#34;int64-default-0&#34;&gt;int64 (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume-from-timestamp&lt;/code&gt; (a 64 bit timestamp where the first 32 bytes represent the time since epoch and the last 32 bits
+represent an offset) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have
+a specific timestamp from the oplog and would like to start syncing from after this event.&lt;/p&gt;
+
+&lt;h2 id=&#34;replay&#34;&gt;replay&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-2&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;replay&lt;/code&gt; is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.&lt;/p&gt;
+
+&lt;p&gt;When &lt;code&gt;resume&lt;/code&gt; and &lt;code&gt;replay&lt;/code&gt; are both true, monstache replays all events from the beginning of the mongodb oplog, syncs them
+to elasticsearch and also writes the timestamp of processed events to &lt;code&gt;monstache.monstache&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;When neither &lt;code&gt;resume&lt;/code&gt; nor &lt;code&gt;replay&lt;/code&gt; are true, monstache reads the last timestamp in the oplog and starts listening for events
+occurring after this timestamp.  Timestamps are not written to &lt;code&gt;monstache.monstache&lt;/code&gt;.  This is the default behavior.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume-write-unsafe&#34;&gt;resume-write-unsafe&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-3&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;resume-write-unsafe&lt;/code&gt; is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
+This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
+of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
+and do not stop execution it&amp;rsquo;s not unreasonable to set this to true to get a speedup.&lt;/p&gt;
+
+&lt;h2 id=&#34;namespace-regex&#34;&gt;namespace-regex&lt;/h2&gt;
+
+&lt;h3 id=&#34;regexp-default&#34;&gt;regexp (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;namespace-regex&lt;/code&gt; is given this regex is tested against the namespace, &lt;code&gt;database.collection&lt;/code&gt;, of the event. If
+the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+processes events in all databases and all collections with the exception of the reserved database &lt;code&gt;monstache&lt;/code&gt;, any
+collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system collections. For more information see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/namespaces/&#34;&gt;Namespaces&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;namespace-exclude-regex&#34;&gt;namespace-exclude-regex&lt;/h2&gt;
+
+&lt;h3 id=&#34;regex-default&#34;&gt;regex (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;namespace-exclude-regex&lt;/code&gt; is given this regex is tested against the namespace, &lt;code&gt;database.collection&lt;/code&gt;, of the event. If
+the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+processes events in all databases and all collections with the exception of the reserved database &lt;code&gt;monstache&lt;/code&gt;, any
+collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system collections. For more information see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/namespaces/&#34;&gt;Namespaces&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;gtm-channel-size&#34;&gt;gtm-channel-size&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;gtm-channel-size&lt;/code&gt; is given it controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-url&#34;&gt;mongo-url&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-localhost&#34;&gt;string (default localhost)&lt;/h3&gt;
+
+&lt;p&gt;The URL to connect to MongoDB which must follow the &lt;a href=&#34;https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format&#34;&gt;Standard Connection String Format&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-pem-file&#34;&gt;mongo-pem-file&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-pem-file&lt;/code&gt; is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-validate-pem&#34;&gt;mongo-validate-pem&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-validate-pem-file&lt;/code&gt; is false TLS will be configured to skip verification&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-oplog-database-name&#34;&gt;mongo-oplog-database-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-local&#34;&gt;string (default local)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-oplog-database-name&lt;/code&gt; is given monstache will look for the mongodb oplog in the supplied database&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-oplog-collection-name&#34;&gt;mongo-oplog-collection-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-oplog-main&#34;&gt;string (default $oplog.main)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-oplog-collection-name&lt;/code&gt; is given monstache will look for the mongodb oplog in the supplied collection&lt;/p&gt;
+
+&lt;h2 id=&#34;mongo-cursor-timeout&#34;&gt;mongo-cursor-timeout&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-100s&#34;&gt;string (default 100s)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;mongo-cursor-timeout&lt;/code&gt; is given monstache will time out and re-query the oplog after the supplied duration.
+Duration values are expected in the form &lt;code&gt;50s&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;index-files&#34;&gt;index-files&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-4&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;index-files&lt;/code&gt; is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
+By default &lt;code&gt;index-files&lt;/code&gt; is false meaning that monstache will only index metadata associated with files stored in GridFS.
+In order for &lt;code&gt;index-files&lt;/code&gt; to index the raw content of files stored in GridFS you must install a plugin for elasticsearch.
+For versions of elasticsearch prior to version 5, you should install the &lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html&#34;&gt;mapper-attachments&lt;/a&gt; plugin.  In version 5 or greater
+of elasticsearch the mapper-attachment plugin is deprecated and you should install the &lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html&#34;&gt;ingest-attachment&lt;/a&gt; plugin instead.
+For further information on how to configure monstache to index content from GridFS, see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/gridfs/&#34;&gt;Indexing Gridfs Files&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;max-file-size&#34;&gt;max-file-size&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;max-file-size&lt;/code&gt; is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-namespaces&#34;&gt;file-namespaces&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;file-namespaces&lt;/code&gt; config must be set when &lt;code&gt;index-files&lt;/code&gt; is enabled.  &lt;code&gt;file-namespaces&lt;/code&gt; must be set to an array of mongodb
+namespace strings.  Files uploaded through gridfs to any of the namespaces in &lt;code&gt;file-namespaces&lt;/code&gt; will be retrieved and their
+raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-highlighting&#34;&gt;file-highlighting&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-5&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;file-highlighting&lt;/code&gt; is true monstache will enable the ability to return highlighted keywords in the extracted text of files
+for queries on files which were indexed in elasticsearch from gridfs.&lt;/p&gt;
+
+&lt;h2 id=&#34;verbose&#34;&gt;verbose&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-6&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;verbose&lt;/code&gt; is true monstache with enable debug logging including a trace of requests to elasticsearch&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-url&#34;&gt;elasticsearch-url&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-http-localhost-9200&#34;&gt;string (default &lt;a href=&#34;http://localhost:9200&#34;&gt;http://localhost:9200&lt;/a&gt;)&lt;/h3&gt;
+
+&lt;p&gt;The URL of the ElasticSearch REST Interface&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-retry-seconds&#34;&gt;elasticsearch-retry-seconds&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-1&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticseach-retry-seconds&lt;/code&gt; is greater than 0 a failed request to elasticsearch with retry the request after the given number of seconds&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-docs&#34;&gt;elasticsearch-max-docs&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-2&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-docs&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-bytes&#34;&gt;elasticsearch-max-bytes&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-3&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-bytes&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-max-seconds&#34;&gt;elasticsearch-max-seconds&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-0-4&#34;&gt;int (default 0)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-max-seconds&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-pem-file&#34;&gt;elasticsearch-pem-file&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-1&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-pem-file&lt;/code&gt; is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-validate-pem&#34;&gt;elasticsearch-validate-pem&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-1&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-validate-pem-file&lt;/code&gt; is false TLS will be configured to skip verification&lt;/p&gt;
+
+&lt;h2 id=&#34;elasticsearch-hosts&#34;&gt;elasticsearch-hosts&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil-1&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;elasticsearch-hosts&lt;/code&gt; is given monstache will set the hosts array on the &lt;code&gt;elastigo&lt;/code&gt; client connection. You must duplicate and include in this array value
+the host that you already configured in the &lt;code&gt;elasticsearch-url&lt;/code&gt; option along with any other hosts. Use this option if you have a cluster with multiple nodes
+and would like index requests to be intelligently distributed between the cluster nodes.  Note that index requests will go to only one of the configured hosts
+within a cluster.  If you have multiple elasticsearch clusters you should use one dedicated monstache process per cluster.  This configures the hosts within
+a single cluster and not across clusters.&lt;/p&gt;
+
+&lt;h2 id=&#34;dropped-databases&#34;&gt;dropped-databases&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-2&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;dropped-databases&lt;/code&gt; is false monstache will not delete the mapped indexes in elasticsearch if a mongodb database is dropped&lt;/p&gt;
+
+&lt;h2 id=&#34;dropped-collections&#34;&gt;dropped-collections&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-true-3&#34;&gt;boolean (default true)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;dropped-collections&lt;/code&gt; is false monstache will not delete the mapped index in elasticsearch if a mongodb collection is dropped&lt;/p&gt;
+
+&lt;h2 id=&#34;worker&#34;&gt;worker&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-2&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;worker&lt;/code&gt; is given monstache will enter multi-worker mode and will require you to also provide the config option &lt;code&gt;workers&lt;/code&gt;.  Use this mode to run
+multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
+same worker and none of the other workers. See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/workers/&#34;&gt;workers&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h2 id=&#34;workers&#34;&gt;workers&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil-2&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;An array of worker names to be used in conjunction with the &lt;code&gt;worker&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;h2 id=&#34;cluster-name&#34;&gt;cluster-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-3&#34;&gt;string (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;cluster-name&lt;/code&gt; is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
+processes in a cluster will be sync changes.  The other process will be in a paused state.  If the process which is syncing changes goes down for some reason
+one of the processes in paused state will take control and start syncing.  See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/high-availability/&#34;&gt;high availability&lt;/a&gt; for more information.&lt;/p&gt;
+
+&lt;h2 id=&#34;script&#34;&gt;script&lt;/h2&gt;
+
+&lt;h3 id=&#34;object-default-nil&#34;&gt;[]object (default nil)&lt;/h3&gt;
+
+&lt;p&gt;When &lt;code&gt;script&lt;/code&gt; is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/transform-filter/&#34;&gt;Transform and Filter&lt;/a&gt;
+for more information.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

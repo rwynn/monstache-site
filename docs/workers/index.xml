@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Workers on Monstache</title>
+    <link>https://rwynn.github.io/monstache-site/workers/index.xml</link>
+    <description>Recent content in Workers on Monstache</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <atom:link href="https://rwynn.github.io/monstache-site/workers/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Workers</title>
+      <link>https://rwynn.github.io/monstache-site/workers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/workers/</guid>
+      <description>&lt;p&gt;You can run multiple monstache processes and distribute the work between them.  First configure
+the names of all the workers in a shared config.toml file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this case we have 3 workers.  Now we can start 3 monstache processes and give each one of the worker
+names.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;monstache -f config.toml -worker Tom
+monstache -f config.toml -worker Dick
+monstache -f config.toml -worker Harry
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;monstache will hash the id of each document using consistent hashing so that each id is handled by only
+one of the available workers.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
