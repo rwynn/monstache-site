@@ -37,7 +37,7 @@ googleAnalytics = ""
 
     [params.font]
     	text = "Work Sans"
-    	code = "Space Mono"
+    	code = "Source Code Pro"
 
 
 [social]

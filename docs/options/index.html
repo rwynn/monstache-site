@@ -55,13 +55,13 @@
     
     
     
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Work%20Sans:400,700|Space&#43;Mono">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Work%20Sans:400,700|Source&#43;Code&#43;Pro">
     <style>
       body, input {
         font-family: 'Work Sans', Helvetica, Arial, sans-serif;
       }
       pre, code {
-        font-family: 'Space Mono', 'Courier New', 'Courier', monospace;
+        font-family: 'Source Code Pro', 'Courier New', 'Courier', monospace;
       }
     </style>
 
@@ -552,6 +552,12 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <p>The URL of the ElasticSearch REST Interface</p>
 
+<h2 id="elasticsearch-max-conns">elasticsearch-max-conns</h2>
+
+<h3 id="int-default-10">int (default 10)</h3>
+
+<p>The maximum size of the ElasticSearch connection pool</p>
+
 <h2 id="elasticsearch-retry-seconds">elasticsearch-retry-seconds</h2>
 
 <h3 id="int-default-0-1">int (default 0)</h3>
@@ -560,19 +566,19 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
 
-<h3 id="int-default-0-2">int (default 0)</h3>
+<h3 id="int-default-100-1">int (default 100)</h3>
 
 <p>When <code>elasticsearch-max-docs</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
 
 <h2 id="elasticsearch-max-bytes">elasticsearch-max-bytes</h2>
 
-<h3 id="int-default-0-3">int (default 0)</h3>
+<h3 id="int-default-16384">int (default 16384)</h3>
 
 <p>When <code>elasticsearch-max-bytes</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes</p>
 
 <h2 id="elasticsearch-max-seconds">elasticsearch-max-seconds</h2>
 
-<h3 id="int-default-0-4">int (default 0)</h3>
+<h3 id="int-default-5">int (default 5)</h3>
 
 <p>When <code>elasticsearch-max-seconds</code> is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds</p>
 

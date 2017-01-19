@@ -164,6 +164,12 @@ When `verbose` is true monstache with enable debug logging including a trace of 
 
 The URL of the ElasticSearch REST Interface
 
+## elasticsearch-max-conns
+
+### int (default 10)
+
+The maximum size of the ElasticSearch connection pool
+
 ## elasticsearch-retry-seconds
 
 ### int (default 0)
@@ -172,19 +178,19 @@ When `elasticseach-retry-seconds` is greater than 0 a failed request to elastics
 
 ## elasticsearch-max-docs
 
-### int (default 0)
+### int (default 100)
 
 When `elasticsearch-max-docs` is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents
 
 ## elasticsearch-max-bytes
 
-### int (default 0)
+### int (default 16384)
 
 When `elasticsearch-max-bytes` is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes
 
 ## elasticsearch-max-seconds
 
-### int (default 0)
+### int (default 5)
 
 When `elasticsearch-max-seconds` is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds
 
