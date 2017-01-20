@@ -77,7 +77,7 @@ collections suffixed with `.chunks`, and the system collections. For more inform
 
 ## gtm-channel-size
 
-### int (default 100)
+### int (default 20)
 
 When `gtm-channel-size` is given it controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.
