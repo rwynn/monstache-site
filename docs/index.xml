@@ -69,7 +69,7 @@ it up and running.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
-# 2.7.1
+# 2.9.2
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
@@ -211,7 +211,7 @@ collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system colle
 
 &lt;h2 id=&#34;gtm-channel-size&#34;&gt;gtm-channel-size&lt;/h2&gt;
 
-&lt;h3 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h3&gt;
+&lt;h3 id=&#34;int-default-20&#34;&gt;int (default 20)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;gtm-channel-size&lt;/code&gt; is given it controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.&lt;/p&gt;
@@ -312,7 +312,7 @@ for queries on files which were indexed in elasticsearch from gridfs.&lt;/p&gt;
 
 &lt;h2 id=&#34;elasticsearch-max-docs&#34;&gt;elasticsearch-max-docs&lt;/h2&gt;
 
-&lt;h3 id=&#34;int-default-100-1&#34;&gt;int (default 100)&lt;/h3&gt;
+&lt;h3 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;elasticsearch-max-docs&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents&lt;/p&gt;
 
