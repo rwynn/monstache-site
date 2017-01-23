@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 2.9.2
+# 2.9.3
 ```
 
 ## Configuration

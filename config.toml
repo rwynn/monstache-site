@@ -18,7 +18,7 @@ googleAnalytics = ""
 	provider = "GitHub"
 	repo_url = "https://github.com/rwynn/monstache"
 
-	version = "2.9.2"
+	version = "2.9.3"
 	logo = "/images/monstache.png"
 	favicon = ""
 
