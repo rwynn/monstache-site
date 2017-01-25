@@ -21,19 +21,27 @@ especially if you enable the index-files setting.
 ### boolean (default false)
 
 When `resume` is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
-to the collection `monstache.monstache`.  It also reads this value from that collection when it starts in order to replay
-events which it might have missed because monstache was stopped. monstache uses the value of `resume-name` as a key when
-storing and retrieving timestamps.  If `resume` is true but `resume-name` is not set the key defaults to `default`.
-In the case where `resume` is true and `worker` is set but `resume-name` is not set the key defaults to the name of the
-worker. Note when using multiple monstache processes it is always best to ensure that `resume-name` is set to a unique 
-value for each process.  This ensures that each process will not overwrite the timestamp information of another.
+to the collection `monstache.monstache`.  It also reads the timestamp from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. If monstache is started with the `cluster-name` option
+set then `resume` is automatically turned on.  
+
+## resume-name
+
+### string (default "default")
+
+monstache uses the value of `resume-name` as an id when storing and retrieving timestamps
+to and from the mongodb collection `monstache.monstache`. The default value for this option is `default`.
+However, there are some exceptions.  If monstache is started with the `cluster-name` option set then the
+name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
+from the last timestamp successfully processed.  The other exception occurs when `resume-name` is not given but
+`worker-name` is.  In that cause the worker name becomes the resume-name.
 
 ## resume-from-timestamp
 
 ### int64 (default 0)
 
-When `resume-from-timestamp` (a 64 bit timestamp where the first 32 bytes represent the time since epoch and the last 32 bits
-represent an offset) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
+When `resume-from-timestamp` (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
+represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
 a specific timestamp from the oplog and would like to start syncing from after this event. 
 
 ## replay

@@ -155,19 +155,27 @@ especially if you enable the index-files setting.&lt;/p&gt;
 &lt;h3 id=&#34;boolean-default-false-1&#34;&gt;boolean (default false)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;resume&lt;/code&gt; is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
-to the collection &lt;code&gt;monstache.monstache&lt;/code&gt;.  It also reads this value from that collection when it starts in order to replay
-events which it might have missed because monstache was stopped. monstache uses the value of &lt;code&gt;resume-name&lt;/code&gt; as a key when
-storing and retrieving timestamps.  If &lt;code&gt;resume&lt;/code&gt; is true but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to &lt;code&gt;default&lt;/code&gt;.
-In the case where &lt;code&gt;resume&lt;/code&gt; is true and &lt;code&gt;worker&lt;/code&gt; is set but &lt;code&gt;resume-name&lt;/code&gt; is not set the key defaults to the name of the
-worker. Note when using multiple monstache processes it is always best to ensure that &lt;code&gt;resume-name&lt;/code&gt; is set to a unique
-value for each process.  This ensures that each process will not overwrite the timestamp information of another.&lt;/p&gt;
+to the collection &lt;code&gt;monstache.monstache&lt;/code&gt;.  It also reads the timestamp from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. If monstache is started with the &lt;code&gt;cluster-name&lt;/code&gt; option
+set then &lt;code&gt;resume&lt;/code&gt; is automatically turned on.&lt;/p&gt;
+
+&lt;h2 id=&#34;resume-name&#34;&gt;resume-name&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-default&#34;&gt;string (default &amp;ldquo;default&amp;rdquo;)&lt;/h3&gt;
+
+&lt;p&gt;monstache uses the value of &lt;code&gt;resume-name&lt;/code&gt; as an id when storing and retrieving timestamps
+to and from the mongodb collection &lt;code&gt;monstache.monstache&lt;/code&gt;. The default value for this option is &lt;code&gt;default&lt;/code&gt;.
+However, there are some exceptions.  If monstache is started with the &lt;code&gt;cluster-name&lt;/code&gt; option set then the
+name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
+from the last timestamp successfully processed.  The other exception occurs when &lt;code&gt;resume-name&lt;/code&gt; is not given but
+&lt;code&gt;worker-name&lt;/code&gt; is.  In that cause the worker name becomes the resume-name.&lt;/p&gt;
 
 &lt;h2 id=&#34;resume-from-timestamp&#34;&gt;resume-from-timestamp&lt;/h2&gt;
 
 &lt;h3 id=&#34;int64-default-0&#34;&gt;int64 (default 0)&lt;/h3&gt;
 
-&lt;p&gt;When &lt;code&gt;resume-from-timestamp&lt;/code&gt; (a 64 bit timestamp where the first 32 bytes represent the time since epoch and the last 32 bits
-represent an offset) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have
+&lt;p&gt;When &lt;code&gt;resume-from-timestamp&lt;/code&gt; (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
+represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have
 a specific timestamp from the oplog and would like to start syncing from after this event.&lt;/p&gt;
 
 &lt;h2 id=&#34;replay&#34;&gt;replay&lt;/h2&gt;
