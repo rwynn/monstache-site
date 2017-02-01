@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>Indexing GridFS Files - Monstache</title>
+    <title>Routing - Monstache</title>
     <meta name="generator" content="Hugo 0.19-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
     
-    <link rel="canonical" href="https://rwynn.github.io/monstache-site/gridfs/">
+    <link rel="canonical" href="https://rwynn.github.io/monstache-site/index-meta/">
     
     <meta name="author" content="Ryan Wynn">
     
 
-    <meta property="og:url" content="https://rwynn.github.io/monstache-site/gridfs/">
+    <meta property="og:url" content="https://rwynn.github.io/monstache-site/index-meta/">
     <meta property="og:title" content="Monstache">
     <meta property="og:image" content="https://rwynn.github.io/images/monstache.png">
     <meta name="apple-mobile-web-app-title" content="Monstache">
@@ -97,7 +97,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Indexing GridFS Files
+        Routing
       </div>
     </div>
 
@@ -289,14 +289,11 @@
 
 
 
-<a class="current" title="Indexing GridFS Files" href="https://rwynn.github.io/monstache-site/gridfs/">
+<a  title="Indexing GridFS Files" href="https://rwynn.github.io/monstache-site/gridfs/">
 	
 	Indexing GridFS Files
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
 
   
@@ -310,11 +307,14 @@
 
 
 
-<a  title="Routing" href="https://rwynn.github.io/monstache-site/index-meta/">
+<a class="current" title="Routing" href="https://rwynn.github.io/monstache-site/index-meta/">
 	
 	Routing
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
 
   
@@ -405,173 +405,78 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Indexing GridFS Files </h1>
+			<h1>Routing </h1>
 
-			<p>Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full
-text search.  This feature requires that you install an elasticsearch plugin which enables the field type <code>attachment</code>.
-For versions of elasticsearch prior to version 5 you should install the
-<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html">mapper-attachments</a> plugin.
-For version 5 or later of elasticsearch you should instead install the
-<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin.</p>
+			<p>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
+is the process by which ElasticSearch determines which shard a document will reside in.  Monstache
+supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.</p>
 
-<p>Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is
-as simple as configuring monstache.  You will want to enable the <code>index-files</code> option and also tell monstache the
-namespace of all collections which will hold GridFS files. For example in your TOML config file,</p>
+<p>Consider an example where you have a <code>comments</code> collection in MongoDB which stores a comment and
+its associated post identifier.</p>
 
-<pre><code class="language-toml">index-files = true
-
-file-namespaces = [&quot;users.fs.files&quot;, &quot;posts.fs.files&quot;]
-
-file-highlighting = true
+<pre><code>use blog;
+db.comments.insert({title: &quot;Did you read this?&quot;, post_id: &quot;123&quot;});
+db.comments.insert({title: &quot;Yeah, it's good&quot;, post_id: &quot;123&quot;});
 </code></pre>
 
-<p>The above configuration tells monstache that you wish to index the raw content of GridFS files in the <code>users</code> and <code>posts</code>
-mongodb databases. By default, mongodb uses a bucket named <code>fs</code>, so if you just use the defaults your collection name will
-be <code>fs.files</code>.  However, if you have customized the bucket name, then your file collection would be something like <code>mybucket.files</code>
-and the entire namespace would be <code>users.mybucket.files</code>.</p>
+<p>In this case monstache will index those 2 documents in an index named <code>blog.comments</code> under the id
+created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing
+the id of the document.  This means that as the number of comments on post <code>123</code> grows, each of the comments
+will be distributed somewhat evenly between the available shards in the cluster.</p>
 
-<p>When you configure monstache this way it will perform an additional operation at startup to ensure the destination indexes in
-elasticsearch have a field named <code>file</code> with a type mapping of <code>attachment</code>.</p>
+<p>Thus, when a query is performed searching among the comments for post <code>123</code> ElasticSearch will need to query
+all of those shards just in case a comment happened to have been routed there.</p>
 
-<p>For the example TOML configuration above, monstache would initialize 2 indices in preparation for indexing into
-elasticsearch by issuing the following REST commands:</p>
+<p>This is where we can take advantage of the support in ElasticSearch and in monstache to do some intelligent
+routing such that all comments for post <code>123</code> reside in the same shard.</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
+<p>First we need to tell monstache that we would like to do custom routing for this collection by setting <code>routing</code>
+equal to true on a custom script for the namespace.  Then we need to add some metadata to the document telling
+monstache how to route the document when indexing.  In this case we want to route by the <code>post_id</code> field.</p>
 
-<pre><code>POST /users.fs.files
-{
-  &quot;mappings&quot;: {
-    &quot;fs.files&quot;: {
-      &quot;properties&quot;: {
-    &quot;file&quot;: { &quot;type&quot;: &quot;attachment&quot; }
-}}}}
-
-POST /posts.fs.files
-{
-  &quot;mappings&quot;: {
-    &quot;fs.files&quot;: {
-      &quot;properties&quot;: {
-    &quot;file&quot;: { &quot;type&quot;: &quot;attachment&quot; }
-}}}}
-</code></pre>
-
-<p>For elasticsearch version 5 and above&hellip;</p>
-
-<pre><code>PUT /_ingest/pipeline/attachment
-{
-  &quot;description&quot; : &quot;Extract file information&quot;,
-  &quot;processors&quot; : [
-    {
-      &quot;attachment&quot; : {
-    &quot;field&quot; : &quot;file&quot;
-      }
-    }
-  ]
+<pre><code class="language-toml">[[script]]
+namespace = &quot;blog.comments&quot;
+routing = true
+script = &quot;&quot;&quot;
+var counter = 1;
+module.exports = function(doc) {
+    doc._meta_monstache = { routing: doc.post_id };
+    return doc;
 }
+&quot;&quot;&quot;
 </code></pre>
 
-<p>When a file is inserted into mongodb via GridFS, monstache will detect the new file, use the mongodb api to retrieve the raw
-content, and index a document into elasticsearch with the raw content stored in a <code>file</code> field as a base64
-encoded string. The elasticsearch plugin will then extract text content from the raw content using
-<a href="https://tika.apache.org/">Apache Tika</a>, tokenize the text content, and allow you to query on the content of the file.</p>
+<p>Now when monstache indexes document for the collection <code>blog.comments</code> it will set the special <code>_routing</code> attribute
+for the document on the index request such that ElasticSearch routes comments based on their corresponding post.</p>
 
-<p>To test this feature of monstache you can simply use the <a href="https://docs.mongodb.com/manual/reference/program/mongofiles/">mongofiles</a>
-command to quickly add a file to mongodb via GridFS.  Continuing the example above one could issue the following command to put a
-file named <code>resume.docx</code> into GridFS and after a short time this file should be searchable in elasticsearch in the index <code>users.fs.files</code>.</p>
+<p>The <code>_meta_monstache</code> field is used only to inform monstache about routing and is not included in the source
+document when indexing to ElasticSearch.</p>
 
-<pre><code>mongofiles -d users put resume.docx
-</code></pre>
+<p>Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
+id in the request and make a search that normally queries all shards query only 1 shard.</p>
 
-<p>After a short time you should be able to query the contents of resume.docx in the users index in elasticsearch</p>
-
-<pre><code>curl -XGET 'http://localhost:9200/users.fs.files/_search?q=golang'
-</code></pre>
-
-<p>If you would like to see the text extracted by Apache Tika you can project the appropriate sub-field</p>
-
-<p>For elasticsearch versions prior to version 5&hellip;</p>
-
-<pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
-    &quot;fields&quot;: [ &quot;file.content&quot; ],
-    &quot;query&quot;: {
-        &quot;match&quot;: {
-            &quot;_all&quot;: &quot;golang&quot;
-        }
-    }
+<pre><code>$ curl -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
+{
+   &quot;query&quot;:{
+      &quot;match_all&quot;:{}
+   }
 }'
 </code></pre>
 
-<p>For elasticsearch version 5 and above&hellip;</p>
+<p>You will notice in the response that only 1 shard was queried instead of all your shards.  Custom routing is great
+way to reduce broadcast searches and thus get better performance.</p>
 
-<pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
-    &quot;_source&quot;: [ &quot;attachment.content&quot; ],
-    &quot;query&quot;: {
-        &quot;match&quot;: {
-            &quot;_all&quot;: &quot;golang&quot;
-        }
-    }
-}'
-</code></pre>
+<p>The catch with custom routing is that you need to include the routing parameter on all insert, update, and delete
+operations.  Insert and update is not a problem for monstache because the routing information will come from your
+MongoDB document.  Deletes, however, pose a problem for monstache because when a delete occurs in MongoDB the
+information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
+document was originally routed in order to tell ElasticSearch where to look for it.</p>
 
-<p>When <code>file-highlighting</code> is enabled you can add a highlight clause to your query</p>
+<p>Monstache gets around this problem by using a lookup table that it stores in MongoDB at <code>monstache.meta</code>.  In this collection monstache stores
+the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
+in this collection and forwards that information to ElasticSearch on the delete request.</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
-
-<pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
-    &quot;fields&quot;: [&quot;file.content&quot;],
-    &quot;query&quot;: {
-        &quot;match&quot;: {
-            &quot;file.content&quot;: &quot;golang&quot;
-        }
-    },
-    &quot;highlight&quot;: {
-        &quot;fields&quot;: {
-            &quot;file.content&quot;: {
-            }
-        }
-    }
-}'
-</code></pre>
-
-<p>For elasticsearch version 5 and above&hellip;</p>
-
-<pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
-    &quot;_source&quot;: [&quot;attachment.content&quot;],
-    &quot;query&quot;: {
-        &quot;match&quot;: {
-            &quot;attachment.content&quot;: &quot;golang&quot;
-        }
-    },
-    &quot;highlight&quot;: {
-        &quot;fields&quot;: {
-            &quot;attachment.content&quot;: {
-            }
-        }
-    }
-}'
-</code></pre>
-
-<p>The highlight response will contain emphasis on the matching terms</p>
-
-<p>For elasticsearch versions prior to version 5&hellip;</p>
-
-<pre><code>&quot;hits&quot; : [ {
-    &quot;highlight&quot; : {
-        &quot;file.content&quot; : [ &quot;I like to program in &lt;em&gt;golang&lt;/em&gt;.\n\n&quot; ]
-    }
-} ]
-</code></pre>
-
-<p>For elasticsearch version 5 and above&hellip;</p>
-
-<pre><code>&quot;hits&quot; : [{
-    &quot;highlight&quot; : {
-        &quot;attachment.content&quot; : [ &quot;I like to program in &lt;em&gt;golang&lt;/em&gt;.&quot; ]
-    }
-}]
-</code></pre>
-
-<hr />
+<p>For more information see <a href="https://www.elastic.co/blog/customizing-your-document-routing">Customizing Document Routing</a></p>
 
 
 			<aside class="copyright" role="note">
@@ -590,7 +495,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="https://rwynn.github.io/monstache-site/transform-filter/" title="Transform and Filter">
+      <a href="https://rwynn.github.io/monstache-site/gridfs/" title="Indexing GridFS Files">
         <span class="direction">
           Previous
         </span>
@@ -600,7 +505,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
           </div>
           <div class="stretch">
             <div class="title">
-              Transform and Filter
+              Indexing GridFS Files
             </div>
           </div>
         </div>
@@ -610,14 +515,14 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 
   <div class="next">
   
-      <a href="https://rwynn.github.io/monstache-site/index-meta/" title="Routing">
+      <a href="https://rwynn.github.io/monstache-site/workers/" title="Workers">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Workers
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

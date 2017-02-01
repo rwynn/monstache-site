@@ -30,6 +30,10 @@
   </url>
   
   <url>
+    <loc>https://rwynn.github.io/monstache-site/index-meta/</loc>
+  </url>
+  
+  <url>
     <loc>https://rwynn.github.io/monstache-site/workers/</loc>
   </url>
   
@@ -58,6 +62,11 @@
   
   <url>
     <loc>https://rwynn.github.io/monstache-site/index-mapping/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rwynn.github.io/monstache-site/index-meta/</loc>
     <priority>0</priority>
   </url>
   

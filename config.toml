@@ -18,7 +18,7 @@ googleAnalytics = ""
 	provider = "GitHub"
 	repo_url = "https://github.com/rwynn/monstache"
 
-	version = "2.9.3"
+	version = "2.10.0"
 	logo = "/images/monstache.png"
 	favicon = ""
 
@@ -79,6 +79,11 @@ googleAnalytics = ""
 	name   = "Indexing GridFS Files"
 	url    = "gridfs/"
 	weight = 50
+	
+[[menu.main]]
+	name   = "Routing"
+	url    = "index-meta/"
+	weight = 51
 
 [[menu.main]]
 	name   = "Workers"

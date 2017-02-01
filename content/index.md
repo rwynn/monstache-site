@@ -26,7 +26,11 @@ go get -v github.com/rwynn/monstache
 
 - Index the content of GridFS files
 
+- Support for hard and soft deletes in MongoDB
+
 - Support for database and collection drops
+
+- Optional custom document routing in ElasticSearch
 
 - Stateful resume feature
 

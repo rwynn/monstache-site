@@ -38,7 +38,11 @@ ElasticSearch indices.&lt;/p&gt;
 
 &lt;li&gt;&lt;p&gt;Index the content of GridFS files&lt;/p&gt;&lt;/li&gt;
 
+&lt;li&gt;&lt;p&gt;Support for hard and soft deletes in MongoDB&lt;/p&gt;&lt;/li&gt;
+
 &lt;li&gt;&lt;p&gt;Support for database and collection drops&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Optional custom document routing in ElasticSearch&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Stateful resume feature&lt;/p&gt;&lt;/li&gt;
 
@@ -69,7 +73,7 @@ it up and running.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
-# 2.9.3
+# 2.10.0
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
@@ -718,6 +722,85 @@ file named &lt;code&gt;resume.docx&lt;/code&gt; into GridFS and after a short ti
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;hr /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Routing</title>
+      <link>https://rwynn.github.io/monstache-site/index-meta/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/index-meta/</guid>
+      <description>&lt;p&gt;Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
+is the process by which ElasticSearch determines which shard a document will reside in.  Monstache
+supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.&lt;/p&gt;
+
+&lt;p&gt;Consider an example where you have a &lt;code&gt;comments&lt;/code&gt; collection in MongoDB which stores a comment and
+its associated post identifier.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;use blog;
+db.comments.insert({title: &amp;quot;Did you read this?&amp;quot;, post_id: &amp;quot;123&amp;quot;});
+db.comments.insert({title: &amp;quot;Yeah, it&#39;s good&amp;quot;, post_id: &amp;quot;123&amp;quot;});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this case monstache will index those 2 documents in an index named &lt;code&gt;blog.comments&lt;/code&gt; under the id
+created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing
+the id of the document.  This means that as the number of comments on post &lt;code&gt;123&lt;/code&gt; grows, each of the comments
+will be distributed somewhat evenly between the available shards in the cluster.&lt;/p&gt;
+
+&lt;p&gt;Thus, when a query is performed searching among the comments for post &lt;code&gt;123&lt;/code&gt; ElasticSearch will need to query
+all of those shards just in case a comment happened to have been routed there.&lt;/p&gt;
+
+&lt;p&gt;This is where we can take advantage of the support in ElasticSearch and in monstache to do some intelligent
+routing such that all comments for post &lt;code&gt;123&lt;/code&gt; reside in the same shard.&lt;/p&gt;
+
+&lt;p&gt;First we need to tell monstache that we would like to do custom routing for this collection by setting &lt;code&gt;routing&lt;/code&gt;
+equal to true on a custom script for the namespace.  Then we need to add some metadata to the document telling
+monstache how to route the document when indexing.  In this case we want to route by the &lt;code&gt;post_id&lt;/code&gt; field.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
+namespace = &amp;quot;blog.comments&amp;quot;
+routing = true
+script = &amp;quot;&amp;quot;&amp;quot;
+var counter = 1;
+module.exports = function(doc) {
+    doc._meta_monstache = { routing: doc.post_id };
+    return doc;
+}
+&amp;quot;&amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now when monstache indexes document for the collection &lt;code&gt;blog.comments&lt;/code&gt; it will set the special &lt;code&gt;_routing&lt;/code&gt; attribute
+for the document on the index request such that ElasticSearch routes comments based on their corresponding post.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;_meta_monstache&lt;/code&gt; field is used only to inform monstache about routing and is not included in the source
+document when indexing to ElasticSearch.&lt;/p&gt;
+
+&lt;p&gt;Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
+id in the request and make a search that normally queries all shards query only 1 shard.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -XGET &#39;http://localhost:9200/blog.comments/_search?routing=123&#39; -d &#39;
+{
+   &amp;quot;query&amp;quot;:{
+      &amp;quot;match_all&amp;quot;:{}
+   }
+}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You will notice in the response that only 1 shard was queried instead of all your shards.  Custom routing is great
+way to reduce broadcast searches and thus get better performance.&lt;/p&gt;
+
+&lt;p&gt;The catch with custom routing is that you need to include the routing parameter on all insert, update, and delete
+operations.  Insert and update is not a problem for monstache because the routing information will come from your
+MongoDB document.  Deletes, however, pose a problem for monstache because when a delete occurs in MongoDB the
+information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
+document was originally routed in order to tell ElasticSearch where to look for it.&lt;/p&gt;
+
+&lt;p&gt;Monstache gets around this problem by using a lookup table that it stores in MongoDB at &lt;code&gt;monstache.meta&lt;/code&gt;.  In this collection monstache stores
+the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
+in this collection and forwards that information to ElasticSearch on the delete request.&lt;/p&gt;
+
+&lt;p&gt;For more information see &lt;a href=&#34;https://www.elastic.co/blog/customizing-your-document-routing&#34;&gt;Customizing Document Routing&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
