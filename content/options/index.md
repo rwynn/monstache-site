@@ -16,6 +16,31 @@ need to update the elasticsearch config file to set http.compression: true. In e
 version 5 and above http.compression is enabled by default. Enabling gzip is recommended 
 especially if you enable the index-files setting.
 
+## fail-fast
+
+### boolean (default false)
+
+When `fail-fast` is true, if monstache receives a failed bulk indexing response from Elasticsearch, monstache
+will log the request that produced the response as an ERROR and then exit immediately with an error status. 
+Normally, monstache just logs the error and continues processing events.
+
+If monstache has been configured with a value for `elasticsearch-retry-seconds`, a failed request will be
+retried once after the retry period before being considered a failure.
+
+## index-oplog-time
+
+### boolean (default false)
+
+If this option is set to true monstache will include 2 automatic fields in the source document indexed into
+Elasticsearch.  The first is `_oplog_ts` which is the timestamp for the event copied directly from the MongoDB
+oplog. The second is `_oplog_date` which is an ElasticSearch date field corresponding to the time of the same
+event.
+
+This information is generally useful in ElasticSearch giving the notion of last updated.  However, it's also
+valuable information to have for failed indexing requests since it gives one the information to replay from 
+a failure point.  See the option `resume-from-timestamp` for information on how to replay oplog events since 
+a given event occurred. 
+
 ## resume
 
 ### boolean (default false)
