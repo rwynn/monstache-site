@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.10.0</span></strong>
+        <strong>Monstache <span class="version">2.11.1</span></strong>
         
           <br>
           rwynn/monstache
@@ -364,6 +364,24 @@
 
 
 
+<a  title="Merge Patches" href="https://rwynn.github.io/monstache-site/merge-patches/">
+	
+	Merge Patches
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="License" href="https://rwynn.github.io/monstache-site/license/">
 	
 	License
@@ -438,7 +456,6 @@ monstache how to route the document when indexing.  In this case we want to rout
 namespace = &quot;blog.comments&quot;
 routing = true
 script = &quot;&quot;&quot;
-var counter = 1;
 module.exports = function(doc) {
     doc._meta_monstache = { routing: doc.post_id };
     return doc;
@@ -477,6 +494,27 @@ the routing information for each document with custom routing.  When a delete oc
 in this collection and forwards that information to ElasticSearch on the delete request.</p>
 
 <p>For more information see <a href="https://www.elastic.co/blog/customizing-your-document-routing">Customizing Document Routing</a></p>
+
+<p>In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
+<code>index</code> and <code>type</code> using a script by putting the custom information in the meta attribute.</p>
+
+<pre><code class="language-toml">[[script]]
+namespace = &quot;blog.comments&quot;
+routing = true
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    if (doc.score &gt;= 100) {
+        // NOTE: prefix dynamic index with namespace for proper cleanup on drops
+        doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
+    } else {
+        doc._meta_monstache = { routing: doc.post_id };
+    }
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<hr />
 
 
 			<aside class="copyright" role="note">

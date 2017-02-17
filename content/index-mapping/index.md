@@ -11,7 +11,7 @@ mongodb collection name -> elasticsearch type
 mongodb document _id -> elasticsearch document _id
 ```
 
-If these default won't work for some reason you can override the index and collection mapping on a per collection basis by adding
+If these default won't work for some reason you can override the index and type mapping on a per collection basis by adding
 the following to your TOML config file:
 
 ```toml
@@ -28,6 +28,9 @@ type = "type2"
 
 With the configuration above documents in the `test.test` namespace in mongodb are indexed into the `index1` 
 index in elasticsearch with the `type1` type.
+
+If you need your index and type mapping to be more dynamic, such as based on values inside the mongodb document, then
+see the section [Routing](/index-meta/).
 
 Make sure that automatic index creation is not disabled in elasticsearch.yml.
 

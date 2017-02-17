@@ -36,7 +36,6 @@ monstache how to route the document when indexing.  In this case we want to rout
 namespace = "blog.comments"
 routing = true
 script = """
-var counter = 1;
 module.exports = function(doc) {
 	doc._meta_monstache = { routing: doc.post_id };
 	return doc;
@@ -76,3 +75,25 @@ the routing information for each document with custom routing.  When a delete oc
 in this collection and forwards that information to ElasticSearch on the delete request.
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
+
+In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
+`index` and `type` using a script by putting the custom information in the meta attribute. 
+
+```toml
+[[script]]
+namespace = "blog.comments"
+routing = true
+script = """
+module.exports = function(doc) {
+	if (doc.score >= 100) {
+		// NOTE: prefix dynamic index with namespace for proper cleanup on drops
+		doc._meta_monstache = { index: "blog.comments.highscore", type: "highScoreComment", routing: doc.post_id };
+	} else {
+		doc._meta_monstache = { routing: doc.post_id };
+	}
+	return doc;
+}
+"""
+```
+
+---

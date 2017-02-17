@@ -83,13 +83,6 @@ the regex matches monstache ignores the event, otherwise it continues processing
 processes events in all databases and all collections with the exception of the reserved database `monstache`, any
 collections suffixed with `.chunks`, and the system collections. For more information see the section [Namespaces](/namespaces/).
 
-## gtm-channel-size
-
-### int (default 20)
-
-When `gtm-channel-size` is given it controls the size of the go channels created for processing events.  When many events
-are processed at once a larger channel size may prevent blocking in gtm.
-
 ## mongo-url
 
 ### string (default localhost)
@@ -127,6 +120,106 @@ When `mongo-oplog-collection-name` is given monstache will look for the mongodb 
 
 When `mongo-cursor-timeout` is given monstache will time out and re-query the oplog after the supplied duration.
 Duration values are expected in the form `50s`.
+
+## mongo-dial-settings
+
+### TOML table (default nil)
+
+The following mongodb dial properties are available
+
+### timeout
+
+#### int (default 10)
+
+Seconds to wait when establishing a connection to mongodb before giving up
+
+## mongo-session-settings
+
+### TOML table (default nil)
+
+The following mongodb session properties are available
+
+### socket-timeout
+
+#### int (default 60)
+
+Seconds to wait for a non-responding socket before it is forcefully closed
+
+### sync-timeout
+
+#### int (default 7)
+
+Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
+Set it to zero to wait forever.
+
+## gtm-settings
+
+### TOML table (default nil)
+
+The following gtm configuration properties are available.  See (gtm)[https://github.com/rwynn/gtm] for details
+
+### channel-size
+
+#### int (default 100)
+
+Controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.
+
+### buffer-size
+
+#### int (default 32)
+
+Determines how many documents are buffered by a gtm worker go routine before they are batch fetched from
+mongodb.  When many documents are inserted or updated at once it is better to fetch them together.
+
+### buffer-duration
+
+#### string (default 750ms)
+
+A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
+fetched in batch from mongodb and flushed for indexing.
+
+### worker-count
+
+#### int (default 8)
+
+The number of go routines which are batch fetching documents for indexing.  Each go routine will batch according
+to the `buffer-size` setting and hold buffers for at most `buffer-duration`.  This will be set to 1 if `ordering`
+is set to 0 or `oplog`.
+
+### ordering
+
+#### int (default 2)
+
+Determines the ordering guarantee of operations coming off the oplog. Operations first come off the oplog sorted
+chronologically, but then enter queues where they are picked up by go routines (workers) for further processing.
+Ordering sets the behavior of those workers with respect to maintaining the original oplog ordering.
+
+Valid options for ordering are 0, 1, or 2. 
+
+0 gives Oplog (strongest) ordering. 0 means that operations are indexed in the same order they appear in the oplog.
+
+1 gives Namespace ordering.  1 means that operations within a namespace are indexed oplog ordered.  There is no guarantee that
+operations across namespaces will be indexed in the same order they appeared in the oplog.
+
+2 gives Document ordering.  2 means that operations against a single document (insert, update, delete) are oplog ordered.
+There is no guarantee that across 2 documents that the indexing order will match the oplog order.  
+
+1 and 2 give better throughput when combined with a worker count greater than 1 because multiple go routines will be 
+operating concurrently to batch fetch documents.  The cost of fanning out document fetches is that total ordering cannot be
+guaranteed.
+
+2 gives the best performance while still ensuring that if a single document
+is updated and then quickly deleted, then the delete of that document in elasticsearch will happen after the update.  
+
+2 does not guarantee that if a document is inserted into a collection C and then C is instantly dropped that the corresponding
+index for C does not contain the document (though 1 does).  This (probably rare) scenario is one drawback of 2.  
+
+0 is an option if you need to ensure that operations are always processed in strict oplog order. When 0 is used the
+`worker-count` is forced to 1 to ensure the strict ordering.  This results in slightly less throughput. This is a good option
+is ordering semantics are your primary concern.  
+
+1 is a good middle ground.  It is not as performant as 2 better than 0 while providing ordering semantics at the namespace level.
 
 ## index-files
 
@@ -172,6 +265,15 @@ When `verbose` is true monstache with enable debug logging including a trace of 
 
 The URL of the ElasticSearch REST Interface
 
+## elasticsearch-version
+
+### string (by default determined by connecting to the server)
+
+When `elasticsearch-version` is provided monstache will parse the given server version to determine how to interact with
+the elasticsearch API.  This is normally not recommended because monstache will connect to elasticsearch to find out
+which version is being used.  This option is provided for cases where connecting to the base URL of the elasticsearch REST
+API to get the version is not possible or desired.
+
 ## elasticsearch-max-conns
 
 ### int (default 10)
@@ -198,7 +300,7 @@ When `elasticsearch-max-bytes` is given a bulk index request to elasticsearch wi
 
 ## elasticsearch-max-seconds
 
-### int (default 5)
+### int (default 2)
 
 When `elasticsearch-max-seconds` is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds
 
@@ -251,6 +353,24 @@ same worker and none of the other workers. See the section [workers](/workers/) 
 
 An array of worker names to be used in conjunction with the `worker` option. 
 
+## enable-patches
+
+### boolean (default false) 
+
+Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) patches in your elasticsearch documents
+
+## patch-namespaces
+
+### []string (default nil)
+
+An array of mongodb namespaces that you would like to enable rfc7396 patches on
+
+## merge-patch-attribute
+
+### string (default "json-merge-patches") 
+
+Customize the name of the property under which merge patches are stored
+
 ## cluster-name
 
 ### string (default "")
@@ -261,7 +381,7 @@ one of the processes in paused state will take control and start syncing.  See t
 
 ## script
 
-### []object (default nil)
+### [] TOML table (default nil)
 
 When `script` is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Transform and Filter](/transform-filter/)
 for more information.

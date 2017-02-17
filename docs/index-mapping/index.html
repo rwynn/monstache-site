@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.10.0</span></strong>
+        <strong>Monstache <span class="version">2.11.1</span></strong>
         
           <br>
           rwynn/monstache
@@ -364,6 +364,24 @@
 
 
 
+<a  title="Merge Patches" href="https://rwynn.github.io/monstache-site/merge-patches/">
+	
+	Merge Patches
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="License" href="https://rwynn.github.io/monstache-site/license/">
 	
 	License
@@ -414,7 +432,7 @@ mongodb collection name -&gt; elasticsearch type
 mongodb document _id -&gt; elasticsearch document _id
 </code></pre>
 
-<p>If these default won&rsquo;t work for some reason you can override the index and collection mapping on a per collection basis by adding
+<p>If these default won&rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding
 the following to your TOML config file:</p>
 
 <pre><code class="language-toml">[[mapping]]
@@ -430,6 +448,9 @@ type = &quot;type2&quot;
 
 <p>With the configuration above documents in the <code>test.test</code> namespace in mongodb are indexed into the <code>index1</code>
 index in elasticsearch with the <code>type1</code> type.</p>
+
+<p>If you need your index and type mapping to be more dynamic, such as based on values inside the mongodb document, then
+see the section <a href="https://rwynn.github.io/monstache-site/index-meta/">Routing</a>.</p>
 
 <p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>
 

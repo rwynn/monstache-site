@@ -12,7 +12,7 @@ ElasticSearch indices.
 
 ## Quick start
 
-Install with go get:
+[Download](https://github.com/rwynn/monstache/releases) or Install with go get:
 
 ```sh
 go get -v github.com/rwynn/monstache
@@ -35,6 +35,8 @@ go get -v github.com/rwynn/monstache
 - Stateful resume feature
 
 - Worker and Clustering modes for High Availability
+
+- Support for [rfc7396](https://tools.ietf.org/html/rfc7396) JSON merge patches
 
 - Single binary with a light footprint 
 

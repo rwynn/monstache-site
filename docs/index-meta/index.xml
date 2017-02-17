@@ -46,7 +46,6 @@ monstache how to route the document when indexing.  In this case we want to rout
 namespace = &amp;quot;blog.comments&amp;quot;
 routing = true
 script = &amp;quot;&amp;quot;&amp;quot;
-var counter = 1;
 module.exports = function(doc) {
     doc._meta_monstache = { routing: doc.post_id };
     return doc;
@@ -85,6 +84,27 @@ the routing information for each document with custom routing.  When a delete oc
 in this collection and forwards that information to ElasticSearch on the delete request.&lt;/p&gt;
 
 &lt;p&gt;For more information see &lt;a href=&#34;https://www.elastic.co/blog/customizing-your-document-routing&#34;&gt;Customizing Document Routing&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
+&lt;code&gt;index&lt;/code&gt; and &lt;code&gt;type&lt;/code&gt; using a script by putting the custom information in the meta attribute.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
+namespace = &amp;quot;blog.comments&amp;quot;
+routing = true
+script = &amp;quot;&amp;quot;&amp;quot;
+module.exports = function(doc) {
+    if (doc.score &amp;gt;= 100) {
+        // NOTE: prefix dynamic index with namespace for proper cleanup on drops
+        doc._meta_monstache = { index: &amp;quot;blog.comments.highscore&amp;quot;, type: &amp;quot;highScoreComment&amp;quot;, routing: doc.post_id };
+    } else {
+        doc._meta_monstache = { routing: doc.post_id };
+    }
+    return doc;
+}
+&amp;quot;&amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
 </description>
     </item>
     

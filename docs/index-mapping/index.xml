@@ -22,7 +22,7 @@ mongodb collection name -&amp;gt; elasticsearch type
 mongodb document _id -&amp;gt; elasticsearch document _id
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;If these default won&amp;rsquo;t work for some reason you can override the index and collection mapping on a per collection basis by adding
+&lt;p&gt;If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding
 the following to your TOML config file:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[mapping]]
@@ -38,6 +38,9 @@ type = &amp;quot;type2&amp;quot;
 
 &lt;p&gt;With the configuration above documents in the &lt;code&gt;test.test&lt;/code&gt; namespace in mongodb are indexed into the &lt;code&gt;index1&lt;/code&gt;
 index in elasticsearch with the &lt;code&gt;type1&lt;/code&gt; type.&lt;/p&gt;
+
+&lt;p&gt;If you need your index and type mapping to be more dynamic, such as based on values inside the mongodb document, then
+see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/index-meta/&#34;&gt;Routing&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Make sure that automatic index creation is not disabled in elasticsearch.yml.&lt;/p&gt;
 

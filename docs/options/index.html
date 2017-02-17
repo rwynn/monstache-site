@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.10.0</span></strong>
+        <strong>Monstache <span class="version">2.11.1</span></strong>
         
           <br>
           rwynn/monstache
@@ -364,6 +364,24 @@
 
 
 
+<a  title="Merge Patches" href="https://rwynn.github.io/monstache-site/merge-patches/">
+	
+	Merge Patches
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="License" href="https://rwynn.github.io/monstache-site/license/">
 	
 	License
@@ -489,13 +507,6 @@ the regex matches monstache ignores the event, otherwise it continues processing
 processes events in all databases and all collections with the exception of the reserved database <code>monstache</code>, any
 collections suffixed with <code>.chunks</code>, and the system collections. For more information see the section <a href="https://rwynn.github.io/monstache-site/namespaces/">Namespaces</a>.</p>
 
-<h2 id="gtm-channel-size">gtm-channel-size</h2>
-
-<h3 id="int-default-20">int (default 20)</h3>
-
-<p>When <code>gtm-channel-size</code> is given it controls the size of the go channels created for processing events.  When many events
-are processed at once a larger channel size may prevent blocking in gtm.</p>
-
 <h2 id="mongo-url">mongo-url</h2>
 
 <h3 id="string-default-localhost">string (default localhost)</h3>
@@ -533,6 +544,106 @@ pool when connecting to mongodb. This should only be used when mongodb is config
 
 <p>When <code>mongo-cursor-timeout</code> is given monstache will time out and re-query the oplog after the supplied duration.
 Duration values are expected in the form <code>50s</code>.</p>
+
+<h2 id="mongo-dial-settings">mongo-dial-settings</h2>
+
+<h3 id="toml-table-default-nil">TOML table (default nil)</h3>
+
+<p>The following mongodb dial properties are available</p>
+
+<h3 id="timeout">timeout</h3>
+
+<h4 id="int-default-10">int (default 10)</h4>
+
+<p>Seconds to wait when establishing a connection to mongodb before giving up</p>
+
+<h2 id="mongo-session-settings">mongo-session-settings</h2>
+
+<h3 id="toml-table-default-nil-1">TOML table (default nil)</h3>
+
+<p>The following mongodb session properties are available</p>
+
+<h3 id="socket-timeout">socket-timeout</h3>
+
+<h4 id="int-default-60">int (default 60)</h4>
+
+<p>Seconds to wait for a non-responding socket before it is forcefully closed</p>
+
+<h3 id="sync-timeout">sync-timeout</h3>
+
+<h4 id="int-default-7">int (default 7)</h4>
+
+<p>Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can&rsquo;t be established.
+Set it to zero to wait forever.</p>
+
+<h2 id="gtm-settings">gtm-settings</h2>
+
+<h3 id="toml-table-default-nil-2">TOML table (default nil)</h3>
+
+<p>The following gtm configuration properties are available.  See (gtm)[<a href="https://github.com/rwynn/gtm">https://github.com/rwynn/gtm</a>] for details</p>
+
+<h3 id="channel-size">channel-size</h3>
+
+<h4 id="int-default-100">int (default 100)</h4>
+
+<p>Controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.</p>
+
+<h3 id="buffer-size">buffer-size</h3>
+
+<h4 id="int-default-32">int (default 32)</h4>
+
+<p>Determines how many documents are buffered by a gtm worker go routine before they are batch fetched from
+mongodb.  When many documents are inserted or updated at once it is better to fetch them together.</p>
+
+<h3 id="buffer-duration">buffer-duration</h3>
+
+<h4 id="string-default-750ms">string (default 750ms)</h4>
+
+<p>A string representation of a golang duration.  Determines the maximum time a buffer is held before it is
+fetched in batch from mongodb and flushed for indexing.</p>
+
+<h3 id="worker-count">worker-count</h3>
+
+<h4 id="int-default-8">int (default 8)</h4>
+
+<p>The number of go routines which are batch fetching documents for indexing.  Each go routine will batch according
+to the <code>buffer-size</code> setting and hold buffers for at most <code>buffer-duration</code>.  This will be set to 1 if <code>ordering</code>
+is set to 0 or <code>oplog</code>.</p>
+
+<h3 id="ordering">ordering</h3>
+
+<h4 id="int-default-2">int (default 2)</h4>
+
+<p>Determines the ordering guarantee of operations coming off the oplog. Operations first come off the oplog sorted
+chronologically, but then enter queues where they are picked up by go routines (workers) for further processing.
+Ordering sets the behavior of those workers with respect to maintaining the original oplog ordering.</p>
+
+<p>Valid options for ordering are 0, 1, or 2.</p>
+
+<p>0 gives Oplog (strongest) ordering. 0 means that operations are indexed in the same order they appear in the oplog.</p>
+
+<p>1 gives Namespace ordering.  1 means that operations within a namespace are indexed oplog ordered.  There is no guarantee that
+operations across namespaces will be indexed in the same order they appeared in the oplog.</p>
+
+<p>2 gives Document ordering.  2 means that operations against a single document (insert, update, delete) are oplog ordered.
+There is no guarantee that across 2 documents that the indexing order will match the oplog order.</p>
+
+<p>1 and 2 give better throughput when combined with a worker count greater than 1 because multiple go routines will be
+operating concurrently to batch fetch documents.  The cost of fanning out document fetches is that total ordering cannot be
+guaranteed.</p>
+
+<p>2 gives the best performance while still ensuring that if a single document
+is updated and then quickly deleted, then the delete of that document in elasticsearch will happen after the update.</p>
+
+<p>2 does not guarantee that if a document is inserted into a collection C and then C is instantly dropped that the corresponding
+index for C does not contain the document (though 1 does).  This (probably rare) scenario is one drawback of 2.</p>
+
+<p>0 is an option if you need to ensure that operations are always processed in strict oplog order. When 0 is used the
+<code>worker-count</code> is forced to 1 to ensure the strict ordering.  This results in slightly less throughput. This is a good option
+is ordering semantics are your primary concern.</p>
+
+<p>1 is a good middle ground.  It is not as performant as 2 better than 0 while providing ordering semantics at the namespace level.</p>
 
 <h2 id="index-files">index-files</h2>
 
@@ -578,9 +689,18 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <p>The URL of the ElasticSearch REST Interface</p>
 
+<h2 id="elasticsearch-version">elasticsearch-version</h2>
+
+<h3 id="string-by-default-determined-by-connecting-to-the-server">string (by default determined by connecting to the server)</h3>
+
+<p>When <code>elasticsearch-version</code> is provided monstache will parse the given server version to determine how to interact with
+the elasticsearch API.  This is normally not recommended because monstache will connect to elasticsearch to find out
+which version is being used.  This option is provided for cases where connecting to the base URL of the elasticsearch REST
+API to get the version is not possible or desired.</p>
+
 <h2 id="elasticsearch-max-conns">elasticsearch-max-conns</h2>
 
-<h3 id="int-default-10">int (default 10)</h3>
+<h3 id="int-default-10-1">int (default 10)</h3>
 
 <p>The maximum size of the ElasticSearch connection pool</p>
 
@@ -592,7 +712,7 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
 
-<h3 id="int-default-100">int (default 100)</h3>
+<h3 id="int-default-100-1">int (default 100)</h3>
 
 <p>When <code>elasticsearch-max-docs</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
 
@@ -604,7 +724,7 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="elasticsearch-max-seconds">elasticsearch-max-seconds</h2>
 
-<h3 id="int-default-5">int (default 5)</h3>
+<h3 id="int-default-2-1">int (default 2)</h3>
 
 <p>When <code>elasticsearch-max-seconds</code> is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds</p>
 
@@ -657,6 +777,24 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 
 <p>An array of worker names to be used in conjunction with the <code>worker</code> option.</p>
 
+<h2 id="enable-patches">enable-patches</h2>
+
+<h3 id="boolean-default-false-7">boolean (default false)</h3>
+
+<p>Set to true to enable storing <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> patches in your elasticsearch documents</p>
+
+<h2 id="patch-namespaces">patch-namespaces</h2>
+
+<h3 id="string-default-nil-3">[]string (default nil)</h3>
+
+<p>An array of mongodb namespaces that you would like to enable rfc7396 patches on</p>
+
+<h2 id="merge-patch-attribute">merge-patch-attribute</h2>
+
+<h3 id="string-default-json-merge-patches">string (default &ldquo;json-merge-patches&rdquo;)</h3>
+
+<p>Customize the name of the property under which merge patches are stored</p>
+
 <h2 id="cluster-name">cluster-name</h2>
 
 <h3 id="string-default-3">string (default &ldquo;&rdquo;)</h3>
@@ -667,7 +805,7 @@ one of the processes in paused state will take control and start syncing.  See t
 
 <h2 id="script">script</h2>
 
-<h3 id="object-default-nil">[]object (default nil)</h3>
+<h3 id="toml-table-default-nil-3">[] TOML table (default nil)</h3>
 
 <p>When <code>script</code> is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section <a href="https://rwynn.github.io/monstache-site/transform-filter/">Transform and Filter</a>
 for more information.</p>
