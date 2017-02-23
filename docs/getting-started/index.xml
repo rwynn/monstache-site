@@ -24,7 +24,7 @@
 &lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
-# 2.11.2
+# 2.12.0
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;

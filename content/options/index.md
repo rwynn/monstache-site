@@ -114,6 +114,17 @@ collections suffixed with `.chunks`, and the system collections. For more inform
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
+Note: the connection string for the Go MongoDB driver does not support the `ssl` paramter. 
+If your connection requires SSL, e.g. when using MongoDB Atlas, remove `ssl=true` from your connection string 
+and then set the following option in your TOML config:
+
+```toml
+[mongo-dial-settings]
+ssl = true
+
+
+```
+
 ## mongo-pem-file
 
 ### string (default "")
@@ -152,6 +163,12 @@ Duration values are expected in the form `50s`.
 
 The following mongodb dial properties are available
 
+### ssl
+
+#### bool (default false)
+
+Set to true to establish a connection using TLS.
+
 ### timeout
 
 #### int (default 10)
@@ -172,7 +189,7 @@ Seconds to wait for a non-responding socket before it is forcefully closed
 
 ### sync-timeout
 
-#### int (default 7)
+#### int (default 60)
 
 Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 Set it to zero to wait forever.
@@ -203,48 +220,6 @@ mongodb.  When many documents are inserted or updated at once it is better to fe
 
 A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
 fetched in batch from mongodb and flushed for indexing.
-
-### worker-count
-
-#### int (default 8)
-
-The number of go routines which are batch fetching documents for indexing.  Each go routine will batch according
-to the `buffer-size` setting and hold buffers for at most `buffer-duration`.  This will be set to 1 if `ordering`
-is set to 0 or `oplog`.
-
-### ordering
-
-#### int (default 2)
-
-Determines the ordering guarantee of operations coming off the oplog. Operations first come off the oplog sorted
-chronologically, but then enter queues where they are picked up by go routines (workers) for further processing.
-Ordering sets the behavior of those workers with respect to maintaining the original oplog ordering.
-
-Valid options for ordering are 0, 1, or 2. 
-
-0 gives Oplog (strongest) ordering. 0 means that operations are indexed in the same order they appear in the oplog.
-
-1 gives Namespace ordering.  1 means that operations within a namespace are indexed oplog ordered.  There is no guarantee that
-operations across namespaces will be indexed in the same order they appeared in the oplog.
-
-2 gives Document ordering.  2 means that operations against a single document (insert, update, delete) are oplog ordered.
-There is no guarantee that across 2 documents that the indexing order will match the oplog order.  
-
-1 and 2 give better throughput when combined with a worker count greater than 1 because multiple go routines will be 
-operating concurrently to batch fetch documents.  The cost of fanning out document fetches is that total ordering cannot be
-guaranteed.
-
-2 gives the best performance while still ensuring that if a single document
-is updated and then quickly deleted, then the delete of that document in elasticsearch will happen after the update.  
-
-2 does not guarantee that if a document is inserted into a collection C and then C is instantly dropped that the corresponding
-index for C does not contain the document (though 1 does).  This (probably rare) scenario is one drawback of 2.  
-
-0 is an option if you need to ensure that operations are always processed in strict oplog order. When 0 is used the
-`worker-count` is forced to 1 to ensure the strict ordering.  This results in slightly less throughput. This is a good option
-is ordering semantics are your primary concern.  
-
-1 is a good middle ground.  It is not as performant as 2 better than 0 while providing ordering semantics at the namespace level.
 
 ## index-files
 
@@ -406,7 +381,7 @@ one of the processes in paused state will take control and start syncing.  See t
 
 ## script
 
-### [] TOML table (default nil)
+### [] array of TOML table (default nil)
 
 When `script` is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Transform and Filter](/transform-filter/)
 for more information.
