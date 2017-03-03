@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.12.0</span></strong>
+        <strong>Monstache <span class="version">2.13.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -514,6 +514,30 @@ This speeds up writing of timestamps used to resume synching in a subsequent run
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it&rsquo;s not unreasonable to set this to true to get a speedup.</p>
 
+<h2 id="direct-read-namespaces">direct-read-namespaces</h2>
+
+<h3 id="string-default-nil">[]string (default nil)</h3>
+
+<p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
+The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
+sync of mongodb to elasticsearch.  To do this, set <code>direct-read-namespaces</code> to an array of namespaces that you would
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.</p>
+
+<h2 id="direct-read-limit">direct-read-limit</h2>
+
+<h3 id="int-default-100">int (default 100)</h3>
+
+<p>The maximum number of documents to retreive in each direct read query</p>
+
+<h2 id="exit-after-direct-reads">exit-after-direct-reads</h2>
+
+<h3 id="boolean-default-false-6">boolean (default false)</h3>
+
+<p>The <code>direct-read-namespaces</code> option gives you a way to do a full sync on multiple collections.  At times you may want
+to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
+monstache will exit after syncing the direct read collections instead of continuing to tail the oplog. This is useful
+if you would like to run monstache to run a full sync on a set of collections via a cron job.</p>
+
 <h2 id="namespace-regex">namespace-regex</h2>
 
 <h3 id="regexp-default">regexp (default &ldquo;&rdquo;)</h3>
@@ -537,16 +561,6 @@ collections suffixed with <code>.chunks</code>, and the system collections. For 
 <h3 id="string-default-localhost">string (default localhost)</h3>
 
 <p>The URL to connect to MongoDB which must follow the <a href="https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format">Standard Connection String Format</a></p>
-
-<p>Note: the connection string for the Go MongoDB driver does not support the <code>ssl</code> paramter.
-If your connection requires SSL, e.g. when using MongoDB Atlas, remove <code>ssl=true</code> from your connection string
-and then set the following option in your TOML config:</p>
-
-<pre><code class="language-toml">[mongo-dial-settings]
-ssl = true
-
-
-</code></pre>
 
 <h2 id="mongo-pem-file">mongo-pem-file</h2>
 
@@ -625,7 +639,7 @@ Set it to zero to wait forever.</p>
 
 <h3 id="channel-size">channel-size</h3>
 
-<h4 id="int-default-100">int (default 100)</h4>
+<h4 id="int-default-100-1">int (default 100)</h4>
 
 <p>Controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.</p>
@@ -646,7 +660,7 @@ fetched in batch from mongodb and flushed for indexing.</p>
 
 <h2 id="index-files">index-files</h2>
 
-<h3 id="boolean-default-false-6">boolean (default false)</h3>
+<h3 id="boolean-default-false-7">boolean (default false)</h3>
 
 <p>When <code>index-files</code> is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
 By default <code>index-files</code> is false meaning that monstache will only index metadata associated with files stored in GridFS.
@@ -663,7 +677,7 @@ For further information on how to configure monstache to index content from Grid
 
 <h2 id="file-namespaces">file-namespaces</h2>
 
-<h3 id="string-default-nil">[]string (default nil)</h3>
+<h3 id="string-default-nil-1">[]string (default nil)</h3>
 
 <p>The <code>file-namespaces</code> config must be set when <code>index-files</code> is enabled.  <code>file-namespaces</code> must be set to an array of mongodb
 namespace strings.  Files uploaded through gridfs to any of the namespaces in <code>file-namespaces</code> will be retrieved and their
@@ -671,14 +685,14 @@ raw content indexed into elasticsearch via either the mapper-attachments or inge
 
 <h2 id="file-highlighting">file-highlighting</h2>
 
-<h3 id="boolean-default-false-7">boolean (default false)</h3>
+<h3 id="boolean-default-false-8">boolean (default false)</h3>
 
 <p>When <code>file-highlighting</code> is true monstache will enable the ability to return highlighted keywords in the extracted text of files
 for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="verbose">verbose</h2>
 
-<h3 id="boolean-default-false-8">boolean (default false)</h3>
+<h3 id="boolean-default-false-9">boolean (default false)</h3>
 
 <p>When <code>verbose</code> is true monstache with enable debug logging including a trace of requests to elasticsearch</p>
 
@@ -711,7 +725,7 @@ API to get the version is not possible or desired.</p>
 
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
 
-<h3 id="int-default-100-1">int (default 100)</h3>
+<h3 id="int-default-100-2">int (default 100)</h3>
 
 <p>When <code>elasticsearch-max-docs</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
 
@@ -742,7 +756,7 @@ pool when connecting to elasticsearch. This should only be used when elasticsear
 
 <h2 id="elasticsearch-hosts">elasticsearch-hosts</h2>
 
-<h3 id="string-default-nil-1">[]string (default nil)</h3>
+<h3 id="string-default-nil-2">[]string (default nil)</h3>
 
 <p>When <code>elasticsearch-hosts</code> is given monstache will set the hosts array on the <code>elastigo</code> client connection. You must duplicate and include in this array value
 the host that you already configured in the <code>elasticsearch-url</code> option along with any other hosts. Use this option if you have a cluster with multiple nodes
@@ -772,19 +786,19 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 
 <h2 id="workers">workers</h2>
 
-<h3 id="string-default-nil-2">[]string (default nil)</h3>
+<h3 id="string-default-nil-3">[]string (default nil)</h3>
 
 <p>An array of worker names to be used in conjunction with the <code>worker</code> option.</p>
 
 <h2 id="enable-patches">enable-patches</h2>
 
-<h3 id="boolean-default-false-9">boolean (default false)</h3>
+<h3 id="boolean-default-false-10">boolean (default false)</h3>
 
 <p>Set to true to enable storing <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> patches in your elasticsearch documents</p>
 
 <h2 id="patch-namespaces">patch-namespaces</h2>
 
-<h3 id="string-default-nil-3">[]string (default nil)</h3>
+<h3 id="string-default-nil-4">[]string (default nil)</h3>
 
 <p>An array of mongodb namespaces that you would like to enable rfc7396 patches on</p>
 

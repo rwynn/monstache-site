@@ -90,6 +90,30 @@ This speeds up writing of timestamps used to resume synching in a subsequent run
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it's not unreasonable to set this to true to get a speedup.
 
+## direct-read-namespaces
+
+### []string (default nil)
+
+At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
+The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
+sync of mongodb to elasticsearch.  To do this, set `direct-read-namespaces` to an array of namespaces that you would 
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch. 
+
+## direct-read-limit
+
+### int (default 100)
+
+The maximum number of documents to retreive in each direct read query
+
+## exit-after-direct-reads
+
+### boolean (default false)
+
+The `direct-read-namespaces` option gives you a way to do a full sync on multiple collections.  At times you may want
+to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
+monstache will exit after syncing the direct read collections instead of continuing to tail the oplog. This is useful
+if you would like to run monstache to run a full sync on a set of collections via a cron job.
+
 ## namespace-regex
 
 ### regexp (default "")
@@ -113,17 +137,6 @@ collections suffixed with `.chunks`, and the system collections. For more inform
 ### string (default localhost)
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
-
-Note: the connection string for the Go MongoDB driver does not support the `ssl` paramter. 
-If your connection requires SSL, e.g. when using MongoDB Atlas, remove `ssl=true` from your connection string 
-and then set the following option in your TOML config:
-
-```toml
-[mongo-dial-settings]
-ssl = true
-
-
-```
 
 ## mongo-pem-file
 

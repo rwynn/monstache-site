@@ -104,6 +104,30 @@ This speeds up writing of timestamps used to resume synching in a subsequent run
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it&amp;rsquo;s not unreasonable to set this to true to get a speedup.&lt;/p&gt;
 
+&lt;h2 id=&#34;direct-read-namespaces&#34;&gt;direct-read-namespaces&lt;/h2&gt;
+
+&lt;h3 id=&#34;string-default-nil&#34;&gt;[]string (default nil)&lt;/h3&gt;
+
+&lt;p&gt;At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
+The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
+sync of mongodb to elasticsearch.  To do this, set &lt;code&gt;direct-read-namespaces&lt;/code&gt; to an array of namespaces that you would
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.&lt;/p&gt;
+
+&lt;h2 id=&#34;direct-read-limit&#34;&gt;direct-read-limit&lt;/h2&gt;
+
+&lt;h3 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h3&gt;
+
+&lt;p&gt;The maximum number of documents to retreive in each direct read query&lt;/p&gt;
+
+&lt;h2 id=&#34;exit-after-direct-reads&#34;&gt;exit-after-direct-reads&lt;/h2&gt;
+
+&lt;h3 id=&#34;boolean-default-false-6&#34;&gt;boolean (default false)&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;direct-read-namespaces&lt;/code&gt; option gives you a way to do a full sync on multiple collections.  At times you may want
+to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
+monstache will exit after syncing the direct read collections instead of continuing to tail the oplog. This is useful
+if you would like to run monstache to run a full sync on a set of collections via a cron job.&lt;/p&gt;
+
 &lt;h2 id=&#34;namespace-regex&#34;&gt;namespace-regex&lt;/h2&gt;
 
 &lt;h3 id=&#34;regexp-default&#34;&gt;regexp (default &amp;ldquo;&amp;rdquo;)&lt;/h3&gt;
@@ -127,16 +151,6 @@ collections suffixed with &lt;code&gt;.chunks&lt;/code&gt;, and the system colle
 &lt;h3 id=&#34;string-default-localhost&#34;&gt;string (default localhost)&lt;/h3&gt;
 
 &lt;p&gt;The URL to connect to MongoDB which must follow the &lt;a href=&#34;https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format&#34;&gt;Standard Connection String Format&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Note: the connection string for the Go MongoDB driver does not support the &lt;code&gt;ssl&lt;/code&gt; paramter.
-If your connection requires SSL, e.g. when using MongoDB Atlas, remove &lt;code&gt;ssl=true&lt;/code&gt; from your connection string
-and then set the following option in your TOML config:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[mongo-dial-settings]
-ssl = true
-
-
-&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;mongo-pem-file&#34;&gt;mongo-pem-file&lt;/h2&gt;
 
@@ -215,7 +229,7 @@ Set it to zero to wait forever.&lt;/p&gt;
 
 &lt;h3 id=&#34;channel-size&#34;&gt;channel-size&lt;/h3&gt;
 
-&lt;h4 id=&#34;int-default-100&#34;&gt;int (default 100)&lt;/h4&gt;
+&lt;h4 id=&#34;int-default-100-1&#34;&gt;int (default 100)&lt;/h4&gt;
 
 &lt;p&gt;Controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.&lt;/p&gt;
@@ -236,7 +250,7 @@ fetched in batch from mongodb and flushed for indexing.&lt;/p&gt;
 
 &lt;h2 id=&#34;index-files&#34;&gt;index-files&lt;/h2&gt;
 
-&lt;h3 id=&#34;boolean-default-false-6&#34;&gt;boolean (default false)&lt;/h3&gt;
+&lt;h3 id=&#34;boolean-default-false-7&#34;&gt;boolean (default false)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;index-files&lt;/code&gt; is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
 By default &lt;code&gt;index-files&lt;/code&gt; is false meaning that monstache will only index metadata associated with files stored in GridFS.
@@ -253,7 +267,7 @@ For further information on how to configure monstache to index content from Grid
 
 &lt;h2 id=&#34;file-namespaces&#34;&gt;file-namespaces&lt;/h2&gt;
 
-&lt;h3 id=&#34;string-default-nil&#34;&gt;[]string (default nil)&lt;/h3&gt;
+&lt;h3 id=&#34;string-default-nil-1&#34;&gt;[]string (default nil)&lt;/h3&gt;
 
 &lt;p&gt;The &lt;code&gt;file-namespaces&lt;/code&gt; config must be set when &lt;code&gt;index-files&lt;/code&gt; is enabled.  &lt;code&gt;file-namespaces&lt;/code&gt; must be set to an array of mongodb
 namespace strings.  Files uploaded through gridfs to any of the namespaces in &lt;code&gt;file-namespaces&lt;/code&gt; will be retrieved and their
@@ -261,14 +275,14 @@ raw content indexed into elasticsearch via either the mapper-attachments or inge
 
 &lt;h2 id=&#34;file-highlighting&#34;&gt;file-highlighting&lt;/h2&gt;
 
-&lt;h3 id=&#34;boolean-default-false-7&#34;&gt;boolean (default false)&lt;/h3&gt;
+&lt;h3 id=&#34;boolean-default-false-8&#34;&gt;boolean (default false)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;file-highlighting&lt;/code&gt; is true monstache will enable the ability to return highlighted keywords in the extracted text of files
 for queries on files which were indexed in elasticsearch from gridfs.&lt;/p&gt;
 
 &lt;h2 id=&#34;verbose&#34;&gt;verbose&lt;/h2&gt;
 
-&lt;h3 id=&#34;boolean-default-false-8&#34;&gt;boolean (default false)&lt;/h3&gt;
+&lt;h3 id=&#34;boolean-default-false-9&#34;&gt;boolean (default false)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;verbose&lt;/code&gt; is true monstache with enable debug logging including a trace of requests to elasticsearch&lt;/p&gt;
 
@@ -301,7 +315,7 @@ API to get the version is not possible or desired.&lt;/p&gt;
 
 &lt;h2 id=&#34;elasticsearch-max-docs&#34;&gt;elasticsearch-max-docs&lt;/h2&gt;
 
-&lt;h3 id=&#34;int-default-100-1&#34;&gt;int (default 100)&lt;/h3&gt;
+&lt;h3 id=&#34;int-default-100-2&#34;&gt;int (default 100)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;elasticsearch-max-docs&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents&lt;/p&gt;
 
@@ -332,7 +346,7 @@ pool when connecting to elasticsearch. This should only be used when elasticsear
 
 &lt;h2 id=&#34;elasticsearch-hosts&#34;&gt;elasticsearch-hosts&lt;/h2&gt;
 
-&lt;h3 id=&#34;string-default-nil-1&#34;&gt;[]string (default nil)&lt;/h3&gt;
+&lt;h3 id=&#34;string-default-nil-2&#34;&gt;[]string (default nil)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;elasticsearch-hosts&lt;/code&gt; is given monstache will set the hosts array on the &lt;code&gt;elastigo&lt;/code&gt; client connection. You must duplicate and include in this array value
 the host that you already configured in the &lt;code&gt;elasticsearch-url&lt;/code&gt; option along with any other hosts. Use this option if you have a cluster with multiple nodes
@@ -362,19 +376,19 @@ same worker and none of the other workers. See the section &lt;a href=&#34;https
 
 &lt;h2 id=&#34;workers&#34;&gt;workers&lt;/h2&gt;
 
-&lt;h3 id=&#34;string-default-nil-2&#34;&gt;[]string (default nil)&lt;/h3&gt;
+&lt;h3 id=&#34;string-default-nil-3&#34;&gt;[]string (default nil)&lt;/h3&gt;
 
 &lt;p&gt;An array of worker names to be used in conjunction with the &lt;code&gt;worker&lt;/code&gt; option.&lt;/p&gt;
 
 &lt;h2 id=&#34;enable-patches&#34;&gt;enable-patches&lt;/h2&gt;
 
-&lt;h3 id=&#34;boolean-default-false-9&#34;&gt;boolean (default false)&lt;/h3&gt;
+&lt;h3 id=&#34;boolean-default-false-10&#34;&gt;boolean (default false)&lt;/h3&gt;
 
 &lt;p&gt;Set to true to enable storing &lt;a href=&#34;https://tools.ietf.org/html/rfc7396&#34;&gt;rfc7396&lt;/a&gt; patches in your elasticsearch documents&lt;/p&gt;
 
 &lt;h2 id=&#34;patch-namespaces&#34;&gt;patch-namespaces&lt;/h2&gt;
 
-&lt;h3 id=&#34;string-default-nil-3&#34;&gt;[]string (default nil)&lt;/h3&gt;
+&lt;h3 id=&#34;string-default-nil-4&#34;&gt;[]string (default nil)&lt;/h3&gt;
 
 &lt;p&gt;An array of mongodb namespaces that you would like to enable rfc7396 patches on&lt;/p&gt;
 

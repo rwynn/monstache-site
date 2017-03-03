@@ -24,7 +24,7 @@
 &lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
-# 2.12.0
+# 2.13.0
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
@@ -75,6 +75,8 @@ file-highlighting = true
 file-namespaces = [&amp;quot;users.fs.files&amp;quot;]
 verbose = true
 cluster-name = &#39;apollo&#39;
+direct-read-namespaces = [&amp;quot;db.collection&amp;quot;, &amp;quot;test.test&amp;quot;]
+exit-after-direct-reads = false
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;See the &lt;a href=&#34;https://rwynn.github.io/monstache-site/options/&#34;&gt;Options guide&lt;/a&gt; for details about each configuration

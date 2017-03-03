@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.12.0</span></strong>
+        <strong>Monstache <span class="version">2.13.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,7 +434,7 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 2.12.0
+# 2.13.0
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
@@ -485,6 +485,8 @@ file-highlighting = true
 file-namespaces = [&quot;users.fs.files&quot;]
 verbose = true
 cluster-name = 'apollo'
+direct-read-namespaces = [&quot;db.collection&quot;, &quot;test.test&quot;]
+exit-after-direct-reads = false
 </code></pre>
 
 <p>See the <a href="https://rwynn.github.io/monstache-site/options/">Options guide</a> for details about each configuration

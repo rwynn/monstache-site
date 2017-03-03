@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 2.12.0
+# 2.13.0
 ```
 
 ## Configuration
@@ -63,6 +63,8 @@ file-highlighting = true
 file-namespaces = ["users.fs.files"]
 verbose = true
 cluster-name = 'apollo'
+direct-read-namespaces = ["db.collection", "test.test"]
+exit-after-direct-reads = false
 ```
 
 See the [Options guide]({{< relref "options/index.md" >}}) for details about each configuration
