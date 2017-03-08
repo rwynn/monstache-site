@@ -215,7 +215,7 @@ The following gtm configuration properties are available.  See (gtm)[https://git
 
 ### channel-size
 
-#### int (default 100)
+#### int (default 512)
 
 Controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.
@@ -291,7 +291,15 @@ API to get the version is not possible or desired.
 
 ### int (default 10)
 
-The maximum size of the ElasticSearch connection pool
+The size of the ElasticSearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
+If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
+of this queue is 50.  To increase the size of the bulk indexing queue you can update the Elasticsearch config file:
+
+	thread_pool:
+	    bulk:
+		queue_size: 200
+
+For more information see [Thread Pool](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html).
 
 ## elasticsearch-retry-seconds
 

@@ -17,10 +17,61 @@
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
       <description>
 
+&lt;p&gt;monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
+drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
+require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).&lt;/p&gt;
+
+&lt;h2 id=&#34;golang&#34;&gt;Golang&lt;/h2&gt;
+
+&lt;p&gt;monstache supports Golang 1.8 plugins.  To implement a plugin for monstache you simply need to implement a specific function signature,
+use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.&lt;/p&gt;
+
+&lt;p&gt;plugins must import the package &amp;ldquo;github.com/rwynn/monstache/monstachemap&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;plugins must implement a function named &amp;ldquo;Map&amp;rdquo; with the following signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;plugins can be compiled using&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go build -buildmode=plugin -o myplugin.so myplugin.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so&lt;/p&gt;
+
+&lt;p&gt;the following example plugin simply converts top level string values to uppercase&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+import (
+	&amp;quot;github.com/rwynn/monstache/monstachemap&amp;quot;
+	&amp;quot;strings&amp;quot;
+)
+// a plugin to convert document values to uppercase
+func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
+	doc := input.Document
+	for k, v := range doc {
+		switch v.(type) {
+		case string:
+			doc[k] = strings.ToUpper(v.(string))
+		}
+	}
+	output = &amp;amp;monstachemap.MapperPluginOutput{Document: doc}
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
+to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true&lt;/p&gt;
+
+&lt;p&gt;output.Index, output.Type, and output.Routing allow you to set the indexing metadata.&lt;/p&gt;
+
+&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
+
 &lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
 
 &lt;p&gt;monstache uses the amazing &lt;a href=&#34;https://github.com/robertkrimen/otto&#34;&gt;otto&lt;/a&gt; library to provide transformation at the document field
-level in javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]

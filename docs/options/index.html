@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.13.0</span></strong>
+        <strong>Monstache <span class="version">2.14.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -639,7 +639,7 @@ Set it to zero to wait forever.</p>
 
 <h3 id="channel-size">channel-size</h3>
 
-<h4 id="int-default-100-1">int (default 100)</h4>
+<h4 id="int-default-512">int (default 512)</h4>
 
 <p>Controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.</p>
@@ -715,7 +715,16 @@ API to get the version is not possible or desired.</p>
 
 <h3 id="int-default-10-1">int (default 10)</h3>
 
-<p>The maximum size of the ElasticSearch connection pool</p>
+<p>The size of the ElasticSearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
+If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
+of this queue is 50.  To increase the size of the bulk indexing queue you can update the Elasticsearch config file:</p>
+
+<pre><code>thread_pool:
+    bulk:
+    queue_size: 200
+</code></pre>
+
+<p>For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html">Thread Pool</a>.</p>
 
 <h2 id="elasticsearch-retry-seconds">elasticsearch-retry-seconds</h2>
 
@@ -725,7 +734,7 @@ API to get the version is not possible or desired.</p>
 
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
 
-<h3 id="int-default-100-2">int (default 100)</h3>
+<h3 id="int-default-100-1">int (default 100)</h3>
 
 <p>When <code>elasticsearch-max-docs</code> is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
 

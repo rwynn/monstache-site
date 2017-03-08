@@ -34,7 +34,7 @@ ElasticSearch indices.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;Select only the collections you want to sync&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;Transform and filter documents before indexing using JavaScript&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Transform and filter documents before indexing using Golang plugins or JavaScript&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Index the content of GridFS files&lt;/p&gt;&lt;/li&gt;
 
@@ -75,7 +75,7 @@ it up and running.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;monstache -v
-# 2.13.0
+# 2.14.0
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;configuration&#34;&gt;Configuration&lt;/h2&gt;
@@ -357,7 +357,7 @@ Set it to zero to wait forever.&lt;/p&gt;
 
 &lt;h3 id=&#34;channel-size&#34;&gt;channel-size&lt;/h3&gt;
 
-&lt;h4 id=&#34;int-default-100-1&#34;&gt;int (default 100)&lt;/h4&gt;
+&lt;h4 id=&#34;int-default-512&#34;&gt;int (default 512)&lt;/h4&gt;
 
 &lt;p&gt;Controls the size of the go channels created for processing events.  When many events
 are processed at once a larger channel size may prevent blocking in gtm.&lt;/p&gt;
@@ -433,7 +433,16 @@ API to get the version is not possible or desired.&lt;/p&gt;
 
 &lt;h3 id=&#34;int-default-10-1&#34;&gt;int (default 10)&lt;/h3&gt;
 
-&lt;p&gt;The maximum size of the ElasticSearch connection pool&lt;/p&gt;
+&lt;p&gt;The size of the ElasticSearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
+If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
+of this queue is 50.  To increase the size of the bulk indexing queue you can update the Elasticsearch config file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;thread_pool:
+    bulk:
+    queue_size: 200
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For more information see &lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html&#34;&gt;Thread Pool&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;elasticsearch-retry-seconds&#34;&gt;elasticsearch-retry-seconds&lt;/h2&gt;
 
@@ -443,7 +452,7 @@ API to get the version is not possible or desired.&lt;/p&gt;
 
 &lt;h2 id=&#34;elasticsearch-max-docs&#34;&gt;elasticsearch-max-docs&lt;/h2&gt;
 
-&lt;h3 id=&#34;int-default-100-2&#34;&gt;int (default 100)&lt;/h3&gt;
+&lt;h3 id=&#34;int-default-100-1&#34;&gt;int (default 100)&lt;/h3&gt;
 
 &lt;p&gt;When &lt;code&gt;elasticsearch-max-docs&lt;/code&gt; is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents&lt;/p&gt;
 
@@ -612,10 +621,61 @@ all lowercase and that index, types, and ids do not being with an underscore.&lt
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
       <description>
 
+&lt;p&gt;monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
+drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
+require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).&lt;/p&gt;
+
+&lt;h2 id=&#34;golang&#34;&gt;Golang&lt;/h2&gt;
+
+&lt;p&gt;monstache supports Golang 1.8 plugins.  To implement a plugin for monstache you simply need to implement a specific function signature,
+use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.&lt;/p&gt;
+
+&lt;p&gt;plugins must import the package &amp;ldquo;github.com/rwynn/monstache/monstachemap&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;plugins must implement a function named &amp;ldquo;Map&amp;rdquo; with the following signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;plugins can be compiled using&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go build -buildmode=plugin -o myplugin.so myplugin.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so&lt;/p&gt;
+
+&lt;p&gt;the following example plugin simply converts top level string values to uppercase&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+import (
+	&amp;quot;github.com/rwynn/monstache/monstachemap&amp;quot;
+	&amp;quot;strings&amp;quot;
+)
+// a plugin to convert document values to uppercase
+func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
+	doc := input.Document
+	for k, v := range doc {
+		switch v.(type) {
+		case string:
+			doc[k] = strings.ToUpper(v.(string))
+		}
+	}
+	output = &amp;amp;monstachemap.MapperPluginOutput{Document: doc}
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
+to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true&lt;/p&gt;
+
+&lt;p&gt;output.Index, output.Type, and output.Routing allow you to set the indexing metadata.&lt;/p&gt;
+
+&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
+
 &lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
 
 &lt;p&gt;monstache uses the amazing &lt;a href=&#34;https://github.com/robertkrimen/otto&#34;&gt;otto&lt;/a&gt; library to provide transformation at the document field
-level in javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]

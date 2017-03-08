@@ -3,10 +3,63 @@ title: Transform and Filter
 weight: 40
 ---
 
+monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
+drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
+require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
+
+## Golang
+
+monstache supports Golang 1.8 plugins.  To implement a plugin for monstache you simply need to implement a specific function signature,
+use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
+
+plugins must import the package "github.com/rwynn/monstache/monstachemap"
+
+plugins must implement a function named "Map" with the following signature
+
+``` go
+func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
+```
+
+plugins can be compiled using
+
+	go build -buildmode=plugin -o myplugin.so myplugin.go
+
+to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so
+
+the following example plugin simply converts top level string values to uppercase
+
+``` go
+package main
+import (
+	"github.com/rwynn/monstache/monstachemap"
+	"strings"
+)
+// a plugin to convert document values to uppercase
+func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
+	doc := input.Document
+	for k, v := range doc {
+		switch v.(type) {
+		case string:
+			doc[k] = strings.ToUpper(v.(string))
+		}
+	}
+	output = &monstachemap.MapperPluginOutput{Document: doc}
+	return
+}
+```
+
+the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
+to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true
+
+output.Index, output.Type, and output.Routing allow you to set the indexing metadata.
+
+
+## Javascript
+
 ### Transformation
 
 monstache uses the amazing [otto](https://github.com/robertkrimen/otto) library to provide transformation at the document field
-level in javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:
 	
 ```toml

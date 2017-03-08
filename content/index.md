@@ -22,7 +22,7 @@ go get -v github.com/rwynn/monstache
 
 - Select only the collections you want to sync
 
-- Transform and filter documents before indexing using JavaScript
+- Transform and filter documents before indexing using Golang plugins or JavaScript
 
 - Index the content of GridFS files
 
