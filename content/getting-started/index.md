@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 2.14.0
+# 3.0.0
 ```
 
 ## Configuration
@@ -44,7 +44,9 @@ gzip = true
 mongo-url = "mongodb://someuser:password@localhost:40001"
 mongo-pem-file = "/path/to/mongoCert.pem"
 mongo-validate-pem-file = false
-elasticsearch-url = "http://someuser:password@localhost:9200"
+elasticsearch-urls = ["https://example:9200"]
+elasticsearch-user = "someuser"
+elasticsearch-password = "somepassword"
 elasticsearch-max-conns = 10
 elasticsearch-pem-file = "/path/to/elasticCert.pem"
 elastic-validate-pem-file = true

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Getting started - Monstache</title>
-    <meta name="generator" content="Hugo 0.19-DEV" />
+    <meta name="generator" content="Hugo 0.21-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.14.0</span></strong>
+        <strong>Monstache <span class="version">3.0.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,7 +434,7 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 2.14.0
+# 3.0.0
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
@@ -466,7 +466,9 @@ monstache with an explicit configuration by passing the -f flag.</p>
 mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
 mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
 mongo-validate-pem-file = false
-elasticsearch-url = &quot;http://someuser:password@localhost:9200&quot;
+elasticsearch-urls = [&quot;https://example:9200&quot;]
+elasticsearch-user = &quot;someuser&quot;
+elasticsearch-password = &quot;somepassword&quot;
 elasticsearch-max-conns = 10
 elasticsearch-pem-file = &quot;/path/to/elasticCert.pem&quot;
 elastic-validate-pem-file = true

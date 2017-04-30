@@ -2,12 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>High-availabilities on Monstache</title>
-    <link>https://rwynn.github.io/monstache-site/high-availability/index.xml</link>
+    <link>https://rwynn.github.io/monstache-site/high-availability/</link>
     <description>Recent content in High-availabilities on Monstache</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Released under the MIT license</copyright>
-    <atom:link href="https://rwynn.github.io/monstache-site/high-availability/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://rwynn.github.io/monstache-site/high-availability/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>High Availability</title>
@@ -15,43 +17,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/high-availability/</guid>
-      <description>&lt;p&gt;You can run monstache in high availability mode by starting multiple processes with the same value for &lt;code&gt;cluster-name&lt;/code&gt;.
-Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.&lt;/p&gt;
-
-&lt;p&gt;High availability works by ensuring a active process in the &lt;code&gt;monstache.cluster&lt;/code&gt; collection in mongodb. Only the processes in
-this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the
-&lt;code&gt;monstache.cluster&lt;/code&gt; collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
-the collection by mongodb and another process in the cluster will then have a chance to write to the collection and become the
-new active process.&lt;/p&gt;
-
-&lt;p&gt;When &lt;code&gt;cluster-name&lt;/code&gt; is supplied the &lt;code&gt;resume&lt;/code&gt; feature is automatically turned on and the &lt;code&gt;resume-name&lt;/code&gt; becomes the name of the cluster.
-This is to ensure that each of the processes is able to pick up syncing where the last one left off.&lt;/p&gt;
-
-&lt;p&gt;You can combine the HA feature with the workers feature.  For 3 cluster nodes with 3 workers per node you would have something like the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// config.toml
-workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]
-
-// on host A
-monstache -cluster-name HA -worker Tom -f config.toml
-monstache -cluster-name HA -worker Dick -f config.toml
-monstache -cluster-name HA -worker Harry -f config.toml
-
-// on host B
-monstache -cluster-name HA -worker Tom -f config.toml
-monstache -cluster-name HA -worker Dick -f config.toml
-monstache -cluster-name HA -worker Harry -f config.toml
-
-// on host C
-monstache -cluster-name HA -worker Tom -f config.toml
-monstache -cluster-name HA -worker Dick -f config.toml
-monstache -cluster-name HA -worker Harry -f config.toml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When the clustering feature is combined with workers then the &lt;code&gt;resume&lt;/code&gt; name becomes the cluster name concatenated with the worker name.&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
+      <description>You can run monstache in high availability mode by starting multiple processes with the same value for cluster-name. Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.
+High availability works by ensuring a active process in the monstache.cluster collection in mongodb. Only the processes in this collection will be syncing for the cluster. Processes not present in this collection will be paused.</description>
     </item>
     
   </channel>

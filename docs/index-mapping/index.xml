@@ -2,12 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Index-mappings on Monstache</title>
-    <link>https://rwynn.github.io/monstache-site/index-mapping/index.xml</link>
+    <link>https://rwynn.github.io/monstache-site/index-mapping/</link>
     <description>Recent content in Index-mappings on Monstache</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Released under the MIT license</copyright>
-    <atom:link href="https://rwynn.github.io/monstache-site/index-mapping/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://rwynn.github.io/monstache-site/index-mapping/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Index Mapping</title>
@@ -15,43 +17,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/index-mapping/</guid>
-      <description>&lt;p&gt;When indexing documents from mongodb into elasticsearch the mapping is as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-txt&#34;&gt;mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name
-mongodb collection name -&amp;gt; elasticsearch type
-mongodb document _id -&amp;gt; elasticsearch document _id
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding
-the following to your TOML config file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[mapping]]
-namespace = &amp;quot;test.test&amp;quot;
-index = &amp;quot;index1&amp;quot;
-type = &amp;quot;type1&amp;quot;
-
-[[mapping]]
-namespace = &amp;quot;test.test2&amp;quot;
-index = &amp;quot;index2&amp;quot;
-type = &amp;quot;type2&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With the configuration above documents in the &lt;code&gt;test.test&lt;/code&gt; namespace in mongodb are indexed into the &lt;code&gt;index1&lt;/code&gt;
-index in elasticsearch with the &lt;code&gt;type1&lt;/code&gt; type.&lt;/p&gt;
-
-&lt;p&gt;If you need your index and type mapping to be more dynamic, such as based on values inside the mongodb document, then
-see the section &lt;a href=&#34;https://rwynn.github.io/monstache-site/index-meta/&#34;&gt;Routing&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Make sure that automatic index creation is not disabled in elasticsearch.yml.&lt;/p&gt;
-
-&lt;p&gt;If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.&lt;/p&gt;
-
-&lt;p&gt;Note that when monstache maps index and type names for ElasticSearch it does normalization based on the
-&lt;a href=&#34;https://github.com/elastic/elasticsearch/issues/6736&#34;&gt;Validity Rules&lt;/a&gt;.  This includes making sure index names are
-all lowercase and that index, types, and ids do not being with an underscore.&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
+      <description>When indexing documents from mongodb into elasticsearch the mapping is as follows:
+mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id  If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
+[[mapping]] namespace = &amp;quot;test.</description>
     </item>
     
   </channel>

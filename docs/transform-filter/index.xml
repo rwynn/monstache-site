@@ -2,12 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Transform-filters on Monstache</title>
-    <link>https://rwynn.github.io/monstache-site/transform-filter/index.xml</link>
+    <link>https://rwynn.github.io/monstache-site/transform-filter/</link>
     <description>Recent content in Transform-filters on Monstache</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Released under the MIT license</copyright>
-    <atom:link href="https://rwynn.github.io/monstache-site/transform-filter/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://rwynn.github.io/monstache-site/transform-filter/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Transform and Filter</title>
@@ -15,136 +17,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
-      <description>
-
-&lt;p&gt;monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
-drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
-require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).&lt;/p&gt;
-
-&lt;h2 id=&#34;golang&#34;&gt;Golang&lt;/h2&gt;
-
-&lt;p&gt;monstache supports Golang 1.8 plugins.  To implement a plugin for monstache you simply need to implement a specific function signature,
-use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.&lt;/p&gt;
-
-&lt;p&gt;plugins must import the package &amp;ldquo;github.com/rwynn/monstache/monstachemap&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;plugins must implement a function named &amp;ldquo;Map&amp;rdquo; with the following signature&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;plugins can be compiled using&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;go build -buildmode=plugin -o myplugin.so myplugin.go
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so&lt;/p&gt;
-
-&lt;p&gt;the following example plugin simply converts top level string values to uppercase&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-import (
-	&amp;quot;github.com/rwynn/monstache/monstachemap&amp;quot;
-	&amp;quot;strings&amp;quot;
-)
-// a plugin to convert document values to uppercase
-func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
-	doc := input.Document
-	for k, v := range doc {
-		switch v.(type) {
-		case string:
-			doc[k] = strings.ToUpper(v.(string))
-		}
-	}
-	output = &amp;amp;monstachemap.MapperPluginOutput{Document: doc}
-	return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
-to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true&lt;/p&gt;
-
-&lt;p&gt;output.Index, output.Type, and output.Routing allow you to set the indexing metadata.&lt;/p&gt;
-
-&lt;h2 id=&#34;javascript&#34;&gt;Javascript&lt;/h2&gt;
-
-&lt;h3 id=&#34;transformation&#34;&gt;Transformation&lt;/h3&gt;
-
-&lt;p&gt;monstache uses the amazing &lt;a href=&#34;https://github.com/robertkrimen/otto&#34;&gt;otto&lt;/a&gt; library to provide transformation at the document field
-level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
-added to your TOML config file, for example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
-namespace = &amp;quot;mydb.mycollection&amp;quot;
-script = &amp;quot;&amp;quot;&amp;quot;
-var counter = 1;
-module.exports = function(doc) {
-	doc.foo += &amp;quot;test&amp;quot; + counter;
-	counter++;
-	return _.omit(doc, &amp;quot;password&amp;quot;, &amp;quot;secret&amp;quot;);
-}
-&amp;quot;&amp;quot;&amp;quot;
-
-[[script]]
-namespace = &amp;quot;anotherdb.anothercollection&amp;quot;
-script = &amp;quot;&amp;quot;&amp;quot;
-var counter = 1;
-module.exports = function(doc) {
-	doc.foo += &amp;quot;test2&amp;quot; + counter;
-	counter++;
-	return doc;
-}
-&amp;quot;&amp;quot;&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The example TOML above configures 2 scripts. The first is applied to &lt;code&gt;mycollection&lt;/code&gt; in &lt;code&gt;mydb&lt;/code&gt; while the second is applied
-to &lt;code&gt;anothercollection&lt;/code&gt; in &lt;code&gt;anotherdb&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
-&lt;code&gt;script&lt;/code&gt;.  The javascript assigned to script must assign a function to the exports property of the &lt;code&gt;module&lt;/code&gt; object.  This
-function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can
-manipulate the document to drop fields, add fields, or augment the existing fields.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;this&lt;/code&gt; reference in the mapping function is assigned to the document from mongodb.&lt;/p&gt;
-
-&lt;p&gt;When the return value from the mapping function is an &lt;code&gt;object&lt;/code&gt; then that mapped object is what actually gets indexed in elasticsearch.
-For these purposes an object is a javascript non-primitive, excluding &lt;code&gt;Function&lt;/code&gt;, &lt;code&gt;Array&lt;/code&gt;, &lt;code&gt;String&lt;/code&gt;, &lt;code&gt;Number&lt;/code&gt;, &lt;code&gt;Boolean&lt;/code&gt;, &lt;code&gt;Date&lt;/code&gt;, &lt;code&gt;Error&lt;/code&gt; and &lt;code&gt;RegExp&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;filtering&#34;&gt;Filtering&lt;/h3&gt;
-
-&lt;p&gt;If the return value from the mapping function is not an &lt;code&gt;object&lt;/code&gt; per the definition above then the result is converted into a &lt;code&gt;boolean&lt;/code&gt;
-and if the boolean value is &lt;code&gt;false&lt;/code&gt; then that indicates to monstache that you would not like to index the document. If the boolean value is &lt;code&gt;true&lt;/code&gt; then
-the original document from mongodb gets indexed in elasticsearch.&lt;/p&gt;
-
-&lt;p&gt;This allows you to return false or null if you have implemented soft deletes in mongodb.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;[[script]]
-namespace = &amp;quot;db.collection&amp;quot;
-script = &amp;quot;&amp;quot;&amp;quot;
-module.exports = function(doc) {
-	if (!!doc.deletedAt) {
-		return false;
-	}
-	return true;
-}
-&amp;quot;&amp;quot;&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In the above example monstache will index any document except the ones with a &lt;code&gt;deletedAt&lt;/code&gt; property.  If the document is first
-inserted without a &lt;code&gt;deletedAt&lt;/code&gt; property, but later updated to include the &lt;code&gt;deletedAt&lt;/code&gt; property then monstache will remove the
-previously indexed document from the elasticsearch index.&lt;/p&gt;
-
-&lt;p&gt;Note you could also return &lt;code&gt;doc&lt;/code&gt; above instead of returning &lt;code&gt;true&lt;/code&gt; and get the same result, however, it&amp;rsquo;s a slight performance gain
-to simply return &lt;code&gt;true&lt;/code&gt; when not changing the document because you are not copying data in that case.&lt;/p&gt;
-
-&lt;p&gt;You may have noticed that in the first example above the exported mapping function closes over a var named &lt;code&gt;counter&lt;/code&gt;.  You can
-use closures to maintain state between invocations of your mapping function.&lt;/p&gt;
-
-&lt;p&gt;Finally, since Otto makes it so easy, the venerable &lt;a href=&#34;http://underscorejs.org/&#34;&gt;Underscore&lt;/a&gt; library is included for you at
-no extra charge.  Feel free to abuse the power of the &lt;code&gt;_&lt;/code&gt;.&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
+      <description>monstache supports embedding user defined middleware between MongoDB and Elasticsearch. middleware is able to transform documents, drop documents, or define indexing metadata. middleware may be written in either Javascript or in Golang as a plugin. Golang plugins require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
+Golang monstache supports Golang 1.8 plugins. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
     </item>
     
   </channel>

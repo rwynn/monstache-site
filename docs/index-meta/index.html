@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Routing - Monstache</title>
-    <meta name="generator" content="Hugo 0.19-DEV" />
+    <meta name="generator" content="Hugo 0.21-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">2.14.0</span></strong>
+        <strong>Monstache <span class="version">3.0.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -457,8 +457,8 @@ namespace = &quot;blog.comments&quot;
 routing = true
 script = &quot;&quot;&quot;
 module.exports = function(doc) {
-    doc._meta_monstache = { routing: doc.post_id };
-    return doc;
+	doc._meta_monstache = { routing: doc.post_id };
+	return doc;
 }
 &quot;&quot;&quot;
 </code></pre>
@@ -503,13 +503,13 @@ namespace = &quot;blog.comments&quot;
 routing = true
 script = &quot;&quot;&quot;
 module.exports = function(doc) {
-    if (doc.score &gt;= 100) {
-        // NOTE: prefix dynamic index with namespace for proper cleanup on drops
-        doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
-    } else {
-        doc._meta_monstache = { routing: doc.post_id };
-    }
-    return doc;
+	if (doc.score &gt;= 100) {
+		// NOTE: prefix dynamic index with namespace for proper cleanup on drops
+		doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
+	} else {
+		doc._meta_monstache = { routing: doc.post_id };
+	}
+	return doc;
 }
 &quot;&quot;&quot;
 </code></pre>

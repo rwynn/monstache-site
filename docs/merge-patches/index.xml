@@ -2,12 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Merge-patches on Monstache</title>
-    <link>https://rwynn.github.io/monstache-site/merge-patches/index.xml</link>
+    <link>https://rwynn.github.io/monstache-site/merge-patches/</link>
     <description>Recent content in Merge-patches on Monstache</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Released under the MIT license</copyright>
-    <atom:link href="https://rwynn.github.io/monstache-site/merge-patches/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://rwynn.github.io/monstache-site/merge-patches/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Merge Patches</title>
@@ -15,116 +17,11 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/merge-patches/</guid>
-      <description>&lt;p&gt;A unique feature of monstache is support for JSON Merge Patches &lt;a href=&#34;https://tools.ietf.org/html/rfc7396&#34;&gt;rfc-7396&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The
-name of this field is configurable but it defaults to &lt;code&gt;json-merge-patches&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Consider the following example with merge patches enabled&amp;hellip;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;At this point you would have the following document source in elasticsearch.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; &amp;quot;_source&amp;quot; : {
-  &amp;quot;age&amp;quot; : 16,
-  &amp;quot;friends&amp;quot; : [
-    1,
-    2,
-    3
-  ],
-  &amp;quot;json-merge-patches&amp;quot; : [
-    {
-      &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;,
-      &amp;quot;ts&amp;quot; : 1487263414,
-      &amp;quot;v&amp;quot; : 1
-    }
-  ],
-  &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As you can see we have a single timestamped merge patch in the json-merge-patches array.&lt;/p&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s update the document to remove a friend and update the age.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;db.test.update({name: &amp;quot;Joe&amp;quot;}, {$set: {age: 21, friends: [1, 3]}})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If we now look at the document in elasticsearch we see the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;quot;_source&amp;quot; : {
-  &amp;quot;age&amp;quot; : 21,
-  &amp;quot;friends&amp;quot; : [
-    1,
-    3
-  ],
-  &amp;quot;json-merge-patches&amp;quot; : [
-    {
-      &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;,
-      &amp;quot;ts&amp;quot; : 1487263414,
-      &amp;quot;v&amp;quot; : 1
-    },
-    {
-      &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:21,\&amp;quot;friends\&amp;quot;:[1,3]}&amp;quot;,
-      &amp;quot;ts&amp;quot; : 1487263746,
-      &amp;quot;v&amp;quot; : 2
-    }
-  ],
-  &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can see that the document was updated as expected and an additional merge patch was added.&lt;/p&gt;
-
-&lt;p&gt;Each time the document is updated in mongodb the corresponding document in elasticsearch gains a
-timestamped merge patch.  Using this information we can time travel is the document&amp;rsquo;s history.&lt;/p&gt;
-
-&lt;p&gt;There is a merge patch for each version of the document.  To recreate a specific version we simply need
-to apply the merge patches in order up to the version that we want.&lt;/p&gt;
-
-&lt;p&gt;To get version 1 of the document above we start with {} and apply the 1st merge patch.&lt;/p&gt;
-
-&lt;p&gt;To get version 2 of the document above we start with {}&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;apply the 1st merge patch to get v1&lt;/li&gt;
-&lt;li&gt;apply the 2nd merge patch to v1 to get v2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The timestamps associated with these merge patches are in seconds since the epoch, taken from the
-timestamp recorded in the oplog when the insert or update occured.&lt;/p&gt;
-
-&lt;p&gt;To enable the merge patches feature in monstache you need to add the following to you TOML config:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;enable-patches = true
-patch-namespaces = [&amp;quot;test.test&amp;quot;]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You need you add each namespace that you would like to see patches for in the patch-namespaces array.&lt;/p&gt;
-
-&lt;p&gt;Optionally, you can change the key under which the patches are stored in the source document as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;merge-patch-attribute = &amp;quot;custom-merge-attr&amp;quot; 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Most likely, you will want to turn off indexing for the merge patch attribute.  You can do this by creating
-an index template for each patch namespace before running monstache&amp;hellip;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;PUT /_template/test.test
-{
-    &amp;quot;template&amp;quot; : &amp;quot;test.test&amp;quot;,
-    &amp;quot;mappings&amp;quot; : {
-    &amp;quot;test&amp;quot; : {
-        &amp;quot;json-merge-patches&amp;quot; : { &amp;quot;index&amp;quot; : false }
-    }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-</description>
+      <description>A unique feature of monstache is support for JSON Merge Patches rfc-7396.
+If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The name of this field is configurable but it defaults to json-merge-patches.
+Consider the following example with merge patches enabled&amp;hellip;
+db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At this point you would have the following document source in elasticsearch.
+ &amp;quot;_source&amp;quot; : { &amp;quot;age&amp;quot; : 16, &amp;quot;friends&amp;quot; : [ 1, 2, 3 ], &amp;quot;json-merge-patches&amp;quot; : [ { &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;, &amp;quot;ts&amp;quot; : 1487263414, &amp;quot;v&amp;quot; : 1 } ], &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot; }  As you can see we have a single timestamped merge patch in the json-merge-patches array.</description>
     </item>
     
   </channel>
