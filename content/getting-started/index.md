@@ -50,7 +50,6 @@ elasticsearch-password = "somepassword"
 elasticsearch-max-conns = 10
 elasticsearch-pem-file = "/path/to/elasticCert.pem"
 elastic-validate-pem-file = true
-elasticsearch-hosts = ["localhost", "example.com"]
 dropped-collections = true
 dropped-databases = true
 replay = false
