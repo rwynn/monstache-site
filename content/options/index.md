@@ -421,7 +421,7 @@ one of the processes in paused state will take control and start syncing.  See t
 When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Transform and Filter](/transform-filter/)
 for more information.
 
-## log
+## logs
 
 ### TOML table (default nil)
 
