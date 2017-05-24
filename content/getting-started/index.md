@@ -11,13 +11,13 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 3.0.0
+# 3.0.2
 ```
 
 ## Configuration
 
 Monstache uses the MongoDB [oplog](https://docs.mongodb.com/manual/core/replica-set-oplog/) as an event source. You will need to make sure that MongoDB is configured to
-produce an oplog.  The oplog can be enabled by
+produce an oplog.  The oplog can be enabled by using one of the following options:
 
 + Setting up [replica sets](http://docs.mongodb.org/manual/tutorial/deploy-replica-set/)
 + Passing --master to the mongod process
@@ -26,6 +26,12 @@ produce an oplog.  The oplog can be enabled by
 ```toml
 master = true
 ```
+
+If you have have enable security in MongoDB you will need to give the user in your connection string
+certain priviledges.  Specifically, the user will need to be able read the `local` database (to read
+from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the 
+resume or clustering features the user will need to be able to write to and create indexes for the 
+`monstache` database. 
 
 Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
 and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.

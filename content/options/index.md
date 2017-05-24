@@ -331,6 +331,12 @@ For more information see [Thread Pool](https://www.elastic.co/guide/en/elasticse
 
 When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy
 
+## elasticsearch-client-timeout
+
+### int (default 60)
+
+The number of seconds before a request to elasticsearch times out
+
 ## elasticsearch-max-docs
 
 ### int (default 1000)

@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.0</span></strong>
+        <strong>Monstache <span class="version">3.0.2</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,13 +434,13 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 3.0.0
+# 3.0.2
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
 
 <p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to make sure that MongoDB is configured to
-produce an oplog.  The oplog can be enabled by</p>
+produce an oplog.  The oplog can be enabled by using one of the following options:</p>
 
 <ul>
 <li>Setting up <a href="http://docs.mongodb.org/manual/tutorial/deploy-replica-set/">replica sets</a></li>
@@ -450,6 +450,12 @@ produce an oplog.  The oplog can be enabled by</p>
 
 <pre><code class="language-toml">master = true
 </code></pre>
+
+<p>If you have have enable security in MongoDB you will need to give the user in your connection string
+certain priviledges.  Specifically, the user will need to be able read the <code>local</code> database (to read
+from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the
+resume or clustering features the user will need to be able to write to and create indexes for the
+<code>monstache</code> database.</p>
 
 <p>Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
 and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>
