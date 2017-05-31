@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.2</span></strong>
+        <strong>Monstache <span class="version">3.0.3</span></strong>
         
           <br>
           rwynn/monstache
@@ -535,6 +535,8 @@ The oplog is a capped collection and may only contain a subset of the data.  In 
 sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.</p>
 
+<p>This option may be passed on the command line as ./monstache &ndash;direct-read-namespace test.foo &ndash;direct-read-namespace test.bar</p>
+
 <h2 id="direct-read-limit">direct-read-limit</h2>
 
 <h3 id="int-default-1000">int (default 1000)</h3>
@@ -695,6 +697,8 @@ For further information on how to configure monstache to index content from Grid
 namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
 raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin.</p>
 
+<p>This option may be passed on the command line as ./monstache &ndash;file-namespace test.foo &ndash;file-namespace test.bar</p>
+
 <h2 id="file-highlighting">file-highlighting</h2>
 
 <h3 id="boolean-default-false-9">boolean (default false)</h3>
@@ -726,6 +730,8 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <p>An array of URLs to connect to the Elasticsearch REST Interface</p>
 
+<p>This option may be passed on the command line as ./monstache &ndash;elasticsearch-url URL1 &ndash;elasticsearch-url URL2</p>
+
 <h2 id="elasticsearch-version">elasticsearch-version</h2>
 
 <h3 id="string-by-default-determined-by-connecting-to-the-server">string (by default determined by connecting to the server)</h3>
@@ -754,7 +760,9 @@ of this queue is 50.  To increase the size of the bulk indexing queue you can up
 
 <h3 id="boolean-default-false-11">boolean (default false)</h3>
 
-<p>When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy</p>
+<p>When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
+is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how
+this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v5/backoff.go">Back Off Strategy</a></p>
 
 <h2 id="elasticsearch-client-timeout">elasticsearch-client-timeout</h2>
 
@@ -819,6 +827,8 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 
 <p>An array of worker names to be used in conjunction with the worker option.</p>
 
+<p>This option may be passed on the command line as ./monstache &ndash;workers w1 &ndash;workers w2</p>
+
 <h2 id="enable-patches">enable-patches</h2>
 
 <h3 id="boolean-default-false-12">boolean (default false)</h3>
@@ -830,6 +840,8 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 <h3 id="string-default-nil-3">[]string (default nil)</h3>
 
 <p>An array of mongodb namespaces that you would like to enable rfc7396 patches on</p>
+
+<p>This option may be passed on the command line as ./monstache &ndash;patch-namespace test.foo &ndash;patch-namespace test.bar</p>
 
 <h2 id="merge-patch-attribute">merge-patch-attribute</h2>
 

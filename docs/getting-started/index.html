@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.2</span></strong>
+        <strong>Monstache <span class="version">3.0.3</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,7 +434,7 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 3.0.2
+# 3.0.3
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
@@ -456,6 +456,16 @@ certain priviledges.  Specifically, the user will need to be able read the <code
 from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the
 resume or clustering features the user will need to be able to write to and create indexes for the
 <code>monstache</code> database.</p>
+
+<p>Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
+pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time
+out due to an overloaded queue. The queue size can be increased by making changes to your elasticsearch.yml
+configuration.</p>
+
+<pre><code> thread_pool:
+   bulk:
+     queue_size: 200
+</code></pre>
 
 <p>Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
 and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>

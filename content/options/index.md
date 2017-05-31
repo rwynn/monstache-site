@@ -109,7 +109,9 @@ and do not stop execution it's not unreasonable to set this to true to get a spe
 At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
 The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
 sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
-like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch. 
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.
+
+This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
 
 ## direct-read-limit
 
@@ -271,6 +273,8 @@ The file-namespaces config must be set when index-files is enabled.  file-namesp
 namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
 raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin. 
 
+This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar
+
 ## file-highlighting
 
 ### boolean (default false)
@@ -302,6 +306,8 @@ Optional Elasticsearch password for basic auth
 
 An array of URLs to connect to the Elasticsearch REST Interface
 
+This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 
+
 ## elasticsearch-version
 
 ### string (by default determined by connecting to the server)
@@ -329,7 +335,9 @@ For more information see [Thread Pool](https://www.elastic.co/guide/en/elasticse
 
 ### boolean (default false)
 
-When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy
+When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
+is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how 
+this works see [Back Off Strategy](https://github.com/olivere/elastic/blob/release-branch.v5/backoff.go)
 
 ## elasticsearch-client-timeout
 
@@ -394,6 +402,8 @@ same worker and none of the other workers. See the section [workers](/workers/) 
 
 An array of worker names to be used in conjunction with the worker option. 
 
+This option may be passed on the command line as ./monstache --workers w1 --workers w2 
+
 ## enable-patches
 
 ### boolean (default false) 
@@ -405,6 +415,8 @@ Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) pat
 ### []string (default nil)
 
 An array of mongodb namespaces that you would like to enable rfc7396 patches on
+
+This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar 
 
 ## merge-patch-attribute
 

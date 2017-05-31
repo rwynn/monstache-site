@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 3.0.2
+# 3.0.3
 ```
 
 ## Configuration
@@ -32,6 +32,17 @@ certain priviledges.  Specifically, the user will need to be able read the `loca
 from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the 
 resume or clustering features the user will need to be able to write to and create indexes for the 
 `monstache` database. 
+
+Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
+pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time
+out due to an overloaded queue. The queue size can be increased by making changes to your elasticsearch.yml
+configuration.
+
+```
+ thread_pool:
+   bulk:
+     queue_size: 200
+```
 
 Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
 and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.
