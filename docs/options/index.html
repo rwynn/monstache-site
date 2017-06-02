@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.3</span></strong>
+        <strong>Monstache <span class="version">3.0.4</span></strong>
         
           <br>
           rwynn/monstache
@@ -539,9 +539,15 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 
 <h2 id="direct-read-limit">direct-read-limit</h2>
 
-<h3 id="int-default-1000">int (default 1000)</h3>
+<h3 id="int-default-5000">int (default 5000)</h3>
 
 <p>The maximum number of documents to retreive in each direct read query</p>
+
+<h2 id="direct-readers-per-col">direct-readers-per-col</h2>
+
+<h3 id="int-default-10">int (default 10)</h3>
+
+<p>The number of concurrent readers per collection for direct reads</p>
 
 <h2 id="exit-after-direct-reads">exit-after-direct-reads</h2>
 
@@ -622,7 +628,7 @@ Duration values are expected in the form 50s.</p>
 
 <h3 id="timeout">timeout</h3>
 
-<h4 id="int-default-10">int (default 10)</h4>
+<h4 id="int-default-10-1">int (default 10)</h4>
 
 <p>Seconds to wait when establishing a connection to mongodb before giving up</p>
 
@@ -743,7 +749,7 @@ API to get the version is not possible or desired.</p>
 
 <h2 id="elasticsearch-max-conns">elasticsearch-max-conns</h2>
 
-<h3 id="int-default-10-1">int (default 10)</h3>
+<h3 id="int-default-10-2">int (default 10)</h3>
 
 <p>The size of the Elasticsearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
 If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
@@ -772,7 +778,7 @@ this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v
 
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs</h2>
 
-<h3 id="int-default-1000-1">int (default 1000)</h3>
+<h3 id="int-default-1000">int (default 1000)</h3>
 
 <p>When elasticsearch-max-docs is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
 

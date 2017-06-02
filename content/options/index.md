@@ -115,9 +115,15 @@ This option may be passed on the command line as ./monstache --direct-read-names
 
 ## direct-read-limit
 
-### int (default 1000)
+### int (default 5000)
 
 The maximum number of documents to retreive in each direct read query
+
+## direct-readers-per-col
+
+### int (default 10)
+
+The number of concurrent readers per collection for direct reads
 
 ## exit-after-direct-reads
 
