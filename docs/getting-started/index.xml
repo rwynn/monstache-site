@@ -19,7 +19,7 @@
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.0.5  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.0.6  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
   </channel>
