@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -142,7 +142,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -430,8 +430,8 @@
 
 <h2 id="sync-mongodb-to-elasticsearch-in-near-realtime">Sync MongoDB to ElasticSearch in near realtime</h2>
 
-<p>Monstache is a sync daemon written in Go that keeps your MongoDB collections synchronized with your
-ElasticSearch indices.</p>
+<p>Monstache is a sync daemon written in Go that continously indexes your MongoDB collections in
+Elasticsearch.</p>
 
 <h2 id="quick-start">Quick start</h2>
 
@@ -443,7 +443,9 @@ ElasticSearch indices.</p>
 <h2 id="features">Features</h2>
 
 <ul>
-<li><p>Select only the collections you want to sync</p></li>
+<li><p>Optionally filter the set of collections you want to sync</p></li>
+
+<li><p>Direct read mode to do a full sync of collections in addition to tailing the oplog</p></li>
 
 <li><p>Transform and filter documents before indexing using Golang plugins or JavaScript</p></li>
 
@@ -451,7 +453,7 @@ ElasticSearch indices.</p>
 
 <li><p>Support for hard and soft deletes in MongoDB</p></li>
 
-<li><p>Support for database and collection drops</p></li>
+<li><p>Support for propogating database and collection drops</p></li>
 
 <li><p>Optional custom document routing in ElasticSearch</p></li>
 

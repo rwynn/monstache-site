@@ -17,12 +17,11 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/</guid>
-      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that keeps your MongoDB collections synchronized with your ElasticSearch indices.
+      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections in Elasticsearch.
 Quick start Download or Install with go get:
-go get -v github.com/rwynn/monstache  Features  Select only the collections you want to sync
- Transform and filter documents before indexing using Golang plugins or JavaScript
- Index the content of GridFS files
- Support for hard and soft deletes in MongoDB</description>
+go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections you want to sync
+ Direct read mode to do a full sync of collections in addition to tailing the oplog
+ Transform and filter documents before indexing using Golang plugins or JavaScript</description>
     </item>
     
     <item>
@@ -33,7 +32,7 @@ go get -v github.com/rwynn/monstache  Features  Select only the collections you 
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.0.4  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.0.5  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>
@@ -63,7 +62,7 @@ In addition to inserts, updates, and deletes monstache also supports database an
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/index-mapping/</guid>
-      <description>When indexing documents from mongodb into elasticsearch the mapping is as follows:
+      <description>When indexing documents from MongoDB into elasticsearch the mapping is as follows:
 mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id  If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
 [[mapping]] namespace = &amp;quot;test.</description>
     </item>
@@ -75,7 +74,7 @@ mongodb database name . mongodb collection name -&amp;gt; elasticsearch index na
       
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
       <description>monstache supports embedding user defined middleware between MongoDB and Elasticsearch. middleware is able to transform documents, drop documents, or define indexing metadata. middleware may be written in either Javascript or in Golang as a plugin. Golang plugins require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
-Golang monstache supports Golang 1.8 plugins. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
+Golang monstache supports Golang 1.8 plugins on Linux. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
     </item>
     
     <item>
@@ -84,8 +83,8 @@ Golang monstache supports Golang 1.8 plugins. To implement a plugin for monstach
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/gridfs/</guid>
-      <description>Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full text search. This feature requires that you install an elasticsearch plugin which enables the field type attachment. For versions of elasticsearch prior to version 5 you should install the mapper-attachments plugin. For version 5 or later of elasticsearch you should instead install the ingest-attachment plugin.
-Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is as simple as configuring monstache.</description>
+      <description>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full text search. This feature requires that you install an Elasticsearch plugin which enables the field type attachment. For versions of Elasticsearch prior to version 5 you should install the mapper-attachments plugin. For version 5 or later of Elasticsearch you should instead install the ingest-attachment plugin.
+Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is as simple as configuring monstache.</description>
     </item>
     
     <item>
@@ -116,7 +115,7 @@ monstache -f config.toml -worker Tom monstache -f config.toml -worker Dick monst
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/high-availability/</guid>
-      <description>You can run monstache in high availability mode by starting multiple processes with the same value for cluster-name. Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.
+      <description>You can run monstache in high availability mode by starting multiple processes with the same value for cluster-name. Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.
 High availability works by ensuring a active process in the monstache.cluster collection in mongodb. Only the processes in this collection will be syncing for the cluster. Processes not present in this collection will be paused.</description>
     </item>
     

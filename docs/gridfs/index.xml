@@ -17,8 +17,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/gridfs/</guid>
-      <description>Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full text search. This feature requires that you install an elasticsearch plugin which enables the field type attachment. For versions of elasticsearch prior to version 5 you should install the mapper-attachments plugin. For version 5 or later of elasticsearch you should instead install the ingest-attachment plugin.
-Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is as simple as configuring monstache.</description>
+      <description>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full text search. This feature requires that you install an Elasticsearch plugin which enables the field type attachment. For versions of Elasticsearch prior to version 5 you should install the mapper-attachments plugin. For version 5 or later of Elasticsearch you should instead install the ingest-attachment plugin.
+Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is as simple as configuring monstache.</description>
     </item>
     
   </channel>

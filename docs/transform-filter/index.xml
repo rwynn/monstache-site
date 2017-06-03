@@ -18,7 +18,7 @@
       
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
       <description>monstache supports embedding user defined middleware between MongoDB and Elasticsearch. middleware is able to transform documents, drop documents, or define indexing metadata. middleware may be written in either Javascript or in Golang as a plugin. Golang plugins require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
-Golang monstache supports Golang 1.8 plugins. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
+Golang monstache supports Golang 1.8 plugins on Linux. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
     </item>
     
   </channel>

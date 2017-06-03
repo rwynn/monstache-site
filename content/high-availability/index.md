@@ -5,7 +5,7 @@ weight: 70
 
 
 You can run monstache in high availability mode by starting multiple processes with the same value for `cluster-name`.
-Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.
+Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.
 
 High availability works by ensuring a active process in the `monstache.cluster` collection in mongodb. Only the processes in
 this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the 

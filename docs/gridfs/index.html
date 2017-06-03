@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Indexing GridFS Files - Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -425,14 +425,14 @@
 		<div class="wrapper">
 			<h1>Indexing GridFS Files </h1>
 
-			<p>Monstache supports indexing the raw content of files stored in GridFS into elasticsearch for full
-text search.  This feature requires that you install an elasticsearch plugin which enables the field type <code>attachment</code>.
-For versions of elasticsearch prior to version 5 you should install the
-<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.3/mapper-attachments.html">mapper-attachments</a> plugin.
-For version 5 or later of elasticsearch you should instead install the
-<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin.</p>
+			<p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
+text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
+For versions of Elasticsearch prior to version 5 you should install the
+<a href="https://www.elastic.co/guide/en/Elasticsearch/plugins/2.3/mapper-attachments.html">mapper-attachments</a> plugin.
+For version 5 or later of Elasticsearch you should instead install the
+<a href="https://www.elastic.co/guide/en/Elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin.</p>
 
-<p>Once you have installed the appropriate plugin for elasticsearch, getting file content from GridFS into elasticsearch is
+<p>Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is
 as simple as configuring monstache.  You will want to enable the <code>index-files</code> option and also tell monstache the
 namespace of all collections which will hold GridFS files. For example in your TOML config file,</p>
 
@@ -444,17 +444,17 @@ file-highlighting = true
 </code></pre>
 
 <p>The above configuration tells monstache that you wish to index the raw content of GridFS files in the <code>users</code> and <code>posts</code>
-mongodb databases. By default, mongodb uses a bucket named <code>fs</code>, so if you just use the defaults your collection name will
+MongoDB databases. By default, MongoDB uses a bucket named <code>fs</code>, so if you just use the defaults your collection name will
 be <code>fs.files</code>.  However, if you have customized the bucket name, then your file collection would be something like <code>mybucket.files</code>
 and the entire namespace would be <code>users.mybucket.files</code>.</p>
 
 <p>When you configure monstache this way it will perform an additional operation at startup to ensure the destination indexes in
-elasticsearch have a field named <code>file</code> with a type mapping of <code>attachment</code>.</p>
+Elasticsearch have a field named <code>file</code> with a type mapping of <code>attachment</code>.</p>
 
 <p>For the example TOML configuration above, monstache would initialize 2 indices in preparation for indexing into
-elasticsearch by issuing the following REST commands:</p>
+Elasticsearch by issuing the following REST commands:</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
+<p>For Elasticsearch versions prior to version 5&hellip;</p>
 
 <pre><code>POST /users.fs.files
 {
@@ -473,7 +473,7 @@ POST /posts.fs.files
 }}}}
 </code></pre>
 
-<p>For elasticsearch version 5 and above&hellip;</p>
+<p>For Elasticsearch version 5 and above&hellip;</p>
 
 <pre><code>PUT /_ingest/pipeline/attachment
 {
@@ -488,26 +488,26 @@ POST /posts.fs.files
 }
 </code></pre>
 
-<p>When a file is inserted into mongodb via GridFS, monstache will detect the new file, use the mongodb api to retrieve the raw
-content, and index a document into elasticsearch with the raw content stored in a <code>file</code> field as a base64
-encoded string. The elasticsearch plugin will then extract text content from the raw content using
+<p>When a file is inserted into MongoDB via GridFS, monstache will detect the new file, use the MongoDB api to retrieve the raw
+content, and index a document into Elasticsearch with the raw content stored in a <code>file</code> field as a base64
+encoded string. The Elasticsearch plugin will then extract text content from the raw content using
 <a href="https://tika.apache.org/">Apache Tika</a>, tokenize the text content, and allow you to query on the content of the file.</p>
 
 <p>To test this feature of monstache you can simply use the <a href="https://docs.mongodb.com/manual/reference/program/mongofiles/">mongofiles</a>
-command to quickly add a file to mongodb via GridFS.  Continuing the example above one could issue the following command to put a
-file named <code>resume.docx</code> into GridFS and after a short time this file should be searchable in elasticsearch in the index <code>users.fs.files</code>.</p>
+command to quickly add a file to MongoDB via GridFS.  Continuing the example above one could issue the following command to put a
+file named <code>resume.docx</code> into GridFS and after a short time this file should be searchable in Elasticsearch in the index <code>users.fs.files</code>.</p>
 
 <pre><code>mongofiles -d users put resume.docx
 </code></pre>
 
-<p>After a short time you should be able to query the contents of resume.docx in the users index in elasticsearch</p>
+<p>After a short time you should be able to query the contents of resume.docx in the users index in Elasticsearch</p>
 
 <pre><code>curl -XGET 'http://localhost:9200/users.fs.files/_search?q=golang'
 </code></pre>
 
 <p>If you would like to see the text extracted by Apache Tika you can project the appropriate sub-field</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
+<p>For Elasticsearch versions prior to version 5&hellip;</p>
 
 <pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
     &quot;fields&quot;: [ &quot;file.content&quot; ],
@@ -519,7 +519,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 }'
 </code></pre>
 
-<p>For elasticsearch version 5 and above&hellip;</p>
+<p>For Elasticsearch version 5 and above&hellip;</p>
 
 <pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
     &quot;_source&quot;: [ &quot;attachment.content&quot; ],
@@ -533,7 +533,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 
 <p>When <code>file-highlighting</code> is enabled you can add a highlight clause to your query</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
+<p>For Elasticsearch versions prior to version 5&hellip;</p>
 
 <pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
     &quot;fields&quot;: [&quot;file.content&quot;],
@@ -551,7 +551,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 }'
 </code></pre>
 
-<p>For elasticsearch version 5 and above&hellip;</p>
+<p>For Elasticsearch version 5 and above&hellip;</p>
 
 <pre><code>curl localhost:9200/users.fs.files/_search?pretty -d '{
     &quot;_source&quot;: [&quot;attachment.content&quot;],
@@ -571,7 +571,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 
 <p>The highlight response will contain emphasis on the matching terms</p>
 
-<p>For elasticsearch versions prior to version 5&hellip;</p>
+<p>For Elasticsearch versions prior to version 5&hellip;</p>
 
 <pre><code>&quot;hits&quot; : [ {
     &quot;highlight&quot; : {
@@ -580,7 +580,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
 } ]
 </code></pre>
 
-<p>For elasticsearch version 5 and above&hellip;</p>
+<p>For Elasticsearch version 5 and above&hellip;</p>
 
 <pre><code>&quot;hits&quot; : [{
     &quot;highlight&quot; : {

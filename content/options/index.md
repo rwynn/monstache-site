@@ -53,6 +53,10 @@ valuable information to have for failed indexing requests since it gives one the
 a failure point.  See the option resume-from-timestamp for information on how to replay oplog events since 
 a given event occurred. 
 
+For data read via the direct read feature the oplog time will only be available if the id of the MongoDB
+document is an ObjectID.  If the id of the MongoDB document is not an ObjectID and the document source is
+a direct read query then the oplog time with not be available.
+
 ## resume
 
 ### boolean (default false)
@@ -118,6 +122,12 @@ This option may be passed on the command line as ./monstache --direct-read-names
 ### int (default 5000)
 
 The maximum number of documents to retreive in each direct read query
+
+## direct-read-batch-size
+
+### int (default 500)
+
+The batch size to set on direct read queries
 
 ## direct-readers-per-col
 

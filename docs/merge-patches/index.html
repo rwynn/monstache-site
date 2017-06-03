@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Merge Patches - Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -518,6 +518,9 @@ patch-namespaces = [&quot;test.test&quot;]
 
 <pre><code>merge-patch-attribute = &quot;custom-merge-attr&quot; 
 </code></pre>
+
+<p>Merge patches will only be recorded for data read from the MongoDB oplog.  Data read using the direct read
+feature will not be enhanced with merge patches.</p>
 
 <p>Most likely, you will want to turn off indexing for the merge patch attribute.  You can do this by creating
 an index template for each patch namespace before running monstache&hellip;</p>

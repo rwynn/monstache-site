@@ -89,6 +89,9 @@ Optionally, you can change the key under which the patches are stored in the sou
 
 	merge-patch-attribute = "custom-merge-attr"	
 
+Merge patches will only be recorded for data read from the MongoDB oplog.  Data read using the direct read
+feature will not be enhanced with merge patches.
+
 Most likely, you will want to turn off indexing for the merge patch attribute.  You can do this by creating
 an index template for each patch namespace before running monstache...
 

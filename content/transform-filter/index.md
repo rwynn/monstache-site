@@ -9,7 +9,7 @@ require Go version 1.8 or greater. currently, you are able to use Javascript or 
 
 ## Golang
 
-monstache supports Golang 1.8 plugins.  To implement a plugin for monstache you simply need to implement a specific function signature,
+monstache supports Golang 1.8 plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
 
 plugins must import the package "github.com/rwynn/monstache/monstachemap"

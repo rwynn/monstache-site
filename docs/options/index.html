@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Options - Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -477,6 +477,10 @@ valuable information to have for failed indexing requests since it gives one the
 a failure point.  See the option resume-from-timestamp for information on how to replay oplog events since
 a given event occurred.</p>
 
+<p>For data read via the direct read feature the oplog time will only be available if the id of the MongoDB
+document is an ObjectID.  If the id of the MongoDB document is not an ObjectID and the document source is
+a direct read query then the oplog time with not be available.</p>
+
 <h2 id="resume">resume</h2>
 
 <h3 id="boolean-default-false-4">boolean (default false)</h3>
@@ -542,6 +546,12 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 <h3 id="int-default-5000">int (default 5000)</h3>
 
 <p>The maximum number of documents to retreive in each direct read query</p>
+
+<h2 id="direct-read-batch-size">direct-read-batch-size</h2>
+
+<h3 id="int-default-500">int (default 500)</h3>
+
+<p>The batch size to set on direct read queries</p>
 
 <h2 id="direct-readers-per-col">direct-readers-per-col</h2>
 

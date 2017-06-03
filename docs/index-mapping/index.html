@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Index Mapping - Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -425,7 +425,7 @@
 		<div class="wrapper">
 			<h1>Index Mapping </h1>
 
-			<p>When indexing documents from mongodb into elasticsearch the mapping is as follows:</p>
+			<p>When indexing documents from MongoDB into elasticsearch the mapping is as follows:</p>
 
 <pre><code class="language-txt">mongodb database name . mongodb collection name -&gt; elasticsearch index name
 mongodb collection name -&gt; elasticsearch type
@@ -446,10 +446,10 @@ index = &quot;index2&quot;
 type = &quot;type2&quot;
 </code></pre>
 
-<p>With the configuration above documents in the <code>test.test</code> namespace in mongodb are indexed into the <code>index1</code>
+<p>With the configuration above documents in the <code>test.test</code> namespace in MongoDB are indexed into the <code>index1</code>
 index in elasticsearch with the <code>type1</code> type.</p>
 
-<p>If you need your index and type mapping to be more dynamic, such as based on values inside the mongodb document, then
+<p>If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
 see the section <a href="https://rwynn.github.io/monstache-site/index-meta/">Routing</a>.</p>
 
 <p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>

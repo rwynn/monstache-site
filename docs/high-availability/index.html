@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>High Availability - Monstache</title>
-    <meta name="generator" content="Hugo 0.21-DEV" />
+    <meta name="generator" content="Hugo 0.22-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.4</span></strong>
+        <strong>Monstache <span class="version">3.0.5</span></strong>
         
           <br>
           rwynn/monstache
@@ -426,7 +426,7 @@
 			<h1>High Availability </h1>
 
 			<p>You can run monstache in high availability mode by starting multiple processes with the same value for <code>cluster-name</code>.
-Each process will join a cluster which works together to ensure that a monstache process is always syncing to elasticsearch.</p>
+Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.</p>
 
 <p>High availability works by ensuring a active process in the <code>monstache.cluster</code> collection in mongodb. Only the processes in
 this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the
