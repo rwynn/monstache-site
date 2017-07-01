@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.6</span></strong>
+        <strong>Monstache <span class="version">3.1.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,7 +434,7 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 3.0.6
+# 3.1.0
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
@@ -479,6 +479,8 @@ monstache with an explicit configuration by passing the -f flag.</p>
 <p>A sample configuration looks like this:</p>
 
 <pre><code class="language-toml">gzip = true
+stats = true
+index-stats = true
 mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
 mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
 mongo-validate-pem-file = false

@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.0.6</span></strong>
+        <strong>Monstache <span class="version">3.1.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -430,9 +430,15 @@
 <p>Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
 Options specified as program arguments take precedance over the same option in the TOML config file.</p>
 
-<h2 id="stats">stats</h2>
+<h2 id="print-config">print-config</h2>
 
 <h3 id="boolean-default-false">boolean (default false)</h3>
+
+<p>When print-config is true monstache will print its configuration and then exit</p>
+
+<h2 id="stats">stats</h2>
+
+<h3 id="boolean-default-false-1">boolean (default false)</h3>
 
 <p>When stats is true monstache will periodically print statistics accumulated by the indexer</p>
 
@@ -442,9 +448,16 @@ Options specified as program arguments take precedance over the same option in t
 
 <p>Sets the duration after which statistics are printed if stats is enabled</p>
 
+<h2 id="index-stats">index-stats</h2>
+
+<h3 id="boolean-default-false-2">boolean (default false)</h3>
+
+<p>When index-stats is true monstache will write statistics about its indexing progress in
+Elasticsearch.  The index used to store the statistics is <code>monstache.stats</code>.</p>
+
 <h2 id="gzip">gzip</h2>
 
-<h3 id="boolean-default-false-1">boolean (default false)</h3>
+<h3 id="boolean-default-false-3">boolean (default false)</h3>
 
 <p>When gzip is true, monstache will compress requests to elasticsearch to increase performance.
 If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also
@@ -454,7 +467,7 @@ especially if you enable the index-files setting.</p>
 
 <h2 id="fail-fast">fail-fast</h2>
 
-<h3 id="boolean-default-false-2">boolean (default false)</h3>
+<h3 id="boolean-default-false-4">boolean (default false)</h3>
 
 <p>When fail-fast is true, if monstache receives a failed bulk indexing response from Elasticsearch, monstache
 will log the request that produced the response as an ERROR and then exit immediately with an error status.
@@ -465,7 +478,7 @@ retried before being considered a failure.</p>
 
 <h2 id="index-oplog-time">index-oplog-time</h2>
 
-<h3 id="boolean-default-false-3">boolean (default false)</h3>
+<h3 id="boolean-default-false-5">boolean (default false)</h3>
 
 <p>If this option is set to true monstache will include 2 automatic fields in the source document indexed into
 Elasticsearch.  The first is _oplog_ts which is the timestamp for the event copied directly from the MongoDB
@@ -483,7 +496,7 @@ a direct read query then the oplog time with not be available.</p>
 
 <h2 id="resume">resume</h2>
 
-<h3 id="boolean-default-false-4">boolean (default false)</h3>
+<h3 id="boolean-default-false-6">boolean (default false)</h3>
 
 <p>When resume is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
 to the collection monstache.monstache.  It also reads the timestamp from that collection when it starts in order to replay
@@ -511,7 +524,7 @@ a specific timestamp from the oplog and would like to start syncing from after t
 
 <h2 id="replay">replay</h2>
 
-<h3 id="boolean-default-false-5">boolean (default false)</h3>
+<h3 id="boolean-default-false-7">boolean (default false)</h3>
 
 <p>When replay is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.</p>
 
@@ -523,7 +536,7 @@ occurring after this timestamp.  Timestamps are not written to monstache.monstac
 
 <h2 id="resume-write-unsafe">resume-write-unsafe</h2>
 
-<h3 id="boolean-default-false-6">boolean (default false)</h3>
+<h3 id="boolean-default-false-8">boolean (default false)</h3>
 
 <p>When resume-write-unsafe is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
 This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
@@ -540,6 +553,16 @@ sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.</p>
 
 <p>This option may be passed on the command line as ./monstache &ndash;direct-read-namespace test.foo &ndash;direct-read-namespace test.bar</p>
+
+<p>For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
+destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
+index basis by using the Index Settings or Index Template APIs.  For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html">Update Indices Settings</a>.</p>
+
+<p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
+phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing
+phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
+
+<p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
 
 <h2 id="direct-read-limit">direct-read-limit</h2>
 
@@ -561,7 +584,7 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 
 <h2 id="exit-after-direct-reads">exit-after-direct-reads</h2>
 
-<h3 id="boolean-default-false-7">boolean (default false)</h3>
+<h3 id="boolean-default-false-9">boolean (default false)</h3>
 
 <p>The direct-read-namespaces option gives you a way to do a full sync on multiple collections.  At times you may want
 to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
@@ -690,7 +713,7 @@ fetched in batch from mongodb and flushed for indexing.</p>
 
 <h2 id="index-files">index-files</h2>
 
-<h3 id="boolean-default-false-8">boolean (default false)</h3>
+<h3 id="boolean-default-false-10">boolean (default false)</h3>
 
 <p>When index-files is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
 By default index-files is false meaning that monstache will only index metadata associated with files stored in GridFS.
@@ -717,14 +740,14 @@ raw content indexed into elasticsearch via either the mapper-attachments or inge
 
 <h2 id="file-highlighting">file-highlighting</h2>
 
-<h3 id="boolean-default-false-9">boolean (default false)</h3>
+<h3 id="boolean-default-false-11">boolean (default false)</h3>
 
 <p>When file-highlighting is true monstache will enable the ability to return highlighted keywords in the extracted text of files
 for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="verbose">verbose</h2>
 
-<h3 id="boolean-default-false-10">boolean (default false)</h3>
+<h3 id="boolean-default-false-12">boolean (default false)</h3>
 
 <p>When verbose is true monstache with enable debug logging including a trace of requests to elasticsearch</p>
 
@@ -774,7 +797,7 @@ of this queue is 50.  To increase the size of the bulk indexing queue you can up
 
 <h2 id="elasticsearch-retry">elasticsearch-retry</h2>
 
-<h3 id="boolean-default-false-11">boolean (default false)</h3>
+<h3 id="boolean-default-false-13">boolean (default false)</h3>
 
 <p>When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
 is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how
@@ -847,7 +870,7 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 
 <h2 id="enable-patches">enable-patches</h2>
 
-<h3 id="boolean-default-false-12">boolean (default false)</h3>
+<h3 id="boolean-default-false-14">boolean (default false)</h3>
 
 <p>Set to true to enable storing <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> patches in your elasticsearch documents</p>
 

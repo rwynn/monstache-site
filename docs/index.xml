@@ -17,11 +17,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/</guid>
-      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections in Elasticsearch.
+      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into Elasticsearch. Monstache gives you the ability to do complex searches and aggregations of your MongoDB data and easily build realtime Kibana visualizations and dashboards.
 Quick start Download or Install with go get:
-go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections you want to sync
- Direct read mode to do a full sync of collections in addition to tailing the oplog
- Transform and filter documents before indexing using Golang plugins or JavaScript</description>
+go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections you want to sync</description>
     </item>
     
     <item>
@@ -32,7 +30,7 @@ go get -v github.com/rwynn/monstache  Features  Optionally filter the set of col
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.0.6  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.1.0  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>
@@ -42,8 +40,8 @@ monstache -v # 3.0.6  Configuration Monstache uses the MongoDB oplog as an event
       
       <guid>https://rwynn.github.io/monstache-site/options/</guid>
       <description>Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line. Options specified as program arguments take precedance over the same option in the TOML config file.
-stats boolean (default false) When stats is true monstache will periodically print statistics accumulated by the indexer
-stats-duration string (default 30s) Sets the duration after which statistics are printed if stats is enabled</description>
+print-config boolean (default false) When print-config is true monstache will print its configuration and then exit
+stats boolean (default false) When stats is true monstache will periodically print statistics accumulated by the indexer</description>
     </item>
     
     <item>

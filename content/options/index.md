@@ -6,6 +6,12 @@ weight: 20
 Options can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
 Options specified as program arguments take precedance over the same option in the TOML config file.
 
+## print-config
+
+### boolean (default false)
+
+When print-config is true monstache will print its configuration and then exit
+
 ## stats
 
 ### boolean (default false)
@@ -17,6 +23,13 @@ When stats is true monstache will periodically print statistics accumulated by t
 ### string (default 30s)
 
 Sets the duration after which statistics are printed if stats is enabled
+
+## index-stats
+
+### boolean (default false)
+
+When index-stats is true monstache will write statistics about its indexing progress in
+Elasticsearch.  The index used to store the statistics is `monstache.stats`.  
 
 ## gzip
 
@@ -116,6 +129,16 @@ sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.
 
 This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
+
+For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
+destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
+index basis by using the Index Settings or Index Template APIs.  For more information see [Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html).
+
+By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
+phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
+phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.
+
+By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
 
 ## direct-read-limit
 

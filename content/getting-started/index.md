@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 3.0.6
+# 3.1.0
 ```
 
 ## Configuration
@@ -58,6 +58,8 @@ A sample configuration looks like this:
 
 ```toml
 gzip = true
+stats = true
+index-stats = true
 mongo-url = "mongodb://someuser:password@localhost:40001"
 mongo-pem-file = "/path/to/mongoCert.pem"
 mongo-validate-pem-file = false

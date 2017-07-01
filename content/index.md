@@ -6,8 +6,9 @@ weight: 1
 
 ## Sync MongoDB to ElasticSearch in near realtime
 
-Monstache is a sync daemon written in Go that continously indexes your MongoDB collections in
-Elasticsearch. 
+Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into
+Elasticsearch. Monstache gives you the ability to do complex searches and aggregations of your MongoDB data
+and easily build realtime Kibana visualizations and dashboards.
 
 ## Quick start
 
