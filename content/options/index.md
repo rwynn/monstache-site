@@ -29,7 +29,8 @@ Sets the duration after which statistics are printed if stats is enabled
 ### boolean (default false)
 
 When index-stats is true monstache will write statistics about its indexing progress in
-Elasticsearch.  The index used to store the statistics is `monstache.stats`.  
+Elasticsearch.  The indexes used to store the statistics are time stamped by day and 
+prefixed `monstache.stats.`. E.g. monstache.stats.07-01-2017 and so on. 
 
 ## gzip
 

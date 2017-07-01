@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.1.0</span></strong>
+        <strong>Monstache <span class="version">3.1.1</span></strong>
         
           <br>
           rwynn/monstache
@@ -453,7 +453,8 @@ Options specified as program arguments take precedance over the same option in t
 <h3 id="boolean-default-false-2">boolean (default false)</h3>
 
 <p>When index-stats is true monstache will write statistics about its indexing progress in
-Elasticsearch.  The index used to store the statistics is <code>monstache.stats</code>.</p>
+Elasticsearch.  The indexes used to store the statistics are time stamped by day and
+prefixed <code>monstache.stats.</code>. E.g. monstache.stats.07-01-2017 and so on.</p>
 
 <h2 id="gzip">gzip</h2>
 
