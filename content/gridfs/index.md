@@ -6,9 +6,9 @@ weight: 50
 Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type `attachment`.
 For versions of Elasticsearch prior to version 5 you should install the 
-[mapper-attachments](https://www.elastic.co/guide/en/Elasticsearch/plugins/2.3/mapper-attachments.html) plugin.
+[mapper-attachments](https://www.elastic.co/guide/en/elasticsearch/plugins/current/mapper-attachments.html) plugin.
 For version 5 or later of Elasticsearch you should instead install the 
-[ingest-attachment](https://www.elastic.co/guide/en/Elasticsearch/plugins/master/ingest-attachment.html) plugin.
+[ingest-attachment](https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html) plugin.
 
 Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is
 as simple as configuring monstache.  You will want to enable the `index-files` option and also tell monstache the 
