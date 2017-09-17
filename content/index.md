@@ -20,7 +20,7 @@ go get -v github.com/rwynn/monstache
 
 ## Features
 
-- Optionally filter the set of collections you want to sync
+- Optionally filter the set of collections to sync
 
 - Direct read mode to do a full sync of collections in addition to tailing the oplog
 

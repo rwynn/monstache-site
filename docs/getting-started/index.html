@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.1.1</span></strong>
+        <strong>Monstache <span class="version">3.1.2</span></strong>
         
           <br>
           rwynn/monstache
@@ -434,7 +434,7 @@
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 
 <pre><code class="language-sh">monstache -v
-# 3.1.1
+# 3.1.2
 </code></pre>
 
 <h2 id="configuration">Configuration</h2>
@@ -468,7 +468,7 @@ configuration.</p>
 </code></pre>
 
 <p>Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
-and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>
+on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>
 
 <p>Monstache uses the <a href="https://github.com/toml-lang/toml">TOML</a> format for its configuration.  You can run
 monstache with an explicit configuration by passing the -f flag.</p>

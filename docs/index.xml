@@ -19,7 +19,7 @@
       <guid>https://rwynn.github.io/monstache-site/</guid>
       <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into Elasticsearch. Monstache gives you the ability to do complex searches and aggregations of your MongoDB data and easily build realtime Kibana visualizations and dashboards.
 Quick start Download or Install with go get:
-go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections you want to sync</description>
+go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections to sync</description>
     </item>
     
     <item>
@@ -30,7 +30,7 @@ go get -v github.com/rwynn/monstache  Features  Optionally filter the set of col
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.1.1  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.1.2  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>

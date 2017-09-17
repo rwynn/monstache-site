@@ -30,7 +30,10 @@ Sets the duration after which statistics are printed if stats is enabled
 
 When index-stats is true monstache will write statistics about its indexing progress in
 Elasticsearch.  The indexes used to store the statistics are time stamped by day and 
-prefixed `monstache.stats.`. E.g. monstache.stats.07-01-2017 and so on. 
+prefixed `monstache.stats.`. E.g. monstache.stats.2017-07-01 and so on. 
+
+As these indexes will accrue over time your can use a tool like [curator](https://github.com/elastic/curator)
+to prune them with a Delete Indices action and an age filter.
 
 ## gzip
 
@@ -265,7 +268,7 @@ Set it to zero to wait forever.
 
 ### TOML table (default nil)
 
-The following gtm configuration properties are available.  See (gtm)[https://github.com/rwynn/gtm] for details
+The following gtm configuration properties are available.  See [gtm](https://github.com/rwynn/gtm) for details
 
 ### channel-size
 

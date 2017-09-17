@@ -11,7 +11,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 3.1.1
+# 3.1.2
 ```
 
 ## Configuration
@@ -45,7 +45,7 @@ configuration.
 ```
 
 Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
-and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.
+on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.
 
 Monstache uses the [TOML](https://github.com/toml-lang/toml) format for its configuration.  You can run 
 monstache with an explicit configuration by passing the -f flag.

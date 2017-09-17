@@ -139,7 +139,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.1.1</span></strong>
+        <strong>Monstache <span class="version">3.1.2</span></strong>
         
           <br>
           rwynn/monstache
@@ -454,7 +454,10 @@ Options specified as program arguments take precedance over the same option in t
 
 <p>When index-stats is true monstache will write statistics about its indexing progress in
 Elasticsearch.  The indexes used to store the statistics are time stamped by day and
-prefixed <code>monstache.stats.</code>. E.g. monstache.stats.07-01-2017 and so on.</p>
+prefixed <code>monstache.stats.</code>. E.g. monstache.stats.2017-07-01 and so on.</p>
+
+<p>As these indexes will accrue over time your can use a tool like <a href="https://github.com/elastic/curator">curator</a>
+to prune them with a Delete Indices action and an age filter.</p>
 
 <h2 id="gzip">gzip</h2>
 
@@ -689,7 +692,7 @@ Set it to zero to wait forever.</p>
 
 <h3 id="toml-table-default-nil-2">TOML table (default nil)</h3>
 
-<p>The following gtm configuration properties are available.  See (gtm)[<a href="https://github.com/rwynn/gtm">https://github.com/rwynn/gtm</a>] for details</p>
+<p>The following gtm configuration properties are available.  See <a href="https://github.com/rwynn/gtm">gtm</a> for details</p>
 
 <h3 id="channel-size">channel-size</h3>
 
