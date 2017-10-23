@@ -3,7 +3,7 @@
     <div class="banner">
       {{ with .Site.Params.logo }}
         <div class="logo">
-          <img src="{{ . }}">
+          <img src="{{ $.Site.BaseURL }}{{ . }}">
         </div>
       {{ end }}
       <div class="name">
@@ -21,7 +21,7 @@
       {{ if (eq (trim .Site.Params.provider " " | lower) "github") | and (isset .Site.Params "repo_url") }}
         <ul class="repo">
           <li class="repo-download">
-            <a href="{{ .Site.Params.repo_url }}/releases" target="_blank" title="Download" data-action="download">
+            <a href="{{ .Site.Params.repo_url }}/archive/master.zip" target="_blank" title="Download" data-action="download">
               <i class="icon icon-download"></i> Download
             </a>
           </li>
@@ -32,7 +32,7 @@
             </a>
           </li>
         </ul>
-	<hr>
+        <hr>
       {{ end }}
 
       <div class="toc">
@@ -44,7 +44,7 @@
 
         {{ if isset .Site.Params "author" }}
         <hr>
-        <span class="section">Author</span>
+        <span class="section">The author</span>
         
         <ul>
           {{ with .Site.Social.twitter }}

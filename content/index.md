@@ -42,6 +42,8 @@ go get -v github.com/rwynn/monstache
 
 - Single binary with a light footprint 
 
+- Systemd support
+
 See the [Getting started guide]({{< relref "getting-started/index.md" >}}) for instructions how to get
 it up and running.
 

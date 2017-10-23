@@ -18,7 +18,7 @@ googleAnalytics = ""
 	provider = "GitHub"
 	repo_url = "https://github.com/rwynn/monstache"
 
-	version = "3.1.2"
+	version = "3.2.0"
 	logo = "/images/monstache.png"
 	favicon = ""
 
@@ -99,6 +99,11 @@ googleAnalytics = ""
 	name   = "Merge Patches"
 	url    = "merge-patches/"
 	weight = 71
+
+[[menu.main]]
+	name   = "Systemd"
+	url    = "system-d/"
+	weight = 72
 
 [[menu.main]]
 	name   = "License"

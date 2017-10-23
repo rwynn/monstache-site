@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>Getting started - Monstache</title>
+    <title>Systemd - Monstache</title>
     <meta name="generator" content="Hugo 0.31-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
     
-    <link rel="canonical" href="https://rwynn.github.io/monstache-site/getting-started/">
+    <link rel="canonical" href="https://rwynn.github.io/monstache-site/system-d/">
     
     <meta name="author" content="Ryan Wynn">
     
 
-    <meta property="og:url" content="https://rwynn.github.io/monstache-site/getting-started/">
+    <meta property="og:url" content="https://rwynn.github.io/monstache-site/system-d/">
     <meta property="og:title" content="Monstache">
     <meta property="og:image" content="https://rwynn.github.io/images/monstache.png">
     <meta name="apple-mobile-web-app-title" content="Monstache">
@@ -97,7 +97,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Getting started
+        Systemd
       </div>
     </div>
 
@@ -198,14 +198,11 @@
 
 
 
-<a class="current" title="Getting started" href="https://rwynn.github.io/monstache-site/getting-started/">
+<a  title="Getting started" href="https://rwynn.github.io/monstache-site/getting-started/">
 	
 	Getting started
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
 
   
@@ -381,11 +378,14 @@
 
 
 
-<a  title="Systemd" href="https://rwynn.github.io/monstache-site/system-d/">
+<a class="current" title="Systemd" href="https://rwynn.github.io/monstache-site/system-d/">
 	
 	Systemd
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
 
   
@@ -440,93 +440,33 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Getting started </h1>
+			<h1>Systemd </h1>
 
-			
+			<p>Monstache has support built in for integrating with systemd. The following <code>monstache.service</code> is an example
+systemd configuration.</p>
 
-<h2 id="installation">Installation</h2>
+<pre><code>[Unit]
+Description=monstache sync service
 
-<p>Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the <a href="https://github.com/rwynn/monstache/releases">latest version</a>.</p>
+[Service]
+Type=notify
+ExecStart=/usr/bin/monstache
+WatchdogSec=30s
+Restart=on-failure
 
-<p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
-
-<pre><code class="language-sh">monstache -v
-# 3.2.0
+[Install]
+WantedBy=multi-user.target
 </code></pre>
 
-<h2 id="configuration">Configuration</h2>
+<p>System-d unit files are normally saved to <code>/lib/systemd/system</code>.</p>
 
-<p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to make sure that MongoDB is configured to
-produce an oplog.  The oplog can be enabled by using one of the following options:</p>
+<p>After adding monstache.service you can run <code>systemctl daemon-reload</code> to tell systemd to reload all unit files.</p>
 
-<ul>
-<li>Setting up <a href="http://docs.mongodb.org/manual/tutorial/deploy-replica-set/">replica sets</a></li>
-<li>Passing &ndash;master to the mongod process</li>
-<li>Setting the following in /etc/mongod.conf</li>
-</ul>
+<p>You can start the service with <code>systemctl start monstache.service</code>.</p>
 
-<pre><code class="language-toml">master = true
-</code></pre>
-
-<p>If you have enabled security in MongoDB you will need to give the user in your connection string
-certain privileges.  Specifically, the user will need to be able read the <code>local</code> database (to read
-from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the
-resume or clustering features the user will need to be able to write to and create indexes for the
-<code>monstache</code> database.</p>
-
-<p>Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
-pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time
-out due to an overloaded queue. The queue size can be increased by making changes to your elasticsearch.yml
-configuration.</p>
-
-<pre><code> thread_pool:
-   bulk:
-     queue_size: 200
-</code></pre>
-
-<p>Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
-on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>
-
-<p>Monstache uses the <a href="https://github.com/toml-lang/toml">TOML</a> format for its configuration.  You can run
-monstache with an explicit configuration by passing the -f flag.</p>
-
-<pre><code class="language-sh">monstache -f /path/to/config.toml
-</code></pre>
-
-<p>A sample configuration looks like this:</p>
-
-<pre><code class="language-toml">gzip = true
-stats = true
-index-stats = true
-mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
-mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
-mongo-validate-pem-file = false
-elasticsearch-urls = [&quot;https://example:9200&quot;]
-elasticsearch-user = &quot;someuser&quot;
-elasticsearch-password = &quot;somepassword&quot;
-elasticsearch-max-conns = 10
-elasticsearch-pem-file = &quot;/path/to/elasticCert.pem&quot;
-elastic-validate-pem-file = true
-dropped-collections = true
-dropped-databases = true
-replay = false
-resume = true
-resume-write-unsafe = false
-resume-name = &quot;default&quot;
-namespace-regex = &quot;^mydb\.(mycollection|\$cmd)$&quot;
-namespace-exclude-regex = &quot;^mydb\.(ignorecollection|\$cmd)$&quot;
-gtm-channel-size = 200
-index-files = true
-file-highlighting = true
-file-namespaces = [&quot;users.fs.files&quot;]
-verbose = true
-cluster-name = 'apollo'
-direct-read-namespaces = [&quot;db.collection&quot;, &quot;test.test&quot;]
-exit-after-direct-reads = false
-</code></pre>
-
-<p>See the <a href="https://rwynn.github.io/monstache-site/options/">Options guide</a> for details about each configuration
-option.</p>
+<p>With the configuration above monstache will notify systemd when it has started successfully and then notify
+systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
+to restart monstache if it does not start or respond within the WatchdDog interval.</p>
 
 <hr />
 
@@ -547,7 +487,7 @@ option.</p>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="https://rwynn.github.io/monstache-site/" title="Monstache">
+      <a href="https://rwynn.github.io/monstache-site/merge-patches/" title="Merge Patches">
         <span class="direction">
           Previous
         </span>
@@ -557,7 +497,7 @@ option.</p>
           </div>
           <div class="stretch">
             <div class="title">
-              Monstache
+              Merge Patches
             </div>
           </div>
         </div>
@@ -567,14 +507,14 @@ option.</p>
 
   <div class="next">
   
-      <a href="https://rwynn.github.io/monstache-site/options/" title="Options">
+      <a href="https://rwynn.github.io/monstache-site/license/" title="License">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Options
+              License
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

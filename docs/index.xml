@@ -30,7 +30,7 @@ go get -v github.com/rwynn/monstache  Features  Optionally filter the set of col
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.1.2  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.2.0  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>
@@ -128,6 +128,19 @@ If merge patches are enabled monstache will add an additional field to documents
 Consider the following example with merge patches enabled&amp;hellip;
 db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At this point you would have the following document source in elasticsearch.
  &amp;quot;_source&amp;quot; : { &amp;quot;age&amp;quot; : 16, &amp;quot;friends&amp;quot; : [ 1, 2, 3 ], &amp;quot;json-merge-patches&amp;quot; : [ { &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;, &amp;quot;ts&amp;quot; : 1487263414, &amp;quot;v&amp;quot; : 1 } ], &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot; }  As you can see we have a single timestamped merge patch in the json-merge-patches array.</description>
+    </item>
+    
+    <item>
+      <title>Systemd</title>
+      <link>https://rwynn.github.io/monstache-site/system-d/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/system-d/</guid>
+      <description>Monstache has support built in for integrating with systemd. The following monstache.service is an example systemd configuration.
+[Unit] Description=monstache sync service [Service] Type=notify ExecStart=/usr/bin/monstache WatchdogSec=30s Restart=on-failure [Install] WantedBy=multi-user.target  System-d unit files are normally saved to /lib/systemd/system.
+After adding monstache.service you can run systemctl daemon-reload to tell systemd to reload all unit files.
+You can start the service with systemctl start monstache.service.
+With the configuration above monstache will notify systemd when it has started successfully and then notify systemd repeatedly at half the WatchDog interval to signal liveness.</description>
     </item>
     
     <item>
