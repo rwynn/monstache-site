@@ -30,7 +30,7 @@ go get -v github.com/rwynn/monstache  Features  Optionally filter the set of col
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.2.0  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.3.0  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>
@@ -141,6 +141,20 @@ db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At
 After adding monstache.service you can run systemctl daemon-reload to tell systemd to reload all unit files.
 You can start the service with systemctl start monstache.service.
 With the configuration above monstache will notify systemd when it has started successfully and then notify systemd repeatedly at half the WatchDog interval to signal liveness.</description>
+    </item>
+    
+    <item>
+      <title>HTTP Server</title>
+      <link>https://rwynn.github.io/monstache-site/http-server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/http-server/</guid>
+      <description>Monstache has a built in HTTP server that you can enable with &amp;ndash;enable-http-server. It listens on :8080 by default but you can change this with &amp;ndash;http-server-addr.
+When using monstache with kubernetes this server can be used to detect liveness and act accordingly
+The following endpoints are available
+/started Returns the uptime of the server
+/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running
+/stats Returns the current indexing statistics in JSON format.</description>
     </item>
     
     <item>

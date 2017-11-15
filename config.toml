@@ -18,7 +18,7 @@ googleAnalytics = ""
 	provider = "GitHub"
 	repo_url = "https://github.com/rwynn/monstache"
 
-	version = "3.2.0"
+	version = "3.3.0"
 	logo = "/images/monstache.png"
 	favicon = ""
 
@@ -52,62 +52,67 @@ googleAnalytics = ""
 
 [[menu.main]]
 	name   = "Getting started"
-	url    = "getting-started/"
+	url    = "/getting-started/"
 	weight = 10
 
 [[menu.main]]
 	name   = "Options"
-	url    = "options/"
+	url    = "/options/"
 	weight = 20
 
 [[menu.main]]
 	name   = "Namespaces"
-	url    = "namespaces/"
+	url    = "/namespaces/"
 	weight = 21
 
 [[menu.main]]
 	name   = "Index Mapping"
-	url    = "index-mapping/"
+	url    = "/index-mapping/"
 	weight = 30
 
 [[menu.main]]
 	name   = "Transform and Filter"
-	url    = "transform-filter/"
+	url    = "/transform-filter/"
 	weight = 40
 
 [[menu.main]]
 	name   = "Indexing GridFS Files"
-	url    = "gridfs/"
+	url    = "/gridfs/"
 	weight = 50
 	
 [[menu.main]]
 	name   = "Routing"
-	url    = "index-meta/"
+	url    = "/index-meta/"
 	weight = 51
 
 [[menu.main]]
 	name   = "Workers"
-	url    = "workers/"
+	url    = "/workers/"
 	weight = 60
 
 [[menu.main]]
 	name   = "High Availability"
-	url    = "high-availability/"
+	url    = "/high-availability/"
 	weight = 70
 
 [[menu.main]]
 	name   = "Merge Patches"
-	url    = "merge-patches/"
+	url    = "/merge-patches/"
 	weight = 71
 
 [[menu.main]]
 	name   = "Systemd"
-	url    = "system-d/"
+	url    = "/system-d/"
 	weight = 72
 
 [[menu.main]]
+	name   = "HTTP Server"
+	url    = "/http-server/"
+	weight = 73
+
+[[menu.main]]
 	name   = "License"
-	url    = "license/"
+	url    = "/license/"
 	weight = 80
 
 [blackfriday]

@@ -51,6 +51,10 @@
   </url>
   
   <url>
+    <loc>https://rwynn.github.io/monstache-site/http-server/</loc>
+  </url>
+  
+  <url>
     <loc>https://rwynn.github.io/monstache-site/license/</loc>
   </url>
   
@@ -71,6 +75,11 @@
   
   <url>
     <loc>https://rwynn.github.io/monstache-site/high-availability/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rwynn.github.io/monstache-site/http-server/</loc>
     <priority>0</priority>
   </url>
   

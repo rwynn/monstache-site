@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.2.0</span></strong>
+        <strong>Monstache <span class="version">3.3.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -306,14 +306,11 @@
 
 
 
-<a class="current" title="Routing" href="https://rwynn.github.io/monstache-site/index-meta/">
+<a  title="Routing" href="https://rwynn.github.io/monstache-site/index-meta/">
 	
 	Routing
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
 
   
@@ -384,6 +381,24 @@
 <a  title="Systemd" href="https://rwynn.github.io/monstache-site/system-d/">
 	
 	Systemd
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="HTTP Server" href="https://rwynn.github.io/monstache-site/http-server/">
+	
+	HTTP Server
 </a>
 
 
@@ -474,8 +489,8 @@ namespace = &quot;blog.comments&quot;
 routing = true
 script = &quot;&quot;&quot;
 module.exports = function(doc) {
-    doc._meta_monstache = { routing: doc.post_id };
-    return doc;
+	doc._meta_monstache = { routing: doc.post_id };
+	return doc;
 }
 &quot;&quot;&quot;
 </code></pre>
@@ -520,13 +535,13 @@ namespace = &quot;blog.comments&quot;
 routing = true
 script = &quot;&quot;&quot;
 module.exports = function(doc) {
-    if (doc.score &gt;= 100) {
-        // NOTE: prefix dynamic index with namespace for proper cleanup on drops
-        doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
-    } else {
-        doc._meta_monstache = { routing: doc.post_id };
-    }
-    return doc;
+	if (doc.score &gt;= 100) {
+		// NOTE: prefix dynamic index with namespace for proper cleanup on drops
+		doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
+	} else {
+		doc._meta_monstache = { routing: doc.post_id };
+	}
+	return doc;
 }
 &quot;&quot;&quot;
 </code></pre>

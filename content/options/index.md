@@ -512,4 +512,16 @@ The file path to write trace level logs to. Trace logs are enabled via the verbo
 
 The file path to write indexing statistics to. Stats logs are enabled via the stats option.
 
+## enable-http-server
+
+### boolean (default false)
+
+Add this flag to enable an embedded HTTP server at localhost:8080
+
+## http-server-addr
+
+### string (default ":8080")
+
+The address to bind the embedded HTTP server on if enabled
+
 ---

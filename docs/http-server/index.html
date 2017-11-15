@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>Monstache</title>
+    <title>HTTP Server - Monstache</title>
     <meta name="generator" content="Hugo 0.31-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
     
-    <link rel="canonical" href="https://rwynn.github.io/monstache-site/">
+    <link rel="canonical" href="https://rwynn.github.io/monstache-site/http-server/">
     
     <meta name="author" content="Ryan Wynn">
     
 
-    <meta property="og:url" content="https://rwynn.github.io/monstache-site/">
+    <meta property="og:url" content="https://rwynn.github.io/monstache-site/http-server/">
     <meta property="og:title" content="Monstache">
     <meta property="og:image" content="https://rwynn.github.io/images/monstache.png">
     <meta name="apple-mobile-web-app-title" content="Monstache">
@@ -69,9 +69,6 @@
     <script src="https://rwynn.github.io/monstache-site/javascripts/modernizr.js"></script>
 
     
-    <link href="https://rwynn.github.io/monstache-site/index.xml" rel="alternate" type="application/rss+xml" title="Monstache" />
-    <link href="https://rwynn.github.io/monstache-site/index.xml" rel="feed" type="application/rss+xml" title="Monstache" />
-    
 
   </head>
   <body class="palette-primary-indigo palette-accent-red">
@@ -100,7 +97,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Monstache
+        HTTP Server
       </div>
     </div>
 
@@ -458,60 +455,36 @@
 
 	<article class="article">
 		<div class="wrapper">
+			<h1>HTTP Server </h1>
+
 			
-				<h1>Monstache </h1>
 
-				
+<p>Monstache has a built in HTTP server that you can enable with &ndash;enable-http-server. It
+listens on :8080 by default but you can change this with &ndash;http-server-addr.</p>
 
-<h2 id="sync-mongodb-to-elasticsearch-in-near-realtime">Sync MongoDB to ElasticSearch in near realtime</h2>
+<p>When using monstache with kubernetes this server can be used to detect liveness and
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/">act accordingly</a></p>
 
-<p>Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into
-Elasticsearch. Monstache gives you the ability to do complex searches and aggregations of your MongoDB data
-and easily build realtime Kibana visualizations and dashboards.</p>
+<p>The following endpoints are available</p>
 
-<h2 id="quick-start">Quick start</h2>
+<h3 id="started">/started</h3>
 
-<p><a href="https://github.com/rwynn/monstache/releases">Download</a> or Install with go get:</p>
+<p>Returns the uptime of the server</p>
 
-<pre><code class="language-sh">go get -v github.com/rwynn/monstache
-</code></pre>
+<h3 id="healthz">/healthz</h3>
 
-<h2 id="features">Features</h2>
+<p>Returns at 200 status code with the text &ldquo;ok&rdquo; when monstache is running</p>
 
-<ul>
-<li><p>Optionally filter the set of collections to sync</p></li>
+<h3 id="stats">/stats</h3>
 
-<li><p>Direct read mode to do a full sync of collections in addition to tailing the oplog</p></li>
+<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
 
-<li><p>Transform and filter documents before indexing using Golang plugins or JavaScript</p></li>
+<h3 id="config">/config</h3>
 
-<li><p>Index the content of GridFS files</p></li>
-
-<li><p>Support for hard and soft deletes in MongoDB</p></li>
-
-<li><p>Support for propogating database and collection drops</p></li>
-
-<li><p>Optional custom document routing in ElasticSearch</p></li>
-
-<li><p>Stateful resume feature</p></li>
-
-<li><p>Worker and Clustering modes for High Availability</p></li>
-
-<li><p>Support for <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> JSON merge patches</p></li>
-
-<li><p>Single binary with a light footprint</p></li>
-
-<li><p>Systemd support</p></li>
-
-<li><p>Optional http server to get access to liveness, stats, etc</p></li>
-</ul>
-
-<p>See the <a href="https://rwynn.github.io/monstache-site/getting-started/">Getting started guide</a> for instructions how to get
-it up and running.</p>
+<p>Returns the configuration monstache is using in JSON format</p>
 
 <hr />
 
-			
 
 			<aside class="copyright" role="note">
 				
@@ -526,23 +499,37 @@ it up and running.</p>
 			<footer class="footer">
 				
 
-
-
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
+  
+      <a href="https://rwynn.github.io/monstache-site/system-d/" title="Systemd">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Systemd
+            </div>
+          </div>
+        </div>
+      </a>
+  
   </div>
 
-  
-  
   <div class="next">
-      <a href="https://rwynn.github.io/monstache-site/getting-started/" title="Getting started">
+  
+      <a href="https://rwynn.github.io/monstache-site/license/" title="License">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Getting started
+              License
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">
@@ -550,8 +537,11 @@ it up and running.</p>
           </div>
         </div>
       </a>
+  
   </div>
 </nav>
+
+
 
 
 

@@ -44,6 +44,8 @@ go get -v github.com/rwynn/monstache
 
 - Systemd support
 
+- Optional http server to get access to liveness, stats, etc
+
 See the [Getting started guide]({{< relref "getting-started/index.md" >}}) for instructions how to get
 it up and running.
 

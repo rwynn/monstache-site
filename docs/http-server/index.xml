@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Http-servers on Monstache</title>
+    <link>https://rwynn.github.io/monstache-site/http-server/</link>
+    <description>Recent content in Http-servers on Monstache</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    
+	<atom:link href="https://rwynn.github.io/monstache-site/http-server/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>HTTP Server</title>
+      <link>https://rwynn.github.io/monstache-site/http-server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rwynn.github.io/monstache-site/http-server/</guid>
+      <description>Monstache has a built in HTTP server that you can enable with &amp;ndash;enable-http-server. It listens on :8080 by default but you can change this with &amp;ndash;http-server-addr.
+When using monstache with kubernetes this server can be used to detect liveness and act accordingly
+The following endpoints are available
+/started Returns the uptime of the server
+/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running
+/stats Returns the current indexing statistics in JSON format.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.2.0</span></strong>
+        <strong>Monstache <span class="version">3.3.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -270,14 +270,11 @@
 
 
 
-<a class="current" title="Transform and Filter" href="https://rwynn.github.io/monstache-site/transform-filter/">
+<a  title="Transform and Filter" href="https://rwynn.github.io/monstache-site/transform-filter/">
 	
 	Transform and Filter
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
 
   
@@ -399,6 +396,24 @@
 
 
 
+<a  title="HTTP Server" href="https://rwynn.github.io/monstache-site/http-server/">
+	
+	HTTP Server
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="License" href="https://rwynn.github.io/monstache-site/license/">
 	
 	License
@@ -471,20 +486,20 @@ use the go command to build a .so file for your plugin, and finally pass the pat
 
 <pre><code class="language-go">package main
 import (
-    &quot;github.com/rwynn/monstache/monstachemap&quot;
-    &quot;strings&quot;
+	&quot;github.com/rwynn/monstache/monstachemap&quot;
+	&quot;strings&quot;
 )
 // a plugin to convert document values to uppercase
 func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
-    doc := input.Document
-    for k, v := range doc {
-        switch v.(type) {
-        case string:
-            doc[k] = strings.ToUpper(v.(string))
-        }
-    }
-    output = &amp;monstachemap.MapperPluginOutput{Document: doc}
-    return
+	doc := input.Document
+	for k, v := range doc {
+		switch v.(type) {
+		case string:
+			doc[k] = strings.ToUpper(v.(string))
+		}
+	}
+	output = &amp;monstachemap.MapperPluginOutput{Document: doc}
+	return
 }
 </code></pre>
 
@@ -506,9 +521,9 @@ namespace = &quot;mydb.mycollection&quot;
 script = &quot;&quot;&quot;
 var counter = 1;
 module.exports = function(doc) {
-    doc.foo += &quot;test&quot; + counter;
-    counter++;
-    return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
+	doc.foo += &quot;test&quot; + counter;
+	counter++;
+	return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
 }
 &quot;&quot;&quot;
 
@@ -517,9 +532,9 @@ namespace = &quot;anotherdb.anothercollection&quot;
 script = &quot;&quot;&quot;
 var counter = 1;
 module.exports = function(doc) {
-    doc.foo += &quot;test2&quot; + counter;
-    counter++;
-    return doc;
+	doc.foo += &quot;test2&quot; + counter;
+	counter++;
+	return doc;
 }
 &quot;&quot;&quot;
 </code></pre>
@@ -549,10 +564,10 @@ the original document from mongodb gets indexed in elasticsearch.</p>
 namespace = &quot;db.collection&quot;
 script = &quot;&quot;&quot;
 module.exports = function(doc) {
-    if (!!doc.deletedAt) {
-        return false;
-    }
-    return true;
+	if (!!doc.deletedAt) {
+		return false;
+	}
+	return true;
 }
 &quot;&quot;&quot;
 </code></pre>
