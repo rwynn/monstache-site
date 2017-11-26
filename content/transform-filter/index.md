@@ -51,7 +51,7 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
 to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true
 
-output.Index, output.Type, and output.Routing allow you to set the indexing metadata.
+output.Index, output.Type, output.Parent and output.Routing allow you to set the indexing metadata for each individual document.
 
 
 ## Javascript
@@ -132,5 +132,52 @@ use closures to maintain state between invocations of your mapping function.
 
 Finally, since Otto makes it so easy, the venerable [Underscore](http://underscorejs.org/) library is included for you at 
 no extra charge.  Feel free to abuse the power of the `_`.
+
+### Indexing Metadata
+
+You can override the indexing metadata for an individual document by setting a special field named
+`_meta_monstache` on the document you return from your Javascript function.
+
+For example, the following snippet sets up a parent-child relationship in Elasticsearch based on the
+incoming documents from MongoDB.
+
+```
+[[script]]
+namespace = "test.company"
+routing = true
+script = """
+module.exports = function(doc) {
+	doc._meta_monstache = { type: doc.type, index: 'company' };
+	if (doc.type === "employee") {
+		doc._meta_monstache.parent = doc.branch;
+	}
+	delete doc.parent;
+	delete doc.type;
+	return doc;
+}
+"""
+```
+
+Assume there is a collection in MongoDB named `company` in the `test` database.
+The documents in this collection look like either 
+
+```
+{ "_id": "london", "type": "branch", "name": "London Westminster", "city": "London", "country": "UK" }
+```
+or
+```
+{ "_id": "alice", "type": "employee", "name": "Alice Smith", "branch": "london" }
+```
+
+The snippet above will route these documents to the `company` index in Elasticsearch instead of the
+default of `test.company`.  Also, instead of using `company` as the Elasticsearch type, the type
+attribute from the document will be used as the Elasticsearch type.  Finally, if the type is
+employee then the document will be indexed as a child of the branch the person belongs to.  
+
+We can throw away the type and branch information by deleting it from the document before returning
+since the type information will be stored in Elasticsearch under `_type` and the branch information
+will be stored under `_parent`.
+
+The example is based on the Elasticsearch docs for [parent-child](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html)
 
 ---
