@@ -3,7 +3,7 @@ title: Index Mapping
 weight: 30
 ---
 
-When indexing documents from MongoDB into elasticsearch the mapping is as follows:
+When indexing documents from MongoDB into elasticsearch the default mapping is as follows:
 
 ```txt
 mongodb database name . mongodb collection name -> elasticsearch index name
@@ -30,7 +30,7 @@ With the configuration above documents in the `test.test` namespace in MongoDB a
 index in elasticsearch with the `type1` type.
 
 If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
-see the section [Routing](/index-meta/).
+see the sections [Transform and Filter](/transform-filter/) and  [Routing](/index-meta/).
 
 Make sure that automatic index creation is not disabled in elasticsearch.yml.
 

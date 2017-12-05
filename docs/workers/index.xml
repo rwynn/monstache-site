@@ -18,7 +18,7 @@
       
       <guid>https://rwynn.github.io/monstache-site/workers/</guid>
       <description>You can run multiple monstache processes and distribute the work between them. First configure the names of all the workers in a shared config.toml file.
-workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]  In this case we have 3 workers. Now we can start 3 monstache processes and give each one of the worker names.
+workers = [&amp;#34;Tom&amp;#34;, &amp;#34;Dick&amp;#34;, &amp;#34;Harry&amp;#34;] In this case we have 3 workers. Now we can start 3 monstache processes and give each one of the worker names.
 monstache -f config.toml -worker Tom monstache -f config.toml -worker Dick monstache -f config.toml -worker Harry  monstache will hash the id of each document using consistent hashing so that each id is handled by only one of the available workers.</description>
     </item>
     

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Indexing GridFS Files - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -468,7 +468,7 @@ For version 5 or later of Elasticsearch you should instead install the
 as simple as configuring monstache.  You will want to enable the <code>index-files</code> option and also tell monstache the
 namespace of all collections which will hold GridFS files. For example in your TOML config file,</p>
 
-<pre><code class="language-toml">index-files = true
+<pre><code>index-files = true
 
 file-namespaces = [&quot;users.fs.files&quot;, &quot;posts.fs.files&quot;]
 

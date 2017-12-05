@@ -19,10 +19,9 @@
       <guid>https://rwynn.github.io/monstache-site/http-server/</guid>
       <description>Monstache has a built in HTTP server that you can enable with &amp;ndash;enable-http-server. It listens on :8080 by default but you can change this with &amp;ndash;http-server-addr.
 When using monstache with kubernetes this server can be used to detect liveness and act accordingly
-The following endpoints are available
+The following GET endpoints are available
 /started Returns the uptime of the server
-/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running
-/stats Returns the current indexing statistics in JSON format.</description>
+/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running</description>
     </item>
     
   </channel>

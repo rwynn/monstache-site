@@ -19,7 +19,7 @@
       <guid>https://rwynn.github.io/monstache-site/index-meta/</guid>
       <description>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing is the process by which ElasticSearch determines which shard a document will reside in. Monstache supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.
 Consider an example where you have a comments collection in MongoDB which stores a comment and its associated post identifier.
-use blog; db.comments.insert({title: &amp;quot;Did you read this?&amp;quot;, post_id: &amp;quot;123&amp;quot;}); db.</description>
+use blog; db.comments.insert({title: &amp;#34;Did you read this?&amp;#34;, post_id: &amp;#34;123&amp;#34;}); db.</description>
     </item>
     
   </channel>

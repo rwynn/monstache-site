@@ -10,8 +10,9 @@ name of this field is configurable but it defaults to `json-merge-patches`.
 
 Consider the following example with merge patches enabled... 
 
-	db.test.insert({name: "Joe", age: 16, friends: [1, 2, 3]})
-
+```javascript
+db.test.insert({name: "Joe", age: 16, friends: [1, 2, 3]})
+```
 At this point you would have the following document source in elasticsearch.
 
 	 "_source" : {
@@ -35,7 +36,9 @@ As you can see we have a single timestamped merge patch in the json-merge-patche
 
 Now let's update the document to remove a friend and update the age.
 
-	db.test.update({name: "Joe"}, {$set: {age: 21, friends: [1, 3]}})
+```javascript
+db.test.update({name: "Joe"}, {$set: {age: 21, friends: [1, 3]}})
+```
 
 If we now look at the document in elasticsearch we see the following:
 
@@ -87,7 +90,7 @@ You need you add each namespace that you would like to see patches for in the pa
 
 Optionally, you can change the key under which the patches are stored in the source document as follows:
 
-	merge-patch-attribute = "custom-merge-attr"	
+    merge-patch-attribute = "custom-merge-attr"	
 
 Merge patches will only be recorded for data read from the MongoDB oplog.  Data read using the direct read
 feature will not be enhanced with merge patches.

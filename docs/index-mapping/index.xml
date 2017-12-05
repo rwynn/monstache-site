@@ -17,9 +17,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/index-mapping/</guid>
-      <description>When indexing documents from MongoDB into elasticsearch the mapping is as follows:
-mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id  If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
-[[mapping]] namespace = &amp;quot;test.</description>
+      <description>When indexing documents from MongoDB into elasticsearch the default mapping is as follows:
+mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
+[[mapping]] namespace = &amp;#34;test.</description>
     </item>
     
   </channel>

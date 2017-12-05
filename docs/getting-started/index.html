@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Getting started - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -464,11 +464,8 @@
 <p>Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the <a href="https://github.com/rwynn/monstache/releases">latest version</a>.</p>
 
 <p>Let&rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
-
-<pre><code class="language-sh">monstache -v
-# 3.3.1
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">monstache -v
+# <span style="color:#f60">3</span>.4.0</code></pre></div>
 <h2 id="configuration">Configuration</h2>
 
 <p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to make sure that MongoDB is configured to
@@ -479,10 +476,7 @@ produce an oplog.  The oplog can be enabled by using one of the following option
 <li>Passing &ndash;master to the mongod process</li>
 <li>Setting the following in /etc/mongod.conf</li>
 </ul>
-
-<pre><code class="language-toml">master = true
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">master = <span style="color:#069;font-weight:bold">true</span></code></pre></div>
 <p>If you have enabled security in MongoDB you will need to give the user in your connection string
 certain privileges.  Specifically, the user will need to be able read the <code>local</code> database (to read
 from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the
@@ -504,13 +498,10 @@ on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoD
 
 <p>Monstache uses the <a href="https://github.com/toml-lang/toml">TOML</a> format for its configuration.  You can run
 monstache with an explicit configuration by passing the -f flag.</p>
-
-<pre><code class="language-sh">monstache -f /path/to/config.toml
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">monstache -f /path/to/config.toml</code></pre></div>
 <p>A sample configuration looks like this:</p>
 
-<pre><code class="language-toml">gzip = true
+<pre><code>gzip = true
 stats = true
 index-stats = true
 mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;

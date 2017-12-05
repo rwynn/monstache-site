@@ -17,9 +17,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/</guid>
-      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into Elasticsearch. Monstache gives you the ability to do complex searches and aggregations of your MongoDB data and easily build realtime Kibana visualizations and dashboards.
+      <description>Sync MongoDB to ElasticSearch in near realtime Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into Elasticsearch. Monstache gives you the ability to use Elasticsearch to do complex searches and aggregations of your MongoDB data and easily build realtime Kibana visualizations and dashboards.
 Quick start Download or Install with go get:
-go get -v github.com/rwynn/monstache  Features  Optionally filter the set of collections to sync</description>
+go get -v github.com/rwynn/monstache Features  Optionally filter the set of collections to sync</description>
     </item>
     
     <item>
@@ -30,7 +30,7 @@ go get -v github.com/rwynn/monstache  Features  Optionally filter the set of col
       <guid>https://rwynn.github.io/monstache-site/getting-started/</guid>
       <description>Installation Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. You just need to download the latest version.
 Let&amp;rsquo;s make sure Monstache is set up as expected. You should see a similar version number in your terminal:
-monstache -v # 3.3.1  Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
+monstache -v # 3.4.0 Configuration Monstache uses the MongoDB oplog as an event source. You will need to make sure that MongoDB is configured to produce an oplog.</description>
     </item>
     
     <item>
@@ -60,9 +60,9 @@ In addition to inserts, updates, and deletes monstache also supports database an
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/index-mapping/</guid>
-      <description>When indexing documents from MongoDB into elasticsearch the mapping is as follows:
-mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id  If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
-[[mapping]] namespace = &amp;quot;test.</description>
+      <description>When indexing documents from MongoDB into elasticsearch the default mapping is as follows:
+mongodb database name . mongodb collection name -&amp;gt; elasticsearch index name mongodb collection name -&amp;gt; elasticsearch type mongodb document _id -&amp;gt; elasticsearch document _id If these default won&amp;rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding the following to your TOML config file:
+[[mapping]] namespace = &amp;#34;test.</description>
     </item>
     
     <item>
@@ -71,8 +71,8 @@ mongodb database name . mongodb collection name -&amp;gt; elasticsearch index na
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rwynn.github.io/monstache-site/transform-filter/</guid>
-      <description>monstache supports embedding user defined middleware between MongoDB and Elasticsearch. middleware is able to transform documents, drop documents, or define indexing metadata. middleware may be written in either Javascript or in Golang as a plugin. Golang plugins require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
-Golang monstache supports Golang 1.8 plugins on Linux. To implement a plugin for monstache you simply need to implement a specific function signature, use the go command to build a .</description>
+      <description>monstache supports embedding user defined middleware between MongoDB and Elasticsearch. middleware is able to transform documents, drop documents, or define indexing metadata. middleware may be written in either Javascript or in Golang as a plugin. Golang plugins require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).
+Golang monstache supports Golang 1.8 plugins on Linux.</description>
     </item>
     
     <item>
@@ -93,7 +93,7 @@ Once you have installed the appropriate plugin for Elasticsearch, getting file c
       <guid>https://rwynn.github.io/monstache-site/index-meta/</guid>
       <description>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing is the process by which ElasticSearch determines which shard a document will reside in. Monstache supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.
 Consider an example where you have a comments collection in MongoDB which stores a comment and its associated post identifier.
-use blog; db.comments.insert({title: &amp;quot;Did you read this?&amp;quot;, post_id: &amp;quot;123&amp;quot;}); db.</description>
+use blog; db.comments.insert({title: &amp;#34;Did you read this?&amp;#34;, post_id: &amp;#34;123&amp;#34;}); db.</description>
     </item>
     
     <item>
@@ -103,7 +103,7 @@ use blog; db.comments.insert({title: &amp;quot;Did you read this?&amp;quot;, pos
       
       <guid>https://rwynn.github.io/monstache-site/workers/</guid>
       <description>You can run multiple monstache processes and distribute the work between them. First configure the names of all the workers in a shared config.toml file.
-workers = [&amp;quot;Tom&amp;quot;, &amp;quot;Dick&amp;quot;, &amp;quot;Harry&amp;quot;]  In this case we have 3 workers. Now we can start 3 monstache processes and give each one of the worker names.
+workers = [&amp;#34;Tom&amp;#34;, &amp;#34;Dick&amp;#34;, &amp;#34;Harry&amp;#34;] In this case we have 3 workers. Now we can start 3 monstache processes and give each one of the worker names.
 monstache -f config.toml -worker Tom monstache -f config.toml -worker Dick monstache -f config.toml -worker Harry  monstache will hash the id of each document using consistent hashing so that each id is handled by only one of the available workers.</description>
     </item>
     
@@ -126,7 +126,7 @@ High availability works by ensuring a active process in the monstache.cluster co
       <description>A unique feature of monstache is support for JSON Merge Patches rfc-7396.
 If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The name of this field is configurable but it defaults to json-merge-patches.
 Consider the following example with merge patches enabled&amp;hellip;
-db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At this point you would have the following document source in elasticsearch.
+db.test.insert({name: &amp;#34;Joe&amp;#34;, age: 16, friends: [1, 2, 3]}) At this point you would have the following document source in elasticsearch.
  &amp;quot;_source&amp;quot; : { &amp;quot;age&amp;quot; : 16, &amp;quot;friends&amp;quot; : [ 1, 2, 3 ], &amp;quot;json-merge-patches&amp;quot; : [ { &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;, &amp;quot;ts&amp;quot; : 1487263414, &amp;quot;v&amp;quot; : 1 } ], &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot; }  As you can see we have a single timestamped merge patch in the json-merge-patches array.</description>
     </item>
     
@@ -137,10 +137,9 @@ db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At
       
       <guid>https://rwynn.github.io/monstache-site/system-d/</guid>
       <description>Monstache has support built in for integrating with systemd. The following monstache.service is an example systemd configuration.
-[Unit] Description=monstache sync service [Service] Type=notify ExecStart=/usr/bin/monstache WatchdogSec=30s Restart=on-failure [Install] WantedBy=multi-user.target  System-d unit files are normally saved to /lib/systemd/system.
-After adding monstache.service you can run systemctl daemon-reload to tell systemd to reload all unit files.
-You can start the service with systemctl start monstache.service.
-With the configuration above monstache will notify systemd when it has started successfully and then notify systemd repeatedly at half the WatchDog interval to signal liveness.</description>
+[Unit] Description=monstache sync service [Service] Type=notify ExecStart=/usr/local/bin/monstache WatchdogSec=30s Restart=on-failure [Install] WantedBy=multi-user.target  System-d unit files are normally saved to /lib/systemd/system.
+After saving the monstache.service file you can run systemctl daemon-reload to tell systemd to reload all unit files.
+You can enable the service to start on boot with systemctl enable monstache.service and start the service with systemctl start monstache.</description>
     </item>
     
     <item>
@@ -151,10 +150,9 @@ With the configuration above monstache will notify systemd when it has started s
       <guid>https://rwynn.github.io/monstache-site/http-server/</guid>
       <description>Monstache has a built in HTTP server that you can enable with &amp;ndash;enable-http-server. It listens on :8080 by default but you can change this with &amp;ndash;http-server-addr.
 When using monstache with kubernetes this server can be used to detect liveness and act accordingly
-The following endpoints are available
+The following GET endpoints are available
 /started Returns the uptime of the server
-/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running
-/stats Returns the current indexing statistics in JSON format.</description>
+/healthz Returns at 200 status code with the text &amp;ldquo;ok&amp;rdquo; when monstache is running</description>
     </item>
     
     <item>

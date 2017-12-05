@@ -14,7 +14,7 @@ Once you have installed the appropriate plugin for Elasticsearch, getting file c
 as simple as configuring monstache.  You will want to enable the `index-files` option and also tell monstache the 
 namespace of all collections which will hold GridFS files. For example in your TOML config file,
 
-```toml
+```
 index-files = true
 
 file-namespaces = ["users.fs.files", "posts.fs.files"]

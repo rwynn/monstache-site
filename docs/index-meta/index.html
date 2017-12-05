@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Routing - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -463,12 +463,9 @@ supports user defined, or custom, routing of your MongoDB documents into Elastic
 
 <p>Consider an example where you have a <code>comments</code> collection in MongoDB which stores a comment and
 its associated post identifier.</p>
-
-<pre><code>use blog;
-db.comments.insert({title: &quot;Did you read this?&quot;, post_id: &quot;123&quot;});
-db.comments.insert({title: &quot;Yeah, it's good&quot;, post_id: &quot;123&quot;});
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">use blog;
+db.comments.insert({title<span style="color:#555">:</span> <span style="color:#c30">&#34;Did you read this?&#34;</span>, post_id<span style="color:#555">:</span> <span style="color:#c30">&#34;123&#34;</span>});
+db.comments.insert({title<span style="color:#555">:</span> <span style="color:#c30">&#34;Yeah, it&#39;s good&#34;</span>, post_id<span style="color:#555">:</span> <span style="color:#c30">&#34;123&#34;</span>});</code></pre></div>
 <p>In this case monstache will index those 2 documents in an index named <code>blog.comments</code> under the id
 created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing
 the id of the document.  This means that as the number of comments on post <code>123</code> grows, each of the comments
@@ -483,18 +480,15 @@ routing such that all comments for post <code>123</code> reside in the same shar
 <p>First we need to tell monstache that we would like to do custom routing for this collection by setting <code>routing</code>
 equal to true on a custom script for the namespace.  Then we need to add some metadata to the document telling
 monstache how to route the document when indexing.  In this case we want to route by the <code>post_id</code> field.</p>
-
-<pre><code class="language-toml">[[script]]
-namespace = &quot;blog.comments&quot;
-routing = true
-script = &quot;&quot;&quot;
-module.exports = function(doc) {
-	doc._meta_monstache = { routing: doc.post_id };
-	return doc;
-}
-&quot;&quot;&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[script]]
+namespace = <span style="color:#c30">&#34;blog.comments&#34;</span>
+routing = <span style="color:#069;font-weight:bold">true</span>
+script = <span style="color:#c30">&#34;&#34;&#34;
+</span><span style="color:#c30">module.exports = function(doc) {
+</span><span style="color:#c30">	doc._meta_monstache = { routing: doc.post_id };
+</span><span style="color:#c30">	return doc;
+</span><span style="color:#c30">}
+</span><span style="color:#c30">&#34;&#34;&#34;</span></code></pre></div>
 <p>Now when monstache indexes document for the collection <code>blog.comments</code> it will set the special <code>_routing</code> attribute
 for the document on the index request such that ElasticSearch routes comments based on their corresponding post.</p>
 
@@ -529,23 +523,20 @@ in this collection and forwards that information to ElasticSearch on the delete 
 
 <p>In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
 <code>index</code> and <code>type</code> using a script by putting the custom information in the meta attribute.</p>
-
-<pre><code class="language-toml">[[script]]
-namespace = &quot;blog.comments&quot;
-routing = true
-script = &quot;&quot;&quot;
-module.exports = function(doc) {
-	if (doc.score &gt;= 100) {
-		// NOTE: prefix dynamic index with namespace for proper cleanup on drops
-		doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
-	} else {
-		doc._meta_monstache = { routing: doc.post_id };
-	}
-	return doc;
-}
-&quot;&quot;&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[script]]
+namespace = <span style="color:#c30">&#34;blog.comments&#34;</span>
+routing = <span style="color:#069;font-weight:bold">true</span>
+script = <span style="color:#c30">&#34;&#34;&#34;
+</span><span style="color:#c30">module.exports = function(doc) {
+</span><span style="color:#c30">	if (doc.score &gt;= 100) {
+</span><span style="color:#c30">		// NOTE: prefix dynamic index with namespace for proper cleanup on drops
+</span><span style="color:#c30">		doc._meta_monstache = { index: &#34;</span>blog.comments.highscore<span style="color:#c30">&#34;, type: &#34;</span>highScoreComment<span style="color:#c30">&#34;, routing: doc.post_id };
+</span><span style="color:#c30">	} else {
+</span><span style="color:#c30">		doc._meta_monstache = { routing: doc.post_id };
+</span><span style="color:#c30">	}
+</span><span style="color:#c30">	return doc;
+</span><span style="color:#c30">}
+</span><span style="color:#c30">&#34;&#34;&#34;</span></code></pre></div>
 <hr />
 
 

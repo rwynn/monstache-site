@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Index Mapping - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -457,32 +457,26 @@
 		<div class="wrapper">
 			<h1>Index Mapping </h1>
 
-			<p>When indexing documents from MongoDB into elasticsearch the mapping is as follows:</p>
-
-<pre><code class="language-txt">mongodb database name . mongodb collection name -&gt; elasticsearch index name
-mongodb collection name -&gt; elasticsearch type
-mongodb document _id -&gt; elasticsearch document _id
-</code></pre>
-
+			<p>When indexing documents from MongoDB into elasticsearch the default mapping is as follows:</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">mongodb database name . mongodb collection name -<span style="color:#555">&gt;</span> elasticsearch index name
+mongodb collection name -<span style="color:#555">&gt;</span> elasticsearch type
+mongodb document _id -<span style="color:#555">&gt;</span> elasticsearch document _id</code></pre></div>
 <p>If these default won&rsquo;t work for some reason you can override the index and type mapping on a per collection basis by adding
 the following to your TOML config file:</p>
-
-<pre><code class="language-toml">[[mapping]]
-namespace = &quot;test.test&quot;
-index = &quot;index1&quot;
-type = &quot;type1&quot;
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[mapping]]
+namespace = <span style="color:#c30">&#34;test.test&#34;</span>
+index = <span style="color:#c30">&#34;index1&#34;</span>
+type = <span style="color:#c30">&#34;type1&#34;</span>
 
 [[mapping]]
-namespace = &quot;test.test2&quot;
-index = &quot;index2&quot;
-type = &quot;type2&quot;
-</code></pre>
-
+namespace = <span style="color:#c30">&#34;test.test2&#34;</span>
+index = <span style="color:#c30">&#34;index2&#34;</span>
+type = <span style="color:#c30">&#34;type2&#34;</span></code></pre></div>
 <p>With the configuration above documents in the <code>test.test</code> namespace in MongoDB are indexed into the <code>index1</code>
 index in elasticsearch with the <code>type1</code> type.</p>
 
 <p>If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
-see the section <a href="https://rwynn.github.io/monstache-site/index-meta/">Routing</a>.</p>
+see the sections <a href="https://rwynn.github.io/monstache-site/transform-filter/">Transform and Filter</a> and  <a href="https://rwynn.github.io/monstache-site/index-meta/">Routing</a>.</p>
 
 <p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>
 

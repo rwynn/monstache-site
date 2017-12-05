@@ -9,7 +9,7 @@ listens on :8080 by default but you can change this with --http-server-addr.
 When using monstache with kubernetes this server can be used to detect liveness and 
 [act accordingly](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
 
-The following endpoints are available
+The following GET endpoints are available
 
 ### /started
 

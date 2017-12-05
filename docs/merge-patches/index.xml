@@ -20,7 +20,7 @@
       <description>A unique feature of monstache is support for JSON Merge Patches rfc-7396.
 If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The name of this field is configurable but it defaults to json-merge-patches.
 Consider the following example with merge patches enabled&amp;hellip;
-db.test.insert({name: &amp;quot;Joe&amp;quot;, age: 16, friends: [1, 2, 3]})  At this point you would have the following document source in elasticsearch.
+db.test.insert({name: &amp;#34;Joe&amp;#34;, age: 16, friends: [1, 2, 3]}) At this point you would have the following document source in elasticsearch.
  &amp;quot;_source&amp;quot; : { &amp;quot;age&amp;quot; : 16, &amp;quot;friends&amp;quot; : [ 1, 2, 3 ], &amp;quot;json-merge-patches&amp;quot; : [ { &amp;quot;p&amp;quot; : &amp;quot;{\&amp;quot;age\&amp;quot;:16,\&amp;quot;friends\&amp;quot;:[1,2,3],\&amp;quot;name\&amp;quot;:\&amp;quot;Joe\&amp;quot;}&amp;quot;, &amp;quot;ts&amp;quot; : 1487263414, &amp;quot;v&amp;quot; : 1 } ], &amp;quot;name&amp;quot; : &amp;quot;Joe&amp;quot; }  As you can see we have a single timestamped merge patch in the json-merge-patches array.</description>
     </item>
     

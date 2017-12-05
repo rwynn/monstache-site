@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Merge Patches - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -463,10 +463,7 @@
 name of this field is configurable but it defaults to <code>json-merge-patches</code>.</p>
 
 <p>Consider the following example with merge patches enabled&hellip;</p>
-
-<pre><code>db.test.insert({name: &quot;Joe&quot;, age: 16, friends: [1, 2, 3]})
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">db.test.insert({name<span style="color:#555">:</span> <span style="color:#c30">&#34;Joe&#34;</span>, age<span style="color:#555">:</span> <span style="color:#f60">16</span>, friends<span style="color:#555">:</span> [<span style="color:#f60">1</span>, <span style="color:#f60">2</span>, <span style="color:#f60">3</span>]})</code></pre></div>
 <p>At this point you would have the following document source in elasticsearch.</p>
 
 <pre><code> &quot;_source&quot; : {
@@ -490,10 +487,7 @@ name of this field is configurable but it defaults to <code>json-merge-patches</
 <p>As you can see we have a single timestamped merge patch in the json-merge-patches array.</p>
 
 <p>Now let&rsquo;s update the document to remove a friend and update the age.</p>
-
-<pre><code>db.test.update({name: &quot;Joe&quot;}, {$set: {age: 21, friends: [1, 3]}})
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">db.test.update({name<span style="color:#555">:</span> <span style="color:#c30">&#34;Joe&#34;</span>}, {$set<span style="color:#555">:</span> {age<span style="color:#555">:</span> <span style="color:#f60">21</span>, friends<span style="color:#555">:</span> [<span style="color:#f60">1</span>, <span style="color:#f60">3</span>]}})</code></pre></div>
 <p>If we now look at the document in elasticsearch we see the following:</p>
 
 <pre><code>&quot;_source&quot; : {

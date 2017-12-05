@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Workers - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -459,10 +459,7 @@
 
 			<p>You can run multiple monstache processes and distribute the work between them.  First configure
 the names of all the workers in a shared config.toml file.</p>
-
-<pre><code class="language-toml">workers = [&quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;]
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">workers = [<span style="color:#c30">&#34;Tom&#34;</span>, <span style="color:#c30">&#34;Dick&#34;</span>, <span style="color:#c30">&#34;Harry&#34;</span>]</code></pre></div>
 <p>In this case we have 3 workers.  Now we can start 3 monstache processes and give each one of the worker
 names.</p>
 

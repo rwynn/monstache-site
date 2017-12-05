@@ -10,7 +10,7 @@ supports user defined, or custom, routing of your MongoDB documents into Elastic
 Consider an example where you have a `comments` collection in MongoDB which stores a comment and 
 its associated post identifier.  
 
-```
+```javascript
 use blog;
 db.comments.insert({title: "Did you read this?", post_id: "123"});
 db.comments.insert({title: "Yeah, it's good", post_id: "123"});

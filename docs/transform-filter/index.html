@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Transform and Filter - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -461,52 +461,52 @@
 
 <p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
 drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
-require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).</p>
+require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).</p>
 
 <h2 id="golang">Golang</h2>
 
 <p>monstache supports Golang 1.8 plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.</p>
 
-<p>plugins must import the package &ldquo;github.com/rwynn/monstache/monstachemap&rdquo;</p>
+<p>plugins must import the package <code>github.com/rwynn/monstache/monstachemap</code></p>
 
-<p>plugins must implement a function named &ldquo;Map&rdquo; with the following signature</p>
-
-<pre><code class="language-go">func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
-</code></pre>
-
+<p>plugins must implement a function named <code>Map</code> with the following signature</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#069;font-weight:bold">func</span> Map(input <span style="color:#555">*</span>monstachemap.MapperPluginInput) (output <span style="color:#555">*</span>monstachemap.MapperPluginOutput, err <span style="color:#078;font-weight:bold">error</span>)</code></pre></div>
 <p>plugins can be compiled using</p>
 
 <pre><code>go build -buildmode=plugin -o myplugin.so myplugin.go
 </code></pre>
 
-<p>to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so</p>
+<p>to enable the plugin, start with <code>monstache -mapper-plugin-path /path/to/myplugin.so</code></p>
 
 <p>the following example plugin simply converts top level string values to uppercase</p>
-
-<pre><code class="language-go">package main
-import (
-	&quot;github.com/rwynn/monstache/monstachemap&quot;
-	&quot;strings&quot;
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#069;font-weight:bold">package</span> main
+<span style="color:#069;font-weight:bold">import</span> (
+	<span style="color:#c30">&#34;github.com/rwynn/monstache/monstachemap&#34;</span>
+	<span style="color:#c30">&#34;strings&#34;</span>
 )
-// a plugin to convert document values to uppercase
-func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
-	doc := input.Document
-	for k, v := range doc {
-		switch v.(type) {
-		case string:
-			doc[k] = strings.ToUpper(v.(string))
+<span style="color:#09f;font-style:italic">// a plugin to convert document values to uppercase
+</span><span style="color:#09f;font-style:italic"></span><span style="color:#069;font-weight:bold">func</span> Map(input <span style="color:#555">*</span>monstachemap.MapperPluginInput) (output <span style="color:#555">*</span>monstachemap.MapperPluginOutput, err <span style="color:#078;font-weight:bold">error</span>) {
+	doc <span style="color:#555">:=</span> input.Document
+	<span style="color:#069;font-weight:bold">for</span> k, v <span style="color:#555">:=</span> <span style="color:#069;font-weight:bold">range</span> doc {
+		<span style="color:#069;font-weight:bold">switch</span> v.(<span style="color:#069;font-weight:bold">type</span>) {
+		<span style="color:#069;font-weight:bold">case</span> <span style="color:#078;font-weight:bold">string</span>:
+			doc[k] = strings.ToUpper(v.(<span style="color:#078;font-weight:bold">string</span>))
 		}
 	}
-	output = &amp;monstachemap.MapperPluginOutput{Document: doc}
-	return
-}
-</code></pre>
+	output = <span style="color:#555">&amp;</span>monstachemap.MapperPluginOutput{Document: doc}
+	<span style="color:#069;font-weight:bold">return</span>
+}</code></pre></div>
+<p>the input parameter will contain information about the document&rsquo;s origin database and collection.
+to drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.
+to simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
 
-<p>the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
-to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true</p>
+<p><code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code> allow you to set the indexing metadata for each individual document.</p>
 
-<p>output.Index, output.Type, output.Parent and output.Routing allow you to set the indexing metadata for each individual document.</p>
+<p>if would like to embed other MongoDB documents (possibly from a different collection) within the current document
+before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the
+<a href="https://godoc.org/gopkg.in/mgo.v2">mgo API</a> to find documents in MongoDB and embed them in the Document set
+on output.</p>
 
 <h2 id="javascript">Javascript</h2>
 
@@ -515,30 +515,27 @@ to index it) set output.Drop = true.  to simply pass the original document throu
 <p>monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
 level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:</p>
-
-<pre><code class="language-toml">[[script]]
-namespace = &quot;mydb.mycollection&quot;
-script = &quot;&quot;&quot;
-var counter = 1;
-module.exports = function(doc) {
-	doc.foo += &quot;test&quot; + counter;
-	counter++;
-	return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
-}
-&quot;&quot;&quot;
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[script]]
+namespace = <span style="color:#c30">&#34;mydb.mycollection&#34;</span>
+script = <span style="color:#c30">&#34;&#34;&#34;
+</span><span style="color:#c30">var counter = 1;
+</span><span style="color:#c30">module.exports = function(doc) {
+</span><span style="color:#c30">	doc.foo += &#34;</span>test<span style="color:#c30">&#34; + counter;
+</span><span style="color:#c30">	counter++;
+</span><span style="color:#c30">	return _.omit(doc, &#34;</span>password<span style="color:#c30">&#34;, &#34;</span>secret<span style="color:#c30">&#34;);
+</span><span style="color:#c30">}
+</span><span style="color:#c30">&#34;&#34;&#34;</span>
 
 [[script]]
-namespace = &quot;anotherdb.anothercollection&quot;
-script = &quot;&quot;&quot;
-var counter = 1;
-module.exports = function(doc) {
-	doc.foo += &quot;test2&quot; + counter;
-	counter++;
-	return doc;
-}
-&quot;&quot;&quot;
-</code></pre>
-
+namespace = <span style="color:#c30">&#34;anotherdb.anothercollection&#34;</span>
+script = <span style="color:#c30">&#34;&#34;&#34;
+</span><span style="color:#c30">var counter = 1;
+</span><span style="color:#c30">module.exports = function(doc) {
+</span><span style="color:#c30">	doc.foo += &#34;</span>test2<span style="color:#c30">&#34; + counter;
+</span><span style="color:#c30">	counter++;
+</span><span style="color:#c30">	return doc;
+</span><span style="color:#c30">}
+</span><span style="color:#c30">&#34;&#34;&#34;</span></code></pre></div>
 <p>The example TOML above configures 2 scripts. The first is applied to <code>mycollection</code> in <code>mydb</code> while the second is applied
 to <code>anothercollection</code> in <code>anotherdb</code>.</p>
 
@@ -559,19 +556,16 @@ and if the boolean value is <code>false</code> then that indicates to monstache 
 the original document from mongodb gets indexed in elasticsearch.</p>
 
 <p>This allows you to return false or null if you have implemented soft deletes in mongodb.</p>
-
-<pre><code class="language-toml">[[script]]
-namespace = &quot;db.collection&quot;
-script = &quot;&quot;&quot;
-module.exports = function(doc) {
-	if (!!doc.deletedAt) {
-		return false;
-	}
-	return true;
-}
-&quot;&quot;&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[script]]
+namespace = <span style="color:#c30">&#34;db.collection&#34;</span>
+script = <span style="color:#c30">&#34;&#34;&#34;
+</span><span style="color:#c30">module.exports = function(doc) {
+</span><span style="color:#c30">	if (!!doc.deletedAt) {
+</span><span style="color:#c30">		return false;
+</span><span style="color:#c30">	}
+</span><span style="color:#c30">	return true;
+</span><span style="color:#c30">}
+</span><span style="color:#c30">&#34;&#34;&#34;</span></code></pre></div>
 <p>In the above example monstache will index any document except the ones with a <code>deletedAt</code> property.  If the document is first
 inserted without a <code>deletedAt</code> property, but later updated to include the <code>deletedAt</code> property then monstache will remove the
 previously indexed document from the elasticsearch index.</p>
@@ -585,29 +579,82 @@ use closures to maintain state between invocations of your mapping function.</p>
 <p>Finally, since Otto makes it so easy, the venerable <a href="http://underscorejs.org/">Underscore</a> library is included for you at
 no extra charge.  Feel free to abuse the power of the <code>_</code>.</p>
 
+<h3 id="embedding-documents">Embedding Documents</h3>
+
+<p>In your javascript function you have access to the following global functions to retreive documents from MongoDB for
+embedding in the current document before indexing.  Using this approach you can pull in related data.</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#069;font-weight:bold">function</span> findId(documentId, [options]) {
+    <span style="color:#09f;font-style:italic">// convenience method for findOne({_id: documentId})
+</span><span style="color:#09f;font-style:italic"></span>    <span style="color:#09f;font-style:italic">// returns 1 document or null
+</span><span style="color:#09f;font-style:italic"></span>}
+
+<span style="color:#069;font-weight:bold">function</span> findOne(query, [options]) {
+    <span style="color:#09f;font-style:italic">// returns 1 document or null
+</span><span style="color:#09f;font-style:italic"></span>}
+
+<span style="color:#069;font-weight:bold">function</span> find(query, [options]) {
+    <span style="color:#09f;font-style:italic">// returns an array of documents or null
+</span><span style="color:#09f;font-style:italic"></span>}</code></pre></div>
+<p>Each function takes a <code>query</code> object parameter and an optional <code>options</code> object parameter.</p>
+
+<p>The options object takes the following keys and values:</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#069;font-weight:bold">var</span> options <span style="color:#555">=</span> {
+    database<span style="color:#555">:</span> <span style="color:#c30">&#34;test&#34;</span>,
+    collection<span style="color:#555">:</span> <span style="color:#c30">&#34;test&#34;</span>,
+    <span style="color:#09f;font-style:italic">// to omit _id set the _id key to 0 in select
+</span><span style="color:#09f;font-style:italic"></span>    select<span style="color:#555">:</span> {
+        age<span style="color:#555">:</span> <span style="color:#f60">1</span>
+    },
+    <span style="color:#09f;font-style:italic">// only applicable to find...
+</span><span style="color:#09f;font-style:italic"></span>    sort<span style="color:#555">:</span> [<span style="color:#c30">&#34;name&#34;</span>],
+    limit<span style="color:#555">:</span> <span style="color:#f60">2</span>
+}</code></pre></div>
+<p>If the database or collection keys are omitted from the options object, the values for database and/or
+collection are set to the database and collection of the document being processed.</p>
+
+<p>Here are some examples:</p>
+
+<p>This example sorts the documents in the same collection as the document being processed by name and returns
+the first 2 documents projecting only the age field.  The result is set on the current document before being
+indexed.</p>
+
+<pre><code>[[script]]
+namespace = &quot;test.test&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    doc.twoAgesSortedByName = find({}, {
+            sort: [&quot;name&quot;],
+            limit: 2,
+            select: {
+              age: 1
+            }
+    });
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>This example grabs a reference id from a document and replaces it with the corresponding document with that id.</p>
+
+<pre><code>[[script]]
+namespace = &quot;test.posts&quot;
+script = &quot;&quot;&quot;
+module.exports = function(post) {
+    if (post.author) { // author is a an object id reference
+        post.author = findId(post.author, {
+          database: &quot;test&quot;,
+          collection: &quot;users&quot;
+        });
+    }
+    return post;
+}
+&quot;&quot;&quot;
+</code></pre>
+
 <h3 id="indexing-metadata">Indexing Metadata</h3>
 
 <p>You can override the indexing metadata for an individual document by setting a special field named
 <code>_meta_monstache</code> on the document you return from your Javascript function.</p>
-
-<p>For example, the following snippet sets up a parent-child relationship in Elasticsearch based on the
-incoming documents from MongoDB.</p>
-
-<pre><code>[[script]]
-namespace = &quot;test.company&quot;
-routing = true
-script = &quot;&quot;&quot;
-module.exports = function(doc) {
-	doc._meta_monstache = { type: doc.type, index: 'company' };
-	if (doc.type === &quot;employee&quot;) {
-		doc._meta_monstache.parent = doc.branch;
-	}
-	delete doc.parent;
-	delete doc.type;
-	return doc;
-}
-&quot;&quot;&quot;
-</code></pre>
 
 <p>Assume there is a collection in MongoDB named <code>company</code> in the <code>test</code> database.
 The documents in this collection look like either</p>
@@ -618,6 +665,24 @@ The documents in this collection look like either</p>
 <p>or</p>
 
 <pre><code>{ &quot;_id&quot;: &quot;alice&quot;, &quot;type&quot;: &quot;employee&quot;, &quot;name&quot;: &quot;Alice Smith&quot;, &quot;branch&quot;: &quot;london&quot; }
+</code></pre>
+
+<p>Given the above the following snippet sets up a parent-child relationship in Elasticsearch based on the
+incoming documents from MongoDB.</p>
+
+<pre><code>[[script]]
+namespace = &quot;test.company&quot;
+routing = true
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    var meta = { type: doc.type, index: 'company' };
+    if (doc.type === &quot;employee&quot;) {
+        meta.parent = doc.branch;
+    }
+    doc._meta_monstache = meta;
+    return _.omit(doc, &quot;branch&quot;, &quot;type&quot;);
+}
+&quot;&quot;&quot;
 </code></pre>
 
 <p>The snippet above will route these documents to the <code>company</code> index in Elasticsearch instead of the

@@ -5,18 +5,18 @@ weight: 40
 
 monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
 drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
-require Go version 1.8 or greater. currently, you are able to use Javascript or Golang but not both (this may change in the future).
+require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).
 
 ## Golang
 
 monstache supports Golang 1.8 plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
 
-plugins must import the package "github.com/rwynn/monstache/monstachemap"
+plugins must import the package `github.com/rwynn/monstache/monstachemap`
 
-plugins must implement a function named "Map" with the following signature
+plugins must implement a function named `Map` with the following signature
 
-``` go
+```go
 func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
 ```
 
@@ -24,11 +24,11 @@ plugins can be compiled using
 
 	go build -buildmode=plugin -o myplugin.so myplugin.go
 
-to enable the plugin, start with monstache -mapper-plugin-path /path/to/myplugin.so
+to enable the plugin, start with `monstache -mapper-plugin-path /path/to/myplugin.so`
 
 the following example plugin simply converts top level string values to uppercase
 
-``` go
+```go
 package main
 import (
 	"github.com/rwynn/monstache/monstachemap"
@@ -48,11 +48,16 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 }
 ```
 
-the input parameter will contain information about the origin database and collection.  to drop the document (direct monstache not
-to index it) set output.Drop = true.  to simply pass the original document through to Elasticsearch, set output.Passthrough = true
+the input parameter will contain information about the document's origin database and collection.
+to drop the document (direct monstache not to index it) set `output.Drop = true`.
+to simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
 
-output.Index, output.Type, output.Parent and output.Routing allow you to set the indexing metadata for each individual document.
+`output.Index`, `output.Type`, `output.Parent` and `output.Routing` allow you to set the indexing metadata for each individual document.
 
+if would like to embed other MongoDB documents (possibly from a different collection) within the current document 
+before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the 
+[mgo API](https://godoc.org/gopkg.in/mgo.v2) to find documents in MongoDB and embed them in the Document set 
+on output.  
 
 ## Javascript
 
@@ -133,30 +138,92 @@ use closures to maintain state between invocations of your mapping function.
 Finally, since Otto makes it so easy, the venerable [Underscore](http://underscorejs.org/) library is included for you at 
 no extra charge.  Feel free to abuse the power of the `_`.
 
+### Embedding Documents
+
+In your javascript function you have access to the following global functions to retreive documents from MongoDB for
+embedding in the current document before indexing.  Using this approach you can pull in related data.
+
+```javascript
+function findId(documentId, [options]) {
+    // convenience method for findOne({_id: documentId})
+    // returns 1 document or null
+}
+
+function findOne(query, [options]) {
+    // returns 1 document or null
+}
+
+function find(query, [options]) {
+    // returns an array of documents or null
+}
+```
+
+Each function takes a `query` object parameter and an optional `options` object parameter.
+
+The options object takes the following keys and values:
+
+```javascript
+var options = {
+    database: "test",
+    collection: "test",
+    // to omit _id set the _id key to 0 in select
+    select: {
+        age: 1
+    },
+    // only applicable to find...
+    sort: ["name"],
+    limit: 2
+}
+```
+
+If the database or collection keys are omitted from the options object, the values for database and/or
+collection are set to the database and collection of the document being processed.
+
+Here are some examples:
+
+This example sorts the documents in the same collection as the document being processed by name and returns
+the first 2 documents projecting only the age field.  The result is set on the current document before being
+indexed.
+
+```
+[[script]]
+namespace = "test.test"
+script = """
+module.exports = function(doc) {
+    doc.twoAgesSortedByName = find({}, {
+            sort: ["name"],
+            limit: 2,
+            select: {
+              age: 1
+            }
+    });
+    return doc;
+}
+"""
+```
+
+This example grabs a reference id from a document and replaces it with the corresponding document with that id.
+
+```
+[[script]]
+namespace = "test.posts"
+script = """
+module.exports = function(post) {
+    if (post.author) { // author is a an object id reference
+        post.author = findId(post.author, {
+          database: "test",
+          collection: "users"
+        });
+    }
+    return post;
+}
+"""
+```
+
 ### Indexing Metadata
 
 You can override the indexing metadata for an individual document by setting a special field named
 `_meta_monstache` on the document you return from your Javascript function.
-
-For example, the following snippet sets up a parent-child relationship in Elasticsearch based on the
-incoming documents from MongoDB.
-
-```
-[[script]]
-namespace = "test.company"
-routing = true
-script = """
-module.exports = function(doc) {
-	doc._meta_monstache = { type: doc.type, index: 'company' };
-	if (doc.type === "employee") {
-		doc._meta_monstache.parent = doc.branch;
-	}
-	delete doc.parent;
-	delete doc.type;
-	return doc;
-}
-"""
-```
 
 Assume there is a collection in MongoDB named `company` in the `test` database.
 The documents in this collection look like either 
@@ -167,6 +234,25 @@ The documents in this collection look like either
 or
 ```
 { "_id": "alice", "type": "employee", "name": "Alice Smith", "branch": "london" }
+```
+
+Given the above the following snippet sets up a parent-child relationship in Elasticsearch based on the
+incoming documents from MongoDB.
+
+```
+[[script]]
+namespace = "test.company"
+routing = true
+script = """
+module.exports = function(doc) {
+    var meta = { type: doc.type, index: 'company' };
+    if (doc.type === "employee") {
+        meta.parent = doc.branch;
+    }
+    doc._meta_monstache = meta;
+    return _.omit(doc, "branch", "type");
+}
+"""
 ```
 
 The snippet above will route these documents to the `company` index in Elasticsearch instead of the

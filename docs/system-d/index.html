@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Systemd - Monstache</title>
-    <meta name="generator" content="Hugo 0.31-DEV" />
+    <meta name="generator" content="Hugo 0.32-DEV" />
 
     
     <meta name="description" content="a go daemon which syncs mongodb to elasticsearch in neal realtime">
@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.3.1</span></strong>
+        <strong>Monstache <span class="version">3.4.0</span></strong>
         
           <br>
           rwynn/monstache
@@ -465,7 +465,7 @@ Description=monstache sync service
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/monstache
+ExecStart=/usr/local/bin/monstache
 WatchdogSec=30s
 Restart=on-failure
 
@@ -475,9 +475,10 @@ WantedBy=multi-user.target
 
 <p>System-d unit files are normally saved to <code>/lib/systemd/system</code>.</p>
 
-<p>After adding monstache.service you can run <code>systemctl daemon-reload</code> to tell systemd to reload all unit files.</p>
+<p>After saving the monstache.service file you can run <code>systemctl daemon-reload</code> to tell systemd to reload
+all unit files.</p>
 
-<p>You can start the service with <code>systemctl start monstache.service</code>.</p>
+<p>You can enable the service to start on boot with <code>systemctl enable monstache.service</code> and start the service with <code>systemctl start monstache.service</code>.</p>
 
 <p>With the configuration above monstache will notify systemd when it has started successfully and then notify
 systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
