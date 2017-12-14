@@ -53,7 +53,7 @@ Now when we are searching for comments and we know the post id that the comment 
 id in the request and make a search that normally queries all shards query only 1 shard.
 
 ```
-$ curl -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
+$ curl -H "Content-Type:application/json" -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
 {
    "query":{
       "match_all":{}

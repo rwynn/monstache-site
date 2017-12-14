@@ -472,7 +472,7 @@ Customize the name of the property under which merge patches are stored
 ### string (default "")
 
 When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
-processes in a cluster will be sync changes.  The other process will be in a paused state.  If the process which is syncing changes goes down for some reason
+processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
 one of the processes in paused state will take control and start syncing.  See the section [high availability](/high-availability/) for more information.
 
 ## script

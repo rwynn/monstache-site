@@ -84,7 +84,7 @@ If you would like to see the text extracted by Apache Tika you can project the a
 
 For Elasticsearch versions prior to version 5...
 
-	curl localhost:9200/users.fs.files/_search?pretty -d '{
+	curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
 		"fields": [ "file.content" ],
 		"query": {
 			"match": {
@@ -95,7 +95,7 @@ For Elasticsearch versions prior to version 5...
 
 For Elasticsearch version 5 and above...
 
-	curl localhost:9200/users.fs.files/_search?pretty -d '{
+	curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
 		"_source": [ "attachment.content" ],
 		"query": {
 			"match": {
@@ -108,7 +108,7 @@ When `file-highlighting` is enabled you can add a highlight clause to your query
 
 For Elasticsearch versions prior to version 5...
 
-	curl localhost:9200/users.fs.files/_search?pretty -d '{
+	curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
 		"fields": ["file.content"],
 		"query": {
 			"match": {
@@ -125,7 +125,7 @@ For Elasticsearch versions prior to version 5...
 
 For Elasticsearch version 5 and above...
 
-	curl localhost:9200/users.fs.files/_search?pretty -d '{
+	curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
 		"_source": ["attachment.content"],
 		"query": {
 			"match": {

@@ -138,7 +138,7 @@
         </div>
       
       <div class="name">
-        <strong>Monstache <span class="version">3.4.0</span></strong>
+        <strong>Monstache <span class="version">3.4.1</span></strong>
         
           <br>
           rwynn/monstache
@@ -498,7 +498,7 @@ document when indexing to ElasticSearch.</p>
 <p>Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
 id in the request and make a search that normally queries all shards query only 1 shard.</p>
 
-<pre><code>$ curl -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
+<pre><code>$ curl -H &quot;Content-Type:application/json&quot; -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
 {
    &quot;query&quot;:{
       &quot;match_all&quot;:{}
