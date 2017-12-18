@@ -35,6 +35,14 @@ prefixed `monstache.stats.`. E.g. monstache.stats.2017-07-01 and so on.
 As these indexes will accrue over time your can use a tool like [curator](https://github.com/elastic/curator)
 to prune them with a Delete Indices action and an age filter.
 
+## stats-index-format
+
+### string (default monstache.stats.2006-01-02)
+
+The time.Time supported index name format for stats indices.  By default, stats indexes 
+are partitioned by day.  To use less indices for stats you can shorten this format string 
+(e.g monstache.stats.2006-01) or remove the time component completely to use a single index.  
+
 ## gzip
 
 ### boolean (default false)
