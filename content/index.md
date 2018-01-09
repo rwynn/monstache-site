@@ -22,6 +22,8 @@ go get -v github.com/rwynn/monstache
 
 - Optionally filter the set of collections to sync
 
+- Support for sharded MongoDB clusters (pre-release - build from git)
+
 - Direct read mode to do a full sync of collections in addition to tailing the oplog
 
 - Transform and filter documents before indexing using Golang plugins or JavaScript

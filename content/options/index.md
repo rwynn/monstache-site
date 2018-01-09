@@ -203,6 +203,18 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
+For sharded clusters this URL should point to the `mongos` router server.
+
+## mongo-config-url (pre-release - build from git)
+
+### string (default "")
+
+This config should only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
+This URL should point to the MongoDB `config` server.
+
+Monstache will read the list of shards using this connection and then setup a listener to react
+to new shards being added to the cluster at a later time.
+
 ## mongo-pem-file
 
 ### string (default "")

@@ -662,9 +662,21 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 <p>The URL to connect to MongoDB which must follow the <a href="https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format">Standard Connection String Format</a></p>
 
-<h2 id="mongo-pem-file">mongo-pem-file</h2>
+<p>For sharded clusters this URL should point to the <code>mongos</code> router server.</p>
+
+<h2 id="mongo-config-url-pre-release-build-from-git">mongo-config-url (pre-release - build from git)</h2>
 
 <h3 id="string-default">string (default &ldquo;&rdquo;)</h3>
+
+<p>This config should only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
+This URL should point to the MongoDB <code>config</code> server.</p>
+
+<p>Monstache will read the list of shards using this connection and then setup a listener to react
+to new shards being added to the cluster at a later time.</p>
+
+<h2 id="mongo-pem-file">mongo-pem-file</h2>
+
+<h3 id="string-default-1">string (default &ldquo;&rdquo;)</h3>
 
 <p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.</p>
@@ -800,13 +812,13 @@ for queries on files which were indexed in elasticsearch from gridfs.</p>
 
 <h2 id="elasticsearch-user">elasticsearch-user</h2>
 
-<h3 id="string-default-1">string (default &ldquo;&rdquo;)</h3>
+<h3 id="string-default-2">string (default &ldquo;&rdquo;)</h3>
 
 <p>Optional Elasticsearch username for basic auth</p>
 
 <h2 id="elasticsearch-password">elasticsearch-password</h2>
 
-<h3 id="string-default-2">string (default &ldquo;&rdquo;)</h3>
+<h3 id="string-default-3">string (default &ldquo;&rdquo;)</h3>
 
 <p>Optional Elasticsearch password for basic auth</p>
 
@@ -876,7 +888,7 @@ this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v
 
 <h2 id="elasticsearch-pem-file">elasticsearch-pem-file</h2>
 
-<h3 id="string-default-3">string (default &ldquo;&rdquo;)</h3>
+<h3 id="string-default-4">string (default &ldquo;&rdquo;)</h3>
 
 <p>When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.</p>
@@ -901,7 +913,7 @@ pool when connecting to elasticsearch. This should only be used when elasticsear
 
 <h2 id="worker">worker</h2>
 
-<h3 id="string-default-4">string (default &ldquo;&rdquo;)</h3>
+<h3 id="string-default-5">string (default &ldquo;&rdquo;)</h3>
 
 <p>When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
@@ -937,7 +949,7 @@ same worker and none of the other workers. See the section <a href="https://rwyn
 
 <h2 id="cluster-name">cluster-name</h2>
 
-<h3 id="string-default-5">string (default &ldquo;&rdquo;)</h3>
+<h3 id="string-default-6">string (default &ldquo;&rdquo;)</h3>
 
 <p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
@@ -958,25 +970,25 @@ for more information.</p>
 
 <h3 id="info">info</h3>
 
-<h4 id="string-default-6">string (default &ldquo;&rdquo;)</h4>
+<h4 id="string-default-7">string (default &ldquo;&rdquo;)</h4>
 
 <p>The file path to write info level logs to</p>
 
 <h3 id="error">error</h3>
 
-<h4 id="string-default-7">string (default &ldquo;&rdquo;)</h4>
+<h4 id="string-default-8">string (default &ldquo;&rdquo;)</h4>
 
 <p>The file path to write error level logs to</p>
 
 <h3 id="trace">trace</h3>
 
-<h4 id="string-default-8">string (default &ldquo;&rdquo;)</h4>
+<h4 id="string-default-9">string (default &ldquo;&rdquo;)</h4>
 
 <p>The file path to write trace level logs to. Trace logs are enabled via the verbose option.</p>
 
 <h3 id="stats-1">stats</h3>
 
-<h4 id="string-default-9">string (default &ldquo;&rdquo;)</h4>
+<h4 id="string-default-10">string (default &ldquo;&rdquo;)</h4>
 
 <p>The file path to write indexing statistics to. Stats logs are enabled via the stats option.</p>
 
@@ -997,7 +1009,7 @@ for more information.</p>
 
 			<aside class="copyright" role="note">
 				
-				&copy; 2017 Released under the MIT license &ndash;
+				&copy; 2018 Released under the MIT license &ndash;
 				
 				Documentation built with
 				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
