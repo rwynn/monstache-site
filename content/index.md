@@ -22,7 +22,7 @@ go get -v github.com/rwynn/monstache
 
 - Optionally filter the set of collections to sync
 
-- Support for sharded MongoDB clusters (pre-release - build from git)
+- Support for sharded MongoDB clusters
 
 - Direct read mode to do a full sync of collections in addition to tailing the oplog
 

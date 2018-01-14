@@ -203,9 +203,10 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
-For sharded clusters this URL should point to the `mongos` router server.
+For sharded clusters this URL should point to the `mongos` router server and the `mongo-config-url`
+option should be set to point to the config server.
 
-## mongo-config-url (pre-release - build from git)
+## mongo-config-url
 
 ### string (default "")
 
