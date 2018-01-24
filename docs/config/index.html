@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Monstache Team">
+        <link rel="canonical" href="https://rwynn.github.io/monstache-site/config/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Configuration - Monstache</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Monstache</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../start/">Getting Started</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Configuration</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../advanced/">Advanced</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../start/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../advanced/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/rwynn/monstache/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#configuration">Configuration</a></li>
+        
+            <li><a href="#print-config">print-config</a></li>
+        
+            <li><a href="#stats">stats</a></li>
+        
+            <li><a href="#stats-duration">stats-duration</a></li>
+        
+            <li><a href="#index-stats">index-stats</a></li>
+        
+            <li><a href="#stats-index-format">stats-index-format</a></li>
+        
+            <li><a href="#gzip">gzip</a></li>
+        
+            <li><a href="#fail-fast">fail-fast</a></li>
+        
+            <li><a href="#index-oplog-time">index-oplog-time</a></li>
+        
+            <li><a href="#resume">resume</a></li>
+        
+            <li><a href="#resume-name">resume-name</a></li>
+        
+            <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
+        
+            <li><a href="#replay">replay</a></li>
+        
+            <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
+        
+            <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
+        
+            <li><a href="#direct-read-limit">direct-read-limit</a></li>
+        
+            <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
+        
+            <li><a href="#direct-readers-per-col">direct-readers-per-col</a></li>
+        
+            <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
+        
+            <li><a href="#namespace-regex">namespace-regex</a></li>
+        
+            <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
+        
+            <li><a href="#mongo-url">mongo-url</a></li>
+        
+            <li><a href="#mongo-config-url">mongo-config-url</a></li>
+        
+            <li><a href="#mongo-pem-file">mongo-pem-file</a></li>
+        
+            <li><a href="#mongo-validate-pem">mongo-validate-pem</a></li>
+        
+            <li><a href="#mongo-oplog-database-name">mongo-oplog-database-name</a></li>
+        
+            <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
+        
+            <li><a href="#mongo-cursor-timeout">mongo-cursor-timeout</a></li>
+        
+            <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
+        
+            <li><a href="#mongo-session-settings">mongo-session-settings</a></li>
+        
+            <li><a href="#gtm-settings">gtm-settings</a></li>
+        
+            <li><a href="#index-files">index-files</a></li>
+        
+            <li><a href="#max-file-size">max-file-size</a></li>
+        
+            <li><a href="#file-namespaces">file-namespaces</a></li>
+        
+            <li><a href="#file-highlighting">file-highlighting</a></li>
+        
+            <li><a href="#verbose">verbose</a></li>
+        
+            <li><a href="#elasticsearch-user">elasticsearch-user</a></li>
+        
+            <li><a href="#elasticsearch-password">elasticsearch-password</a></li>
+        
+            <li><a href="#elasticsearch-urls">elasticsearch-urls</a></li>
+        
+            <li><a href="#elasticsearch-version">elasticsearch-version</a></li>
+        
+            <li><a href="#elasticsearch-max-conns">elasticsearch-max-conns</a></li>
+        
+            <li><a href="#elasticsearch-retry">elasticsearch-retry</a></li>
+        
+            <li><a href="#elasticsearch-client-timeout">elasticsearch-client-timeout</a></li>
+        
+            <li><a href="#elasticsearch-max-docs">elasticsearch-max-docs</a></li>
+        
+            <li><a href="#elasticsearch-max-bytes">elasticsearch-max-bytes</a></li>
+        
+            <li><a href="#elasticsearch-max-seconds">elasticsearch-max-seconds</a></li>
+        
+            <li><a href="#elasticsearch-pem-file">elasticsearch-pem-file</a></li>
+        
+            <li><a href="#elasticsearch-validate-pem">elasticsearch-validate-pem</a></li>
+        
+            <li><a href="#dropped-databases">dropped-databases</a></li>
+        
+            <li><a href="#dropped-collections">dropped-collections</a></li>
+        
+            <li><a href="#worker">worker</a></li>
+        
+            <li><a href="#workers">workers</a></li>
+        
+            <li><a href="#enable-patches">enable-patches</a></li>
+        
+            <li><a href="#patch-namespaces">patch-namespaces</a></li>
+        
+            <li><a href="#merge-patch-attribute">merge-patch-attribute</a></li>
+        
+            <li><a href="#cluster-name">cluster-name</a></li>
+        
+            <li><a href="#script">script</a></li>
+        
+            <li><a href="#logs">logs</a></li>
+        
+            <li><a href="#enable-http-server">enable-http-server</a></li>
+        
+            <li><a href="#http-server-addr">http-server-addr</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link"></a></h1>
+<hr />
+<p>Configuration can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
+Program arguments take precedance over configuration specified in the TOML config file.</p>
+<h2 id="print-config">print-config<a class="headerlink" href="#print-config" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When print-config is true monstache will print its configuration and then exits</p>
+<h2 id="stats">stats<a class="headerlink" href="#stats" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When stats is true monstache will periodically print statistics accumulated by the indexer</p>
+<h2 id="stats-duration">stats-duration<a class="headerlink" href="#stats-duration" title="Permanent link"></a></h2>
+<p>string (default 30s)</p>
+<p>Sets the duration after which statistics are printed if stats is enabled</p>
+<h2 id="index-stats">index-stats<a class="headerlink" href="#index-stats" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When index-stats is true monstache will write statistics about its indexing progress in
+Elasticsearch.  The indexes used to store the statistics are time stamped by day and 
+prefixed <code>monstache.stats.</code>. E.g. monstache.stats.2017-07-01 and so on. </p>
+<p>As these indexes will accrue over time your can use a tool like <a href="https://github.com/elastic/curator">curator</a>
+to prune them with a Delete Indices action and an age filter.</p>
+<h2 id="stats-index-format">stats-index-format<a class="headerlink" href="#stats-index-format" title="Permanent link"></a></h2>
+<p>string (default monstache.stats.2006-01-02)</p>
+<p>The <code>time.Time</code> supported index name format for stats indices.  By default, stats indexes 
+are partitioned by day.  To use less indices for stats you can shorten this format string 
+(e.g monstache.stats.2006-01) or remove the time component completely to use a single index.  </p>
+<h2 id="gzip">gzip<a class="headerlink" href="#gzip" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When gzip is true, monstache will compress requests to elasticsearch to increase performance. 
+If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also 
+need to update the elasticsearch config file to set http.compression: true. In elasticsearch 
+version 5 and above http.compression is enabled by default. Enabling gzip is recommended 
+especially if you enable the index-files setting.</p>
+<h2 id="fail-fast">fail-fast<a class="headerlink" href="#fail-fast" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When fail-fast is true, if monstache receives a failed bulk indexing response from Elasticsearch, monstache
+will log the request that produced the response as an ERROR and then exit immediately with an error status. 
+Normally, monstache just logs the error and continues processing events.</p>
+<p>If monstache has been configured with <a href="#elasticsearch-retry">elasticsearch-retry</a> true, a failed request will be
+retried before being considered a failure.</p>
+<h2 id="index-oplog-time">index-oplog-time<a class="headerlink" href="#index-oplog-time" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>If this option is set to true monstache will include 2 automatic fields in the source document indexed into
+Elasticsearch.  The first is _oplog_ts which is the timestamp for the event copied directly from the MongoDB
+oplog. The second is _oplog_date which is an Elasticsearch date field corresponding to the time of the same
+event.</p>
+<p>This information is generally useful in Elasticsearch giving the notion of last updated.  However, it's also
+valuable information to have for failed indexing requests since it gives one the information to replay from 
+a failure point.  See the option <a href="#resume-from-timestamp">resume-from-timestamp</a> for information on how to replay oplog events since 
+a given event occurred. </p>
+<p>For data read via the direct read feature the oplog time will only be available if the id of the MongoDB
+document is an ObjectID.  If the id of the MongoDB document is not an ObjectID and the document source is
+a direct read query then the oplog time with not be available.</p>
+<h2 id="resume">resume<a class="headerlink" href="#resume" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When resume is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
+to the collection monstache.monstache.  It also reads the timestamp from that collection when it starts in order to replay
+events which it might have missed because monstache was stopped. If monstache is started with the <a href="#cluster-name">cluster-name</a> option
+set then resume is automatically turned on.  </p>
+<h2 id="resume-name">resume-name<a class="headerlink" href="#resume-name" title="Permanent link"></a></h2>
+<p>string (default "default")</p>
+<p>monstache uses the value of resume-name as an id when storing and retrieving timestamps
+to and from the mongodb collection monstache.monstache. The default value for this option is <code>default</code>.
+However, there are some exceptions.  If monstache is started with the <a href="#cluster-name">cluster-name</a> option set then the
+name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
+from the last timestamp successfully processed.  The other exception occurs when resume-name is not given but
+<a href="#worker-name">worker-name</a> is.  In that cause the worker name becomes the resume-name.</p>
+<h2 id="resume-from-timestamp">resume-from-timestamp<a class="headerlink" href="#resume-from-timestamp" title="Permanent link"></a></h2>
+<p>int64 (default 0)</p>
+<p>When resume-from-timestamp (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
+represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
+a specific timestamp from the oplog and would like to start syncing from after this event. </p>
+<h2 id="replay">replay<a class="headerlink" href="#replay" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When replay is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.</p>
+<p>When <a href="#resume">resume</a> and replay are both true, monstache replays all events from the beginning of the mongodb oplog, syncs them
+to elasticsearch and also writes the timestamp of processed events to monstache.monstache. </p>
+<p>When neither resume nor replay are true, monstache reads the last timestamp in the oplog and starts listening for events
+occurring after this timestamp.  Timestamps are not written to monstache.monstache.  This is the default behavior. </p>
+<h2 id="resume-write-unsafe">resume-write-unsafe<a class="headerlink" href="#resume-write-unsafe" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When resume-write-unsafe is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
+This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
+of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
+and do not stop execution it's not unreasonable to set this to true to get a speedup.</p>
+<h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
+The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
+sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.</p>
+<p>This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar</p>
+<p>For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
+destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
+index basis by using the Index Settings or Index Template APIs.  For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html">Update Indices Settings</a>.</p>
+<p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
+phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
+phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
+<p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
+<h2 id="direct-read-limit">direct-read-limit<a class="headerlink" href="#direct-read-limit" title="Permanent link"></a></h2>
+<p>int (default 5000)</p>
+<p>The maximum number of documents to retreive in each direct read query</p>
+<h2 id="direct-read-batch-size">direct-read-batch-size<a class="headerlink" href="#direct-read-batch-size" title="Permanent link"></a></h2>
+<p>int (default 500)</p>
+<p>The batch size to set on direct read queries</p>
+<h2 id="direct-readers-per-col">direct-readers-per-col<a class="headerlink" href="#direct-readers-per-col" title="Permanent link"></a></h2>
+<p>int (default 10)</p>
+<p>The number of concurrent readers per collection for direct reads</p>
+<h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want
+to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
+monstache will exit after syncing the direct read collections instead of continuing to tail the oplog. This is useful
+if you would like to run monstache to run a full sync on a set of collections via a cron job.</p>
+<h2 id="namespace-regex">namespace-regex<a class="headerlink" href="#namespace-regex" title="Permanent link"></a></h2>
+<p>regexp (default "")</p>
+<p>When namespace-regex is given this regex is tested against the namespace, database.collection, of the event. If
+the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+processes events in all databases and all collections with the exception of the reserved database monstache, any
+collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced#namespaces">Namespaces</a>.</p>
+<h2 id="namespace-exclude-regex">namespace-exclude-regex<a class="headerlink" href="#namespace-exclude-regex" title="Permanent link"></a></h2>
+<p>regex (default "")</p>
+<p>When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of the event. If
+the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+processes events in all databases and all collections with the exception of the reserved database monstache, any
+collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced#namespaces">Namespaces</a>.</p>
+<h2 id="mongo-url">mongo-url<a class="headerlink" href="#mongo-url" title="Permanent link"></a></h2>
+<p>string (default localhost)</p>
+<p>The URL to connect to MongoDB which must follow the <a href="https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format">Standard Connection String Format</a></p>
+<p>For sharded clusters this URL should point to the <code>mongos</code> router server and the <a href="#mongo-config-url">mongo-config-url</a>
+option should be set to point to the config server.</p>
+<h2 id="mongo-config-url">mongo-config-url<a class="headerlink" href="#mongo-config-url" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>This config should only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
+This URL should point to the MongoDB <code>config</code> server.</p>
+<p>Monstache will read the list of shards using this connection and then setup a listener to react
+to new shards being added to the cluster at a later time.</p>
+<h2 id="mongo-pem-file">mongo-pem-file<a class="headerlink" href="#mongo-pem-file" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.</p>
+<h2 id="mongo-validate-pem">mongo-validate-pem<a class="headerlink" href="#mongo-validate-pem" title="Permanent link"></a></h2>
+<p>boolean (default true)</p>
+<p>When mongo-validate-pem-file is false TLS will be configured to skip verification</p>
+<h2 id="mongo-oplog-database-name">mongo-oplog-database-name<a class="headerlink" href="#mongo-oplog-database-name" title="Permanent link"></a></h2>
+<p>string (default local)</p>
+<p>When mongo-oplog-database-name is given monstache will look for the mongodb oplog in the supplied database</p>
+<h2 id="mongo-oplog-collection-name">mongo-oplog-collection-name<a class="headerlink" href="#mongo-oplog-collection-name" title="Permanent link"></a></h2>
+<p>string (default $oplog.main)</p>
+<p>When mongo-oplog-collection-name is given monstache will look for the mongodb oplog in the supplied collection</p>
+<h2 id="mongo-cursor-timeout">mongo-cursor-timeout<a class="headerlink" href="#mongo-cursor-timeout" title="Permanent link"></a></h2>
+<p>string (default 100s)</p>
+<p>When mongo-cursor-timeout is given monstache will time out and re-query the oplog after the supplied duration.
+Duration values are expected in the form 50s.</p>
+<h2 id="mongo-dial-settings">mongo-dial-settings<a class="headerlink" href="#mongo-dial-settings" title="Permanent link"></a></h2>
+<p>TOML table (default nil)</p>
+<p>The following mongodb dial properties are available</p>
+<div class="admonition note">
+<h4 id="ssl">ssl<a class="headerlink" href="#ssl" title="Permanent link"></a></h4>
+<h5 id="bool-default-false">bool (default false)<a class="headerlink" href="#bool-default-false" title="Permanent link"></a></h5>
+<p>Set to true to establish a connection using TLS.</p>
+<h4 id="timeout">timeout<a class="headerlink" href="#timeout" title="Permanent link"></a></h4>
+<h5 id="int-default-10">int (default 10)<a class="headerlink" href="#int-default-10" title="Permanent link"></a></h5>
+<p>Seconds to wait when establishing a connection to mongodb before giving up</p>
+</div>
+<h2 id="mongo-session-settings">mongo-session-settings<a class="headerlink" href="#mongo-session-settings" title="Permanent link"></a></h2>
+<p>TOML table (default nil)</p>
+<p>The following mongodb session properties are available</p>
+<div class="admonition note">
+<h4 id="socket-timeout">socket-timeout<a class="headerlink" href="#socket-timeout" title="Permanent link"></a></h4>
+<p>int (default 60)</p>
+<p>Seconds to wait for a non-responding socket before it is forcefully closed</p>
+<h4 id="sync-timeout">sync-timeout<a class="headerlink" href="#sync-timeout" title="Permanent link"></a></h4>
+<p>int (default 60)</p>
+<p>Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
+Set it to zero to wait forever.</p>
+</div>
+<h2 id="gtm-settings">gtm-settings<a class="headerlink" href="#gtm-settings" title="Permanent link"></a></h2>
+<p>TOML table (default nil)</p>
+<p>The following gtm configuration properties are available.  See <a href="https://github.com/rwynn/gtm">gtm</a> for details</p>
+<div class="admonition note">
+<h4 id="channel-size">channel-size<a class="headerlink" href="#channel-size" title="Permanent link"></a></h4>
+<p>int (default 512)</p>
+<p>Controls the size of the go channels created for processing events.  When many events
+are processed at once a larger channel size may prevent blocking in gtm.</p>
+<h4 id="buffer-size">buffer-size<a class="headerlink" href="#buffer-size" title="Permanent link"></a></h4>
+<p>int (default 32)</p>
+<p>Determines how many documents are buffered by a gtm worker go routine before they are batch fetched from
+mongodb.  When many documents are inserted or updated at once it is better to fetch them together.</p>
+<h4 id="buffer-duration">buffer-duration<a class="headerlink" href="#buffer-duration" title="Permanent link"></a></h4>
+<p>string (default 750ms)</p>
+<p>A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
+fetched in batch from mongodb and flushed for indexing.</p>
+</div>
+<h2 id="index-files">index-files<a class="headerlink" href="#index-files" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When index-files is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
+By default index-files is false meaning that monstache will only index metadata associated with files stored in GridFS.
+In order for index-files to index the raw content of files stored in GridFS you must install a plugin for elasticsearch.
+For versions of elasticsearch prior to version 5, you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html">mapper-attachments</a> plugin.  In version 5 or greater
+of elasticsearch the mapper-attachment plugin is deprecated and you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin instead.
+For further information on how to configure monstache to index content from GridFS, see the section <a href="../advanced#gridfs-support">GridFS support</a>.</p>
+<h2 id="max-file-size">max-file-size<a class="headerlink" href="#max-file-size" title="Permanent link"></a></h2>
+<p>int (default 0)</p>
+<p>When max-file-size is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.</p>
+<h2 id="file-namespaces">file-namespaces<a class="headerlink" href="#file-namespaces" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>The file-namespaces config must be set when index-files is enabled.  file-namespaces must be set to an array of mongodb
+namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
+raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin. </p>
+<p>This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar</p>
+<h2 id="file-highlighting">file-highlighting<a class="headerlink" href="#file-highlighting" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When file-highlighting is true monstache will enable the ability to return highlighted keywords in the extracted text of files
+for queries on files which were indexed in elasticsearch from gridfs.</p>
+<h2 id="verbose">verbose<a class="headerlink" href="#verbose" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When verbose is true monstache with enable debug logging including a trace of requests to elasticsearch</p>
+<h2 id="elasticsearch-user">elasticsearch-user<a class="headerlink" href="#elasticsearch-user" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>Optional Elasticsearch username for basic auth</p>
+<h2 id="elasticsearch-password">elasticsearch-password<a class="headerlink" href="#elasticsearch-password" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>Optional Elasticsearch password for basic auth</p>
+<h2 id="elasticsearch-urls">elasticsearch-urls<a class="headerlink" href="#elasticsearch-urls" title="Permanent link"></a></h2>
+<p>[]string (default <code>[ "http://localhost:9200" ]</code>)</p>
+<p>An array of URLs to connect to the Elasticsearch REST Interface</p>
+<p>This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 </p>
+<h2 id="elasticsearch-version">elasticsearch-version<a class="headerlink" href="#elasticsearch-version" title="Permanent link"></a></h2>
+<p>string (by default determined by connecting to the server)</p>
+<p>When elasticsearch-version is provided monstache will parse the given server version to determine how to interact with
+the elasticsearch API.  This is normally not recommended because monstache will connect to elasticsearch to find out
+which version is being used.  This option is provided for cases where connecting to the base URL of the elasticsearch REST
+API to get the version is not possible or desired.</p>
+<h2 id="elasticsearch-max-conns">elasticsearch-max-conns<a class="headerlink" href="#elasticsearch-max-conns" title="Permanent link"></a></h2>
+<p>int (default 10)</p>
+<p>The size of the Elasticsearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
+If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
+of this queue is 50.  To increase the size of the bulk indexing queue you can update the Elasticsearch config file:</p>
+<pre><code>thread_pool:
+    bulk:
+    queue_size: 200
+</code></pre>
+<p>For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html">Thread Pool</a>.</p>
+<h2 id="elasticsearch-retry">elasticsearch-retry<a class="headerlink" href="#elasticsearch-retry" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
+is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how 
+this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v5/backoff.go">Back Off Strategy</a></p>
+<h2 id="elasticsearch-client-timeout">elasticsearch-client-timeout<a class="headerlink" href="#elasticsearch-client-timeout" title="Permanent link"></a></h2>
+<p>int (default 60)</p>
+<p>The number of seconds before a request to elasticsearch times out</p>
+<h2 id="elasticsearch-max-docs">elasticsearch-max-docs<a class="headerlink" href="#elasticsearch-max-docs" title="Permanent link"></a></h2>
+<p>int (default 1000)</p>
+<p>When elasticsearch-max-docs is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
+<h2 id="elasticsearch-max-bytes">elasticsearch-max-bytes<a class="headerlink" href="#elasticsearch-max-bytes" title="Permanent link"></a></h2>
+<p>int (default 16384)</p>
+<p>When elasticsearch-max-bytes is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes</p>
+<h2 id="elasticsearch-max-seconds">elasticsearch-max-seconds<a class="headerlink" href="#elasticsearch-max-seconds" title="Permanent link"></a></h2>
+<p>int (default 1)</p>
+<p>When elasticsearch-max-seconds is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds</p>
+<h2 id="elasticsearch-pem-file">elasticsearch-pem-file<a class="headerlink" href="#elasticsearch-pem-file" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
+pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.</p>
+<h2 id="elasticsearch-validate-pem">elasticsearch-validate-pem<a class="headerlink" href="#elasticsearch-validate-pem" title="Permanent link"></a></h2>
+<p>boolean (default true)</p>
+<p>When elasticsearch-validate-pem-file is false TLS will be configured to skip verification</p>
+<h2 id="dropped-databases">dropped-databases<a class="headerlink" href="#dropped-databases" title="Permanent link"></a></h2>
+<p>boolean (default true)</p>
+<p>When dropped-databases is false monstache will not delete the mapped indexes in elasticsearch if a mongodb database is dropped</p>
+<h2 id="dropped-collections">dropped-collections<a class="headerlink" href="#dropped-collections" title="Permanent link"></a></h2>
+<p>boolean (default true)</p>
+<p>When dropped-collections is false monstache will not delete the mapped index in elasticsearch if a mongodb collection is dropped</p>
+<h2 id="worker">worker<a class="headerlink" href="#worker" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
+multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
+same worker and none of the other workers. See the section <a href="../workers/">workers</a> for more information.</p>
+<h2 id="workers">workers<a class="headerlink" href="#workers" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>An array of worker names to be used in conjunction with the worker option. </p>
+<p>This option may be passed on the command line as ./monstache --workers w1 --workers w2 </p>
+<h2 id="enable-patches">enable-patches<a class="headerlink" href="#enable-patches" title="Permanent link"></a></h2>
+<p>boolean (default false) </p>
+<p>Set to true to enable storing <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> patches in your elasticsearch documents</p>
+<h2 id="patch-namespaces">patch-namespaces<a class="headerlink" href="#patch-namespaces" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>An array of mongodb namespaces that you would like to enable rfc7396 patches on</p>
+<p>This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar </p>
+<h2 id="merge-patch-attribute">merge-patch-attribute<a class="headerlink" href="#merge-patch-attribute" title="Permanent link"></a></h2>
+<p>string (default "json-merge-patches") </p>
+<p>Customize the name of the property under which merge patches are stored</p>
+<h2 id="cluster-name">cluster-name<a class="headerlink" href="#cluster-name" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
+processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
+one of the processes in paused state will take control and start syncing.  See the section <a href="../advanced#high-availability">high availability</a> for more information.</p>
+<h2 id="script">script<a class="headerlink" href="#script" title="Permanent link"></a></h2>
+<p>[] array of TOML table (default nil)</p>
+<p>When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section <a href="../advanced#middleware">Middleware</a>
+for more information.</p>
+<h2 id="logs">logs<a class="headerlink" href="#logs" title="Permanent link"></a></h2>
+<p>TOML table (default nil)</p>
+<p>Allows writing logs to a file using a rolling appender instead of stdout.  Supply a file path for each type of log you would like to send to a file.</p>
+<div class="admonition note">
+<h4 id="info">info<a class="headerlink" href="#info" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The file path to write info level logs to</p>
+<h4 id="error">error<a class="headerlink" href="#error" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The file path to write error level logs to</p>
+<h4 id="trace">trace<a class="headerlink" href="#trace" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The file path to write trace level logs to. Trace logs are enabled via the verbose option.</p>
+<h4 id="stats_1">stats<a class="headerlink" href="#stats_1" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The file path to write indexing statistics to. Stats logs are enabled via the stats option.</p>
+</div>
+<h2 id="enable-http-server">enable-http-server<a class="headerlink" href="#enable-http-server" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>Add this flag to enable an embedded HTTP server at localhost:8080</p>
+<h2 id="http-server-addr">http-server-addr<a class="headerlink" href="#http-server-addr" title="Permanent link"></a></h2>
+<p>string (default ":8080")</p>
+<p>The address to bind the embedded HTTP server on if enabled</p>
+<hr /></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <p>Copyright &copy; 2016-2018 Ryan Wynn</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

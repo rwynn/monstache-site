@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Monstache Team">
+        <link rel="canonical" href="https://rwynn.github.io/monstache-site/advanced/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Advanced - Monstache</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Monstache</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../start/">Getting Started</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../config/">Configuration</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Advanced</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../about/">About</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../config/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../about/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/rwynn/monstache/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#advanced">Advanced</a></li>
+        
+            <li><a href="#gridfs-support">GridFS Support</a></li>
+        
+            <li><a href="#workers">Workers</a></li>
+        
+            <li><a href="#high-availability">High Availability</a></li>
+        
+            <li><a href="#index-mapping">Index Mapping</a></li>
+        
+            <li><a href="#namespaces">Namespaces</a></li>
+        
+            <li><a href="#middleware">Middleware</a></li>
+        
+            <li><a href="#routing">Routing</a></li>
+        
+            <li><a href="#merge-patches">Merge Patches</a></li>
+        
+            <li><a href="#systemd">Systemd</a></li>
+        
+            <li><a href="#http-server">HTTP Server</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="advanced">Advanced<a class="headerlink" href="#advanced" title="Permanent link"></a></h1>
+<hr />
+<h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link"></a></h2>
+<p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
+text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
+For versions of Elasticsearch prior to version 5 you should install the 
+<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html">mapper-attachments</a> plugin.
+For version 5 or later of Elasticsearch you should instead install the 
+<a href="https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html">ingest-attachment</a> plugin.</p>
+<p>Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is
+as simple as configuring monstache.  You will want to enable the <a href="../config#index-files">index-files</a> option and also tell monstache the 
+namespace of all collections which will hold GridFS files. For example in your TOML config file,</p>
+<pre><code>index-files = true
+
+file-namespaces = [&quot;users.fs.files&quot;, &quot;posts.fs.files&quot;]
+
+file-highlighting = true
+</code></pre>
+
+<p>The above configuration tells monstache that you wish to index the raw content of GridFS files in the <code>users</code> and <code>posts</code>
+MongoDB databases. By default, MongoDB uses a bucket named <code>fs</code>, so if you just use the defaults your collection name will
+be <code>fs.files</code>.  However, if you have customized the bucket name, then your file collection would be something like <code>mybucket.files</code>
+and the entire namespace would be <code>users.mybucket.files</code>.</p>
+<p>When you configure monstache this way it will perform an additional operation at startup to ensure the destination indexes in
+Elasticsearch have a field named <code>file</code> with a type mapping of <code>attachment</code>.  </p>
+<p>For the example TOML configuration above, monstache would initialize 2 indices in preparation for indexing into
+Elasticsearch by issuing the following REST commands:</p>
+<p>For Elasticsearch versions prior to version 5...</p>
+<pre><code>POST /users.fs.files
+{
+  "mappings": {
+    "fs.files": {
+      "properties": {
+    "file": { "type": "attachment" }
+}}}}
+
+POST /posts.fs.files
+{
+  "mappings": {
+    "fs.files": {
+      "properties": {
+    "file": { "type": "attachment" }
+}}}}
+</code></pre>
+<p>For Elasticsearch version 5 and above...</p>
+<pre><code>PUT /_ingest/pipeline/attachment
+{
+  "description" : "Extract file information",
+  "processors" : [
+    {
+      "attachment" : {
+    "field" : "file"
+      }
+    }
+  ]
+}
+</code></pre>
+<p>When a file is inserted into MongoDB via GridFS, monstache will detect the new file, use the MongoDB api to retrieve the raw
+content, and index a document into Elasticsearch with the raw content stored in a <code>file</code> field as a base64 
+encoded string. The Elasticsearch plugin will then extract text content from the raw content using 
+<a href="https://tika.apache.org/">Apache Tika</a>, tokenize the text content, and allow you to query on the content of the file.</p>
+<p>To test this feature of monstache you can simply use the <a href="https://docs.mongodb.com/manual/reference/program/mongofiles/">mongofiles</a>
+command to quickly add a file to MongoDB via GridFS.  Continuing the example above one could issue the following command to put a 
+file named <code>resume.docx</code> into GridFS and after a short time this file should be searchable in Elasticsearch in the index <code>users.fs.files</code>.</p>
+<pre><code>mongofiles -d users put resume.docx
+</code></pre>
+<p>After a short time you should be able to query the contents of resume.docx in the users index in Elasticsearch</p>
+<pre><code>curl -XGET "http://localhost:9200/users.fs.files/_search?q=golang"
+</code></pre>
+<p>If you would like to see the text extracted by Apache Tika you can project the appropriate sub-field</p>
+<p>For Elasticsearch versions prior to version 5...</p>
+<pre><code>curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
+    "fields": [ "file.content" ],
+    "query": {
+        "match": {
+            "_all": "golang"
+        }
+    }
+}'
+</code></pre>
+<p>For Elasticsearch version 5 and above...</p>
+<pre><code>curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
+    "_source": [ "attachment.content" ],
+    "query": {
+        "match": {
+            "_all": "golang"
+        }
+    }
+}'
+</code></pre>
+<p>When <a href="../config#file-highlighting">file-highlighting</a> is enabled you can add a highlight clause to your query</p>
+<p>For Elasticsearch versions prior to version 5...</p>
+<pre><code>curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
+    "fields": ["file.content"],
+    "query": {
+        "match": {
+            "file.content": "golang"
+        }
+    },
+    "highlight": {
+        "fields": {
+            "file.content": {
+            }
+        }
+    }
+}'
+</code></pre>
+<p>For Elasticsearch version 5 and above...</p>
+<pre><code>curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
+    "_source": ["attachment.content"],
+    "query": {
+        "match": {
+            "attachment.content": "golang"
+        }
+    },
+    "highlight": {
+        "fields": {
+            "attachment.content": {
+            }
+        }
+    }
+}'
+</code></pre>
+<p>The highlight response will contain emphasis on the matching terms</p>
+<p>For Elasticsearch versions prior to version 5...</p>
+<pre><code>"hits" : [ {
+    "highlight" : {
+        "file.content" : [ "I like to program in &lt;em&gt;golang&lt;/em&gt;.\n\n" ]
+    }
+} ]
+</code></pre>
+<p>For Elasticsearch version 5 and above...</p>
+<pre><code>"hits" : [{
+    "highlight" : {
+        "attachment.content" : [ "I like to program in &lt;em&gt;golang&lt;/em&gt;." ]
+    }
+}]
+</code></pre>
+<h2 id="workers">Workers<a class="headerlink" href="#workers" title="Permanent link"></a></h2>
+<p>You can run multiple monstache processes and distribute the work between them.  First configure
+the names of all the workers in a shared config.toml file.</p>
+<pre><code class="toml">workers = [&quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;]
+</code></pre>
+
+<p>In this case we have 3 workers.  Now we can start 3 monstache processes and give each one of the worker
+names.</p>
+<pre><code>monstache -f config.toml -worker Tom
+monstache -f config.toml -worker Dick
+monstache -f config.toml -worker Harry
+</code></pre>
+<p>monstache will hash the id of each document using consistent hashing so that each id is handled by only
+one of the available workers.</p>
+<h2 id="high-availability">High Availability<a class="headerlink" href="#high-availability" title="Permanent link"></a></h2>
+<p>You can run monstache in high availability mode by starting multiple processes with the same value for <a href="../config#cluster-name">cluster-name</a>.
+Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.</p>
+<p>High availability works by ensuring a active process in the <code>monstache.cluster</code> collection in mongodb. Only the processes in
+this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the 
+<code>monstache.cluster</code> collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
+the collection by mongodb and another process in the monstache cluster will have a chance to write to the collection and become the
+new active process.</p>
+<p>When <a href="../config#cluster-name">cluster-name</a> is supplied the <a href="../config#resume">resume</a> feature is automatically turned on and the <a href="../config#resume-name">resume-name</a> becomes the name of the cluster.
+This is to ensure that each of the processes is able to pick up syncing where the last one left off.  </p>
+<p>You can combine the HA feature with the workers feature.  For 3 cluster nodes with 3 workers per node you would have something like the following:</p>
+<pre><code>// config.toml
+workers = ["Tom", "Dick", "Harry"]
+
+// on host A
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+
+// on host B
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+
+// on host C
+monstache -cluster-name HA -worker Tom -f config.toml
+monstache -cluster-name HA -worker Dick -f config.toml
+monstache -cluster-name HA -worker Harry -f config.toml
+</code></pre>
+<p>When the clustering feature is combined with workers then the <a href="../config#resume-name">resume-name</a> becomes the cluster name concatenated with the worker name.</p>
+<h2 id="index-mapping">Index Mapping<a class="headerlink" href="#index-mapping" title="Permanent link"></a></h2>
+<p>When indexing documents from MongoDB into elasticsearch the default mapping is as follows:</p>
+<pre><code class="text">mongodb database name . mongodb collection name -&gt; elasticsearch index name
+mongodb collection name -&gt; elasticsearch type
+mongodb document _id -&gt; elasticsearch document _id
+</code></pre>
+
+<p>If these default won't work for some reason you can override the index and type mapping on a per collection basis by adding
+the following to your TOML config file:</p>
+<pre><code class="toml">[[mapping]]
+namespace = &quot;test.test&quot;
+index = &quot;index1&quot;
+type = &quot;type1&quot;
+
+[[mapping]]
+namespace = &quot;test.test2&quot;
+index = &quot;index2&quot;
+type = &quot;type2&quot;
+</code></pre>
+
+<p>With the configuration above documents in the <code>test.test</code> namespace in MongoDB are indexed into the <code>index1</code> 
+index in elasticsearch with the <code>type1</code> type.</p>
+<p>If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
+see the sections <a href="#middleware">Middleware</a> and  <a href="#routing">Routing</a>.</p>
+<p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>
+<p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
+<p>Note that when monstache maps index and type names for ElasticSearch it does normalization based on the 
+<a href="https://github.com/elastic/elasticsearch/issues/6736">Validity Rules</a>.  This includes making sure index names are
+all lowercase and that index, types, and ids do not being with an underscore.</p>
+<h2 id="namespaces">Namespaces<a class="headerlink" href="#namespaces" title="Permanent link"></a></h2>
+<p>When a document is inserted, updated, or deleted in mongodb a document is appended to the oplog representing the event.  This document has a field <code>ns</code> which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for <code>use test; db.foo.insert({hello: "world"});</code> the namespace for the event in the oplog would be <code>test.foo</code>.</p>
+<p>In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in mongodb an event is appended to the oplog.  Like the other types of changes this event has a field <code>ns</code> representing the namespace.  However, for drops the namespace is the database name and the string <code>$cmd</code> joined by a dot.  E.g. for <code>use test; db.foo.drop()</code> the namespace for the event in the oplog would be <code>test.$cmd</code>.  </p>
+<p>When configuring namespaces in monstache you will need to account for both cases.  </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Specifically, be careful if you have configured <code>dropped-databases|dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the elasticsearch index not deleted on a drop.</p>
+</div>
+<h2 id="middleware">Middleware<a class="headerlink" href="#middleware" title="Permanent link"></a></h2>
+<p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
+drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
+require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).</p>
+<h3 id="golang">Golang<a class="headerlink" href="#golang" title="Permanent link"></a></h3>
+<p>monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
+use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.</p>
+<p>plugins must import the package <code>github.com/rwynn/monstache/monstachemap</code></p>
+<p>plugins must implement a function named <code>Map</code> with the following signature</p>
+<pre><code class="go">func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
+</code></pre>
+
+<p>plugins can be compiled using</p>
+<pre><code>go build -buildmode=plugin -o myplugin.so myplugin.go
+</code></pre>
+<p>to enable the plugin, start with <code>monstache -mapper-plugin-path /path/to/myplugin.so</code></p>
+<p>the following example plugin simply converts top level string values to uppercase</p>
+<pre><code class="go">package main
+import (
+    &quot;github.com/rwynn/monstache/monstachemap&quot;
+    &quot;strings&quot;
+)
+// a plugin to convert document values to uppercase
+func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error) {
+    doc := input.Document
+    for k, v := range doc {
+        switch v.(type) {
+        case string:
+            doc[k] = strings.ToUpper(v.(string))
+        }
+    }
+    output = &amp;monstachemap.MapperPluginOutput{Document: doc}
+    return
+}
+</code></pre>
+
+<p>the input parameter will contain information about the document's origin database and collection.
+to drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.
+to simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
+<p><code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code> allow you to set the indexing metadata for each individual document.</p>
+<p>if would like to embed other MongoDB documents (possibly from a different collection) within the current document 
+before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the 
+<a href="https://godoc.org/gopkg.in/mgo.v2">mgo API</a> to find documents in MongoDB and embed them in the Document set 
+on output.  </p>
+<h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link"></a></h3>
+<h4 id="transformation">Transformation<a class="headerlink" href="#transformation" title="Permanent link"></a></h4>
+<p>monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+added to your TOML config file, for example:</p>
+<pre><code class="toml">[[script]]
+namespace = &quot;mydb.mycollection&quot;
+script = &quot;&quot;&quot;
+var counter = 1;
+module.exports = function(doc) {
+    doc.foo += &quot;test&quot; + counter;
+    counter++;
+    return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
+}
+&quot;&quot;&quot;
+
+[[script]]
+namespace = &quot;anotherdb.anothercollection&quot;
+script = &quot;&quot;&quot;
+var counter = 1;
+module.exports = function(doc) {
+    doc.foo += &quot;test2&quot; + counter;
+    counter++;
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>The example TOML above configures 2 scripts. The first is applied to <code>mycollection</code> in <code>mydb</code> while the second is applied
+to <code>anothercollection</code> in <code>anotherdb</code>.</p>
+<p>You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
+<code>script</code>.  The javascript assigned to script must assign a function to the exports property of the <code>module</code> object.  This 
+function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can
+manipulate the document to drop fields, add fields, or augment the existing fields.</p>
+<p>The <code>this</code> reference in the mapping function is assigned to the document from mongodb.  </p>
+<p>When the return value from the mapping function is an <code>object</code> then that mapped object is what actually gets indexed in elasticsearch.
+For these purposes an object is a javascript non-primitive, excluding <code>Function</code>, <code>Array</code>, <code>String</code>, <code>Number</code>, <code>Boolean</code>, <code>Date</code>, <code>Error</code> and <code>RegExp</code>.</p>
+<h4 id="filtering">Filtering<a class="headerlink" href="#filtering" title="Permanent link"></a></h4>
+<p>If the return value from the mapping function is not an <code>object</code> per the definition above then the result is converted into a <code>boolean</code>
+and if the boolean value is <code>false</code> then that indicates to monstache that you would not like to index the document. If the boolean value is <code>true</code> then
+the original document from mongodb gets indexed in elasticsearch.</p>
+<p>This allows you to return false or null if you have implemented soft deletes in mongodb.</p>
+<pre><code class="toml">[[script]]
+namespace = &quot;db.collection&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    if (!!doc.deletedAt) {
+        return false;
+    }
+    return true;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>In the above example monstache will index any document except the ones with a <code>deletedAt</code> property.  If the document is first
+inserted without a <code>deletedAt</code> property, but later updated to include the <code>deletedAt</code> property then monstache will remove the
+previously indexed document from the elasticsearch index. </p>
+<p>Note you could also return <code>doc</code> above instead of returning <code>true</code> and get the same result, however, it's a slight performance gain
+to simply return <code>true</code> when not changing the document because you are not copying data in that case.</p>
+<p>You may have noticed that in the first example above the exported mapping function closes over a var named <code>counter</code>.  You can
+use closures to maintain state between invocations of your mapping function.</p>
+<p>Finally, since Otto makes it so easy, the venerable <a href="http://underscorejs.org/">Underscore</a> library is included for you at 
+no extra charge.  Feel free to abuse the power of the <code>_</code>.</p>
+<h4 id="embedding-documents">Embedding Documents<a class="headerlink" href="#embedding-documents" title="Permanent link"></a></h4>
+<p>In your javascript function you have access to the following global functions to retreive documents from MongoDB for
+embedding in the current document before indexing.  Using this approach you can pull in related data.</p>
+<pre><code class="javascript">function findId(documentId, [options]) {
+    // convenience method for findOne({_id: documentId})
+    // returns 1 document or null
+}
+
+function findOne(query, [options]) {
+    // returns 1 document or null
+}
+
+function find(query, [options]) {
+    // returns an array of documents or null
+}
+</code></pre>
+
+<p>Each function takes a <code>query</code> object parameter and an optional <code>options</code> object parameter.</p>
+<p>The options object takes the following keys and values:</p>
+<pre><code class="javascript">var options = {
+    database: &quot;test&quot;,
+    collection: &quot;test&quot;,
+    // to omit _id set the _id key to 0 in select
+    select: {
+        age: 1
+    },
+    // only applicable to find...
+    sort: [&quot;name&quot;],
+    limit: 2
+}
+</code></pre>
+
+<p>If the database or collection keys are omitted from the options object, the values for database and/or
+collection are set to the database and collection of the document being processed.</p>
+<p>Here are some examples:</p>
+<p>This example sorts the documents in the same collection as the document being processed by name and returns
+the first 2 documents projecting only the age field.  The result is set on the current document before being
+indexed.</p>
+<pre><code>[[script]]
+namespace = &quot;test.test&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    doc.twoAgesSortedByName = find({}, {
+            sort: [&quot;name&quot;],
+            limit: 2,
+            select: {
+              age: 1
+            }
+    });
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>This example grabs a reference id from a document and replaces it with the corresponding document with that id.</p>
+<pre><code>[[script]]
+namespace = &quot;test.posts&quot;
+script = &quot;&quot;&quot;
+module.exports = function(post) {
+    if (post.author) { // author is a an object id reference
+        post.author = findId(post.author, {
+          database: &quot;test&quot;,
+          collection: &quot;users&quot;
+        });
+    }
+    return post;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<h4 id="indexing-metadata">Indexing Metadata<a class="headerlink" href="#indexing-metadata" title="Permanent link"></a></h4>
+<p>You can override the indexing metadata for an individual document by setting a special field named
+<code>_meta_monstache</code> on the document you return from your Javascript function.</p>
+<p>Assume there is a collection in MongoDB named <code>company</code> in the <code>test</code> database.
+The documents in this collection look like either </p>
+<pre><code>{ &quot;_id&quot;: &quot;london&quot;, &quot;type&quot;: &quot;branch&quot;, &quot;name&quot;: &quot;London Westminster&quot;, &quot;city&quot;: &quot;London&quot;, &quot;country&quot;: &quot;UK&quot; }
+</code></pre>
+
+<p>or</p>
+<pre><code>{ &quot;_id&quot;: &quot;alice&quot;, &quot;type&quot;: &quot;employee&quot;, &quot;name&quot;: &quot;Alice Smith&quot;, &quot;branch&quot;: &quot;london&quot; }
+</code></pre>
+
+<p>Given the above the following snippet sets up a parent-child relationship in Elasticsearch based on the
+incoming documents from MongoDB.</p>
+<pre><code>[[script]]
+namespace = &quot;test.company&quot;
+routing = true
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    var meta = { type: doc.type, index: 'company' };
+    if (doc.type === &quot;employee&quot;) {
+        meta.parent = doc.branch;
+    }
+    doc._meta_monstache = meta;
+    return _.omit(doc, &quot;branch&quot;, &quot;type&quot;);
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>The snippet above will route these documents to the <code>company</code> index in Elasticsearch instead of the
+default of <code>test.company</code>.  Also, instead of using <code>company</code> as the Elasticsearch type, the type
+attribute from the document will be used as the Elasticsearch type.  Finally, if the type is
+employee then the document will be indexed as a child of the branch the person belongs to.  </p>
+<p>We can throw away the type and branch information by deleting it from the document before returning
+since the type information will be stored in Elasticsearch under <code>_type</code> and the branch information
+will be stored under <code>_parent</code>.</p>
+<p>The example is based on the Elasticsearch docs for <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html">parent-child</a></p>
+<h2 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link"></a></h2>
+<p>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
+is the process by which ElasticSearch determines which shard a document will reside in.  Monstache
+supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.  </p>
+<p>Consider an example where you have a <code>comments</code> collection in MongoDB which stores a comment and 
+its associated post identifier.  </p>
+<pre><code class="javascript">use blog;
+db.comments.insert({title: &quot;Did you read this?&quot;, post_id: &quot;123&quot;});
+db.comments.insert({title: &quot;Yeah, it's good&quot;, post_id: &quot;123&quot;});
+</code></pre>
+
+<p>In this case monstache will index those 2 documents in an index named <code>blog.comments</code> under the id
+created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing 
+the id of the document.  This means that as the number of comments on post <code>123</code> grows, each of the comments
+will be distributed somewhat evenly between the available shards in the cluster.  </p>
+<p>Thus, when a query is performed searching among the comments for post <code>123</code> ElasticSearch will need to query
+all of those shards just in case a comment happened to have been routed there.</p>
+<p>We can take advantage of the support in ElasticSearch and in monstache to do some intelligent
+routing such that all comments for post <code>123</code> reside in the same shard.</p>
+<p>First we need to tell monstache that we would like to do custom routing for this collection by setting <code>routing</code>
+equal to true on a custom script for the namespace.  Then we need to add some metadata to the document telling
+monstache how to route the document when indexing.  In this case we want to route by the <code>post_id</code> field.</p>
+<pre><code class="toml">[[script]]
+namespace = &quot;blog.comments&quot;
+routing = true
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    doc._meta_monstache = { routing: doc.post_id };
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>Now when monstache indexes document for the collection <code>blog.comments</code> it will set the special <code>_routing</code> attribute
+for the document on the index request such that ElasticSearch routes comments based on their corresponding post. </p>
+<p>The <code>_meta_monstache</code> field is used only to inform monstache about routing and is not included in the source
+document when indexing to ElasticSearch.  </p>
+<p>Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
+id in the request and make a search that normally queries all shards query only 1 shard.</p>
+<pre><code>$ curl -H &quot;Content-Type:application/json&quot; -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
+{
+   &quot;query&quot;:{
+      &quot;match_all&quot;:{}
+   }
+}'
+</code></pre>
+
+<p>You will notice in the response that only 1 shard was queried instead of all your shards.  Custom routing is great
+way to reduce broadcast searches and thus get better performance.</p>
+<p>The catch with custom routing is that you need to include the routing parameter on all insert, update, and delete
+operations.  Insert and update is not a problem for monstache because the routing information will come from your
+MongoDB document.  Deletes, however, pose a problem for monstache because when a delete occurs in MongoDB the
+information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
+document was originally routed in order to tell ElasticSearch where to look for it.</p>
+<p>Monstache gets around this problem by using a lookup table that it stores in MongoDB at <code>monstache.meta</code>.  In this collection monstache stores
+the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
+in this collection and forwards that information to ElasticSearch on the delete request.</p>
+<p>For more information see <a href="https://www.elastic.co/blog/customizing-your-document-routing">Customizing Document Routing</a></p>
+<p>In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
+<code>index</code> and <code>type</code> using a script by putting the custom information in the meta attribute. </p>
+<pre><code class="toml">[[script]]
+namespace = &quot;blog.comments&quot;
+routing = true
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    if (doc.score &gt;= 100) {
+        // NOTE: prefix dynamic index with namespace for proper cleanup on drops
+        doc._meta_monstache = { index: &quot;blog.comments.highscore&quot;, type: &quot;highScoreComment&quot;, routing: doc.post_id };
+    } else {
+        doc._meta_monstache = { routing: doc.post_id };
+    }
+    return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<h2 id="merge-patches">Merge Patches<a class="headerlink" href="#merge-patches" title="Permanent link"></a></h2>
+<p>A unique feature of monstache is support for JSON Merge Patches <a href="https://tools.ietf.org/html/rfc7396">rfc-7396</a>.</p>
+<p>If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The
+name of this field is configurable but it defaults to <code>json-merge-patches</code>.  </p>
+<p>Consider the following example with merge patches enabled... </p>
+<pre><code class="javascript">db.test.insert({name: &quot;Joe&quot;, age: 16, friends: [1, 2, 3]})
+</code></pre>
+
+<p>At this point you would have the following document source in elasticsearch.</p>
+<pre><code> "_source" : {
+  "age" : 16,
+  "friends" : [
+    1,
+    2,
+    3
+  ],
+  "json-merge-patches" : [
+    {
+      "p" : "{\"age\":16,\"friends\":[1,2,3],\"name\":\"Joe\"}",
+      "ts" : 1487263414,
+      "v" : 1
+    }
+  ],
+  "name" : "Joe"
+}
+</code></pre>
+<p>As you can see we have a single timestamped merge patch in the json-merge-patches array.  </p>
+<p>Now let's update the document to remove a friend and update the age.</p>
+<pre><code class="javascript">db.test.update({name: &quot;Joe&quot;}, {$set: {age: 21, friends: [1, 3]}})
+</code></pre>
+
+<p>If we now look at the document in elasticsearch we see the following:</p>
+<pre><code>"_source" : {
+  "age" : 21,
+  "friends" : [
+    1,
+    3
+  ],
+  "json-merge-patches" : [
+    {
+      "p" : "{\"age\":16,\"friends\":[1,2,3],\"name\":\"Joe\"}",
+      "ts" : 1487263414,
+      "v" : 1
+    },
+    {
+      "p" : "{\"age\":21,\"friends\":[1,3]}",
+      "ts" : 1487263746,
+      "v" : 2
+    }
+  ],
+  "name" : "Joe"
+}
+</code></pre>
+<p>You can see that the document was updated as expected and an additional merge patch was added.</p>
+<p>Each time the document is updated in mongodb the corresponding document in elasticsearch gains a
+timestamped merge patch.  Using this information we can time travel is the document's history.</p>
+<p>There is a merge patch for each version of the document.  To recreate a specific version we simply need
+to apply the merge patches in order up to the version that we want.</p>
+<p>To get version 1 of the document above we start with {} and apply the 1st merge patch.  </p>
+<p>To get version 2 of the document above we start with {}</p>
+<ul>
+<li>apply the 1st merge patch to get v1</li>
+<li>apply the 2nd merge patch to v1 to get v2</li>
+</ul>
+<p>The timestamps associated with these merge patches are in seconds since the epoch, taken from the
+timestamp recorded in the oplog when the insert or update occured. </p>
+<p>To enable the merge patches feature in monstache you need to add the following to you TOML config:</p>
+<pre><code>enable-patches = true
+patch-namespaces = ["test.test"]
+</code></pre>
+<p>You need you add each namespace that you would like to see patches for in the patch-namespaces array.</p>
+<p>Optionally, you can change the key under which the patches are stored in the source document as follows:</p>
+<pre><code>merge-patch-attribute = "custom-merge-attr"
+</code></pre>
+<p>Merge patches will only be recorded for data read from the MongoDB oplog.  Data read using the direct read
+feature will not be enhanced with merge patches.</p>
+<p>Most likely, you will want to turn off indexing for the merge patch attribute.  You can do this by creating
+an index template for each patch namespace before running monstache...</p>
+<pre><code>PUT /_template/test.test
+{
+    "template" : "test.test",
+    "mappings" : {
+    "test" : {
+        "json-merge-patches" : { "index" : false }
+    }
+    }
+}
+</code></pre>
+<h2 id="systemd">Systemd<a class="headerlink" href="#systemd" title="Permanent link"></a></h2>
+<p>Monstache has support built in for integrating with systemd. The following <code>monstache.service</code> is an example 
+systemd configuration.</p>
+<pre><code>[Unit]
+Description=monstache sync service
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/monstache
+WatchdogSec=30s
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>System-d unit files are normally saved to <code>/lib/systemd/system</code>.  </p>
+<p>After saving the monstache.service file you can run <code>systemctl daemon-reload</code> to tell systemd to reload 
+all unit files. </p>
+<p>You can enable the service to start on boot with <code>systemctl enable monstache.service</code> and start the service with <code>systemctl start monstache.service</code>.</p>
+<p>With the configuration above monstache will notify systemd when it has started successfully and then notify 
+systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
+to restart monstache if it does not start or respond within the WatchdDog interval.</p>
+<h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
+<p>Monstache has a built in HTTP server that you can enable with --enable-http-server. It
+listens on :8080 by default but you can change this with --http-server-addr.</p>
+<p>When using monstache with kubernetes this server can be used to detect liveness and 
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/">act accordingly</a></p>
+<p>The following GET endpoints are available</p>
+<h4 id="started">/started<a class="headerlink" href="#started" title="Permanent link"></a></h4>
+<p>Returns the uptime of the server</p>
+<h4 id="healthz">/healthz<a class="headerlink" href="#healthz" title="Permanent link"></a></h4>
+<p>Returns at 200 status code with the text "ok" when monstache is running</p>
+<h4 id="stats">/stats<a class="headerlink" href="#stats" title="Permanent link"></a></h4>
+<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
+<h4 id="config">/config<a class="headerlink" href="#config" title="Permanent link"></a></h4>
+<p>Returns the configuration monstache is using in JSON format</p>
+<hr /></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <p>Copyright &copy; 2016-2018 Ryan Wynn</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

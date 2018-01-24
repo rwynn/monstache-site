@@ -1,0 +1,21 @@
+site_name: Monstache
+site_url: https://rwynn.github.io/monstache-site/
+site_description: Realtime sync from MongoDB to Elasticsearch.
+site_author: Monstache Team
+docs_dir: src
+site_dir: docs
+repo_url: https://github.com/rwynn/monstache/
+copyright: Copyright &copy; 2016-2018 Ryan Wynn
+extra_css:
+    - css/extra.css
+pages:
+    - "Home": index.md
+    - "Getting Started": start.md
+    - "Configuration": config.md
+    - "Advanced": advanced.md
+    - "About": about.md
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition
+    - def_list
