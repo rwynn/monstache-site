@@ -369,16 +369,19 @@ index in elasticsearch with the <code>type1</code> type.</p>
 see the sections <a href="#middleware">Middleware</a> and  <a href="#routing">Routing</a>.</p>
 <p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>
 <p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
-<p>Note that when monstache maps index and type names for ElasticSearch it does normalization based on the 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When monstache maps index and type names for ElasticSearch it does normalization based on the 
 <a href="https://github.com/elastic/elasticsearch/issues/6736">Validity Rules</a>.  This includes making sure index names are
-all lowercase and that index, types, and ids do not being with an underscore.</p>
+all lowercase and that index, types, and ids do not begin with an underscore.</p>
+</div>
 <h2 id="namespaces">Namespaces<a class="headerlink" href="#namespaces" title="Permanent link"></a></h2>
 <p>When a document is inserted, updated, or deleted in mongodb a document is appended to the oplog representing the event.  This document has a field <code>ns</code> which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for <code>use test; db.foo.insert({hello: "world"});</code> the namespace for the event in the oplog would be <code>test.foo</code>.</p>
 <p>In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in mongodb an event is appended to the oplog.  Like the other types of changes this event has a field <code>ns</code> representing the namespace.  However, for drops the namespace is the database name and the string <code>$cmd</code> joined by a dot.  E.g. for <code>use test; db.foo.drop()</code> the namespace for the event in the oplog would be <code>test.$cmd</code>.  </p>
 <p>When configuring namespaces in monstache you will need to account for both cases.  </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Specifically, be careful if you have configured <code>dropped-databases|dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the elasticsearch index not deleted on a drop.</p>
+<p>Be careful if you have configured <code>dropped-databases|dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the elasticsearch index not deleted on a drop.</p>
 </div>
 <h2 id="middleware">Middleware<a class="headerlink" href="#middleware" title="Permanent link"></a></h2>
 <p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
@@ -481,8 +484,11 @@ module.exports = function(doc) {
 <p>In the above example monstache will index any document except the ones with a <code>deletedAt</code> property.  If the document is first
 inserted without a <code>deletedAt</code> property, but later updated to include the <code>deletedAt</code> property then monstache will remove the
 previously indexed document from the elasticsearch index. </p>
-<p>Note you could also return <code>doc</code> above instead of returning <code>true</code> and get the same result, however, it's a slight performance gain
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can return <code>doc</code> above instead of returning <code>true</code> and get the same result, however, it's a slight performance gain
 to simply return <code>true</code> when not changing the document because you are not copying data in that case.</p>
+</div>
 <p>You may have noticed that in the first example above the exported mapping function closes over a var named <code>counter</code>.  You can
 use closures to maintain state between invocations of your mapping function.</p>
 <p>Finally, since Otto makes it so easy, the venerable <a href="http://underscorejs.org/">Underscore</a> library is included for you at 
@@ -793,8 +799,7 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <h4 id="stats">/stats<a class="headerlink" href="#stats" title="Permanent link"></a></h4>
 <p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
 <h4 id="config">/config<a class="headerlink" href="#config" title="Permanent link"></a></h4>
-<p>Returns the configuration monstache is using in JSON format</p>
-<hr /></div>
+<p>Returns the configuration monstache is using in JSON format</p></div>
             
         </div>
 
