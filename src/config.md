@@ -9,7 +9,7 @@ Program arguments take precedance over configuration specified in the TOML confi
 
 boolean (default false)
 
-When print-config is true monstache will print its configuration and then exits
+When print-config is true monstache will print its configuration and then exit
 
 ## stats
 
@@ -552,4 +552,3 @@ string (default ":8080")
 
 The address to bind the embedded HTTP server on if enabled
 
----

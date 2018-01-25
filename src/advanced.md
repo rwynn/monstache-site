@@ -254,9 +254,10 @@ Make sure that automatic index creation is not disabled in elasticsearch.yml.
 
 If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.
 
-Note that when monstache maps index and type names for ElasticSearch it does normalization based on the 
-[Validity Rules](https://github.com/elastic/elasticsearch/issues/6736).  This includes making sure index names are
-all lowercase and that index, types, and ids do not being with an underscore.
+!!! note
+	When monstache maps index and type names for ElasticSearch it does normalization based on the 
+	[Validity Rules](https://github.com/elastic/elasticsearch/issues/6736).  This includes making sure index names are
+	all lowercase and that index, types, and ids do not begin with an underscore.
 
 ## Namespaces
 
@@ -268,7 +269,7 @@ When configuring namespaces in monstache you will need to account for both cases
 
 !!! warning
 
-	Specifically, be careful if you have configured `dropped-databases|dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the elasticsearch index not deleted on a drop.
+	Be careful if you have configured `dropped-databases|dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the elasticsearch index not deleted on a drop.
 
 
 ## Middleware
@@ -399,8 +400,9 @@ In the above example monstache will index any document except the ones with a `d
 inserted without a `deletedAt` property, but later updated to include the `deletedAt` property then monstache will remove the
 previously indexed document from the elasticsearch index. 
 
-Note you could also return `doc` above instead of returning `true` and get the same result, however, it's a slight performance gain
-to simply return `true` when not changing the document because you are not copying data in that case.
+!!! note
+	You can return `doc` above instead of returning `true` and get the same result, however, it's a slight performance gain
+	to simply return `true` when not changing the document because you are not copying data in that case.
 
 You may have noticed that in the first example above the exported mapping function closes over a var named `counter`.  You can
 use closures to maintain state between invocations of your mapping function.
@@ -791,7 +793,4 @@ Returns the current indexing statistics in JSON format. Only available if stats 
 #### /config
 
 Returns the configuration monstache is using in JSON format
-
----
-
 

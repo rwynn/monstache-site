@@ -41,4 +41,3 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 See [Getting Started](/start/) for instructions how to get
 it up and running.
 
----

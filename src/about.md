@@ -25,6 +25,313 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
----
+## Release Notes
 
+### [monstache v3.5.2](https://github.com/rwynn/monstache/releases/tag/v3.5.2)
+
+
+* The previous release safeguards the integrity of inserts and updates with a version number, but neglected deletes.  This release adds versions to deletes such that an [insert, delete] sequence that gets sent to Elasticsearch in 2 different requests (due to `elasticsearch-max-conns` > 1) cannot actually perform a [delete, insert] instead.  In this case the insert would now carry a version number < the delete version number and be rejected.    
+
+### [monstache v3.5.1](https://github.com/rwynn/monstache/releases/tag/v3.5.1)
+
+
+* Fix for issue #37 - out of order indexing due to concurrent bulk indexing requests.  With `elasticsearch-max-conns` set to greater than 1 you may get out of order index requests; however after this fix **each document is versioned** such that Elasticsearch will not replace a newer version with an older one.  The version of the document is the timestamp from the MongoDB oplog of when the change (insert, update) occurred.  Out of order indexing typically happens when both an insert and an update are queued for a bulk request at around the same time.  In this case, do to the way the bulk processor multiplexes requests onto multiple connections, the document may be received out of order. 
+
+### [monstache v3.5.0](https://github.com/rwynn/monstache/releases/tag/v3.5.0)
+
+
+* Support for sharded MongoDB cluster.  See docs for details
+* Performance optimizations
+* Turn off bulk retries if configured to do so
+
+### [monstache v3.4.2](https://github.com/rwynn/monstache/releases/tag/v3.4.2)
+
+
+* Allow the stats index name format to be configurable.  Continues to default to index per day.  
+
+### [monstache v3.4.1](https://github.com/rwynn/monstache/releases/tag/v3.4.1)
+
+
+* Fix for the javascript mapping functions.  An Otto Export does not appear to recurse into arrays.  Need to do a recursive Export for this scenario.  
+
+### [monstache v3.4.0](https://github.com/rwynn/monstache/releases/tag/v3.4.0)
+
+
+* Add ability to embed documents during the mapping phase.  Javascript plugins get 3 new global functions: findId, findOne, and find.  Golang plugins get access to the mgo.Session.  See the docs for details.  
+
+### [monstache v3.3.1](https://github.com/rwynn/monstache/releases/tag/v3.3.1)
+
+
+* Improve support for additional indexing metadata.
+* Fix issue where indexing metadata was not honored
+
+### [monstache v3.3.0](https://github.com/rwynn/monstache/releases/tag/v3.3.0)
+
+
+* Added optional http server.  Enable with --enable-http-server flag.  Listens on :8080 by default.  Configure address with --http-server-addr :8000.  The server responds to the following endpoints (/started, /healthz, /config, and /stats).  The stats endpoint is only enabled if stats are enabled. The /started and /healthz endpoints can be used to check for liveness.  
+* Upgraded the gtm library with performance improvements
+
+### [monstache v3.2.0](https://github.com/rwynn/monstache/releases/tag/v3.2.0)
+
+
+* Add systemd support
+
+### [monstache v3.1.2](https://github.com/rwynn/monstache/releases/tag/v3.1.2)
+
+
+* Built with go1.9
+* Fix golint warnings
+
+### [monstache v3.1.1](https://github.com/rwynn/monstache/releases/tag/v3.1.1)
+
+
+- timestamp stats indexes by day for easier cleanup using e.g. curator
+
+### [monstache v3.1.0](https://github.com/rwynn/monstache/releases/tag/v3.1.0)
+
+
+- add print-config argument to display the configuration and exit
+- add index-stats option to write indexing statistics into Elasticsearch for analysis
+
+### [monstache v3.0.7](https://github.com/rwynn/monstache/releases/tag/v3.0.7)
+
+
+- fix elasticsearch client http scheme for secure connections
+
+### [monstache v3.0.6](https://github.com/rwynn/monstache/releases/tag/v3.0.6)
+
+
+- fix invalid struct field tag
+
+### [monstache v3.0.5](https://github.com/rwynn/monstache/releases/tag/v3.0.5)
+
+
+- add direct-read-batch-size option
+- upgrade gtm to accept batch size and to ensure all direct read errors are logged
+
+### [monstache v3.0.4](https://github.com/rwynn/monstache/releases/tag/v3.0.4)
+
+
+- fix slowdown on direct reads for large mongodb collections
+
+### [monstache v3.0.3](https://github.com/rwynn/monstache/releases/tag/v3.0.3)
+
+
+- small changes to the settings for the exponential back off on retry.  see the docs for details.
+- only record timestamps originating from the oplog and not from direct reads
+- apply the worker routing filter to direct reads in worker mode
+
+### [monstache v3.0.2](https://github.com/rwynn/monstache/releases/tag/v3.0.2)
+
+
+- add option to configure elasticsearch client http timout.  up the default timeout to 60 seconds
+
+
+### [monstache v3.0.1](https://github.com/rwynn/monstache/releases/tag/v3.0.1)
+
+
+- upgrade gtm to fix an issue where a mongodb query error (such as CappedPositionLost) causes the tail go routine to exit (after which no more events will be processed)
+
+
+### [monstache v3.0.0](https://github.com/rwynn/monstache/releases/tag/v3.0.0)
+
+
+- new major release
+- configuration changes with regards to Elasticsearch.  see docs for details
+- adds ability to write rolling logs to files
+- adds ability to log indexing statistics
+- changed go Elasticsearch client from elastigo to elastic which provides more API coverage
+- upgrade gtm
+
+
+### [monstache v2.14.0](https://github.com/rwynn/monstache/releases/tag/v2.14.0)
+
+
+- add support for golang plugins.  you can now do in golang what you previously could do in javascript
+- add more detail to bulk indexing errors
+- upgrade gtm
+
+
+### [monstache v2.13.0](https://github.com/rwynn/monstache/releases/tag/v2.13.0)
+
+
+- add direct-read-ns option.  allows one to sync documents directly from a set of collections in addition to going through the oplog
+- add exit-after-direct-reads option.  tells monstache to exit after performing direct reads.  useful for running monstache as a cron job.  
+- fix issue around custom routing where db name was being stored as an array
+- upgrade gtm
+
+
+### [monstache v2.12.0](https://github.com/rwynn/monstache/releases/tag/v2.12.0)
+
+
+- Fix order of operations surrounding db or collection drops in the oplog.  Required the removal of some gtm-options introduced in 2.11.  
+- Built with latest version of gtm which includes some performance gains
+- Add ssl option under mongo-dial-settings.  Previously, in order to enable connections with TLS one had to provide a PEM file.  Now, one can enable TLS without a PEM file by setting this new option to true.  This was tested with MongoDB Atlas which requires SSL but does not provide a PEM file
+
+
+### [monstache v2.11.2](https://github.com/rwynn/monstache/releases/tag/v2.11.2)
+
+
+- Built with Go 1.8
+- Added option `fail-fast`
+- Added option `index-oplog-time`
+
+
+### [monstache v2.11.1](https://github.com/rwynn/monstache/releases/tag/v2.11.1)
+
+
+- Built with Go 1.8
+- Performance improvements
+- Support for [rfc7386](https://tools.ietf.org/html/rfc7386) JSON merge patches
+- Support for overriding Elasticsearch index and type in JavaScript
+- More configuration options surfaced
+
+
+### [monstache v2.10.0](https://github.com/rwynn/monstache/releases/tag/v2.10.0)
+
+
+- add shard routing capability
+- add Makefile
+
+
+### [monstache v2.9.3](https://github.com/rwynn/monstache/releases/tag/v2.9.3)
+
+
+- extend ttl for active in cluster to reduce process switching
+
+
+### [monstache v2.9.2](https://github.com/rwynn/monstache/releases/tag/v2.9.2)
+
+- fix potential collision on floating point _id closes #16
+
+
+### [monstache v2.9.1](https://github.com/rwynn/monstache/releases/tag/v2.9.1)
+
+- fix an edge case #18 where a process resuming for the cluster would remain paused
+
+### [monstache v2.9](https://github.com/rwynn/monstache/releases/tag/v2.9)
+
+- fix an issue with formatting of integer ids
+- enable option for new clustering feature for high availability
+- add TLS skip verify options for mongodb and elasticsearch
+- add an option to specify a specific timestamp to start syncing from
+
+
+### [monstache v2.8.1](https://github.com/rwynn/monstache/releases/tag/v2.8.1)
+
+- fix an index out of bounds panic during error reporting
+- surface gtm options for setting the oplog database and collection name as well as the cursor timeout
+- report an error if unable to unzip a response when verbose is true
+
+
+### [monstache v2.8](https://github.com/rwynn/monstache/releases/tag/v2.8)
+
+- add a version flag -v
+- document the elasticsearch-pem-file option
+- add the elasticsearch-hosts option to configure pool of available nodes within a cluster
+
+
+### [monstache v2.7](https://github.com/rwynn/monstache/releases/tag/v2.7)
+
+- add a gzip configuration option to increase performance
+- default resume-name to the worker name if defined
+- decrease binary size by building with -ldflags "-w"
+
+
+### [monstache v2.6](https://github.com/rwynn/monstache/releases/tag/v2.6)
+
+- reuse allocations made for gridfs files
+- add workers feature to distribute synching between multiple processes
+
+### [monstache v2.5](https://github.com/rwynn/monstache/releases/tag/v2.5)
+
+- add option to speed up writes when saving resume state
+- remove extra buffering when adding file content
+
+
+### [monstache v2.4](https://github.com/rwynn/monstache/releases/tag/v2.4)
+
+- Fixed issue #10
+- Fixed issue #11
+
+### [monstache v2.3](https://github.com/rwynn/monstache/releases/tag/v2.3)
+
+- Added configuration option for max file size
+- Added code to normalize index and type names based on restrictions in ElasticSearch
+- Performance improvements for GridFs files
+
+
+### [monstache v2.2](https://github.com/rwynn/monstache/releases/tag/v2.2)
+
+- Added configuration option for dropped databases and dropped collections.  See the README for more
+  information.
+
+
+### [monstache v2.1](https://github.com/rwynn/monstache/releases/tag/v2.1)
+
+- Added support for dropped databases and collections. Now when you drop a database or collection from
+  mongodb the corresponding indexes are deleted in elasticsearch.
+
+
+### [monstache v2.0](https://github.com/rwynn/monstache/releases/tag/v2.0)
+
+- Fixes an issue with the default mapping between mongodb and elasticsearch.  Previously, each database
+  in mongodb was mapped to an index of the same name in elasticsearch.  This creates a problem because
+  mongodb document ids are only guaranteed unique at the collection level.  If there are 2 or more documents
+  in a mongodb database with the same id those documents were previously written to the same elasticsearch index.
+  This fix changes the default mapping such that the entire mongodb document namespace (database + collection)
+  is mapped to the destination index in elasticsearch.  This prevents the possibility of collisions within
+  an index. Since this change requires reindexing of previously indexed data using monstache, the version 
+  number of monstache was bumped to 2.  This change also means that by default you will have an index in
+  elasticsearch for each mongodb collection instead of each mongod database.  So more indexes by default.
+  You still have control to override the default mapping.  See the docs for how to explicitly control the index
+  and type used for a particular mongodb namespace.
+- Bumps the go version to 1.7.3 
+
+
+### [monstache v1.3.1](https://github.com/rwynn/monstache/releases/tag/v1.3.1)
+
+- Version 1.3 rebuilt with go1.7.1
+
+
+### [monstache v1.3](https://github.com/rwynn/monstache/releases/tag/v1.3)
+
+- Improve log messages
+- Add support for the ingest-attachment plugin in elasticsearch 5
+
+
+### [monstache v1.2](https://github.com/rwynn/monstache/releases/tag/v1.2)
+
+- Improve Error Reporting and Add Config Options
+
+
+### [monstache v1.1](https://github.com/rwynn/monstache/releases/tag/v1.1)
+
+- Fixes crash during replay (issue #2)
+- Adds supports for indexing GridFS content (issue #3)
+
+
+### [monstache v1.0](https://github.com/rwynn/monstache/releases/tag/v1.0)
+
+- 64-bit Linux binary built with go1.6.2
+
+
+### [monstache v0.8-beta.2](https://github.com/rwynn/monstache/releases/tag/v0.8-beta.2)
+
+- 64-bit Linux binary built with go1.6.2
+
+
+### [monstache v0.8-beta.1](https://github.com/rwynn/monstache/releases/tag/v0.8-beta.1)
+
+- 64-bit Linux binary built with go1.6.2
+
+
+### [monstache v0.8-beta](https://github.com/rwynn/monstache/releases/tag/v0.8-beta)
+
+- 64-bit Linux binary built with go1.6.2
+
+
+### [monstache v0.8-alpha](https://github.com/rwynn/monstache/releases/tag/v0.8-alpha)
+
+- 64-bit Linux binary built with go1.6.2
 
