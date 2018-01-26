@@ -33,7 +33,7 @@ const getReleases = function(page) {
 					const md = getMarkDown(release);
 					markdown.push(md);
 				});
-				getPage(page + 1);
+				getReleases(page + 1);
 			} else {
 				console.log(markdown.join(""));
 			}
