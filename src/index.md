@@ -1,6 +1,6 @@
 # Monstache
 
-Sync MongoDB to ElasticSearch in realtime
+Sync MongoDB to Elasticsearch in realtime
 
 ---
 
@@ -10,9 +10,11 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 
 ## Features
 
+- Single binary with a light footprint 
+
 - Optionally filter the set of collections to sync
 
-- Support for sharded MongoDB clusters
+- Advanced support for sharded MongoDB clusters including auto-detection of new shards
 
 - Direct read mode to do a full sync of collections in addition to tailing the oplog
 
@@ -24,15 +26,13 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 
 - Support for propogating database and collection drops
 
-- Optional custom document routing in ElasticSearch
+- Optional custom document routing in Elasticsearch
 
 - Stateful resume feature
 
 - Worker and Clustering modes for High Availability
 
 - Support for [rfc7396](https://tools.ietf.org/html/rfc7396) JSON merge patches
-
-- Single binary with a light footprint 
 
 - Systemd support
 

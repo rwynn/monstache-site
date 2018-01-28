@@ -255,7 +255,7 @@ Make sure that automatic index creation is not disabled in elasticsearch.yml.
 If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.
 
 !!! note
-	When monstache maps index and type names for ElasticSearch it does normalization based on the 
+	When monstache maps index and type names for Elasticsearch it does normalization based on the 
 	[Validity Rules](https://github.com/elastic/elasticsearch/issues/6736).  This includes making sure index names are
 	all lowercase and that index, types, and ids do not begin with an underscore.
 
@@ -319,13 +319,15 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 }
 ```
 
-the input parameter will contain information about the document's origin database and collection.
-to drop the document (direct monstache not to index it) set `output.Drop = true`.
-to simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
+The input parameter will contain information about the document's origin database and collection.
+
+To drop the document (direct monstache not to index it) set `output.Drop = true`.
+
+To simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
 
 `output.Index`, `output.Type`, `output.Parent` and `output.Routing` allow you to set the indexing metadata for each individual document.
 
-if would like to embed other MongoDB documents (possibly from a different collection) within the current document 
+If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the 
 [mgo API](https://godoc.org/gopkg.in/mgo.v2) to find documents in MongoDB and embed them in the Document set 
 on output.  
@@ -334,7 +336,7 @@ on output.
 
 #### Transformation
 
-monstache uses the amazing [otto](https://github.com/robertkrimen/otto) library to provide transformation at the document field
+Monstache uses the amazing [otto](https://github.com/robertkrimen/otto) library to provide transformation at the document field
 level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:
 	
@@ -541,8 +543,8 @@ The example is based on the Elasticsearch docs for [parent-child](https://www.el
 ## Routing
 
 Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
-is the process by which ElasticSearch determines which shard a document will reside in.  Monstache
-supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.  
+is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
+supports user defined, or custom, routing of your MongoDB documents into Elasticsearch.  
 
 Consider an example where you have a `comments` collection in MongoDB which stores a comment and 
 its associated post identifier.  
@@ -554,14 +556,14 @@ db.comments.insert({title: "Yeah, it's good", post_id: "123"});
 ```
 
 In this case monstache will index those 2 documents in an index named `blog.comments` under the id
-created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing 
+created by MongoDB.  When Elasticsearch routes a document to a shard, by default, it does so by hashing 
 the id of the document.  This means that as the number of comments on post `123` grows, each of the comments
 will be distributed somewhat evenly between the available shards in the cluster.  
 
-Thus, when a query is performed searching among the comments for post `123` ElasticSearch will need to query
+Thus, when a query is performed searching among the comments for post `123` Elasticsearch will need to query
 all of those shards just in case a comment happened to have been routed there.
 
-We can take advantage of the support in ElasticSearch and in monstache to do some intelligent
+We can take advantage of the support in Elasticsearch and in monstache to do some intelligent
 routing such that all comments for post `123` reside in the same shard.
 
 First we need to tell monstache that we would like to do custom routing for this collection by setting `routing`
@@ -581,10 +583,10 @@ module.exports = function(doc) {
 ```
 
 Now when monstache indexes document for the collection `blog.comments` it will set the special `_routing` attribute
-for the document on the index request such that ElasticSearch routes comments based on their corresponding post. 
+for the document on the index request such that Elasticsearch routes comments based on their corresponding post. 
 
 The `_meta_monstache` field is used only to inform monstache about routing and is not included in the source
-document when indexing to ElasticSearch.  
+document when indexing to Elasticsearch.  
 
 Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
 id in the request and make a search that normally queries all shards query only 1 shard.
@@ -605,11 +607,11 @@ The catch with custom routing is that you need to include the routing parameter 
 operations.  Insert and update is not a problem for monstache because the routing information will come from your
 MongoDB document.  Deletes, however, pose a problem for monstache because when a delete occurs in MongoDB the
 information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
-document was originally routed in order to tell ElasticSearch where to look for it.
+document was originally routed in order to tell Elasticsearch where to look for it.
 
 Monstache gets around this problem by using a lookup table that it stores in MongoDB at `monstache.meta`.  In this collection monstache stores
 the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
-in this collection and forwards that information to ElasticSearch on the delete request.
+in this collection and forwards that information to Elasticsearch on the delete request.
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
 

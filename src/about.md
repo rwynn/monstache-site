@@ -25,6 +25,60 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+## Contributing
+
+The Monstache project welcomes, and depends, on contributions from developers and
+users in the open source community. Contributions can be made in a number of
+ways, a few examples are:
+
+- Code patches via pull requests
+- [Documentation](https://github.com/rwynn/monstache-site) improvements
+- [Bug reports](https://github.com/rwynn/monstache/issues) and patch reviews
+
+### Reporting an Issue
+
+Please include as much detail as you can. Let us know your platform, Monstache
+version, MongoDB version, and Elasticsearch version.
+
+### Testing the Development Version
+
+If you want to just install and try out the latest development version of
+Monstache you can do so with the following command. This can be useful if you
+want to provide feedback for a new feature or want to confirm if a bug you
+have encountered is fixed in the git master.
+
+```bash
+go get -u github.com/rwynn/monstache
+```
+
+### Running the tests
+
+To run the tests, you will need to have local mongod and elasticsearch servers running.  
+Then you will need to start a monstache process in one terminal or in the background.
+
+```bash
+monstache -verbose
+```
+
+Finally in another terminal you can run the tests by issuing the following commands 
+
+```bash
+cd $GOPATH/src/github.com/rwynn/monstache
+go test -v
+```
+
+!!! warning
+
+    Running the Monstache tests will perform modifications to the `test.test` namespace in 
+    MongoDB and will index documents in the `test.test` index in Elasticsearch.  If you have
+    data that you need to keep on your local servers, make a back up before running the tests.
+
+### Submitting Pull Requests
+
+Once you are happy with your changes or you are ready for some feedback, push
+it to your fork and send a pull request. For a change to be accepted it will
+most likely need to have tests and documentation if it is a new feature.
+
 ## Release Notes
 
 ### [monstache v3.5.2](https://github.com/rwynn/monstache/releases/tag/v3.5.2)
@@ -257,7 +311,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 ### [monstache v2.3](https://github.com/rwynn/monstache/releases/tag/v2.3)
 
 - Added configuration option for max file size
-- Added code to normalize index and type names based on restrictions in ElasticSearch
+- Added code to normalize index and type names based on restrictions in Elasticsearch
 - Performance improvements for GridFs files
 
 
