@@ -371,7 +371,7 @@ see the sections <a href="#middleware">Middleware</a> and  <a href="#routing">Ro
 <p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When monstache maps index and type names for ElasticSearch it does normalization based on the 
+<p>When monstache maps index and type names for Elasticsearch it does normalization based on the 
 <a href="https://github.com/elastic/elasticsearch/issues/6736">Validity Rules</a>.  This includes making sure index names are
 all lowercase and that index, types, and ids do not begin with an underscore.</p>
 </div>
@@ -419,17 +419,17 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 }
 </code></pre>
 
-<p>the input parameter will contain information about the document's origin database and collection.
-to drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.
-to simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
+<p>The input parameter will contain information about the document's origin database and collection.</p>
+<p>To drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.</p>
+<p>To simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
 <p><code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code> allow you to set the indexing metadata for each individual document.</p>
-<p>if would like to embed other MongoDB documents (possibly from a different collection) within the current document 
+<p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the 
 <a href="https://godoc.org/gopkg.in/mgo.v2">mgo API</a> to find documents in MongoDB and embed them in the Document set 
 on output.  </p>
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link"></a></h3>
 <h4 id="transformation">Transformation<a class="headerlink" href="#transformation" title="Permanent link"></a></h4>
-<p>monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
+<p>Monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
 level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
 added to your TOML config file, for example:</p>
 <pre><code class="toml">[[script]]
@@ -602,8 +602,8 @@ will be stored under <code>_parent</code>.</p>
 <p>The example is based on the Elasticsearch docs for <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html">parent-child</a></p>
 <h2 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link"></a></h2>
 <p>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
-is the process by which ElasticSearch determines which shard a document will reside in.  Monstache
-supports user defined, or custom, routing of your MongoDB documents into ElasticSearch.  </p>
+is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
+supports user defined, or custom, routing of your MongoDB documents into Elasticsearch.  </p>
 <p>Consider an example where you have a <code>comments</code> collection in MongoDB which stores a comment and 
 its associated post identifier.  </p>
 <pre><code class="javascript">use blog;
@@ -612,12 +612,12 @@ db.comments.insert({title: &quot;Yeah, it's good&quot;, post_id: &quot;123&quot;
 </code></pre>
 
 <p>In this case monstache will index those 2 documents in an index named <code>blog.comments</code> under the id
-created by MongoDB.  When ElasticSearch routes a document to a shard, by default, it does so by hashing 
+created by MongoDB.  When Elasticsearch routes a document to a shard, by default, it does so by hashing 
 the id of the document.  This means that as the number of comments on post <code>123</code> grows, each of the comments
 will be distributed somewhat evenly between the available shards in the cluster.  </p>
-<p>Thus, when a query is performed searching among the comments for post <code>123</code> ElasticSearch will need to query
+<p>Thus, when a query is performed searching among the comments for post <code>123</code> Elasticsearch will need to query
 all of those shards just in case a comment happened to have been routed there.</p>
-<p>We can take advantage of the support in ElasticSearch and in monstache to do some intelligent
+<p>We can take advantage of the support in Elasticsearch and in monstache to do some intelligent
 routing such that all comments for post <code>123</code> reside in the same shard.</p>
 <p>First we need to tell monstache that we would like to do custom routing for this collection by setting <code>routing</code>
 equal to true on a custom script for the namespace.  Then we need to add some metadata to the document telling
@@ -634,9 +634,9 @@ module.exports = function(doc) {
 </code></pre>
 
 <p>Now when monstache indexes document for the collection <code>blog.comments</code> it will set the special <code>_routing</code> attribute
-for the document on the index request such that ElasticSearch routes comments based on their corresponding post. </p>
+for the document on the index request such that Elasticsearch routes comments based on their corresponding post. </p>
 <p>The <code>_meta_monstache</code> field is used only to inform monstache about routing and is not included in the source
-document when indexing to ElasticSearch.  </p>
+document when indexing to Elasticsearch.  </p>
 <p>Now when we are searching for comments and we know the post id that the comment belongs to we can include that post
 id in the request and make a search that normally queries all shards query only 1 shard.</p>
 <pre><code>$ curl -H &quot;Content-Type:application/json&quot; -XGET 'http://localhost:9200/blog.comments/_search?routing=123' -d '
@@ -653,10 +653,10 @@ way to reduce broadcast searches and thus get better performance.</p>
 operations.  Insert and update is not a problem for monstache because the routing information will come from your
 MongoDB document.  Deletes, however, pose a problem for monstache because when a delete occurs in MongoDB the
 information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
-document was originally routed in order to tell ElasticSearch where to look for it.</p>
+document was originally routed in order to tell Elasticsearch where to look for it.</p>
 <p>Monstache gets around this problem by using a lookup table that it stores in MongoDB at <code>monstache.meta</code>.  In this collection monstache stores
 the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
-in this collection and forwards that information to ElasticSearch on the delete request.</p>
+in this collection and forwards that information to Elasticsearch on the delete request.</p>
 <p>For more information see <a href="https://www.elastic.co/blog/customizing-your-document-routing">Customizing Document Routing</a></p>
 <p>In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
 <code>index</code> and <code>type</code> using a script by putting the custom information in the meta attribute. </p>

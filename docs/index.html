@@ -144,7 +144,7 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="monstache">Monstache<a class="headerlink" href="#monstache" title="Permanent link"></a></h1>
-<p>Sync MongoDB to ElasticSearch in realtime</p>
+<p>Sync MongoDB to Elasticsearch in realtime</p>
 <hr />
 <p>Monstache is a sync daemon written in Go that continously indexes your MongoDB collections into
 Elasticsearch. Monstache gives you the ability to use Elasticsearch to do complex searches and aggregations 
@@ -152,10 +152,13 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link"></a></h2>
 <ul>
 <li>
+<p>Single binary with a light footprint </p>
+</li>
+<li>
 <p>Optionally filter the set of collections to sync</p>
 </li>
 <li>
-<p>Support for sharded MongoDB clusters</p>
+<p>Advanced support for sharded MongoDB clusters including auto-detection of new shards</p>
 </li>
 <li>
 <p>Direct read mode to do a full sync of collections in addition to tailing the oplog</p>
@@ -173,7 +176,7 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 <p>Support for propogating database and collection drops</p>
 </li>
 <li>
-<p>Optional custom document routing in ElasticSearch</p>
+<p>Optional custom document routing in Elasticsearch</p>
 </li>
 <li>
 <p>Stateful resume feature</p>
@@ -183,9 +186,6 @@ of your MongoDB data and easily build realtime Kibana visualizations and dashboa
 </li>
 <li>
 <p>Support for <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> JSON merge patches</p>
-</li>
-<li>
-<p>Single binary with a light footprint </p>
 </li>
 <li>
 <p>Systemd support</p>
@@ -244,5 +244,5 @@ it up and running.</p></div>
 
 <!--
 MkDocs version : 0.15.3
-Build Date UTC : 2018-01-25 20:00:06
+Build Date UTC : 2018-01-29 01:24:14
 -->

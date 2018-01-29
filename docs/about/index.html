@@ -138,6 +138,8 @@
         
             <li><a href="#license">License</a></li>
         
+            <li><a href="#contributing">Contributing</a></li>
+        
             <li><a href="#release-notes">Release Notes</a></li>
         
     
@@ -164,6 +166,47 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link"></a></h2>
+<p>The Monstache project welcomes, and depends, on contributions from developers and
+users in the open source community. Contributions can be made in a number of
+ways, a few examples are:</p>
+<ul>
+<li>Code patches via pull requests</li>
+<li><a href="https://github.com/rwynn/monstache-site">Documentation</a> improvements</li>
+<li><a href="https://github.com/rwynn/monstache/issues">Bug reports</a> and patch reviews</li>
+</ul>
+<h3 id="reporting-an-issue">Reporting an Issue<a class="headerlink" href="#reporting-an-issue" title="Permanent link"></a></h3>
+<p>Please include as much detail as you can. Let us know your platform, Monstache
+version, MongoDB version, and Elasticsearch version.</p>
+<h3 id="testing-the-development-version">Testing the Development Version<a class="headerlink" href="#testing-the-development-version" title="Permanent link"></a></h3>
+<p>If you want to just install and try out the latest development version of
+Monstache you can do so with the following command. This can be useful if you
+want to provide feedback for a new feature or want to confirm if a bug you
+have encountered is fixed in the git master.</p>
+<pre><code class="bash">go get -u github.com/rwynn/monstache
+</code></pre>
+
+<h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h3>
+<p>To run the tests, you will need to have local mongod and elasticsearch servers running.<br />
+Then you will need to start a monstache process in one terminal or in the background.</p>
+<pre><code class="bash">monstache -verbose
+</code></pre>
+
+<p>Finally in another terminal you can run the tests by issuing the following commands </p>
+<pre><code class="bash">cd $GOPATH/src/github.com/rwynn/monstache
+go test -v
+</code></pre>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Running the Monstache tests will perform modifications to the <code>test.test</code> namespace in 
+MongoDB and will index documents in the <code>test.test</code> index in Elasticsearch.  If you have
+data that you need to keep on your local servers, make a back up before running the tests.</p>
+</div>
+<h3 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link"></a></h3>
+<p>Once you are happy with your changes or you are ready for some feedback, push
+it to your fork and send a pull request. For a change to be accepted it will
+most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link"></a></h2>
 <h3 id="monstache-v352"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.2">monstache v3.5.2</a><a class="headerlink" href="#monstache-v352" title="Permanent link"></a></h3>
 <ul>
@@ -352,7 +395,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <h3 id="monstache-v23"><a href="https://github.com/rwynn/monstache/releases/tag/v2.3">monstache v2.3</a><a class="headerlink" href="#monstache-v23" title="Permanent link"></a></h3>
 <ul>
 <li>Added configuration option for max file size</li>
-<li>Added code to normalize index and type names based on restrictions in ElasticSearch</li>
+<li>Added code to normalize index and type names based on restrictions in Elasticsearch</li>
 <li>Performance improvements for GridFs files</li>
 </ul>
 <h3 id="monstache-v22"><a href="https://github.com/rwynn/monstache/releases/tag/v2.2">monstache v2.2</a><a class="headerlink" href="#monstache-v22" title="Permanent link"></a></h3>

@@ -188,41 +188,67 @@ configuration.</p>
      queue_size: 200
 </code></pre>
 
-<p>Without any explicit configuration monstache will connect to ElasticSearch and MongoDB on localhost
-on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in ElasticSearch.</p>
+<p>Without any explicit configuration monstache will connect to Elasticsearch and MongoDB on localhost
+on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in Elasticsearch.</p>
 <p>Monstache uses the <a href="https://github.com/toml-lang/toml">TOML</a> format for its configuration.  You can run 
 monstache with an explicit configuration by passing the -f flag.</p>
 <pre><code class="sh">monstache -f /path/to/config.toml
 </code></pre>
 
 <p>A sample configuration looks like this:</p>
-<pre><code>gzip = true
+<pre><code># compress requests to Elasticsearch
+gzip = true
+# generate indexing statistics
 stats = true
+# index statistics into Elasticsearch
 index-stats = true
+# connect to MongoDB using the following URL
 mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
+# use the following PEM file for connections to MongoDB
 mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
+# disable PEM validation
 mongo-validate-pem-file = false
+# connect to the Elasticsearch REST API at the following URLs
 elasticsearch-urls = [&quot;https://example:9200&quot;]
+# use the following user name for Elasticsearch basic auth
 elasticsearch-user = &quot;someuser&quot;
+# use the following password for Elasticsearch basic auth
 elasticsearch-password = &quot;somepassword&quot;
+# use 10 go routines concurrently pushing documents to Elasticsearch
 elasticsearch-max-conns = 10
+# use the following PEM file to connections to Elasticsearch
 elasticsearch-pem-file = &quot;/path/to/elasticCert.pem&quot;
+# validate connections to Elasticsearch
 elastic-validate-pem-file = true
+# propogate dropped collections in MongoDB as index deletes in Elasticsearch
 dropped-collections = true
+# propogate dropped databases in MongoDB as index deletes in Elasticsearch
 dropped-databases = true
+# do not start processing at the beginning of the MongoDB oplog
 replay = false
+# resume processing from a timestamp saved in a previous run
 resume = true
+# do not validate that progress timestamps have been saved
 resume-write-unsafe = false
+# override the name under which resume state is saved
 resume-name = &quot;default&quot;
+# include documents whose namespace matches the following pattern
 namespace-regex = '^mydb\.(mycollection|\$cmd)$'
+# exclude documents whose namespace matches the following pattern
 namespace-exclude-regex = '^mydb\.(ignorecollection|\$cmd)$'
-gtm-channel-size = 200
+# turn on indexing of GridFS file content
 index-files = true
+# turn on search result highlighting of GridFS content
 file-highlighting = true
+# index GridFS files inserted into the following collections
 file-namespaces = [&quot;users.fs.files&quot;]
+# print detailed information including request traces
 verbose = true
+# enable clustering mode
 cluster-name = 'apollo'
+# do a full-sync of the following collections
 direct-read-namespaces = [&quot;db.collection&quot;, &quot;test.test&quot;]
+# do not exit after full-sync, rather continue tailing the oplog
 exit-after-direct-reads = false
 </code></pre>
 
