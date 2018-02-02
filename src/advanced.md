@@ -188,7 +188,7 @@ one of the available workers.
 You can run monstache in high availability mode by starting multiple processes with the same value for [cluster-name](/config#cluster-name).
 Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.
 
-High availability works by ensuring a active process in the `monstache.cluster` collection in mongodb. Only the processes in
+High availability works by ensuring one active process in the `monstache.cluster` collection in mongodb at any given time. Only the process in
 this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the 
 `monstache.cluster` collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
 the collection by mongodb and another process in the monstache cluster will have a chance to write to the collection and become the
@@ -283,9 +283,11 @@ require Go version 1.8 or greater on Linux. currently, you are able to use Javas
 monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
 
-plugins must import the package `github.com/rwynn/monstache/monstachemap`
+To create a golang plugin for monstache
 
-plugins must implement a function named `Map` with the following signature
+- create a .go source file that belongs to the package `main`
+- import `github.com/rwynn/monstache/monstachemap`
+- implement a function named `Map` with the following signature
 
 ```go
 func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
@@ -295,7 +297,9 @@ plugins can be compiled using
 
 	go build -buildmode=plugin -o myplugin.so myplugin.go
 
-to enable the plugin, start with `monstache -mapper-plugin-path /path/to/myplugin.so`
+to enable the plugin, start monstache with
+
+    monstache -mapper-plugin-path /path/to/myplugin.so
 
 the following example plugin simply converts top level string values to uppercase
 
@@ -325,12 +329,10 @@ To drop the document (direct monstache not to index it) set `output.Drop = true`
 
 To simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
 
-`output.Index`, `output.Type`, `output.Parent` and `output.Routing` allow you to set the indexing metadata for each individual document.
+To set indexing metadata on the document use `output.Index`, `output.Type`, `output.Parent` and `output.Routing`.
 
 If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
-before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the 
-[mgo API](https://godoc.org/gopkg.in/mgo.v2) to find documents in MongoDB and embed them in the Document set 
-on output.  
+before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
 
 ### Javascript
 

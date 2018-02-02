@@ -8,22 +8,21 @@
         <meta name="author" content="Monstache Team">
         <link rel="canonical" href="https://rwynn.github.io/monstache-site/config/">
         <link rel="shortcut icon" href="../img/favicon.ico">
-
-	<title>Configuration - Monstache</title>
-
+        <title>Configuration - Monstache</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/highlight.css">
         <link href="../css/extra.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
 
-        
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -32,8 +31,7 @@
 
             ga('create', 'UA-113057322-1', 'rwynn.github.io');
             ga('send', 'pageview');
-        </script>
-        
+        </script> 
     </head>
 
     <body>
@@ -43,7 +41,6 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
-            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -51,50 +48,29 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            
-
-            <!-- Main title -->
             <a class="navbar-brand" href="..">Monstache</a>
         </div>
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            
                 <!-- Main navigation -->
                 <ul class="nav navbar-nav">
-                
-                
                     <li >
                         <a href="..">Home</a>
                     </li>
-                
-                
-                
                     <li >
                         <a href="../start/">Getting Started</a>
                     </li>
-                
-                
-                
                     <li class="active">
                         <a href="./">Configuration</a>
                     </li>
-                
-                
-                
                     <li >
                         <a href="../advanced/">Advanced</a>
                     </li>
-                
-                
-                
                     <li >
                         <a href="../about/">About</a>
                     </li>
-                
-                
                 </ul>
-            
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -102,7 +78,6 @@
                         <i class="fa fa-search"></i> Search
                     </a>
                 </li>
-                
                     <li >
                         <a rel="next" href="../start/">
                             <i class="fa fa-arrow-left"></i> Previous
@@ -113,148 +88,77 @@
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                
-                
                     <li>
-                        <a href="https://github.com/rwynn/monstache/">
-                            
-                                <i class="fa fa-github"></i>
-                            
-                            GitHub
-                        </a>
+                        <a href="https://github.com/rwynn/monstache/edit/master/docs/config.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                     </li>
-                
             </ul>
         </div>
     </div>
 </div>
 
         <div class="container">
-            
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-    
         <li class="main active"><a href="#configuration">Configuration</a></li>
-        
             <li><a href="#print-config">print-config</a></li>
-        
             <li><a href="#stats">stats</a></li>
-        
             <li><a href="#stats-duration">stats-duration</a></li>
-        
             <li><a href="#index-stats">index-stats</a></li>
-        
             <li><a href="#stats-index-format">stats-index-format</a></li>
-        
             <li><a href="#gzip">gzip</a></li>
-        
             <li><a href="#fail-fast">fail-fast</a></li>
-        
             <li><a href="#index-oplog-time">index-oplog-time</a></li>
-        
             <li><a href="#resume">resume</a></li>
-        
             <li><a href="#resume-name">resume-name</a></li>
-        
             <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
-        
             <li><a href="#replay">replay</a></li>
-        
             <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
-        
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
-        
             <li><a href="#direct-read-limit">direct-read-limit</a></li>
-        
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
-        
             <li><a href="#direct-readers-per-col">direct-readers-per-col</a></li>
-        
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
-        
             <li><a href="#namespace-regex">namespace-regex</a></li>
-        
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
-        
             <li><a href="#mongo-url">mongo-url</a></li>
-        
             <li><a href="#mongo-config-url">mongo-config-url</a></li>
-        
             <li><a href="#mongo-pem-file">mongo-pem-file</a></li>
-        
             <li><a href="#mongo-validate-pem">mongo-validate-pem</a></li>
-        
             <li><a href="#mongo-oplog-database-name">mongo-oplog-database-name</a></li>
-        
             <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
-        
             <li><a href="#mongo-cursor-timeout">mongo-cursor-timeout</a></li>
-        
             <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
-        
             <li><a href="#mongo-session-settings">mongo-session-settings</a></li>
-        
             <li><a href="#gtm-settings">gtm-settings</a></li>
-        
             <li><a href="#index-files">index-files</a></li>
-        
             <li><a href="#max-file-size">max-file-size</a></li>
-        
             <li><a href="#file-namespaces">file-namespaces</a></li>
-        
             <li><a href="#file-highlighting">file-highlighting</a></li>
-        
             <li><a href="#verbose">verbose</a></li>
-        
             <li><a href="#elasticsearch-user">elasticsearch-user</a></li>
-        
             <li><a href="#elasticsearch-password">elasticsearch-password</a></li>
-        
             <li><a href="#elasticsearch-urls">elasticsearch-urls</a></li>
-        
             <li><a href="#elasticsearch-version">elasticsearch-version</a></li>
-        
             <li><a href="#elasticsearch-max-conns">elasticsearch-max-conns</a></li>
-        
             <li><a href="#elasticsearch-retry">elasticsearch-retry</a></li>
-        
             <li><a href="#elasticsearch-client-timeout">elasticsearch-client-timeout</a></li>
-        
             <li><a href="#elasticsearch-max-docs">elasticsearch-max-docs</a></li>
-        
             <li><a href="#elasticsearch-max-bytes">elasticsearch-max-bytes</a></li>
-        
             <li><a href="#elasticsearch-max-seconds">elasticsearch-max-seconds</a></li>
-        
             <li><a href="#elasticsearch-pem-file">elasticsearch-pem-file</a></li>
-        
             <li><a href="#elasticsearch-validate-pem">elasticsearch-validate-pem</a></li>
-        
             <li><a href="#dropped-databases">dropped-databases</a></li>
-        
             <li><a href="#dropped-collections">dropped-collections</a></li>
-        
             <li><a href="#worker">worker</a></li>
-        
             <li><a href="#workers">workers</a></li>
-        
             <li><a href="#enable-patches">enable-patches</a></li>
-        
             <li><a href="#patch-namespaces">patch-namespaces</a></li>
-        
             <li><a href="#merge-patch-attribute">merge-patch-attribute</a></li>
-        
             <li><a href="#cluster-name">cluster-name</a></li>
-        
             <li><a href="#script">script</a></li>
-        
             <li><a href="#logs">logs</a></li>
-        
             <li><a href="#enable-http-server">enable-http-server</a></li>
-        
             <li><a href="#http-server-addr">http-server-addr</a></li>
-        
-    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -583,48 +487,82 @@ for more information.</p>
 <h2 id="http-server-addr">http-server-addr<a class="headerlink" href="#http-server-addr" title="Permanent link"></a></h2>
 <p>string (default ":8080")</p>
 <p>The address to bind the embedded HTTP server on if enabled</p></div>
-            
         </div>
 
         <footer class="col-md-12">
             <hr>
-            
                 <p>Copyright &copy; 2016-2018 Ryan Wynn</p>
-            
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-
-        <script src="../js/jquery-1.10.2.min.js"></script>
-        <script src="../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../js/highlight.pack.js"></script>
         <script>var base_url = '..';</script>
-        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
         <script src="../js/base.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
                     </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
 
     </body>
 </html>
