@@ -168,6 +168,10 @@ data that you need to keep on your local servers, make a back up before running 
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link"></a></h2>
+<h3 id="monstache-v360"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.0">monstache v3.6.0</a><a class="headerlink" href="#monstache-v360" title="Permanent link"></a></h3>
+<ul>
+<li>This release focuses on improvements with regards to handling dropped connections to either Elasticsearch or MongoDB and resuming gracefully when they come back online</li>
+</ul>
 <h3 id="monstache-v352"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.2">monstache v3.5.2</a><a class="headerlink" href="#monstache-v352" title="Permanent link"></a></h3>
 <ul>
 <li>The previous release safeguards the integrity of inserts and updates with a version number, but neglected deletes.  This release adds versions to deletes such that an [insert, delete] sequence that gets sent to Elasticsearch in 2 different requests (due to <code>elasticsearch-max-conns</code> &gt; 1) cannot actually perform a [delete, insert] instead.  In this case the insert would now carry a version number &lt; the delete version number and be rejected.    </li>
