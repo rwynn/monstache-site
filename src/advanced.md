@@ -637,6 +637,153 @@ module.exports = function(doc) {
 """
 ```
 
+## Joins
+
+Elasticsearch 6 introduces an updated approach to parent-child called joins.  The following example shows how you can accomplish joins
+with Monstache.  The example is based on the Elasticsearch [documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/parent-join.html).
+
+This example assumes Monstache is syncing the `test.test` collection in MongoDB with the `test.test` index in Elasticsearch.
+
+First we will want to setup an index mapping in Elasticsearch describing the join field.  
+
+```
+curl -XPUT 'localhost:9200/test.test?pretty' -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "test": {
+      "properties": {
+        "my_join_field": { 
+          "type": "join",
+          "relations": {
+            "question": "answer" 
+          }
+        }
+      }
+    }
+  }
+}
+'
+```
+
+Next will will configure Monstache with custom Javascript middleware that does transformation and routing.  In a file called CONFIG.toml.
+
+```
+[[script]]
+namespace = "test.test"
+routing = true
+script = """
+module.exports = function(doc) {
+        var routing;
+        if (doc.type === "question") {
+                routing = doc._id;
+                doc.my_join_field = {
+                   name: "question"
+                }
+        } else if (doc.type === "answer") {
+                routing = doc.question;
+                doc.my_join_field = {
+                  name: "answer",
+                  parent: routing
+                };
+        }
+        if (routing) {
+                doc._meta_monstache = { routing: routing };
+        }
+        return doc;
+}
+"""
+```
+
+The mapping function adds a `my_join_field` field to each document.  The contents of the field are based on the `type` attribute in the MongoDB
+document. Also, the function ensures that the routing is always based on the _id of the question document.   
+
+Now with this config in place we can start Monstache.  We will use verbose to see the requests.
+
+```
+monstache -verbose -f CONFIG.toml
+```
+
+With Monstache running we are now ready to insert into MongoDB
+
+```
+
+rs:PRIMARY> use test;
+switched to db test
+
+rs:PRIMARY> db.test.insert({type: "question", text: "This is a question"});
+
+rs:PRIMARY> db.test.find()
+{ "_id" : ObjectId("5a84a8b826993bde57c12893"), "type" : "question", "text" : "This is a question" }
+
+rs:PRIMARY> db.test.insert({type: "answer", text: "This is an answer", question: ObjectId("5a84a8b826993bde57c12893") });
+
+```
+
+When we insert these documents we should see Monstache generate the following requests to Elasticsearch
+
+```
+
+{"index":{"_id":"5a84a8b826993bde57c12893","_index":"test.test","_type":"test","_routing":"5a84a8b826993bde57c12893","_version":6522523668566769665,"_version_type":"external"}}
+{"my_join_field":{"name":"question"},"text":"This is a question","type":"question"}
+
+{"index":{"_id":"5a84a92b26993bde57c12894","_index":"test.test","_type":"test","_routing":"5a84a8b826993bde57c12893","_version":6522524162488008705,"_version_type":"external"}}
+{"my_join_field":{"name":"answer","parent":"5a84a8b826993bde57c12893"},"question":"5a84a8b826993bde57c12893","text":"This is an answer","type":"answer"}
+
+```
+
+This looks good.  We should now have a parent/child relationship between these documents in Elasticsearch.
+
+If we do a search on the `test.test` index we see the following results:
+
+```json
+
+ "hits" : {
+    "total" : 2,
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "test.test",
+        "_type" : "test",
+        "_id" : "5a84a8b826993bde57c12893",
+        "_score" : 1.0,
+        "_routing" : "5a84a8b826993bde57c12893",
+        "_source" : {
+          "my_join_field" : {
+            "name" : "question"
+          },
+          "text" : "This is a question",
+          "type" : "question"
+        }
+      },
+      {
+        "_index" : "test.test",
+        "_type" : "test",
+        "_id" : "5a84a92b26993bde57c12894",
+        "_score" : 1.0,
+        "_routing" : "5a84a8b826993bde57c12893",
+        "_source" : {
+          "my_join_field" : {
+            "name" : "answer",
+            "parent" : "5a84a8b826993bde57c12893"
+          },
+          "question" : "5a84a8b826993bde57c12893",
+          "text" : "This is an answer",
+          "type" : "answer"
+        }
+      }
+    ]
+  }
+
+```
+
+To clean up our documents in Elasticsearch a bit we can omit the information that we don't really need in the source docs by 
+updating our mapping function. This information needs not be at the top-level since it is duplicated in `my_join_field`.
+
+```
+	return _.omit(doc, "type", "question");
+
+```
+
 ## Merge Patches
 
 A unique feature of monstache is support for JSON Merge Patches [rfc-7396](https://tools.ietf.org/html/rfc7396).
