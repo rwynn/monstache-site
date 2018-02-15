@@ -156,6 +156,7 @@
             <li><a href="#merge-patch-attribute">merge-patch-attribute</a></li>
             <li><a href="#cluster-name">cluster-name</a></li>
             <li><a href="#script">script</a></li>
+            <li><a href="#graylog-addr">graylog-addr</a></li>
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
@@ -464,6 +465,9 @@ one of the processes in paused state will take control and start syncing.  See t
 <p>[] array of TOML table (default nil)</p>
 <p>When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section <a href="../advanced#middleware">Middleware</a>
 for more information.</p>
+<h2 id="graylog-addr">graylog-addr<a class="headerlink" href="#graylog-addr" title="Permanent link"></a></h2>
+<p>string (default "")</p>
+<p>The address of a graylog server to redirect logs to in GELF </p>
 <h2 id="logs">logs<a class="headerlink" href="#logs" title="Permanent link"></a></h2>
 <p>TOML table (default nil)</p>
 <p>Allows writing logs to a file using a rolling appender instead of stdout.  Supply a file path for each type of log you would like to send to a file.</p>

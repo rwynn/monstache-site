@@ -6,7 +6,9 @@
 
 Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP.
 
-You just need to [download the latest version](https://github.com/rwynn/monstache/releases). 
+You just need to [download the latest version](https://github.com/rwynn/monstache/releases).
+
+You will want to use 4.x releases for ES6+ and 3.x releases for ES2-5.
 
 Unzip the download and adjust your PATH variable to include the path to the folder for your platform.
 
@@ -14,15 +16,23 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 3.6.4
+# 4.0.0
 ```
+
+The version number should start 3.3 if you are using Elasticsearch prior to version 6.
 
 !!! note ""
 
-	You can also build monstache from source using
+	You can also build monstache from source. For Elasticsearch 6 and up use
 
 	```
 	go get -u github.com/rwynn/monstache
+	```
+
+	For Elasticsearch before version 6 use
+
+	```
+	go get -u gopkg.in/rwynn/monstache.v3
 	```
 
 ## Usage

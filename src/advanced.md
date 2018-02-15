@@ -223,10 +223,20 @@ When the clustering feature is combined with workers then the [resume-name](/con
 
 When indexing documents from MongoDB into elasticsearch the default mapping is as follows:
 
+For Elasticsearch prior to 6.2
+
 ```text
-mongodb database name . mongodb collection name -> elasticsearch index name
-mongodb collection name -> elasticsearch type
-mongodb document _id -> elasticsearch document _id
+elasticsearch index name    <= mongodb database name . mongodb collection name
+elasticsearch type          <= mongodb collection name
+elasticsearch document _id  <= mongodb document _id
+```
+
+For Elasticsearch 6.2+
+
+```text
+elasticsearch index name    <= mongodb database name . mongodb collection name
+elasticsearch type          <= _doc 
+elasticsearch document _id  <= mongodb document _id
 ```
 
 If these default won't work for some reason you can override the index and type mapping on a per collection basis by adding
@@ -650,7 +660,7 @@ First we will want to setup an index mapping in Elasticsearch describing the joi
 curl -XPUT 'localhost:9200/test.test?pretty' -H 'Content-Type: application/json' -d'
 {
   "mappings": {
-    "test": {
+    "_doc": {
       "properties": {
         "my_join_field": { 
           "type": "join",
@@ -664,6 +674,15 @@ curl -XPUT 'localhost:9200/test.test?pretty' -H 'Content-Type: application/json'
 }
 '
 ```
+
+!!! warning
+    The above mapping uses _doc as the Elasticsearch type. _doc is the recommended type for new
+    versions Elasticsearch but it only works with Elasticsearch versions 6.2 and greater.  Monstache
+    defaults to using _doc as the type when it detects Elasticsearch version 6.2 or greater.  If you
+    are using a previous version of Elasticsearch monstache defaults to using the MongoDB collection
+    name as the Elasticsearch type. The type Monstache uses can be overriden but it is not
+    recommended from Elasticsearch 6.2 on. 
+
 
 Next will will configure Monstache with custom Javascript middleware that does transformation and routing.  In a file called CONFIG.toml.
 
@@ -723,10 +742,10 @@ When we insert these documents we should see Monstache generate the following re
 
 ```
 
-{"index":{"_id":"5a84a8b826993bde57c12893","_index":"test.test","_type":"test","_routing":"5a84a8b826993bde57c12893","_version":6522523668566769665,"_version_type":"external"}}
+{"index":{"_id":"5a84a8b826993bde57c12893","_index":"test.test","_type":"_doc","routing":"5a84a8b826993bde57c12893","version":6522523668566769665,"version_type":"external"}}
 {"my_join_field":{"name":"question"},"text":"This is a question","type":"question"}
 
-{"index":{"_id":"5a84a92b26993bde57c12894","_index":"test.test","_type":"test","_routing":"5a84a8b826993bde57c12893","_version":6522524162488008705,"_version_type":"external"}}
+{"index":{"_id":"5a84a92b26993bde57c12894","_index":"test.test","_type":"_doc","routing":"5a84a8b826993bde57c12893","version":6522524162488008705,"version_type":"external"}}
 {"my_join_field":{"name":"answer","parent":"5a84a8b826993bde57c12893"},"question":"5a84a8b826993bde57c12893","text":"This is an answer","type":"answer"}
 
 ```
@@ -743,7 +762,7 @@ If we do a search on the `test.test` index we see the following results:
     "hits" : [
       {
         "_index" : "test.test",
-        "_type" : "test",
+        "_type" : "_doc",
         "_id" : "5a84a8b826993bde57c12893",
         "_score" : 1.0,
         "_routing" : "5a84a8b826993bde57c12893",
@@ -757,7 +776,7 @@ If we do a search on the `test.test` index we see the following results:
       },
       {
         "_index" : "test.test",
-        "_type" : "test",
+        "_type" : "_doc",
         "_id" : "5a84a92b26993bde57c12894",
         "_score" : 1.0,
         "_routing" : "5a84a8b826993bde57c12893",
@@ -783,6 +802,18 @@ updating our mapping function. This information needs not be at the top-level si
 	return _.omit(doc, "type", "question");
 
 ```
+
+If your parent and child documents are in separate MongoDB collections then you would set up a script
+for each collection.  You can tell if the doc is a parent or child by the collection it comes from. The only other difference would be that you would need to override the index dynamically in addition to the routing such that documents from both MongoDB collections target the same 
+index.
+
+```
+    doc._meta_monstache = { routing: routing, index: "parentsAndChildren" };
+```
+!!! warning
+    You must be careful when you route 2 or more MongoDB collections to the same Elasticsearch index
+    that the document _ids across the MongoDB collections do not collide for any 2 docs because 
+    they will be used as the _id in the target index. 
 
 ## Merge Patches
 

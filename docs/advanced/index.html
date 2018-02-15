@@ -299,9 +299,16 @@ monstache -cluster-name HA -worker Harry -f config.toml
 <p>When the clustering feature is combined with workers then the <a href="../config#resume-name">resume-name</a> becomes the cluster name concatenated with the worker name.</p>
 <h2 id="index-mapping">Index Mapping<a class="headerlink" href="#index-mapping" title="Permanent link"></a></h2>
 <p>When indexing documents from MongoDB into elasticsearch the default mapping is as follows:</p>
-<pre><code class="text">mongodb database name . mongodb collection name -&gt; elasticsearch index name
-mongodb collection name -&gt; elasticsearch type
-mongodb document _id -&gt; elasticsearch document _id
+<p>For Elasticsearch prior to 6.2</p>
+<pre><code class="text">elasticsearch index name    &lt;= mongodb database name . mongodb collection name
+elasticsearch type          &lt;= mongodb collection name
+elasticsearch document _id  &lt;= mongodb document _id
+</code></pre>
+
+<p>For Elasticsearch 6.2+</p>
+<pre><code class="text">elasticsearch index name    &lt;= mongodb database name . mongodb collection name
+elasticsearch type          &lt;= _doc 
+elasticsearch document _id  &lt;= mongodb document _id
 </code></pre>
 
 <p>If these default won't work for some reason you can override the index and type mapping on a per collection basis by adding
@@ -642,7 +649,7 @@ with Monstache.  The example is based on the Elasticsearch <a href="https://www.
 <pre><code>curl -XPUT 'localhost:9200/test.test?pretty' -H 'Content-Type: application/json' -d'
 {
   &quot;mappings&quot;: {
-    &quot;test&quot;: {
+    &quot;_doc&quot;: {
       &quot;properties&quot;: {
         &quot;my_join_field&quot;: { 
           &quot;type&quot;: &quot;join&quot;,
@@ -657,6 +664,15 @@ with Monstache.  The example is based on the Elasticsearch <a href="https://www.
 '
 </code></pre>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The above mapping uses _doc as the Elasticsearch type. _doc is the recommended type for new
+versions Elasticsearch but it only works with Elasticsearch versions 6.2 and greater.  Monstache
+defaults to using _doc as the type when it detects Elasticsearch version 6.2 or greater.  If you
+are using a previous version of Elasticsearch monstache defaults to using the MongoDB collection
+name as the Elasticsearch type. The type Monstache uses can be overriden but it is not
+recommended from Elasticsearch 6.2 on. </p>
+</div>
 <p>Next will will configure Monstache with custom Javascript middleware that does transformation and routing.  In a file called CONFIG.toml.</p>
 <pre><code>[[script]]
 namespace = &quot;test.test&quot;
@@ -706,10 +722,10 @@ rs:PRIMARY&gt; db.test.insert({type: &quot;answer&quot;, text: &quot;This is an 
 
 <p>When we insert these documents we should see Monstache generate the following requests to Elasticsearch</p>
 <pre><code>
-{&quot;index&quot;:{&quot;_id&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;_index&quot;:&quot;test.test&quot;,&quot;_type&quot;:&quot;test&quot;,&quot;_routing&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;_version&quot;:6522523668566769665,&quot;_version_type&quot;:&quot;external&quot;}}
+{&quot;index&quot;:{&quot;_id&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;_index&quot;:&quot;test.test&quot;,&quot;_type&quot;:&quot;_doc&quot;,&quot;routing&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;version&quot;:6522523668566769665,&quot;version_type&quot;:&quot;external&quot;}}
 {&quot;my_join_field&quot;:{&quot;name&quot;:&quot;question&quot;},&quot;text&quot;:&quot;This is a question&quot;,&quot;type&quot;:&quot;question&quot;}
 
-{&quot;index&quot;:{&quot;_id&quot;:&quot;5a84a92b26993bde57c12894&quot;,&quot;_index&quot;:&quot;test.test&quot;,&quot;_type&quot;:&quot;test&quot;,&quot;_routing&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;_version&quot;:6522524162488008705,&quot;_version_type&quot;:&quot;external&quot;}}
+{&quot;index&quot;:{&quot;_id&quot;:&quot;5a84a92b26993bde57c12894&quot;,&quot;_index&quot;:&quot;test.test&quot;,&quot;_type&quot;:&quot;_doc&quot;,&quot;routing&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;version&quot;:6522524162488008705,&quot;version_type&quot;:&quot;external&quot;}}
 {&quot;my_join_field&quot;:{&quot;name&quot;:&quot;answer&quot;,&quot;parent&quot;:&quot;5a84a8b826993bde57c12893&quot;},&quot;question&quot;:&quot;5a84a8b826993bde57c12893&quot;,&quot;text&quot;:&quot;This is an answer&quot;,&quot;type&quot;:&quot;answer&quot;}
 
 </code></pre>
@@ -723,7 +739,7 @@ rs:PRIMARY&gt; db.test.insert({type: &quot;answer&quot;, text: &quot;This is an 
     &quot;hits&quot; : [
       {
         &quot;_index&quot; : &quot;test.test&quot;,
-        &quot;_type&quot; : &quot;test&quot;,
+        &quot;_type&quot; : &quot;_doc&quot;,
         &quot;_id&quot; : &quot;5a84a8b826993bde57c12893&quot;,
         &quot;_score&quot; : 1.0,
         &quot;_routing&quot; : &quot;5a84a8b826993bde57c12893&quot;,
@@ -737,7 +753,7 @@ rs:PRIMARY&gt; db.test.insert({type: &quot;answer&quot;, text: &quot;This is an 
       },
       {
         &quot;_index&quot; : &quot;test.test&quot;,
-        &quot;_type&quot; : &quot;test&quot;,
+        &quot;_type&quot; : &quot;_doc&quot;,
         &quot;_id&quot; : &quot;5a84a92b26993bde57c12894&quot;,
         &quot;_score&quot; : 1.0,
         &quot;_routing&quot; : &quot;5a84a8b826993bde57c12893&quot;,
@@ -762,6 +778,18 @@ updating our mapping function. This information needs not be at the top-level si
 
 </code></pre>
 
+<p>If your parent and child documents are in separate MongoDB collections then you would set up a script
+for each collection.  You can tell if the doc is a parent or child by the collection it comes from. The only other difference would be that you would need to override the index dynamically in addition to the routing such that documents from both MongoDB collections target the same 
+index.</p>
+<pre><code>    doc._meta_monstache = { routing: routing, index: &quot;parentsAndChildren&quot; };
+</code></pre>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must be careful when you route 2 or more MongoDB collections to the same Elasticsearch index
+that the document _ids across the MongoDB collections do not collide for any 2 docs because 
+they will be used as the _id in the target index. </p>
+</div>
 <h2 id="merge-patches">Merge Patches<a class="headerlink" href="#merge-patches" title="Permanent link"></a></h2>
 <p>A unique feature of monstache is support for JSON Merge Patches <a href="https://tools.ietf.org/html/rfc7396">rfc-7396</a>.</p>
 <p>If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The

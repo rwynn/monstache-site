@@ -508,6 +508,12 @@ one of the processes in paused state will take control and start syncing.  See t
 When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Middleware](/advanced#middleware)
 for more information.
 
+## graylog-addr
+
+string (default "")
+
+The address of a graylog server to redirect logs to in GELF 
+
 ## logs
 
 TOML table (default nil)
