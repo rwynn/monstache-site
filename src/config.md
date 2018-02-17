@@ -151,23 +151,11 @@ phase has completed if you decide to temporarily turn off refresh, otherwise you
 
 By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
 
-## direct-read-limit
-
-int (default 5000)
-
-The maximum number of documents to retreive in each direct read query
-
 ## direct-read-batch-size
 
 int (default 500)
 
 The batch size to set on direct read queries
-
-## direct-readers-per-col
-
-int (default 10)
-
-The number of concurrent readers per collection for direct reads
 
 ## exit-after-direct-reads
 

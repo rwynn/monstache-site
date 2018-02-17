@@ -16,7 +16,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.0.0
+# 4.0.1
 ```
 
 The version number should start 3.3 if you are using Elasticsearch prior to version 6.

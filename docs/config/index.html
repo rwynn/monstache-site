@@ -114,9 +114,7 @@
             <li><a href="#replay">replay</a></li>
             <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
-            <li><a href="#direct-read-limit">direct-read-limit</a></li>
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
-            <li><a href="#direct-readers-per-col">direct-readers-per-col</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
             <li><a href="#namespace-regex">namespace-regex</a></li>
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
@@ -262,15 +260,9 @@ index basis by using the Index Settings or Index Template APIs.  For more inform
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
 <p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
-<h2 id="direct-read-limit">direct-read-limit<a class="headerlink" href="#direct-read-limit" title="Permanent link"></a></h2>
-<p>int (default 5000)</p>
-<p>The maximum number of documents to retreive in each direct read query</p>
 <h2 id="direct-read-batch-size">direct-read-batch-size<a class="headerlink" href="#direct-read-batch-size" title="Permanent link"></a></h2>
 <p>int (default 500)</p>
 <p>The batch size to set on direct read queries</p>
-<h2 id="direct-readers-per-col">direct-readers-per-col<a class="headerlink" href="#direct-readers-per-col" title="Permanent link"></a></h2>
-<p>int (default 10)</p>
-<p>The number of concurrent readers per collection for direct reads</p>
 <h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want
