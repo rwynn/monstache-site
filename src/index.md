@@ -33,6 +33,8 @@ Kibana visualizations and dashboards.
 
 - Stateful resume feature
 
+- Time machine feature to track document changes over time
+
 - Worker and Clustering modes for High Availability
 
 - Support for [rfc7396](https://tools.ietf.org/html/rfc7396) JSON merge patches
