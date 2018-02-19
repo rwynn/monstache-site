@@ -19,7 +19,7 @@ monstache -v
 # 4.0.1
 ```
 
-The version number should start 3.3 if you are using Elasticsearch prior to version 6.
+The version number should start with 3.x if you are using Elasticsearch prior to version 6.
 
 !!! note ""
 

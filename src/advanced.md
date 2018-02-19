@@ -260,14 +260,13 @@ index in elasticsearch with the `type1` type.
 If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
 see the sections [Middleware](#middleware) and  [Routing](#routing).
 
-Make sure that automatic index creation is not disabled in elasticsearch.yml.
+!!! warning
+	It is not recommended to override the default type of `_doc` if using Elasticsearch 6.2*.  Using `_doc` as the type
+	will not work with Elasticsearch prior to 6.2.
+
+Make sure that automatic index creation is not disabled in elasticsearch.yml or create your target indexes before using Monstache.
 
 If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.
-
-!!! note
-	When monstache maps index and type names for Elasticsearch it does normalization based on the 
-	[Validity Rules](https://github.com/elastic/elasticsearch/issues/6736).  This includes making sure index names are
-	all lowercase and that index, types, and ids do not begin with an underscore.
 
 ## Namespaces
 
@@ -279,7 +278,7 @@ When configuring namespaces in monstache you will need to account for both cases
 
 !!! warning
 
-	Be careful if you have configured `dropped-databases|dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the elasticsearch index not deleted on a drop.
+	Be careful if you have configured `dropped-databases=true` or `dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the elasticsearch index not deleted on a drop.
 
 
 ## Middleware
@@ -554,8 +553,7 @@ The example is based on the Elasticsearch docs for [parent-child](https://www.el
 
 ## Routing
 
-Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
-is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
+Routing is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
 supports user defined, or custom, routing of your MongoDB documents into Elasticsearch.  
 
 Consider an example where you have a `comments` collection in MongoDB which stores a comment and 

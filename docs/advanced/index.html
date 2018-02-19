@@ -328,21 +328,20 @@ type = &quot;type2&quot;
 index in elasticsearch with the <code>type1</code> type.</p>
 <p>If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
 see the sections <a href="#middleware">Middleware</a> and  <a href="#routing">Routing</a>.</p>
-<p>Make sure that automatic index creation is not disabled in elasticsearch.yml.</p>
-<p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When monstache maps index and type names for Elasticsearch it does normalization based on the 
-<a href="https://github.com/elastic/elasticsearch/issues/6736">Validity Rules</a>.  This includes making sure index names are
-all lowercase and that index, types, and ids do not begin with an underscore.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is not recommended to override the default type of <code>_doc</code> if using Elasticsearch 6.2*.  Using <code>_doc</code> as the type
+will not work with Elasticsearch prior to 6.2.</p>
 </div>
+<p>Make sure that automatic index creation is not disabled in elasticsearch.yml or create your target indexes before using Monstache.</p>
+<p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
 <h2 id="namespaces">Namespaces<a class="headerlink" href="#namespaces" title="Permanent link"></a></h2>
 <p>When a document is inserted, updated, or deleted in mongodb a document is appended to the oplog representing the event.  This document has a field <code>ns</code> which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for <code>use test; db.foo.insert({hello: "world"});</code> the namespace for the event in the oplog would be <code>test.foo</code>.</p>
 <p>In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in mongodb an event is appended to the oplog.  Like the other types of changes this event has a field <code>ns</code> representing the namespace.  However, for drops the namespace is the database name and the string <code>$cmd</code> joined by a dot.  E.g. for <code>use test; db.foo.drop()</code> the namespace for the event in the oplog would be <code>test.$cmd</code>.  </p>
 <p>When configuring namespaces in monstache you will need to account for both cases.  </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Be careful if you have configured <code>dropped-databases|dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the elasticsearch index not deleted on a drop.</p>
+<p>Be careful if you have configured <code>dropped-databases=true</code> or <code>dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the elasticsearch index not deleted on a drop.</p>
 </div>
 <h2 id="middleware">Middleware<a class="headerlink" href="#middleware" title="Permanent link"></a></h2>
 <p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
@@ -566,8 +565,7 @@ since the type information will be stored in Elasticsearch under <code>_type</co
 will be stored under <code>_parent</code>.</p>
 <p>The example is based on the Elasticsearch docs for <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html">parent-child</a></p>
 <h2 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link"></a></h2>
-<p>Domain knowledge of your data can lead to better performance with a custom routing solution. Routing
-is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
+<p>Routing is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
 supports user defined, or custom, routing of your MongoDB documents into Elasticsearch.  </p>
 <p>Consider an example where you have a <code>comments</code> collection in MongoDB which stores a comment and 
 its associated post identifier.  </p>

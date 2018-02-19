@@ -81,6 +81,58 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.0.1](https://github.com/rwynn/monstache/releases/tag/v4.0.1)
+
+* Fixed a bug where monstache would think direct reads were done when they had not even started
+* Performance improvements for direct reads on large collections
+
+
+### [monstache v3.7.0](https://github.com/rwynn/monstache/releases/tag/v3.7.0)
+
+* Fixed a bug where monstache would think direct reads were done when they had not even started
+* Performance improvements for direct reads on large collections
+
+
+### [monstache v4.0.0](https://github.com/rwynn/monstache/releases/tag/v4.0.0)
+
+* Monstache v4+ should be used for ES6+. There will still be bug fixes and maintenance done to the Monstache v3 releases to support ES2-5. You can still download v3.x releases from the downloads page or by directing go get to gopkg.in/rwynn/monstache.v3
+
+* Fixes deprecation warnings during bulk indexing against ES6 because of renamed fields version and version_type
+
+* Monstache will now default to using the ES type _doc (as opposed to the MongoDB collection name) when it detects ES 6.2+. This is the new recommended type name going forward. See issue #42.
+
+
+### [monstache v3.6.5](https://github.com/rwynn/monstache/releases/tag/v3.6.5)
+
+* Remove brittle normalization of index names, type names, and ids
+
+* Start differentiating between releases supporting ES6+ and pre-ES6 by releasing from rel3 branch
+
+* Soon a 4.0.0 release will be cut from master that will be ES6 forward. pre-ES6 will still be supported by downloading 3.x releases from the releases page or directing go get to gopkg.in/rwynn/monstache.v3
+
+* Technically this release will still work with ES+ but that won't last forever. There are some deprecation warnings. In summary, if you need pre-ES6 use v3.x releases of monstache and v4.x releases of monstache for ES6+ going forward.
+
+
+### [monstache v3.6.4](https://github.com/rwynn/monstache/releases/tag/v3.6.4)
+
+* Trying to set the record for github releases in one night
+
+* Fix a regression whereby monstache would exit after direct reads were complete when it should have kept tailing the oplog
+
+### [monstache v3.6.3](https://github.com/rwynn/monstache/releases/tag/v3.6.3)
+
+* Fix for a benign race condition in shutdown, introduced in 3.6.2, that caused a panic
+
+### [monstache v3.6.2](https://github.com/rwynn/monstache/releases/tag/v3.6.2)
+
+* Resume usage of upstream elastic client library now that fix for Elasticsearch going down has been merged
+* When Elasticsearch goes down the elastic client will now put back pressure on Add and Flush calls. When Elasticsearch comes back up it will resume Adding and Flushing were it left off. Do to the blocking nature of Add and Flush the shutdown function of monstache has been refactored to take this into account. Shutdown will not hang if Elasticsearch is down. It will try to Flush pending documents but if this blocks due to a down server it will still exit after a 5 second deadline.
+
+### [monstache v3.6.1](https://github.com/rwynn/monstache/releases/tag/v3.6.1)
+
+* Added more detailed error logging. Each bulk request line that failed will be logged separately with details. This is much more lightweight than having to turn on verbose to get error details. Verbose is not a recommended setting for production.
+
+
 ### [monstache v3.6.0](https://github.com/rwynn/monstache/releases/tag/v3.6.0)
 
 * This release focuses on improvements with regards to handling dropped connections to either Elasticsearch or MongoDB and resuming gracefully when they come back online
