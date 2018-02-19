@@ -113,6 +113,10 @@
             <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
             <li><a href="#replay">replay</a></li>
             <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
+            <li><a href="#time-machine-namespaces">time-machine-namespaces</a></li>
+            <li><a href="#time-machine-index-prefix">time-machine-index-prefix</a></li>
+            <li><a href="#time-machine-index-suffix">time-machine-index-suffix</a></li>
+            <li><a href="#time-machine-direct-reads">time-machine-direct-reads</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
@@ -246,6 +250,21 @@ occurring after this timestamp.  Timestamps are not written to monstache.monstac
 This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it's not unreasonable to set this to true to get a speedup.</p>
+<h2 id="time-machine-namespaces">time-machine-namespaces<a class="headerlink" href="#time-machine-namespaces" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>Monstache is good at keeping your MongoDB collections and Elasticsearch indexes in sync.  When a document is updated in MongoDB the corresponding document in Elasticsearch is updated too.  Same goes for deleting documents in MongoDB.  But what if you also wanted to keep a log of all the changes to a MongoDB document over its lifespan.  That's what time-machine-namespaces are for.  When you configure a list of namespaces in MongoDB to add to the time machine, in addition to keeping documents in sync, Monstache will index of copy of your MongoDB document at the time it changes in a separate timestamped index.</p>
+<p>Say for example, you insert a document into the <code>test.test</code> collection in MongoDB.  Monstache will index by default into the <code>test.test</code> index in Elasticsearch, but with time machines it will also index it into <code>log.test.test.2018-02-19</code>.  When it indexes it into the time machine index it does so without the id from MongoDB and lets Elasticsearch generate a unique id.  But, it stores the id from MongoDB in the source field <code>_source_id</code>.  Also, it adds _oplog_ts and _oplog_date fields on the source document.  These correspond to the timestamp from the oplog when the data changed in MongoDB.</p>
+<p>This lets you do some cool things but mostly you'll want to sort by <code>_oplog_date</code> and filter by <code>_source_id</code> to see how documents have changed over time. </p>
+<p>Because the indexes are timestamped you can drop then after a period of time so they don't take up space.  If you just want the last couple of days of changes, delete the indexes with the old timestamps.  Elastic <a href="https://github.com/elastic/curator">curator</a> is your friend here.</p>
+<h2 id="time-machine-index-prefix">time-machine-index-prefix<a class="headerlink" href="#time-machine-index-prefix" title="Permanent link"></a></h2>
+<p>string (default "log")</p>
+<p>If you have enabled time machine namespaces and want to change the prefix assigned to the index names use this setting.</p>
+<h2 id="time-machine-index-suffix">time-machine-index-suffix<a class="headerlink" href="#time-machine-index-suffix" title="Permanent link"></a></h2>
+<p>string (default "2006-01-02")</p>
+<p>If you have enabled time machine namespaces and want to suffix the index names using a different date format use this setting.  Consult the golang docs for how date formats work.  By default this suffixes the index name with the year, month, and day.</p>
+<h2 id="time-machine-direct-reads">time-machine-direct-reads<a class="headerlink" href="#time-machine-direct-reads" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>This setting controls whether or not direct reads are added to the time machine log index. This is false by default so only changes read from the oplog are added. </p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
 <p>[]string (default nil)</p>
 <p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.

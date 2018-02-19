@@ -81,6 +81,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.1.0](https://github.com/rwynn/monstache/releases/tag/v4.1.0)
+
+* Add a nifty time machine feature
+
+### [monstache v3.8.0](https://github.com/rwynn/monstache/releases/tag/v3.8.0)
+
+* Add a nifty time machine feature
+
 ### [monstache v4.0.1](https://github.com/rwynn/monstache/releases/tag/v4.0.1)
 
 * Fixed a bug where monstache would think direct reads were done when they had not even started

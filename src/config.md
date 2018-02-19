@@ -130,6 +130,36 @@ This speeds up writing of timestamps used to resume synching in a subsequent run
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it's not unreasonable to set this to true to get a speedup.
 
+## time-machine-namespaces
+
+[]string (default nil)
+
+Monstache is good at keeping your MongoDB collections and Elasticsearch indexes in sync.  When a document is updated in MongoDB the corresponding document in Elasticsearch is updated too.  Same goes for deleting documents in MongoDB.  But what if you also wanted to keep a log of all the changes to a MongoDB document over its lifespan.  That's what time-machine-namespaces are for.  When you configure a list of namespaces in MongoDB to add to the time machine, in addition to keeping documents in sync, Monstache will index of copy of your MongoDB document at the time it changes in a separate timestamped index.
+
+Say for example, you insert a document into the `test.test` collection in MongoDB.  Monstache will index by default into the `test.test` index in Elasticsearch, but with time machines it will also index it into `log.test.test.2018-02-19`.  When it indexes it into the time machine index it does so without the id from MongoDB and lets Elasticsearch generate a unique id.  But, it stores the id from MongoDB in the source field `_source_id`.  Also, it adds _oplog_ts and _oplog_date fields on the source document.  These correspond to the timestamp from the oplog when the data changed in MongoDB.
+
+This lets you do some cool things but mostly you'll want to sort by `_oplog_date` and filter by `_source_id` to see how documents have changed over time. 
+
+Because the indexes are timestamped you can drop then after a period of time so they don't take up space.  If you just want the last couple of days of changes, delete the indexes with the old timestamps.  Elastic [curator](https://github.com/elastic/curator) is your friend here.
+
+## time-machine-index-prefix
+
+string (default "log")
+
+If you have enabled time machine namespaces and want to change the prefix assigned to the index names use this setting.
+
+## time-machine-index-suffix
+
+string (default "2006-01-02")
+
+If you have enabled time machine namespaces and want to suffix the index names using a different date format use this setting.  Consult the golang docs for how date formats work.  By default this suffixes the index name with the year, month, and day.
+
+## time-machine-direct-reads
+
+boolean (default false)
+
+This setting controls whether or not direct reads are added to the time machine log index. This is false by default so only changes read from the oplog are added. 
+
 ## direct-read-namespaces
 
 []string (default nil)
