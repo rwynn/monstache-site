@@ -813,6 +813,35 @@ index.
     that the document _ids across the MongoDB collections do not collide for any 2 docs because 
     they will be used as the _id in the target index. 
 
+## Time Machines
+
+If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use [time machine namespaces](/config#time-machine-namespaces).   For example, you've inserted and later updated a document with id 123 in the `test.test` collection in MongoDB. If `test.test` is a time machine namespace you will have 2 documents representing those changes in the `log.test.test.2018-02-20` index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:
+
+```
+$ curl -XGET 'http://localhost:9200/log.test.test.*/_search?routing=123' -d '
+{
+   "query":{
+      "sort" : [
+        { "_oplog_ts" : {"order" : "desc"}}
+      ],
+      "filtered":{
+         "query":{
+            "match_all":{}
+         },
+         "filter":{
+            "term":{
+               "_source_id":"123"
+            }
+         }
+      }
+   }
+}'
+```
+
+That query will be very efficient because it only queries the shard that all the change docs went to for MongoDB document id 123.  It filters the documents on that shard by `_source_id`, or id from MongoDB, to only give us the changes to that document.  Finally, it sorts by the `_oplog_ts` which gives us the most recent change docs first.   
+
+The index pattern in the query is a wilcard to pick up all the timestamped indexes that we've acculated for the `test.test` namespace.
+
 ## Merge Patches
 
 A unique feature of monstache is support for JSON Merge Patches [rfc-7396](https://tools.ietf.org/html/rfc7396).
