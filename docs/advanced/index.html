@@ -108,6 +108,7 @@
             <li><a href="#middleware">Middleware</a></li>
             <li><a href="#routing">Routing</a></li>
             <li><a href="#joins">Joins</a></li>
+            <li><a href="#time-machines">Time Machines</a></li>
             <li><a href="#merge-patches">Merge Patches</a></li>
             <li><a href="#systemd">Systemd</a></li>
             <li><a href="#http-server">HTTP Server</a></li>
@@ -788,6 +789,30 @@ index.</p>
 that the document _ids across the MongoDB collections do not collide for any 2 docs because 
 they will be used as the _id in the target index. </p>
 </div>
+<h2 id="time-machines">Time Machines<a class="headerlink" href="#time-machines" title="Permanent link"></a></h2>
+<p>If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use <a href="../config#time-machine-namespaces">time machine namespaces</a>.   For example, you've inserted and later updated a document with id 123 in the <code>test.test</code> collection in MongoDB. If <code>test.test</code> is a time machine namespace you will have 2 documents representing those changes in the <code>log.test.test.2018-02-20</code> index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:</p>
+<pre><code>$ curl -XGET 'http://localhost:9200/log.test.test.*/_search?routing=123' -d '
+{
+   &quot;query&quot;:{
+      &quot;sort&quot; : [
+        { &quot;_oplog_ts&quot; : {&quot;order&quot; : &quot;desc&quot;}}
+      ],
+      &quot;filtered&quot;:{
+         &quot;query&quot;:{
+            &quot;match_all&quot;:{}
+         },
+         &quot;filter&quot;:{
+            &quot;term&quot;:{
+               &quot;_source_id&quot;:&quot;123&quot;
+            }
+         }
+      }
+   }
+}'
+</code></pre>
+
+<p>That query will be very efficient because it only queries the shard that all the change docs went to for MongoDB document id 123.  It filters the documents on that shard by <code>_source_id</code>, or id from MongoDB, to only give us the changes to that document.  Finally, it sorts by the <code>_oplog_ts</code> which gives us the most recent change docs first.   </p>
+<p>The index pattern in the query is a wilcard to pick up all the timestamped indexes that we've acculated for the <code>test.test</code> namespace.</p>
 <h2 id="merge-patches">Merge Patches<a class="headerlink" href="#merge-patches" title="Permanent link"></a></h2>
 <p>A unique feature of monstache is support for JSON Merge Patches <a href="https://tools.ietf.org/html/rfc7396">rfc-7396</a>.</p>
 <p>If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The
