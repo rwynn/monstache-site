@@ -812,7 +812,7 @@ they will be used as the _id in the target index. </p>
 </code></pre>
 
 <p>That query will be very efficient because it only queries the shard that all the change docs went to for MongoDB document id 123.  It filters the documents on that shard by <code>_source_id</code>, or id from MongoDB, to only give us the changes to that document.  Finally, it sorts by the <code>_oplog_ts</code> which gives us the most recent change docs first.   </p>
-<p>The index pattern in the query is a wilcard to pick up all the timestamped indexes that we've acculated for the <code>test.test</code> namespace.</p>
+<p>The index pattern in the query is a wildcard to pick up all the timestamped indexes that we've acculated for the <code>test.test</code> namespace.</p>
 <h2 id="merge-patches">Merge Patches<a class="headerlink" href="#merge-patches" title="Permanent link"></a></h2>
 <p>A unique feature of monstache is support for JSON Merge Patches <a href="https://tools.ietf.org/html/rfc7396">rfc-7396</a>.</p>
 <p>If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The

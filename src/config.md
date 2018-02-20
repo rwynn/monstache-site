@@ -142,6 +142,8 @@ This lets you do some cool things but mostly you'll want to sort by `_oplog_date
 
 Because the indexes are timestamped you can drop then after a period of time so they don't take up space.  If you just want the last couple of days of changes, delete the indexes with the old timestamps.  Elastic [curator](https://github.com/elastic/curator) is your friend here.
 
+This option may be passed on the command line as ./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar
+
 ## time-machine-index-prefix
 
 string (default "log")

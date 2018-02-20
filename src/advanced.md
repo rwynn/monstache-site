@@ -840,7 +840,7 @@ $ curl -XGET 'http://localhost:9200/log.test.test.*/_search?routing=123' -d '
 
 That query will be very efficient because it only queries the shard that all the change docs went to for MongoDB document id 123.  It filters the documents on that shard by `_source_id`, or id from MongoDB, to only give us the changes to that document.  Finally, it sorts by the `_oplog_ts` which gives us the most recent change docs first.   
 
-The index pattern in the query is a wilcard to pick up all the timestamped indexes that we've acculated for the `test.test` namespace.
+The index pattern in the query is a wildcard to pick up all the timestamped indexes that we've acculated for the `test.test` namespace.
 
 ## Merge Patches
 
