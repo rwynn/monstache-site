@@ -117,6 +117,7 @@
             <li><a href="#time-machine-index-prefix">time-machine-index-prefix</a></li>
             <li><a href="#time-machine-index-suffix">time-machine-index-suffix</a></li>
             <li><a href="#time-machine-direct-reads">time-machine-direct-reads</a></li>
+            <li><a href="#routing-namespaces">routing-namespaces</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
@@ -266,6 +267,10 @@ and do not stop execution it's not unreasonable to set this to true to get a spe
 <h2 id="time-machine-direct-reads">time-machine-direct-reads<a class="headerlink" href="#time-machine-direct-reads" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>This setting controls whether or not direct reads are added to the time machine log index. This is false by default so only changes read from the oplog are added. </p>
+<h2 id="routing-namespaces">routing-namespaces<a class="headerlink" href="#routing-namespaces" title="Permanent link"></a></h2>
+<p>[]string (default nil)</p>
+<p>You only need to set this configuration option if you use golang and javascript plugins are do custom routing: override parent or routing attributes. This array should be set to a list of all the namespaces that custom routing is done on. This ensures that deletes in MongoDB are routed correctly to 
+Elasticsearch.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
 <p>[]string (default nil)</p>
 <p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
@@ -477,6 +482,18 @@ one of the processes in paused state will take control and start syncing.  See t
 <p>[] array of TOML table (default nil)</p>
 <p>When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section <a href="../advanced#middleware">Middleware</a>
 for more information.</p>
+<div class="admonition note">
+<h4 id="namespace">namespace<a class="headerlink" href="#namespace" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The MongoDB namespace, db.collection, to apply the script to</p>
+<h4 id="script_1">script<a class="headerlink" href="#script_1" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>An inline script.  You can use TOML multiline syntax here</p>
+<h4 id="path">path<a class="headerlink" href="#path" title="Permanent link"></a></h4>
+<p>string (default "")</p>
+<p>The file path to load a script from.  Use this or an inline script but not both. Can be a
+path relative to the directory monstache is executed from or an absolute path.</p>
+</div>
 <h2 id="graylog-addr">graylog-addr<a class="headerlink" href="#graylog-addr" title="Permanent link"></a></h2>
 <p>string (default "")</p>
 <p>The address of a graylog server to redirect logs to in GELF </p>

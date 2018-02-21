@@ -338,7 +338,15 @@ To drop the document (direct monstache not to index it) set `output.Drop = true`
 
 To simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
 
-To set indexing metadata on the document use `output.Index`, `output.Type`, `output.Parent` and `output.Routing`.
+To set custom indexing metadata on the document use `output.Index`, `output.Type`, `output.Parent` and `output.Routing`.
+
+!!! note
+    If you override `output.Parent` or `output.Routing` for any MongoDB namespaces in a 
+    golang plugin you should also add those namespaces to the `routing-namespaces` array 
+    in your config file.
+
+    This instructs Monstache to save the routing information so that deletes of the document work
+    correctly.
 
 If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
@@ -365,18 +373,11 @@ module.exports = function(doc) {
 
 [[script]]
 namespace = "anotherdb.anothercollection"
-script = """
-var counter = 1;
-module.exports = function(doc) {
-	doc.foo += "test2" + counter;
-	counter++;
-	return doc;
-}
-"""
+path = "path/to/transform.js"
 ```
 
 The example TOML above configures 2 scripts. The first is applied to `mycollection` in `mydb` while the second is applied
-to `anothercollection` in `anotherdb`.
+to `anothercollection` in `anotherdb`. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.
 
 You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 `script`.  The javascript assigned to script must assign a function to the exports property of the `module` object.  This 

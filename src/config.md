@@ -162,6 +162,13 @@ boolean (default false)
 
 This setting controls whether or not direct reads are added to the time machine log index. This is false by default so only changes read from the oplog are added. 
 
+## routing-namespaces
+
+[]string (default nil)
+
+You only need to set this configuration option if you use golang and javascript plugins are do custom routing: override parent or routing attributes. This array should be set to a list of all the namespaces that custom routing is done on. This ensures that deletes in MongoDB are routed correctly to 
+Elasticsearch.
+
 ## direct-read-namespaces
 
 []string (default nil)
@@ -527,6 +534,27 @@ one of the processes in paused state will take control and start syncing.  See t
 
 When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Middleware](/advanced#middleware)
 for more information.
+
+!!! note ""
+
+	#### namespace
+
+	string (default "")
+
+	The MongoDB namespace, db.collection, to apply the script to
+
+	#### script
+
+	string (default "")
+
+	An inline script.  You can use TOML multiline syntax here
+
+	#### path
+
+	string (default "")
+
+	The file path to load a script from.  Use this or an inline script but not both. Can be a
+    path relative to the directory monstache is executed from or an absolute path.
 
 ## graylog-addr
 

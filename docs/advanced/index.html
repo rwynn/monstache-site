@@ -389,7 +389,15 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 <p>The input parameter will contain information about the document's origin database and collection.</p>
 <p>To drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.</p>
 <p>To simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
-<p>To set indexing metadata on the document use <code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code>.</p>
+<p>To set custom indexing metadata on the document use <code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you override <code>output.Parent</code> or <code>output.Routing</code> for any MongoDB namespaces in a 
+golang plugin you should also add those namespaces to the <code>routing-namespaces</code> array 
+in your config file.</p>
+<p>This instructs Monstache to save the routing information so that deletes of the document work
+correctly.</p>
+</div>
 <p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link"></a></h3>
@@ -410,18 +418,11 @@ module.exports = function(doc) {
 
 [[script]]
 namespace = &quot;anotherdb.anothercollection&quot;
-script = &quot;&quot;&quot;
-var counter = 1;
-module.exports = function(doc) {
-    doc.foo += &quot;test2&quot; + counter;
-    counter++;
-    return doc;
-}
-&quot;&quot;&quot;
+path = &quot;path/to/transform.js&quot;
 </code></pre>
 
 <p>The example TOML above configures 2 scripts. The first is applied to <code>mycollection</code> in <code>mydb</code> while the second is applied
-to <code>anothercollection</code> in <code>anotherdb</code>.</p>
+to <code>anothercollection</code> in <code>anotherdb</code>. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.</p>
 <p>You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 <code>script</code>.  The javascript assigned to script must assign a function to the exports property of the <code>module</code> object.  This 
 function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can

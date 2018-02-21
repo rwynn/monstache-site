@@ -81,6 +81,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.1.2](https://github.com/rwynn/monstache/releases/tag/v4.1.2)
+
+* Fix custom routing for golang plugins
+* Configuration now supports paths to Javascript files in addition to inline scripts
+
+### [monstache v3.8.2](https://github.com/rwynn/monstache/releases/tag/v3.8.2)
+
+* Fix custom routing for golang plugins
+* Configuration now supports paths to Javascript files in addition to inline scripts
+
 ### [monstache v4.1.1](https://github.com/rwynn/monstache/releases/tag/v4.1.1)
 
 * Route time machine docs by MongoDB source id
