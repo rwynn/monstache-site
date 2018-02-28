@@ -302,6 +302,12 @@ To create a golang plugin for monstache
 func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
 ```
 
+- optionally implement a function named `Filter` with the following signature
+
+```go
+func Filter(input *monstachemap.MapperPluginInput) (keep bool, err error)
+```
+
 plugins can be compiled using
 
 	go build -buildmode=plugin -o myplugin.so myplugin.go
@@ -351,6 +357,8 @@ To set custom indexing metadata on the document use `output.Index`, `output.Type
 If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
 
+When you implement a `Filter` function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting `output.Drop` from the mapping function because when you set `output.Drop` to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the `Filter` function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.
+
 ### Javascript
 
 #### Transformation
@@ -391,6 +399,24 @@ For these purposes an object is a javascript non-primitive, excluding `Function`
 
 #### Filtering
 
+You can completely ignore documents by adding filter configurations to your TOML config file.  The filter functions are executing immediately after inserts or updates are read from the oplog.  The correspding document is passed into the function and you can return true or false to include or ignore the document.
+
+```toml
+[[filter]]
+namespace = "db.collection"
+script = """
+module.exports = function(doc) {
+    return !!doc.interesting;
+}
+"""
+
+[[filter]]
+namespace = "db2.collection2"
+path = "path/to/script.js"
+```
+
+#### Dropping
+
 If the return value from the mapping function is not an `object` per the definition above then the result is converted into a `boolean`
 and if the boolean value is `false` then that indicates to monstache that you would not like to index the document. If the boolean value is `true` then
 the original document from mongodb gets indexed in elasticsearch.
@@ -411,12 +437,13 @@ module.exports = function(doc) {
 ```
 
 In the above example monstache will index any document except the ones with a `deletedAt` property.  If the document is first
-inserted without a `deletedAt` property, but later updated to include the `deletedAt` property then monstache will remove the
+inserted without a `deletedAt` property, but later updated to include the `deletedAt` property then monstache will remove, or drop, the
 previously indexed document from the elasticsearch index. 
 
 !!! note
-	You can return `doc` above instead of returning `true` and get the same result, however, it's a slight performance gain
-	to simply return `true` when not changing the document because you are not copying data in that case.
+    Dropping a document is different that filtering a document.  A filtered document is completely ignored.  A dropped document results in a delete request being issued to Elasticsearch in case the document had previously been indexed.
+
+#### Scripting Features 
 
 You may have noticed that in the first example above the exported mapping function closes over a var named `counter`.  You can
 use closures to maintain state between invocations of your mapping function.

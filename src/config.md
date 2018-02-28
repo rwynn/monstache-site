@@ -528,6 +528,33 @@ When cluster-name is given monstache will enter a high availablity mode. Process
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
 one of the processes in paused state will take control and start syncing.  See the section [high availability](/advanced#high-availability) for more information.
 
+## filter
+
+[] array of TOML table (default nil)
+
+When filter is given monstache will pass the mongodb document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
+
+!!! note ""
+
+	#### namespace
+
+	string (default "")
+
+	The MongoDB namespace, db.collection, to apply the script to
+
+	#### script
+
+	string (default "")
+
+	An inline script.  You can use TOML multiline syntax here
+
+	#### path
+
+	string (default "")
+
+	The file path to load a script from.  Use this or an inline script but not both. Can be a
+    path relative to the directory monstache is executed from or an absolute path.
+
 ## script
 
 [] array of TOML table (default nil)
@@ -542,6 +569,12 @@ for more information.
 	string (default "")
 
 	The MongoDB namespace, db.collection, to apply the script to
+
+	#### routing
+
+	boolean (default false)
+
+	Set routing to true if you override the routing or parent metadata
 
 	#### script
 

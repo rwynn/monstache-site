@@ -360,6 +360,12 @@ use the go command to build a .so file for your plugin, and finally pass the pat
 <pre><code class="go">func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
 </code></pre>
 
+<ul>
+<li>optionally implement a function named <code>Filter</code> with the following signature</li>
+</ul>
+<pre><code class="go">func Filter(input *monstachemap.MapperPluginInput) (keep bool, err error)
+</code></pre>
+
 <p>plugins can be compiled using</p>
 <pre><code>go build -buildmode=plugin -o myplugin.so myplugin.go
 </code></pre>
@@ -400,6 +406,7 @@ correctly.</p>
 </div>
 <p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
+<p>When you implement a <code>Filter</code> function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting <code>output.Drop</code> from the mapping function because when you set <code>output.Drop</code> to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the <code>Filter</code> function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.</p>
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link"></a></h3>
 <h4 id="transformation">Transformation<a class="headerlink" href="#transformation" title="Permanent link"></a></h4>
 <p>Monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
@@ -431,6 +438,21 @@ manipulate the document to drop fields, add fields, or augment the existing fiel
 <p>When the return value from the mapping function is an <code>object</code> then that mapped object is what actually gets indexed in elasticsearch.
 For these purposes an object is a javascript non-primitive, excluding <code>Function</code>, <code>Array</code>, <code>String</code>, <code>Number</code>, <code>Boolean</code>, <code>Date</code>, <code>Error</code> and <code>RegExp</code>.</p>
 <h4 id="filtering">Filtering<a class="headerlink" href="#filtering" title="Permanent link"></a></h4>
+<p>You can completely ignore documents by adding filter configurations to your TOML config file.  The filter functions are executing immediately after inserts or updates are read from the oplog.  The correspding document is passed into the function and you can return true or false to include or ignore the document.</p>
+<pre><code class="toml">[[filter]]
+namespace = &quot;db.collection&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc) {
+    return !!doc.interesting;
+}
+&quot;&quot;&quot;
+
+[[filter]]
+namespace = &quot;db2.collection2&quot;
+path = &quot;path/to/script.js&quot;
+</code></pre>
+
+<h4 id="dropping">Dropping<a class="headerlink" href="#dropping" title="Permanent link"></a></h4>
 <p>If the return value from the mapping function is not an <code>object</code> per the definition above then the result is converted into a <code>boolean</code>
 and if the boolean value is <code>false</code> then that indicates to monstache that you would not like to index the document. If the boolean value is <code>true</code> then
 the original document from mongodb gets indexed in elasticsearch.</p>
@@ -448,13 +470,13 @@ module.exports = function(doc) {
 </code></pre>
 
 <p>In the above example monstache will index any document except the ones with a <code>deletedAt</code> property.  If the document is first
-inserted without a <code>deletedAt</code> property, but later updated to include the <code>deletedAt</code> property then monstache will remove the
+inserted without a <code>deletedAt</code> property, but later updated to include the <code>deletedAt</code> property then monstache will remove, or drop, the
 previously indexed document from the elasticsearch index. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can return <code>doc</code> above instead of returning <code>true</code> and get the same result, however, it's a slight performance gain
-to simply return <code>true</code> when not changing the document because you are not copying data in that case.</p>
+<p>Dropping a document is different that filtering a document.  A filtered document is completely ignored.  A dropped document results in a delete request being issued to Elasticsearch in case the document had previously been indexed.</p>
 </div>
+<h4 id="scripting-features">Scripting Features<a class="headerlink" href="#scripting-features" title="Permanent link"></a></h4>
 <p>You may have noticed that in the first example above the exported mapping function closes over a var named <code>counter</code>.  You can
 use closures to maintain state between invocations of your mapping function.</p>
 <p>Finally, since Otto makes it so easy, the venerable <a href="http://underscorejs.org/">Underscore</a> library is included for you at 

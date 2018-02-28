@@ -81,6 +81,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.2.0](https://github.com/rwynn/monstache/releases/tag/v4.2.0)
+
+* Add filtering to Javascript and Golang plugins. Filtered documents are completely
+  ignored while dropped documents result in a delete request.
+
+### [monstache v3.9.0](https://github.com/rwynn/monstache/releases/tag/v3.9.0)
+
+* Add filtering to Javascript and Golang plugins. Filtered documents are completely
+  ignored while dropped documents result in a delete request.
+
 ### [monstache v4.1.2](https://github.com/rwynn/monstache/releases/tag/v4.1.2)
 
 * Fix custom routing for golang plugins
