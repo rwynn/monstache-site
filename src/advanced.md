@@ -1005,6 +1005,21 @@ With the configuration above monstache will notify systemd when it has started s
 systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
 to restart monstache if it does not start or respond within the WatchdDog interval.
 
+## Docker
+
+There are Docker images available for Monstache on [Docker Hub](https://hub.docker.com/r/rwynn/monstache/tags/)
+
+These images are based on Alpine to keep the size down.  The monstache executables built for these images
+are built with `CGO=0`.  Check the Makefile for Monstache on Github for details.
+
+You can pull and run these images with
+
+```
+docker run rwynn/monstache:4.2.0
+
+docker run rwynn/monstache:3.9.0
+```
+
 ## HTTP Server
 
 Monstache has a built in HTTP server that you can enable with --enable-http-server. It

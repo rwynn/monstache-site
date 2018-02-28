@@ -111,6 +111,7 @@
             <li><a href="#time-machines">Time Machines</a></li>
             <li><a href="#merge-patches">Merge Patches</a></li>
             <li><a href="#systemd">Systemd</a></li>
+            <li><a href="#docker">Docker</a></li>
             <li><a href="#http-server">HTTP Server</a></li>
     </ul>
 </div></div>
@@ -946,6 +947,16 @@ all unit files. </p>
 <p>With the configuration above monstache will notify systemd when it has started successfully and then notify 
 systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
 to restart monstache if it does not start or respond within the WatchdDog interval.</p>
+<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link"></a></h2>
+<p>There are Docker images available for Monstache on <a href="https://hub.docker.com/r/rwynn/monstache/tags/">Docker Hub</a></p>
+<p>These images are based on Alpine to keep the size down.  The monstache executables built for these images
+are built with <code>CGO=0</code>.  Check the Makefile for Monstache on Github for details.</p>
+<p>You can pull and run these images with</p>
+<pre><code>docker run rwynn/monstache:4.2.0
+
+docker run rwynn/monstache:3.9.0
+</code></pre>
+
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
 <p>Monstache has a built in HTTP server that you can enable with --enable-http-server. It
 listens on :8080 by default but you can change this with --http-server-addr.</p>
