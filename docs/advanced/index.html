@@ -952,9 +952,9 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 <p>These images are based on Alpine to keep the size down.  The monstache executables built for these images
 are built with <code>CGO=0</code>.  Check the Makefile for Monstache on Github for details.</p>
 <p>You can pull and run these images with</p>
-<pre><code>docker run rwynn/monstache:4.2.0
+<pre><code>docker run rwynn/monstache:4.2.0 -v
 
-docker run rwynn/monstache:3.9.0
+docker run rwynn/monstache:3.9.0 -v
 </code></pre>
 
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>

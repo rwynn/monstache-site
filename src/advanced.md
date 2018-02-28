@@ -1015,9 +1015,9 @@ are built with `CGO=0`.  Check the Makefile for Monstache on Github for details.
 You can pull and run these images with
 
 ```
-docker run rwynn/monstache:4.2.0
+docker run rwynn/monstache:4.2.0 -v
 
-docker run rwynn/monstache:3.9.0
+docker run rwynn/monstache:3.9.0 -v
 ```
 
 ## HTTP Server
