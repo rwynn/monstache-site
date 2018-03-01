@@ -1009,8 +1009,8 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 
 There are Docker images available for Monstache on [Docker Hub](https://hub.docker.com/r/rwynn/monstache/tags/)
 
-These images are based on Alpine to keep the size down.  The monstache executables built for these images
-are built with `CGO=0`.  Check the Makefile for Monstache on Github for details.
+The first set of images are based on Alpine to keep the size down.  The monstache executables built for these images
+are statically linked with `CGO=0`.  Check the Monstache Makefile on Github for details.
 
 You can pull and run these images with
 
@@ -1018,6 +1018,15 @@ You can pull and run these images with
 docker run rwynn/monstache:4.2.0 -v
 
 docker run rwynn/monstache:3.9.0 -v
+```
+
+If you use the golang plugin feature of Monstache, you should instead use the larger Debian based images. The go
+implementation of plugins does not work with statically linked executables.
+
+```
+docker run rwynn/monstache:4.2.0.cgo -v
+
+docker run rwynn/monstache:3.9.0.cgo -v
 ```
 
 ## HTTP Server

@@ -949,12 +949,19 @@ systemd repeatedly at half the WatchDog interval to signal liveness.  The config
 to restart monstache if it does not start or respond within the WatchdDog interval.</p>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link"></a></h2>
 <p>There are Docker images available for Monstache on <a href="https://hub.docker.com/r/rwynn/monstache/tags/">Docker Hub</a></p>
-<p>These images are based on Alpine to keep the size down.  The monstache executables built for these images
-are built with <code>CGO=0</code>.  Check the Makefile for Monstache on Github for details.</p>
+<p>The first set of images are based on Alpine to keep the size down.  The monstache executables built for these images
+are statically linked with <code>CGO=0</code>.  Check the Monstache Makefile on Github for details.</p>
 <p>You can pull and run these images with</p>
 <pre><code>docker run rwynn/monstache:4.2.0 -v
 
 docker run rwynn/monstache:3.9.0 -v
+</code></pre>
+
+<p>If you use the golang plugin feature of Monstache, you should instead use the larger Debian based images. The go
+implementation of plugins does not work with statically linked executables.</p>
+<pre><code>docker run rwynn/monstache:4.2.0.cgo -v
+
+docker run rwynn/monstache:3.9.0.cgo -v
 </code></pre>
 
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
