@@ -294,6 +294,7 @@ use the go command to build a .so file for your plugin, and finally pass the pat
 
 To create a golang plugin for monstache
 
+- get the necessary dependencies with `go get -u github.com/rwynn/monstache/monstachemap`
 - create a .go source file that belongs to the package `main`
 - import `github.com/rwynn/monstache/monstachemap`
 - implement a function named `Map` with the following signature
@@ -1027,6 +1028,12 @@ implementation of plugins does not work with statically linked executables.
 docker run rwynn/monstache:4.2.0.cgo -v
 
 docker run rwynn/monstache:3.9.0.cgo -v
+```
+
+For example, to run monstache via Docker with a golang plugin that resides at ~/plugin/plugin.so on the host you can use a bind mount
+
+```
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.2.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
 ```
 
 ## HTTP Server

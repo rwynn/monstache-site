@@ -354,6 +354,7 @@ require Go version 1.8 or greater on Linux. currently, you are able to use Javas
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.</p>
 <p>To create a golang plugin for monstache</p>
 <ul>
+<li>get the necessary dependencies with <code>go get -u github.com/rwynn/monstache/monstachemap</code></li>
 <li>create a .go source file that belongs to the package <code>main</code></li>
 <li>import <code>github.com/rwynn/monstache/monstachemap</code></li>
 <li>implement a function named <code>Map</code> with the following signature</li>
@@ -962,6 +963,10 @@ implementation of plugins does not work with statically linked executables.</p>
 <pre><code>docker run rwynn/monstache:4.2.0.cgo -v
 
 docker run rwynn/monstache:3.9.0.cgo -v
+</code></pre>
+
+<p>For example, to run monstache via Docker with a golang plugin that resides at ~/plugin/plugin.so on the host you can use a bind mount</p>
+<pre><code>docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.2.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
 </code></pre>
 
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
