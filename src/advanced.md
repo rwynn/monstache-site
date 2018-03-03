@@ -1030,10 +1030,12 @@ docker run rwynn/monstache:4.2.0.cgo -v
 docker run rwynn/monstache:3.9.0.cgo -v
 ```
 
-For example, to run monstache via Docker with a golang plugin that resides at ~/plugin/plugin.so on the host you can use a bind mount
+For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
+
 docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.2.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+
 ```
 
 ## HTTP Server

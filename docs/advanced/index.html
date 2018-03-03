@@ -965,8 +965,10 @@ implementation of plugins does not work with statically linked executables.</p>
 docker run rwynn/monstache:3.9.0.cgo -v
 </code></pre>
 
-<p>For example, to run monstache via Docker with a golang plugin that resides at ~/plugin/plugin.so on the host you can use a bind mount</p>
-<pre><code>docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.2.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+<p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
+<pre><code>
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.2.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+
 </code></pre>
 
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
