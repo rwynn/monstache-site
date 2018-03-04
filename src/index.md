@@ -15,6 +15,8 @@ Kibana visualizations and dashboards.
 
 - Single binary with a light footprint 
 
+- Pre built Docker containers
+
 - Optionally filter the set of collections to sync
 
 - Advanced support for sharded MongoDB clusters including auto-detection of new shards

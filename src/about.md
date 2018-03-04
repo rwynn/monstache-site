@@ -81,6 +81,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.2.1](https://github.com/rwynn/monstache/releases/tag/v4.2.1)
+
+* Ensure index names are lowercase 
+
+### [monstache v3.9.1](https://github.com/rwynn/monstache/releases/tag/v3.9.1)
+
+* Ensure index names are lowercase 
+
 ### [monstache v4.2.0](https://github.com/rwynn/monstache/releases/tag/v4.2.0)
 
 * Add filtering to Javascript and Golang plugins. Filtered documents are completely
