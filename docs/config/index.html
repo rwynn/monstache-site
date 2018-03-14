@@ -120,6 +120,7 @@
             <li><a href="#routing-namespaces">routing-namespaces</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
+            <li><a href="#direct-read-cursors">direct-read-cursors</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
             <li><a href="#namespace-regex">namespace-regex</a></li>
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
@@ -289,6 +290,17 @@ phase has completed if you decide to temporarily turn off refresh, otherwise you
 <h2 id="direct-read-batch-size">direct-read-batch-size<a class="headerlink" href="#direct-read-batch-size" title="Permanent link"></a></h2>
 <p>int (default 500)</p>
 <p>The batch size to set on direct read queries</p>
+<h2 id="direct-read-cursors">direct-read-cursors<a class="headerlink" href="#direct-read-cursors" title="Permanent link"></a></h2>
+<p>int (default 10)</p>
+<p>The number of cursors to <code>request</code> per collection for direct reads.  This setting is only applicable if your MongoDB storage
+engine supports returning more than 1 cursor from the <a href="https://docs.mongodb.com/manual/reference/command/parallelCollectionScan/">Parallel Collection Scan</a>
+command.  Currently, only the <code>mmapv1</code> storage engine supports multiple cursors. If and when the <code>WiredTiger</code> storage engine supports
+multiple cursors, monstache will begin to use those cursors without an upgrade. The number of cursors returned by MongoDB may be less
+than the requested amount.</p>
+<p>Each cursor returned is read from in a separate go routine to increase throughput.  </p>
+<p>Monstache will only attempt parallel collection scans for MongoDB servers version 2.6 or greater.  When monstache detects that the server
+does not support the feature or the number of cursors returned is 1, monstache will revert to using a single go routine per collection for
+direct reads.</p>
 <h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want

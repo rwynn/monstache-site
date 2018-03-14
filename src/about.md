@@ -81,6 +81,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.3.0](https://github.com/rwynn/monstache/releases/tag/v4.3.0)
+
+* Upgrade gtm to pick up support for parallel collection scan on direct reads if your mongodb storage engine supports it
+* Add config option to specify the number of cursors to request for parallel collection scans
+* Allow mappings to specify overrides for 1 of `index` and `type` instead of requiring both
+* Fix an issue where filters were not being applied to document updates
+
+### [monstache v3.10.0](https://github.com/rwynn/monstache/releases/tag/v3.10.0)
+
+* Upgrade gtm to pick up support for parallel collection scan on direct reads if your mongodb storage engine supports it
+* Add config option to specify the number of cursors to request for parallel collection scans
+* Allow mappings to specify overrides for 1 of `index` and `type` instead of requiring both
+* Fix an issue where filters were not being applied to document updates
+
 ### [monstache v4.2.1](https://github.com/rwynn/monstache/releases/tag/v4.2.1)
 
 * Ensure index names are lowercase 

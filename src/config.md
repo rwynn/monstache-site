@@ -196,6 +196,22 @@ int (default 500)
 
 The batch size to set on direct read queries
 
+## direct-read-cursors
+
+int (default 10)
+
+The number of cursors to `request` per collection for direct reads.  This setting is only applicable if your MongoDB storage
+engine supports returning more than 1 cursor from the [Parallel Collection Scan](https://docs.mongodb.com/manual/reference/command/parallelCollectionScan/)
+command.  Currently, only the `mmapv1` storage engine supports multiple cursors. If and when the `WiredTiger` storage engine supports
+multiple cursors, monstache will begin to use those cursors without an upgrade. The number of cursors returned by MongoDB may be less
+than the requested amount.
+
+Each cursor returned is read from in a separate go routine to increase throughput.  
+
+Monstache will only attempt parallel collection scans for MongoDB servers version 2.6 or greater.  When monstache detects that the server
+does not support the feature or the number of cursors returned is 1, monstache will revert to using a single go routine per collection for
+direct reads.
+
 ## exit-after-direct-reads
 
 boolean (default false)
