@@ -81,6 +81,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.3.1](https://github.com/rwynn/monstache/releases/tag/v4.3.1)
+
+* Upgrade gtm to pick up fix for parallel collection scans on direct reads. Each cursor now gets its own connection.
+
+### [monstache v3.10.1](https://github.com/rwynn/monstache/releases/tag/v3.10.1)
+
+* Upgrade gtm to pick up fix for parallel collection scans on direct reads. Each cursor now gets its own connection.
+
 ### [monstache v4.3.0](https://github.com/rwynn/monstache/releases/tag/v4.3.0)
 
 * Upgrade gtm to pick up support for parallel collection scan on direct reads if your mongodb storage engine supports it
