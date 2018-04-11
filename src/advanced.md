@@ -367,7 +367,8 @@ When you implement a `Filter` function the function is called immediately after 
 #### Transformation
 
 Monstache uses the amazing [otto](https://github.com/robertkrimen/otto) library to provide transformation at the document field
-level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  You can also associate a function 
+at the global level by not specifying a namespace.  These javascript functions are
 added to your TOML config file, for example:
 	
 ```toml
@@ -378,17 +379,29 @@ var counter = 1;
 module.exports = function(doc) {
 	doc.foo += "test" + counter;
 	counter++;
-	return _.omit(doc, "password", "secret");
+	return doc;
 }
 """
 
 [[script]]
 namespace = "anotherdb.anothercollection"
 path = "path/to/transform.js"
+
+[[script]]
+# this script does not declare a namespace
+# it is global to all collections
+script = """
+module.exports = function(doc, ns) {
+	// the doc namespace e.g. test.test is passed as the 2nd arg
+	return _.omit(doc, "password", "secret");
+}
+"""
 ```
 
-The example TOML above configures 2 scripts. The first is applied to `mycollection` in `mydb` while the second is applied
+The example TOML above configures 3 scripts. The first is applied to `mycollection` in `mydb` while the second is applied
 to `anothercollection` in `anotherdb`. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.
+The last script does not specify a namespace, so documents from all collections pass through it. Global scripts are run before scripts which are
+linked to a specific namespace.  
 
 You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 `script`.  The javascript assigned to script must assign a function to the exports property of the `module` object.  This 

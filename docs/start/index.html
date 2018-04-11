@@ -115,7 +115,7 @@
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.3.1
+# 4.3.2
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
@@ -160,21 +160,28 @@ monstache with an explicit configuration by passing the -f flag.</p>
 <pre><code class="sh">monstache -f /path/to/config.toml
 </code></pre>
 
-<p>A sample configuration looks like this:</p>
-<pre><code># compress requests to Elasticsearch
+<p>The following shows how to specify options in a TOML config file.  It is recommended that you start with only your MongoDB
+and Elasticsearch connection settings and only specify additional options as needed. </p>
+<pre><code># connection settings
+
+# connect to MongoDB using the following URL
+mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
+# connect to the Elasticsearch REST API at the following URLs
+elasticsearch-urls = [&quot;https://example:9200&quot;]
+
+
+# additional settings
+
+# compress requests to Elasticsearch
 gzip = true
 # generate indexing statistics
 stats = true
 # index statistics into Elasticsearch
 index-stats = true
-# connect to MongoDB using the following URL
-mongo-url = &quot;mongodb://someuser:password@localhost:40001&quot;
 # use the following PEM file for connections to MongoDB
 mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
 # disable PEM validation
 mongo-validate-pem-file = false
-# connect to the Elasticsearch REST API at the following URLs
-elasticsearch-urls = [&quot;https://example:9200&quot;]
 # use the following user name for Elasticsearch basic auth
 elasticsearch-user = &quot;someuser&quot;
 # use the following password for Elasticsearch basic auth

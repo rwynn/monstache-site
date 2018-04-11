@@ -15,7 +15,7 @@ Kibana visualizations and dashboards.
 
 - Single binary with a light footprint 
 
-- Pre built Docker containers
+- Pre built Docker [containers](https://hub.docker.com/r/rwynn/monstache/tags/)
 
 - Optionally filter the set of collections to sync
 

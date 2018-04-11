@@ -414,7 +414,8 @@ before indexing, you can access the <code>*mgo.Session</code> pointer as <code>i
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link"></a></h3>
 <h4 id="transformation">Transformation<a class="headerlink" href="#transformation" title="Permanent link"></a></h4>
 <p>Monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
-level in Javascript.  You can associate one javascript mapping function per mongodb collection.  These javascript functions are
+level in Javascript.  You can associate one javascript mapping function per mongodb collection.  You can also associate a function 
+at the global level by not specifying a namespace.  These javascript functions are
 added to your TOML config file, for example:</p>
 <pre><code class="toml">[[script]]
 namespace = &quot;mydb.mycollection&quot;
@@ -423,17 +424,29 @@ var counter = 1;
 module.exports = function(doc) {
     doc.foo += &quot;test&quot; + counter;
     counter++;
-    return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
+    return doc;
 }
 &quot;&quot;&quot;
 
 [[script]]
 namespace = &quot;anotherdb.anothercollection&quot;
 path = &quot;path/to/transform.js&quot;
+
+[[script]]
+# this script does not declare a namespace
+# it is global to all collections
+script = &quot;&quot;&quot;
+module.exports = function(doc, ns) {
+    // the doc namespace e.g. test.test is passed as the 2nd arg
+    return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
+}
+&quot;&quot;&quot;
 </code></pre>
 
-<p>The example TOML above configures 2 scripts. The first is applied to <code>mycollection</code> in <code>mydb</code> while the second is applied
-to <code>anothercollection</code> in <code>anotherdb</code>. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.</p>
+<p>The example TOML above configures 3 scripts. The first is applied to <code>mycollection</code> in <code>mydb</code> while the second is applied
+to <code>anothercollection</code> in <code>anotherdb</code>. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.
+The last script does not specify a namespace, so documents from all collections pass through it. Global scripts are run before scripts which are
+linked to a specific namespace.  </p>
 <p>You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 <code>script</code>.  The javascript assigned to script must assign a function to the exports property of the <code>module</code> object.  This 
 function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can

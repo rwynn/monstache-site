@@ -16,7 +16,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.3.1
+# 4.3.2
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -76,23 +76,30 @@ monstache with an explicit configuration by passing the -f flag.
 monstache -f /path/to/config.toml
 ```
 
-A sample configuration looks like this:
+The following shows how to specify options in a TOML config file.  It is recommended that you start with only your MongoDB
+and Elasticsearch connection settings and only specify additional options as needed. 
 
 ```
+# connection settings
+
+# connect to MongoDB using the following URL
+mongo-url = "mongodb://someuser:password@localhost:40001"
+# connect to the Elasticsearch REST API at the following URLs
+elasticsearch-urls = ["https://example:9200"]
+
+
+# additional settings
+
 # compress requests to Elasticsearch
 gzip = true
 # generate indexing statistics
 stats = true
 # index statistics into Elasticsearch
 index-stats = true
-# connect to MongoDB using the following URL
-mongo-url = "mongodb://someuser:password@localhost:40001"
 # use the following PEM file for connections to MongoDB
 mongo-pem-file = "/path/to/mongoCert.pem"
 # disable PEM validation
 mongo-validate-pem-file = false
-# connect to the Elasticsearch REST API at the following URLs
-elasticsearch-urls = ["https://example:9200"]
 # use the following user name for Elasticsearch basic auth
 elasticsearch-user = "someuser"
 # use the following password for Elasticsearch basic auth
