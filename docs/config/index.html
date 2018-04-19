@@ -165,6 +165,7 @@
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
+            <li><a href="#delete-strategy">delete-strategy</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -516,7 +517,7 @@ for more information.</p>
 <p>The MongoDB namespace, db.collection, to apply the script to</p>
 <h4 id="routing">routing<a class="headerlink" href="#routing" title="Permanent link"></a></h4>
 <p>boolean (default false)</p>
-<p>Set routing to true if you override the routing or parent metadata</p>
+<p>Set routing to true if you override the index, routing or parent metadata via _meta_monstache</p>
 <h4 id="script_2">script<a class="headerlink" href="#script_2" title="Permanent link"></a></h4>
 <p>string (default "")</p>
 <p>An inline script.  You can use TOML multiline syntax here</p>
@@ -550,7 +551,12 @@ path relative to the directory monstache is executed from or an absolute path.</
 <p>Add this flag to enable an embedded HTTP server at localhost:8080</p>
 <h2 id="http-server-addr">http-server-addr<a class="headerlink" href="#http-server-addr" title="Permanent link"></a></h2>
 <p>string (default ":8080")</p>
-<p>The address to bind the embedded HTTP server on if enabled</p></div>
+<p>The address to bind the embedded HTTP server on if enabled</p>
+<h2 id="delete-strategy">delete-strategy<a class="headerlink" href="#delete-strategy" title="Permanent link"></a></h2>
+<p>int (default 0)</p>
+<p>The strategy to use for handling document deletes when custom indexing is done in scripts.  Strategy 0, the default, will do a term query by document
+id across all Elasticsearch indexes.  Stategy 1 will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to 
+locate and delete the document.   Stategy 2 will completely ignore document deletes in MongoDB.  </p></div>
         </div>
 
         <footer class="col-md-12">

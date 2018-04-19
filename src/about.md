@@ -81,6 +81,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0)
+
+* Updated the default delete strategy
+
+### [monstache v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0)
+
+* Updated the default delete strategy
+
 ### [monstache v4.3.2](https://github.com/rwynn/monstache/releases/tag/v4.3.2)
 
 * Allow specifying a script without a namespace. In this case documents from all collections will be run through the script. The document object will continue to be the 1st argument to the function and a new 2nd argument will be the namespace of the source document. Fixes #55.
