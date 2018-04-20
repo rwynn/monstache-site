@@ -118,6 +118,7 @@
             <li><a href="#time-machine-index-suffix">time-machine-index-suffix</a></li>
             <li><a href="#time-machine-direct-reads">time-machine-direct-reads</a></li>
             <li><a href="#routing-namespaces">routing-namespaces</a></li>
+            <li><a href="#delete-strategy">delete-strategy</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
             <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
             <li><a href="#direct-read-cursors">direct-read-cursors</a></li>
@@ -165,7 +166,6 @@
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
-            <li><a href="#delete-strategy">delete-strategy</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -274,6 +274,14 @@ and do not stop execution it's not unreasonable to set this to true to get a spe
 <p>[]string (default nil)</p>
 <p>You only need to set this configuration option if you use golang and javascript plugins are do custom routing: override parent or routing attributes. This array should be set to a list of all the namespaces that custom routing is done on. This ensures that deletes in MongoDB are routed correctly to 
 Elasticsearch.</p>
+<h2 id="delete-strategy">delete-strategy<a class="headerlink" href="#delete-strategy" title="Permanent link"></a></h2>
+<p>int (default 0)</p>
+<p>The strategy to use for handling document deletes when custom indexing is done in scripts.</p>
+<p>Breaking change in versions <a href="https://github.com/rwynn/monstache/releases/tag/v4.4.0">v4.4.0</a> &amp; <a href="https://github.com/rwynn/monstache/releases/tag/v3.11.0">v3.11.0</a> Monstache was saving routing foreach document in mongodb in a db called "monstache" collection "meta" using the same mongodb url and credentials provided in config by default</p>
+<p>But now this has changed to be stateless, you can read more: <a href="https://github.com/rwynn/monstache/issues/55#issuecomment-382055317">discussion</a> &amp; <a href="https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e">commit</a></p>
+<p>Strategy 0 -default- will do a term query by document id across all Elasticsearch indexes.</p>
+<p>Stategy 1 will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to locate and delete the document.</p>
+<p>Stategy 2 will completely ignore document deletes in MongoDB.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
 <p>[]string (default nil)</p>
 <p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
@@ -551,12 +559,7 @@ path relative to the directory monstache is executed from or an absolute path.</
 <p>Add this flag to enable an embedded HTTP server at localhost:8080</p>
 <h2 id="http-server-addr">http-server-addr<a class="headerlink" href="#http-server-addr" title="Permanent link"></a></h2>
 <p>string (default ":8080")</p>
-<p>The address to bind the embedded HTTP server on if enabled</p>
-<h2 id="delete-strategy">delete-strategy<a class="headerlink" href="#delete-strategy" title="Permanent link"></a></h2>
-<p>int (default 0)</p>
-<p>The strategy to use for handling document deletes when custom indexing is done in scripts.  Strategy 0, the default, will do a term query by document
-id across all Elasticsearch indexes.  Stategy 1 will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to 
-locate and delete the document.   Stategy 2 will completely ignore document deletes in MongoDB.  </p></div>
+<p>The address to bind the embedded HTTP server on if enabled</p></div>
         </div>
 
         <footer class="col-md-12">
