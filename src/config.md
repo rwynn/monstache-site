@@ -169,6 +169,22 @@ This setting controls whether or not direct reads are added to the time machine 
 You only need to set this configuration option if you use golang and javascript plugins are do custom routing: override parent or routing attributes. This array should be set to a list of all the namespaces that custom routing is done on. This ensures that deletes in MongoDB are routed correctly to 
 Elasticsearch.
 
+## delete-strategy
+
+int (default 0)
+
+The strategy to use for handling document deletes when custom indexing is done in scripts.
+
+Breaking change in versions [v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0) & [v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0) Monstache was saving routing foreach document in mongodb in a db called "monstache" collection "meta" using the same mongodb url and credentials provided in config by default
+
+But now this has changed to be stateless, you can read more: [discussion](https://github.com/rwynn/monstache/issues/55#issuecomment-382055317) & [commit](https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e)
+
+Strategy 0 -default- will do a term query by document id across all Elasticsearch indexes.
+
+Stategy 1 will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to locate and delete the document.
+
+Stategy 2 will completely ignore document deletes in MongoDB.
+
 ## direct-read-namespaces
 
 []string (default nil)
@@ -654,12 +670,3 @@ Add this flag to enable an embedded HTTP server at localhost:8080
 string (default ":8080")
 
 The address to bind the embedded HTTP server on if enabled
-
-## delete-strategy
-
-int (default 0)
-
-The strategy to use for handling document deletes when custom indexing is done in scripts.  Strategy 0, the default, will do a term query by document
-id across all Elasticsearch indexes.  Stategy 1 will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to 
-locate and delete the document.   Stategy 2 will completely ignore document deletes in MongoDB.  
-
