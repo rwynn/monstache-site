@@ -402,7 +402,7 @@ module.exports = function(doc, ns) {
 The example TOML above configures 3 scripts. The first is applied to `mycollection` in `mydb` while the second is applied
 to `anothercollection` in `anotherdb`. The first script is inlined while the second is loaded from a file path.  The path can be absolute or relative to the directory monstache is executed from.
 The last script does not specify a namespace, so documents from all collections pass through it. Global scripts are run before scripts which are
-linked to a specific namespace.  
+linked to a specific namespace.
 
 You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 `script`.  The javascript assigned to script must assign a function to the exports property of the `module` object.  This 
@@ -556,7 +556,7 @@ You can override the indexing metadata for an individual document by setting a s
 `_meta_monstache` on the document you return from your Javascript function.
 
 Assume there is a collection in MongoDB named `company` in the `test` database.
-The documents in this collection look like either 
+The documents in this collection look like either
 
 ```
 { "_id": "london", "type": "branch", "name": "London Westminster", "city": "London", "country": "UK" }
@@ -567,15 +567,16 @@ or
 ```
 
 Given the above the following snippet sets up a parent-child relationship in Elasticsearch based on the
-incoming documents from MongoDB.
+incoming documents from MongoDB and updates the ns (namespace) from test.company to company in elasticsearch
 
 ```
 [[script]]
 namespace = "test.company"
 routing = true
 script = """
-module.exports = function(doc) {
-    var meta = { type: doc.type, index: 'company' };
+module.exports = function(doc, ns) {
+		// var meta = { type: doc.type, index: 'company' };
+    var meta = { type: doc.type, index: ns.split(".")[1] };
     if (doc.type === "employee") {
         meta.parent = doc.branch;
     }
@@ -586,15 +587,17 @@ module.exports = function(doc) {
 ```
 
 The snippet above will route these documents to the `company` index in Elasticsearch instead of the
-default of `test.company`.  Also, instead of using `company` as the Elasticsearch type, the type
+default of `test.company`, if you didn't specify a namespace, it'll route all documents to indexes named as the collection only without the database _db_._collection_ (mongodb) => _collection_ (elasticsearch).  Also, instead of using `company` as the Elasticsearch type, the type
 attribute from the document will be used as the Elasticsearch type.  Finally, if the type is
-employee then the document will be indexed as a child of the branch the person belongs to.  
+employee then the document will be indexed as a child of the branch the person belongs to.
 
 We can throw away the type and branch information by deleting it from the document before returning
 since the type information will be stored in Elasticsearch under `_type` and the branch information
 will be stored under `_parent`.
 
 The example is based on the Elasticsearch docs for [parent-child](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html)
+
+More on updating the namespace name, check the [Delete Strategy](/config/#delete-strategy) and there is a change of the default behviour in v4.4.0 & v3.11.0
 
 ## Routing
 
