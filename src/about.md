@@ -85,9 +85,13 @@ most likely need to have tests and documentation if it is a new feature.
 
 * Updated the default delete strategy
 
+* Breaking change: check [delete-strategy](/config/#delete-strategy)
+
 ### [monstache v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0)
 
 * Updated the default delete strategy
+
+* Breaking change: check [delete-strategy](/config/#delete-strategy)
 
 ### [monstache v4.3.2](https://github.com/rwynn/monstache/releases/tag/v4.3.2)
 
