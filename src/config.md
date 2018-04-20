@@ -590,7 +590,7 @@ for more information.
 
 	boolean (default false)
 
-	Set routing to true if you override the routing or parent metadata
+	Set routing to true if you override the index, routing or parent metadata via _meta_monstache
 
 	#### script
 
@@ -654,4 +654,12 @@ Add this flag to enable an embedded HTTP server at localhost:8080
 string (default ":8080")
 
 The address to bind the embedded HTTP server on if enabled
+
+## delete-strategy
+
+int (default 0)
+
+The strategy to use for handling document deletes when custom indexing is done in scripts.  Strategy 0, the default, will do a term query by document
+id across all Elasticsearch indexes.  Stategy 1 will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to 
+locate and delete the document.   Stategy 2 will completely ignore document deletes in MongoDB.  
 
