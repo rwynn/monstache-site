@@ -5,6 +5,8 @@
 Configuration can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
 Program arguments take precedance over configuration specified in the TOML config file.
 
+Note: Please keep any simple -one line config- above any [[script]] or toml table configs, as [`there is a bug in the toml parser where if you have definitions below a TOML table, e.g. a [[script]] then the parser thinks that lines below that belong to the table instead of at the global level`](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381)
+
 ## print-config
 
 boolean (default false)
