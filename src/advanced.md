@@ -1053,6 +1053,14 @@ docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.3.1.cgo -ma
 
 ```
 
+Shells & Binaries:
+
+Images ending with `.cgo` like: `rwynn/monstache:4.4.0.cgo` have both: `sh` & `bash` shells, but don't have `wget` or `curl` binaries
+
+Images with just the version number like: `rwynn/monstache:4.4.0` have only `sh` shell and `wget` binary
+
+This information might be useful if you `exec` in the container or use `healthcheck`
+
 ## HTTP Server
 
 Monstache has a built in HTTP server that you can enable with --enable-http-server. It
