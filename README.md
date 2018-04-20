@@ -1,4 +1,10 @@
-# Monstache
+# Monstache Docs
+
+This is [Monstache](https://github.com/rwynn/monstache) documentation source-code
+
+For better readability, check the [`Hosted GitHub Page`](https://rwynn.github.io/monstache-site/): [https://rwynn.github.io/monstache-site](https://rwynn.github.io/monstache-site/)
+
+## Introduction
 
 Sync MongoDB to Elasticsearch in realtime
 
@@ -43,8 +49,6 @@ Monstache is a sync daemon written in Go that continously indexes your MongoDB c
 - See Getting Started for instructions how to get it up and running.
 
 ## Links
-
-[Docs](https://rwynn.github.io/monstache-site/)
 
 [About](https://rwynn.github.io/monstache-site/about/)
 
