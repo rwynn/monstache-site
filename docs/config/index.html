@@ -174,6 +174,10 @@
 <hr />
 <p>Configuration can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
 Program arguments take precedance over configuration specified in the TOML config file.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please keep any simple -one line config- above any <code>[[script]]</code> or toml table configs, as <a href="https://github.com/rwynn/monstache/issues/58#issuecomment-381275381"><code>there is a bug</code></a> in the toml parser where if you have definitions below a TOML table, e.g. a <code>[[script]]</code> then the parser thinks that lines below that belong to the table instead of at the global level</p>
+</div>
 <h2 id="print-config">print-config<a class="headerlink" href="#print-config" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>When print-config is true monstache will print its configuration and then exit</p>
@@ -277,11 +281,16 @@ Elasticsearch.</p>
 <h2 id="delete-strategy">delete-strategy<a class="headerlink" href="#delete-strategy" title="Permanent link"></a></h2>
 <p>int (default 0)</p>
 <p>The strategy to use for handling document deletes when custom indexing is done in scripts.</p>
-<p>Breaking change in versions <a href="https://github.com/rwynn/monstache/releases/tag/v4.4.0">v4.4.0</a> &amp; <a href="https://github.com/rwynn/monstache/releases/tag/v3.11.0">v3.11.0</a> Monstache was saving routing foreach document in mongodb in a db called "monstache" collection "meta" using the same mongodb url and credentials provided in config by default</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Breaking change in versions <a href="https://github.com/rwynn/monstache/releases/tag/v4.4.0">v4.4.0</a> &amp; <a href="https://github.com/rwynn/monstache/releases/tag/v3.11.0">v3.11.0</a>. Monstache was saving routing foreach document in mongodb in a db called <code>monstache</code> collection <code>meta</code> using the same mongodb URL and credentials provided in config by default.
+Monstache was only saving this information if the document metadata was being altered via <code>_monstache_meta</code> in a script or via the API in a golang plugin.  Monstache needed to save this information in order to locate and perform deletes in Elasticsearch if the corresponding document was deleted in MongoDB.
+If you want to maintain this stategy use value 1.  Otherwise, you can drop the <code>monstache.meta</code> collection as this is no longer used by default.</p>
+</div>
 <p>But now this has changed to be stateless, you can read more: <a href="https://github.com/rwynn/monstache/issues/55#issuecomment-382055317">discussion</a> &amp; <a href="https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e">commit</a></p>
-<p>Strategy 0 -default- will do a term query by document id across all Elasticsearch indexes.</p>
-<p>Stategy 1 will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to locate and delete the document.</p>
-<p>Stategy 2 will completely ignore document deletes in MongoDB.</p>
+<p><strong>Strategy 0</strong> -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.</p>
+<p><strong>Stategy 1</strong> will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to locate and delete the document.</p>
+<p><strong>Stategy 2</strong> will completely ignore document deletes in MongoDB.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
 <p>[]string (default nil)</p>
 <p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.

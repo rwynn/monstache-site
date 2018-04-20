@@ -5,7 +5,8 @@
 Configuration can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
 Program arguments take precedance over configuration specified in the TOML config file.
 
-Note: Please keep any simple -one line config- above any [[script]] or toml table configs, as [`there is a bug in the toml parser where if you have definitions below a TOML table, e.g. a [[script]] then the parser thinks that lines below that belong to the table instead of at the global level`](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381)
+!!! warning
+	Please keep any simple -one line config- above any `[[script]]` or toml table configs, as [`there is a bug`](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381) in the toml parser where if you have definitions below a TOML table, e.g. a `[[script]]` then the parser thinks that lines below that belong to the table instead of at the global level
 
 ## print-config
 
@@ -177,15 +178,18 @@ int (default 0)
 
 The strategy to use for handling document deletes when custom indexing is done in scripts.
 
-Breaking change in versions [v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0) & [v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0) Monstache was saving routing foreach document in mongodb in a db called "monstache" collection "meta" using the same mongodb url and credentials provided in config by default
+!!! warning
+	Breaking change in versions [v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0) & [v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0). Monstache was saving routing foreach document in mongodb in a db called `monstache` collection `meta` using the same mongodb URL and credentials provided in config by default.
+	Monstache was only saving this information if the document metadata was being altered via `_monstache_meta` in a script or via the API in a golang plugin.  Monstache needed to save this information in order to locate and perform deletes in Elasticsearch if the corresponding document was deleted in MongoDB.
+	If you want to maintain this stategy use value 1.  Otherwise, you can drop the `monstache.meta` collection as this is no longer used by default.
 
 But now this has changed to be stateless, you can read more: [discussion](https://github.com/rwynn/monstache/issues/55#issuecomment-382055317) & [commit](https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e)
 
-Strategy 0 -default- will do a term query by document id across all Elasticsearch indexes.
+**Strategy 0** -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.
 
-Stategy 1 will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to locate and delete the document.
+**Stategy 1** will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to locate and delete the document.
 
-Stategy 2 will completely ignore document deletes in MongoDB.
+**Stategy 2** will completely ignore document deletes in MongoDB.
 
 ## direct-read-namespaces
 

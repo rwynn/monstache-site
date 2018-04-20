@@ -334,8 +334,8 @@ index in elasticsearch with the <code>type1</code> type.</p>
 see the sections <a href="#middleware">Middleware</a> and  <a href="#routing">Routing</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>It is not recommended to override the default type of <code>_doc</code> if using Elasticsearch 6.2*.  Using <code>_doc</code> as the type
-will not work with Elasticsearch prior to 6.2.</p>
+<p>It is not recommended to override the default type of <code>_doc</code> if using Elasticsearch 6.2+ since this will be the supported path going forward.
+Also, using <code>_doc</code> as the type will not work with Elasticsearch prior to 6.2.</p>
 </div>
 <p>Make sure that automatic index creation is not disabled in elasticsearch.yml or create your target indexes before using Monstache.</p>
 <p>If automatic index creation must be controlled, whitelist any indexes in elasticsearch.yml that monstache will create.</p>
@@ -969,7 +969,7 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link"></a></h2>
 <p>There are Docker images available for Monstache on <a href="https://hub.docker.com/r/rwynn/monstache/tags/">Docker Hub</a></p>
 <p>The first set of images are based on Alpine to keep the size down.  The monstache executables built for these images
-are statically linked with <code>CGO=0</code>.  Check the Monstache Makefile on Github for details.</p>
+are statically linked with <code>CGO=0</code>.  Check the Monstache <a href="https://github.com/rwynn/monstache/blob/master/Makefile">Makefile</a> on Github for details.</p>
 <p>You can pull and run these images with</p>
 <pre><code>docker run rwynn/monstache:4.4.0 -v
 
@@ -989,6 +989,10 @@ docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.4.0.cgo -ma
 
 </code></pre>
 
+<h4 id="shells-binaries">Shells &amp; Binaries<a class="headerlink" href="#shells-binaries" title="Permanent link"></a></h4>
+<p>Images ending with <code>.cgo</code> like: <code>rwynn/monstache:4.4.0.cgo</code> have both: <code>sh</code> &amp; <code>bash</code> shells, but don't have <code>wget</code> or <code>curl</code> binaries</p>
+<p>Images with just the version number like: <code>rwynn/monstache:4.4.0</code> have only <code>sh</code> shell and <code>wget</code> binary</p>
+<p>This information might be useful if you <code>exec</code> in the container or use <code>healthcheck</code></p>
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link"></a></h2>
 <p>Monstache has a built in HTTP server that you can enable with --enable-http-server. It
 listens on :8080 by default but you can change this with --http-server-addr.</p>

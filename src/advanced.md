@@ -263,8 +263,8 @@ If you need your index and type mapping to be more dynamic, such as based on val
 see the sections [Middleware](#middleware) and  [Routing](#routing).
 
 !!! warning
-	It is not recommended to override the default type of `_doc` if using Elasticsearch 6.2*.  Using `_doc` as the type
-	will not work with Elasticsearch prior to 6.2.
+	It is not recommended to override the default type of `_doc` if using Elasticsearch 6.2+ since this will be the supported path going forward.
+	Also, using `_doc` as the type will not work with Elasticsearch prior to 6.2.
 
 Make sure that automatic index creation is not disabled in elasticsearch.yml or create your target indexes before using Monstache.
 
@@ -1030,7 +1030,7 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 There are Docker images available for Monstache on [Docker Hub](https://hub.docker.com/r/rwynn/monstache/tags/)
 
 The first set of images are based on Alpine to keep the size down.  The monstache executables built for these images
-are statically linked with `CGO=0`.  Check the Monstache Makefile on Github for details.
+are statically linked with `CGO=0`.  Check the Monstache [Makefile](https://github.com/rwynn/monstache/blob/master/Makefile) on Github for details.
 
 You can pull and run these images with
 
@@ -1057,7 +1057,7 @@ docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.4.0.cgo -ma
 
 ```
 
-Shells & Binaries:
+#### Shells & Binaries
 
 Images ending with `.cgo` like: `rwynn/monstache:4.4.0.cgo` have both: `sh` & `bash` shells, but don't have `wget` or `curl` binaries
 
