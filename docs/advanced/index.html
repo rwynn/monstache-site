@@ -194,7 +194,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
     "fields": [ "file.content" ],
     "query": {
         "match": {
-            "_all": "golang"
+            "file.content": "golang"
         }
     }
 }'
@@ -204,7 +204,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
     "_source": [ "attachment.content" ],
     "query": {
         "match": {
-            "_all": "golang"
+            "attachment.content": "golang"
         }
     }
 }'

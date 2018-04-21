@@ -91,7 +91,7 @@ For Elasticsearch versions prior to version 5...
 		"fields": [ "file.content" ],
 		"query": {
 			"match": {
-				"_all": "golang"
+				"file.content": "golang"
 			}
 		}
 	}'
@@ -102,7 +102,7 @@ For Elasticsearch version 5 and above...
 		"_source": [ "attachment.content" ],
 		"query": {
 			"match": {
-				"_all": "golang"
+				"attachment.content": "golang"
 			}
 		}
 	}'
