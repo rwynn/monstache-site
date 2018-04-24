@@ -66,6 +66,14 @@ Normally, monstache just logs the error and continues processing events.
 If monstache has been configured with [elasticsearch-retry](#elasticsearch-retry) true, a failed request will be
 retried before being considered a failure.
 
+## prune-invalid-json
+
+boolean (default false)
+
+If you MongoDB data contains values like +Infinity, -Infinity, or NaN you will want to set this option to true.  The
+Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When this
+is set to true Monstache will drop those fields so that indexing errors do not occur.
+
 ## index-oplog-time
 
 boolean (default false)
@@ -191,6 +199,14 @@ But now this has changed to be stateless, you can read more: [discussion](https:
 
 **Stategy 2** will completely ignore document deletes in MongoDB.
 
+## delete-index-pattern
+
+string (default *)
+
+When using a stateless delete strategy, set this to a valid Elasticsearch index pattern to restrict the scope of possible indexes that a stateless delete
+will consider.  If monstache only indexes to index a, b, and c then you can set this to `a,b,c`.  If monstache only indexes to indexes starting with 
+mydb then you can set this to `mydb*`.  
+
 ## direct-read-namespaces
 
 []string (default nil)
@@ -202,6 +218,8 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 
 This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
 
+By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
+
 For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
 destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
 index basis by using the Index Settings or Index Template APIs.  For more information see [Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html).
@@ -210,29 +228,23 @@ By default, Elasticsearch refreshes every second.  You will want to increase thi
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.
 
-By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
+!!! note
+	To get the best througput possible on direct reads you will want to consider the indexes on your MongoDB collections. In the best case scenario, 
+	for very large collections, you will have an index on a field with a moderately low cardinality. For example, if you have 10 million documents 
+	in your collection and have a field named `category` that will have a value between 1 and 20, and you have an index of this field, then monstache 
+	will be able to perform an internal MongoDB admin command named `splitVector` on this key. The results of the split vector command will return 
+	all of the categories which exist in the collection up to 24 splits. Once monstache has the split points it is able to start splits+1 go routines
+	with range queries to consume the entire collection concurrently. 
 
-## direct-read-batch-size
+	When this is working you will notice the connection count increase substancially in mongostat. On the other hand, if you do not have an index 
+	which yields a high number splits, monstache will force a split and it will only be able to start 2 go routines to read your collection concurrently.
 
-int (default 500)
-
-The batch size to set on direct read queries
-
-## direct-read-cursors
-
-int (default 10)
-
-The number of cursors to `request` per collection for direct reads.  This setting is only applicable if your MongoDB storage
-engine supports returning more than 1 cursor from the [Parallel Collection Scan](https://docs.mongodb.com/manual/reference/command/parallelCollectionScan/)
-command.  Currently, only the `mmapv1` storage engine supports multiple cursors. If and when the `WiredTiger` storage engine supports
-multiple cursors, monstache will begin to use those cursors without an upgrade. The number of cursors returned by MongoDB may be less
-than the requested amount.
-
-Each cursor returned is read from in a separate go routine to increase throughput.  
-
-Monstache will only attempt parallel collection scans for MongoDB servers version 2.6 or greater.  When monstache detects that the server
-does not support the feature or the number of cursors returned is 1, monstache will revert to using a single go routine per collection for
-direct reads.
+	The user that monstache connects with will need to have `admin` access to perform the splitVector command. If the user does not have this access 
+	then monstache will use a traditional cursor read of each collection in a single go routine. This can be slow for collections on the 
+	order of millions of documents.
+	
+	Monstache previously supported the `parallelCollectionScan` command to get multiple read cursors on a collection. However, this command only worked on the `mmapv1` storage engine
+	and will be removed completely once the mmapv1 engine is retired. It looks like splitVector or something like it will be promoted in new versions on MongoDB.
 
 ## exit-after-direct-reads
 

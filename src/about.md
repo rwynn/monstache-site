@@ -81,6 +81,34 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.5.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0)
+
+* Adds an option `delete-index-pattern` to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
+  pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.
+* Adds the ability to specify a global filter function in Javascript.  Previously, a filter function needed to be tied to a MongoDB namespace.
+  Now you can leave off the namespace and the filter function will be applied to all namespaces.  The filter function will receive the document
+  as the first argument and the MongoDB namespace as the second argument.
+* Breaking change: `direct-read-cursors` and `direct-read-batch-size` have been removed as options.  The underlying gtm library of monstache has been
+  upgraded and no longer supports parallelCollectionScan which is being removed in future versions of MongoDB.  Now gtm will use splitVector to divy
+  up collections to read documents concurrently. Also, the batch size will be managed by MongoDB and not set explicitly.  See the gtm library docs for more information.
+* Adds a boolean configuration option, `prune-invalid-json`, which defaults to false.  Set this to true if your MongoDB data has values such as +Inf,
+  -Inf, or NaN which are not supported by the golang JSON parser and cause infinite error loops to occur.  With prune-invalid-json set to true Monstache
+  will remove these values before indexing into Elasticsearch to avoid these errors.
+
+### [monstache v3.12.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0)
+
+* Adds an option `delete-index-pattern` to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
+  pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.
+* Adds the ability to specify a global filter function in Javascript.  Previously, a filter function needed to be tied to a MongoDB namespace.
+  Now you can leave off the namespace and the filter function will be applied to all namespaces.  The filter function will receive the document
+  as the first argument and the MongoDB namespace as the second argument.
+* Breaking change: `direct-read-cursors` and `direct-read-batch-size` have been removed as options.  The underlying gtm library of monstache has been
+  upgraded and no longer supports parallelCollectionScan which is being removed in future versions of MongoDB.  Now gtm will use splitVector to divy
+  up collections to read documents concurrently. Also, the batch size will be managed by MongoDB and not set explicitly.  See the gtm library docs for more information.
+* Adds a boolean configuration option, `prune-invalid-json`, which defaults to false.  Set this to true if your MongoDB data has values such as +Inf,
+  -Inf, or NaN which are not supported by the golang JSON parser and cause infinite error loops to occur.  With prune-invalid-json set to true Monstache
+  will remove these values before indexing into Elasticsearch to avoid these errors.
+
 ### [monstache v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0)
 
 * Updated the default delete strategy

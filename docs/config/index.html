@@ -107,6 +107,7 @@
             <li><a href="#stats-index-format">stats-index-format</a></li>
             <li><a href="#gzip">gzip</a></li>
             <li><a href="#fail-fast">fail-fast</a></li>
+            <li><a href="#prune-invalid-json">prune-invalid-json</a></li>
             <li><a href="#index-oplog-time">index-oplog-time</a></li>
             <li><a href="#resume">resume</a></li>
             <li><a href="#resume-name">resume-name</a></li>
@@ -119,9 +120,8 @@
             <li><a href="#time-machine-direct-reads">time-machine-direct-reads</a></li>
             <li><a href="#routing-namespaces">routing-namespaces</a></li>
             <li><a href="#delete-strategy">delete-strategy</a></li>
+            <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
-            <li><a href="#direct-read-batch-size">direct-read-batch-size</a></li>
-            <li><a href="#direct-read-cursors">direct-read-cursors</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
             <li><a href="#namespace-regex">namespace-regex</a></li>
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
@@ -213,6 +213,11 @@ will log the request that produced the response as an ERROR and then exit immedi
 Normally, monstache just logs the error and continues processing events.</p>
 <p>If monstache has been configured with <a href="#elasticsearch-retry">elasticsearch-retry</a> true, a failed request will be
 retried before being considered a failure.</p>
+<h2 id="prune-invalid-json">prune-invalid-json<a class="headerlink" href="#prune-invalid-json" title="Permanent link"></a></h2>
+<p>boolean (default false)</p>
+<p>If you MongoDB data contains values like +Infinity, -Infinity, or NaN you will want to set this option to true.  The
+Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When this
+is set to true Monstache will drop those fields so that indexing errors do not occur.</p>
 <h2 id="index-oplog-time">index-oplog-time<a class="headerlink" href="#index-oplog-time" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>If this option is set to true monstache will include 2 automatic fields in the source document indexed into
@@ -291,6 +296,11 @@ If you want to maintain this stategy use value 1.  Otherwise, you can drop the <
 <p><strong>Strategy 0</strong> -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.</p>
 <p><strong>Stategy 1</strong> will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to locate and delete the document.</p>
 <p><strong>Stategy 2</strong> will completely ignore document deletes in MongoDB.</p>
+<h2 id="delete-index-pattern">delete-index-pattern<a class="headerlink" href="#delete-index-pattern" title="Permanent link"></a></h2>
+<p>string (default *)</p>
+<p>When using a stateless delete strategy, set this to a valid Elasticsearch index pattern to restrict the scope of possible indexes that a stateless delete
+will consider.  If monstache only indexes to index a, b, and c then you can set this to <code>a,b,c</code>.  If monstache only indexes to indexes starting with 
+mydb then you can set this to <code>mydb*</code>.  </p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link"></a></h2>
 <p>[]string (default nil)</p>
 <p>At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
@@ -298,27 +308,29 @@ The oplog is a capped collection and may only contain a subset of the data.  In 
 sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.</p>
 <p>This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar</p>
+<p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
 <p>For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
 destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
 index basis by using the Index Settings or Index Template APIs.  For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html">Update Indices Settings</a>.</p>
 <p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
-<p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
-<h2 id="direct-read-batch-size">direct-read-batch-size<a class="headerlink" href="#direct-read-batch-size" title="Permanent link"></a></h2>
-<p>int (default 500)</p>
-<p>The batch size to set on direct read queries</p>
-<h2 id="direct-read-cursors">direct-read-cursors<a class="headerlink" href="#direct-read-cursors" title="Permanent link"></a></h2>
-<p>int (default 10)</p>
-<p>The number of cursors to <code>request</code> per collection for direct reads.  This setting is only applicable if your MongoDB storage
-engine supports returning more than 1 cursor from the <a href="https://docs.mongodb.com/manual/reference/command/parallelCollectionScan/">Parallel Collection Scan</a>
-command.  Currently, only the <code>mmapv1</code> storage engine supports multiple cursors. If and when the <code>WiredTiger</code> storage engine supports
-multiple cursors, monstache will begin to use those cursors without an upgrade. The number of cursors returned by MongoDB may be less
-than the requested amount.</p>
-<p>Each cursor returned is read from in a separate go routine to increase throughput.  </p>
-<p>Monstache will only attempt parallel collection scans for MongoDB servers version 2.6 or greater.  When monstache detects that the server
-does not support the feature or the number of cursors returned is 1, monstache will revert to using a single go routine per collection for
-direct reads.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To get the best througput possible on direct reads you will want to consider the indexes on your MongoDB collections. In the best case scenario, 
+for very large collections, you will have an index on a field with a moderately low cardinality. For example, if you have 10 million documents 
+in your collection and have a field named <code>category</code> that will have a value between 1 and 20, and you have an index of this field, then monstache 
+will be able to perform an internal MongoDB admin command named <code>splitVector</code> on this key. The results of the split vector command will return 
+all of the categories which exist in the collection up to 24 splits. Once monstache has the split points it is able to start splits+1 go routines
+with range queries to consume the entire collection concurrently. </p>
+<p>When this is working you will notice the connection count increase substancially in mongostat. On the other hand, if you do not have an index 
+which yields a high number splits, monstache will force a split and it will only be able to start 2 go routines to read your collection concurrently.</p>
+<p>The user that monstache connects with will need to have <code>admin</code> access to perform the splitVector command. If the user does not have this access 
+then monstache will use a traditional cursor read of each collection in a single go routine. This can be slow for collections on the 
+order of millions of documents.</p>
+<p>Monstache previously supported the <code>parallelCollectionScan</code> command to get multiple read cursors on a collection. However, this command only worked on the <code>mmapv1</code> storage engine
+and will be removed completely once the mmapv1 engine is retired. It looks like splitVector or something like it will be promoted in new versions on MongoDB.</p>
+</div>
 <h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want

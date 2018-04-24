@@ -597,7 +597,7 @@ will be stored under `_parent`.
 
 The example is based on the Elasticsearch docs for [parent-child](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html)
 
-More on updating the namespace name, check the [Delete Strategy](/config/#delete-strategy) and there is a change of the default behviour in v4.4.0 & v3.11.0
+For more on updating the namespace name, check the [Delete Strategy](/config/#delete-strategy) as there is a change of the default behviour in v4.4.0 & v3.11.0
 
 ## Routing
 
@@ -667,9 +667,14 @@ MongoDB document.  Deletes, however, pose a problem for monstache because when a
 information in the oplog is limited to the id of the document that was deleted.  But monstache needs to know where the
 document was originally routed in order to tell Elasticsearch where to look for it.
 
-Monstache gets around this problem by using a lookup table that it stores in MongoDB at `monstache.meta`.  In this collection monstache stores
-the routing information for each document with custom routing.  When a delete occurs monstache looks up the route
-in this collection and forwards that information to Elasticsearch on the delete request.
+Monstache has 3 available strategies for handling deletes in this situation.  The default strategy is stateless and uses
+a term query into Elasticsearch based on the ID of the document deleted in MongoDB.  If the search into Elasticsearch returns
+exactly 1 document then monstache will schedule that document for deletion. The 2nd stategy monstache uses is stateful and requires
+giving monstache the ability to write to the collection `monstache.meta`.  In this collection monstache stores information about
+documents that were given custom indexing metadata.  This stategy slows down indexing and takes up space in MongoDB.  
+However, it is precise because it records exactly how each document was indexed. The final stategy simply punts on deletes and
+leaves document deletion to the user.  If you don't generally delete documents in MongoDB or don't care if Elasticsearch contains
+documents which have been deleted in MongoDB, this option is available. See [Delete Strategy](/config/#delete-strategy) for more information.
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
 
@@ -1035,25 +1040,25 @@ are statically linked with `CGO=0`.  Check the Monstache [Makefile](https://gith
 You can pull and run these images with
 
 ```
-docker run rwynn/monstache:4.4.0 -v
+docker run rwynn/monstache:4.5.0 -v
 
-docker run rwynn/monstache:3.11.0 -v
+docker run rwynn/monstache:3.12.0 -v
 ```
 
 If you use the golang plugin feature of Monstache, you should instead use the larger Debian based images. The go
 implementation of plugins does not work with statically linked executables.
 
 ```
-docker run rwynn/monstache:4.4.0.cgo -v
+docker run rwynn/monstache:4.5.0.cgo -v
 
-docker run rwynn/monstache:3.11.0.cgo -v
+docker run rwynn/monstache:3.12.0.cgo -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.4.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.5.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 

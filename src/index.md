@@ -48,3 +48,5 @@ Kibana visualizations and dashboards.
 See [Getting Started](/start/) for instructions how to get
 it up and running.
 
+See the [Release Notes](/about/#release-notes) for updates.
+
