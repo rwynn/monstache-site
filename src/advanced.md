@@ -1040,25 +1040,25 @@ are statically linked with `CGO=0`.  Check the Monstache [Makefile](https://gith
 You can pull and run these images with
 
 ```
-docker run rwynn/monstache:4.5.0 -v
+docker run rwynn/monstache:4.6.0 -v
 
-docker run rwynn/monstache:3.12.0 -v
+docker run rwynn/monstache:3.13.0 -v
 ```
 
 If you use the golang plugin feature of Monstache, you should instead use the larger Debian based images. The go
 implementation of plugins does not work with statically linked executables.
 
 ```
-docker run rwynn/monstache:4.5.0.cgo -v
+docker run rwynn/monstache:4.6.0.cgo -v
 
-docker run rwynn/monstache:3.12.0.cgo -v
+docker run rwynn/monstache:3.13.0.cgo -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.5.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.0.cgo -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 

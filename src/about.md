@@ -81,6 +81,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.6.0](https://github.com/rwynn/monstache/releases/tag/v4.6.0)
+
+* Performance improvements. Much of the performance gains come from an upgrade of the gtm library. This library now uses split vector failing back to a paginated range queries. Also, some buffering has been removed at the gtm level for certain operations.
+
+### [monstache v3.13.0](https://github.com/rwynn/monstache/releases/tag/v3.13.0)
+
+* Performance improvements. Much of the performance gains come from an upgrade of the gtm library. This library now uses split vector failing back to a paginated range queries. Also, some buffering has been removed at the gtm level for certain operations.
+
 ### [monstache v4.5.0](https://github.com/rwynn/monstache/releases/tag/v4.5.0)
 
 * Adds an option `delete-index-pattern` to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
