@@ -81,7 +81,7 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
-### [monstache v4.5.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0)
+### [monstache v4.5.0](https://github.com/rwynn/monstache/releases/tag/v4.5.0)
 
 * Adds an option `delete-index-pattern` to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
   pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.
@@ -95,7 +95,7 @@ most likely need to have tests and documentation if it is a new feature.
   -Inf, or NaN which are not supported by the golang JSON parser and cause infinite error loops to occur.  With prune-invalid-json set to true Monstache
   will remove these values before indexing into Elasticsearch to avoid these errors.
 
-### [monstache v3.12.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0)
+### [monstache v3.12.0](https://github.com/rwynn/monstache/releases/tag/v3.12.0)
 
 * Adds an option `delete-index-pattern` to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
   pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.
