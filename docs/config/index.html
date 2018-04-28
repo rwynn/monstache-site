@@ -315,22 +315,6 @@ index basis by using the Index Settings or Index Template APIs.  For more inform
 <p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>To get the best througput possible on direct reads you will want to consider the indexes on your MongoDB collections. In the best case scenario, 
-for very large collections, you will have an index on a field with a moderately low cardinality. For example, if you have 10 million documents 
-in your collection and have a field named <code>category</code> that will have a value between 1 and 20, and you have an index of this field, then monstache 
-will be able to perform an internal MongoDB admin command named <code>splitVector</code> on this key. The results of the split vector command will return 
-all of the categories which exist in the collection up to 24 splits. Once monstache has the split points it is able to start splits+1 go routines
-with range queries to consume the entire collection concurrently. </p>
-<p>When this is working you will notice the connection count increase substancially in mongostat. On the other hand, if you do not have an index 
-which yields a high number splits, monstache will force a split and it will only be able to start 2 go routines to read your collection concurrently.</p>
-<p>The user that monstache connects with will need to have <code>admin</code> access to perform the splitVector command. If the user does not have this access 
-then monstache will use a traditional cursor read of each collection in a single go routine. This can be slow for collections on the 
-order of millions of documents.</p>
-<p>Monstache previously supported the <code>parallelCollectionScan</code> command to get multiple read cursors on a collection. However, this command only worked on the <code>mmapv1</code> storage engine
-and will be removed completely once the mmapv1 engine is retired. It looks like splitVector or something like it will be promoted in new versions on MongoDB.</p>
-</div>
 <h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want
@@ -458,15 +442,16 @@ the elasticsearch API.  This is normally not recommended because monstache will 
 which version is being used.  This option is provided for cases where connecting to the base URL of the elasticsearch REST
 API to get the version is not possible or desired.</p>
 <h2 id="elasticsearch-max-conns">elasticsearch-max-conns<a class="headerlink" href="#elasticsearch-max-conns" title="Permanent link"></a></h2>
-<p>int (default 10)</p>
+<p>int (default 4)</p>
 <p>The size of the Elasticsearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
-If you increase this value you may begin to see bulk indexing failures if the bulk index queue gets overloaded.  The default size
-of this queue is 50.  To increase the size of the bulk indexing queue you can update the Elasticsearch config file:</p>
+If you increase this value too high you may begin to see bulk indexing failures if the bulk index queue gets overloaded.
+To increase the size of the bulk indexing queue you can update the Elasticsearch config file:</p>
 <pre><code>thread_pool:
     bulk:
     queue_size: 200
 </code></pre>
 <p>For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html">Thread Pool</a>.</p>
+<p>You will want to tune this variable in sync with the <code>elasticsearch-max-bytes</code> option.</p>
 <h2 id="elasticsearch-retry">elasticsearch-retry<a class="headerlink" href="#elasticsearch-retry" title="Permanent link"></a></h2>
 <p>boolean (default false)</p>
 <p>When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
@@ -476,14 +461,23 @@ this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v
 <p>int (default 60)</p>
 <p>The number of seconds before a request to elasticsearch times out</p>
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs<a class="headerlink" href="#elasticsearch-max-docs" title="Permanent link"></a></h2>
-<p>int (default 1000)</p>
-<p>When elasticsearch-max-docs is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents</p>
+<p>int (default -1)</p>
+<p>When elasticsearch-max-docs is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is not recommended to change this option but rather use <code>elasticsearch-max-bytes</code> instead since the document count is not a good gauge of when
+to flush.  The default value of -1 means to not use the number of docs as a flush indicator. </p>
+</div>
 <h2 id="elasticsearch-max-bytes">elasticsearch-max-bytes<a class="headerlink" href="#elasticsearch-max-bytes" title="Permanent link"></a></h2>
-<p>int (default 16384)</p>
-<p>When elasticsearch-max-bytes is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of bytes</p>
+<p>int (default 8MB as bytes)</p>
+<p>When elasticsearch-max-bytes is given a bulk index request to elasticsearch will be forced when a connection buffer reaches the given number of bytes. This
+setting greatly impacts performance. A high value for this setting will cause high memory monstache memory usage as the documents are buffered in memory.</p>
+<p>Each connection in <code>elasticsearch-max-conns</code> will flush when its queue gets filled to this size. </p>
 <h2 id="elasticsearch-max-seconds">elasticsearch-max-seconds<a class="headerlink" href="#elasticsearch-max-seconds" title="Permanent link"></a></h2>
 <p>int (default 1)</p>
-<p>When elasticsearch-max-seconds is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds</p>
+<p>When elasticsearch-max-seconds is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds.
+The default value is automatically increased to <code>5</code> when direct read namespaces are detected.  This is to ensure that flushes do not happen too often in this
+case which would cut performance.</p>
 <h2 id="elasticsearch-pem-file">elasticsearch-pem-file<a class="headerlink" href="#elasticsearch-pem-file" title="Permanent link"></a></h2>
 <p>string (default "")</p>
 <p>When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert

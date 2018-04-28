@@ -81,6 +81,28 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.6.2](https://github.com/rwynn/monstache/releases/tag/v4.6.2)
+
+* Fix regression in 3.13 series where collections under 50K documents were not synching
+* Performing Tuning.  The following defaults have changed so please update your config files accordingly.
+
+elasticsearch-max-conns went from 10 -> 4
+elasticsearch-max-docs went from 1000 -> do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
+elasticsearch-max-bytes went from 5MB -> 8MB
+
+Note when you specify elasticseach-max-bytes the value must be in bytes not MB
+
+### [monstache v3.13.2](https://github.com/rwynn/monstache/releases/tag/v3.13.2)
+
+* Fix regression in 3.13 series where collections under 50K documents were not synching
+* Performing Tuning.  The following defaults have changed so please update your config files accordingly.
+
+elasticsearch-max-conns went from 10 -> 4
+elasticsearch-max-docs went from 1000 -> do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
+elasticsearch-max-bytes went from 5MB -> 8MB
+
+Note when you specify elasticseach-max-bytes the value must be in bytes not MB
+
 ### [monstache v4.6.1](https://github.com/rwynn/monstache/releases/tag/v4.6.1)
 
 * Performance and bug fixes in the gtm library 

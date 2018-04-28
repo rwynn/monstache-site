@@ -168,6 +168,24 @@ data that you need to keep on your local servers, make a back up before running 
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link"></a></h2>
+<h3 id="monstache-v462"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.2">monstache v4.6.2</a><a class="headerlink" href="#monstache-v462" title="Permanent link"></a></h3>
+<ul>
+<li>Fix regression in 3.13 series where collections under 50K documents were not synching</li>
+<li>Performing Tuning.  The following defaults have changed so please update your config files accordingly.</li>
+</ul>
+<p>elasticsearch-max-conns went from 10 -&gt; 4
+elasticsearch-max-docs went from 1000 -&gt; do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
+elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
+<p>Note when you specify elasticseach-max-bytes the value must be in bytes not MB</p>
+<h3 id="monstache-v3132"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.2">monstache v3.13.2</a><a class="headerlink" href="#monstache-v3132" title="Permanent link"></a></h3>
+<ul>
+<li>Fix regression in 3.13 series where collections under 50K documents were not synching</li>
+<li>Performing Tuning.  The following defaults have changed so please update your config files accordingly.</li>
+</ul>
+<p>elasticsearch-max-conns went from 10 -&gt; 4
+elasticsearch-max-docs went from 1000 -&gt; do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
+elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
+<p>Note when you specify elasticseach-max-bytes the value must be in bytes not MB</p>
 <h3 id="monstache-v461"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.1">monstache v4.6.1</a><a class="headerlink" href="#monstache-v461" title="Permanent link"></a></h3>
 <ul>
 <li>Performance and bug fixes in the gtm library </li>
