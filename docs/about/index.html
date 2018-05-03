@@ -107,9 +107,9 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="about">About<a class="headerlink" href="#about" title="Permanent link"></a></h1>
+<h1 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h1>
 <hr />
-<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link"></a></h2>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>The MIT License (MIT)</p>
 <p>Copyright (c) 2016-2018 Ryan Wynn</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -126,7 +126,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link"></a></h2>
+<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
 <p>The Monstache project welcomes, and depends, on contributions from developers and
 users in the open source community. Contributions can be made in a number of
 ways, a few examples are:</p>
@@ -135,10 +135,10 @@ ways, a few examples are:</p>
 <li><a href="https://github.com/rwynn/monstache-site">Documentation</a> improvements</li>
 <li><a href="https://github.com/rwynn/monstache/issues">Bug reports</a> and patch reviews</li>
 </ul>
-<h3 id="reporting-an-issue">Reporting an Issue<a class="headerlink" href="#reporting-an-issue" title="Permanent link"></a></h3>
+<h3 id="reporting-an-issue">Reporting an Issue<a class="headerlink" href="#reporting-an-issue" title="Permanent link">&para;</a></h3>
 <p>Please include as much detail as you can. Let us know your platform, Monstache
 version, MongoDB version, and Elasticsearch version.</p>
-<h3 id="testing-the-development-version">Testing the Development Version<a class="headerlink" href="#testing-the-development-version" title="Permanent link"></a></h3>
+<h3 id="testing-the-development-version">Testing the Development Version<a class="headerlink" href="#testing-the-development-version" title="Permanent link">&para;</a></h3>
 <p>If you want to just install and try out the latest development version of
 Monstache you can do so with the following command. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
@@ -146,7 +146,7 @@ have encountered is fixed in the git master.</p>
 <pre><code class="bash">go get -u github.com/rwynn/monstache
 </code></pre>
 
-<h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link"></a></h3>
+<h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link">&para;</a></h3>
 <p>To run the tests, you will need to have local mongod and elasticsearch servers running.<br />
 Then you will need to start a monstache process in one terminal or in the background.</p>
 <pre><code class="bash">monstache -verbose
@@ -163,12 +163,26 @@ go test -v
 MongoDB and will index documents in the <code>test.test</code> index in Elasticsearch.  If you have
 data that you need to keep on your local servers, make a back up before running the tests.</p>
 </div>
-<h3 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link"></a></h3>
+<h3 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link">&para;</a></h3>
 <p>Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
-<h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link"></a></h2>
-<h3 id="monstache-v462"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.2">monstache v4.6.2</a><a class="headerlink" href="#monstache-v462" title="Permanent link"></a></h3>
+<h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v463"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.3">monstache v4.6.3</a><a class="headerlink" href="#monstache-v463" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for issue #65, year outside of [0,9999].  Invalid time will be removed now with <code>prune-invalid-json</code> turned on</li>
+<li>Fix for issue #62, the number of connections to MongoDB is now limited to a max of 32 per namespace</li>
+<li>Fix for issue #59, unsupported values of +/- Infinity and NaN.  These values can now be removed with the <code>prune-invalid-json</code> setting</li>
+<li>Fix for issue $46 and #66, having to do with filtering.  Filters now use locks to ensure the javascript environment is used by one at a time.</li>
+</ul>
+<h3 id="monstache-v3133"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.3">monstache v3.13.3</a><a class="headerlink" href="#monstache-v3133" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for issue #65, year outside of [0,9999].  Invalid time will be removed now with <code>prune-invalid-json</code> turned on</li>
+<li>Fix for issue #62, the number of connections to MongoDB is now limited to a max of 32 per namespace</li>
+<li>Fix for issue #59, unsupported values of +/- Infinity and NaN.  These values can now be removed with the <code>prune-invalid-json</code> setting</li>
+<li>Fix for issue $46 and #66, having to do with filtering.  Filters now use locks to ensure the javascript environment is used by one at a time.</li>
+</ul>
+<h3 id="monstache-v462"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.2">monstache v4.6.2</a><a class="headerlink" href="#monstache-v462" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix regression in 3.13 series where collections under 50K documents were not synching</li>
 <li>Performing Tuning.  The following defaults have changed so please update your config files accordingly.</li>
@@ -177,7 +191,7 @@ most likely need to have tests and documentation if it is a new feature.</p>
 elasticsearch-max-docs went from 1000 -&gt; do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
 elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Note when you specify elasticseach-max-bytes the value must be in bytes not MB</p>
-<h3 id="monstache-v3132"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.2">monstache v3.13.2</a><a class="headerlink" href="#monstache-v3132" title="Permanent link"></a></h3>
+<h3 id="monstache-v3132"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.2">monstache v3.13.2</a><a class="headerlink" href="#monstache-v3132" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix regression in 3.13 series where collections under 50K documents were not synching</li>
 <li>Performing Tuning.  The following defaults have changed so please update your config files accordingly.</li>
@@ -186,23 +200,23 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 elasticsearch-max-docs went from 1000 -&gt; do not flush based on count (I suggest not overriding this since document sizes can vary greatly - instead use max-bytes)
 elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Note when you specify elasticseach-max-bytes the value must be in bytes not MB</p>
-<h3 id="monstache-v461"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.1">monstache v4.6.1</a><a class="headerlink" href="#monstache-v461" title="Permanent link"></a></h3>
+<h3 id="monstache-v461"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.1">monstache v4.6.1</a><a class="headerlink" href="#monstache-v461" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Performance and bug fixes in the gtm library </li>
 </ul>
-<h3 id="monstache-v3131"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.1">monstache v3.13.1</a><a class="headerlink" href="#monstache-v3131" title="Permanent link"></a></h3>
+<h3 id="monstache-v3131"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.1">monstache v3.13.1</a><a class="headerlink" href="#monstache-v3131" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Performance and bug fixes in the gtm library </li>
 </ul>
-<h3 id="monstache-v460"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.0">monstache v4.6.0</a><a class="headerlink" href="#monstache-v460" title="Permanent link"></a></h3>
+<h3 id="monstache-v460"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.0">monstache v4.6.0</a><a class="headerlink" href="#monstache-v460" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Performance improvements. Much of the performance gains come from an upgrade of the gtm library. This library now uses split vector failing back to a paginated range queries. Also, some buffering has been removed at the gtm level for certain operations.</li>
 </ul>
-<h3 id="monstache-v3130"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.0">monstache v3.13.0</a><a class="headerlink" href="#monstache-v3130" title="Permanent link"></a></h3>
+<h3 id="monstache-v3130"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.0">monstache v3.13.0</a><a class="headerlink" href="#monstache-v3130" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Performance improvements. Much of the performance gains come from an upgrade of the gtm library. This library now uses split vector failing back to a paginated range queries. Also, some buffering has been removed at the gtm level for certain operations.</li>
 </ul>
-<h3 id="monstache-v450"><a href="https://github.com/rwynn/monstache/releases/tag/v4.5.0">monstache v4.5.0</a><a class="headerlink" href="#monstache-v450" title="Permanent link"></a></h3>
+<h3 id="monstache-v450"><a href="https://github.com/rwynn/monstache/releases/tag/v4.5.0">monstache v4.5.0</a><a class="headerlink" href="#monstache-v450" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Adds an option <code>delete-index-pattern</code> to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
   pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.</li>
@@ -216,7 +230,7 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
   -Inf, or NaN which are not supported by the golang JSON parser and cause infinite error loops to occur.  With prune-invalid-json set to true Monstache
   will remove these values before indexing into Elasticsearch to avoid these errors.</li>
 </ul>
-<h3 id="monstache-v3120"><a href="https://github.com/rwynn/monstache/releases/tag/v3.12.0">monstache v3.12.0</a><a class="headerlink" href="#monstache-v3120" title="Permanent link"></a></h3>
+<h3 id="monstache-v3120"><a href="https://github.com/rwynn/monstache/releases/tag/v3.12.0">monstache v3.12.0</a><a class="headerlink" href="#monstache-v3120" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Adds an option <code>delete-index-pattern</code> to specify an Elasticsearch index pattern to scope stateless deletes.  Indexes outside of this
   pattern will not be considered when propogating deletes from MongoDB to Elasticsearch.  By default all Elasticsearch indexes are queried.</li>
@@ -230,7 +244,7 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
   -Inf, or NaN which are not supported by the golang JSON parser and cause infinite error loops to occur.  With prune-invalid-json set to true Monstache
   will remove these values before indexing into Elasticsearch to avoid these errors.</li>
 </ul>
-<h3 id="monstache-v440"><a href="https://github.com/rwynn/monstache/releases/tag/v4.4.0">monstache v4.4.0</a><a class="headerlink" href="#monstache-v440" title="Permanent link"></a></h3>
+<h3 id="monstache-v440"><a href="https://github.com/rwynn/monstache/releases/tag/v4.4.0">monstache v4.4.0</a><a class="headerlink" href="#monstache-v440" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Updated the default delete strategy</p>
@@ -239,7 +253,7 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Breaking change: check <a href="../config/#delete-strategy">delete-strategy</a></p>
 </li>
 </ul>
-<h3 id="monstache-v3110"><a href="https://github.com/rwynn/monstache/releases/tag/v3.11.0">monstache v3.11.0</a><a class="headerlink" href="#monstache-v3110" title="Permanent link"></a></h3>
+<h3 id="monstache-v3110"><a href="https://github.com/rwynn/monstache/releases/tag/v3.11.0">monstache v3.11.0</a><a class="headerlink" href="#monstache-v3110" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Updated the default delete strategy</p>
@@ -248,95 +262,95 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Breaking change: check <a href="../config/#delete-strategy">delete-strategy</a></p>
 </li>
 </ul>
-<h3 id="monstache-v432"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.2">monstache v4.3.2</a><a class="headerlink" href="#monstache-v432" title="Permanent link"></a></h3>
+<h3 id="monstache-v432"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.2">monstache v4.3.2</a><a class="headerlink" href="#monstache-v432" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Allow specifying a script without a namespace. In this case documents from all collections will be run through the script. The document object will continue to be the 1st argument to the function and a new 2nd argument will be the namespace of the source document. Fixes #55.</li>
 <li>Fix an issue where a Date object created in Javascript would not be formatted correctly for indexing.</li>
 <li>Build with go 1.10.1</li>
 </ul>
-<h3 id="monstache-v3102"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.2">monstache v3.10.2</a><a class="headerlink" href="#monstache-v3102" title="Permanent link"></a></h3>
+<h3 id="monstache-v3102"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.2">monstache v3.10.2</a><a class="headerlink" href="#monstache-v3102" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Allow specifying a script without a namespace. In this case documents from all collections will be run through the script. The document object will continue to be the 1st argument to the function and a new 2nd argument will be the namespace of the source document. Fixes #55.</li>
 <li>Fix an issue where a Date object created in Javascript would not be formatted correctly for indexing.</li>
 <li>Build with go 1.10.1</li>
 </ul>
-<h3 id="monstache-v431"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.1">monstache v4.3.1</a><a class="headerlink" href="#monstache-v431" title="Permanent link"></a></h3>
+<h3 id="monstache-v431"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.1">monstache v4.3.1</a><a class="headerlink" href="#monstache-v431" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Upgrade gtm to pick up fix for parallel collection scans on direct reads. Each cursor now gets its own connection.</li>
 </ul>
-<h3 id="monstache-v3101"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.1">monstache v3.10.1</a><a class="headerlink" href="#monstache-v3101" title="Permanent link"></a></h3>
+<h3 id="monstache-v3101"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.1">monstache v3.10.1</a><a class="headerlink" href="#monstache-v3101" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Upgrade gtm to pick up fix for parallel collection scans on direct reads. Each cursor now gets its own connection.</li>
 </ul>
-<h3 id="monstache-v430"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.0">monstache v4.3.0</a><a class="headerlink" href="#monstache-v430" title="Permanent link"></a></h3>
+<h3 id="monstache-v430"><a href="https://github.com/rwynn/monstache/releases/tag/v4.3.0">monstache v4.3.0</a><a class="headerlink" href="#monstache-v430" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Upgrade gtm to pick up support for parallel collection scan on direct reads if your mongodb storage engine supports it</li>
 <li>Add config option to specify the number of cursors to request for parallel collection scans</li>
 <li>Allow mappings to specify overrides for 1 of <code>index</code> and <code>type</code> instead of requiring both</li>
 <li>Fix an issue where filters were not being applied to document updates</li>
 </ul>
-<h3 id="monstache-v3100"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.0">monstache v3.10.0</a><a class="headerlink" href="#monstache-v3100" title="Permanent link"></a></h3>
+<h3 id="monstache-v3100"><a href="https://github.com/rwynn/monstache/releases/tag/v3.10.0">monstache v3.10.0</a><a class="headerlink" href="#monstache-v3100" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Upgrade gtm to pick up support for parallel collection scan on direct reads if your mongodb storage engine supports it</li>
 <li>Add config option to specify the number of cursors to request for parallel collection scans</li>
 <li>Allow mappings to specify overrides for 1 of <code>index</code> and <code>type</code> instead of requiring both</li>
 <li>Fix an issue where filters were not being applied to document updates</li>
 </ul>
-<h3 id="monstache-v421"><a href="https://github.com/rwynn/monstache/releases/tag/v4.2.1">monstache v4.2.1</a><a class="headerlink" href="#monstache-v421" title="Permanent link"></a></h3>
+<h3 id="monstache-v421"><a href="https://github.com/rwynn/monstache/releases/tag/v4.2.1">monstache v4.2.1</a><a class="headerlink" href="#monstache-v421" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Ensure index names are lowercase </li>
 </ul>
-<h3 id="monstache-v391"><a href="https://github.com/rwynn/monstache/releases/tag/v3.9.1">monstache v3.9.1</a><a class="headerlink" href="#monstache-v391" title="Permanent link"></a></h3>
+<h3 id="monstache-v391"><a href="https://github.com/rwynn/monstache/releases/tag/v3.9.1">monstache v3.9.1</a><a class="headerlink" href="#monstache-v391" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Ensure index names are lowercase </li>
 </ul>
-<h3 id="monstache-v420"><a href="https://github.com/rwynn/monstache/releases/tag/v4.2.0">monstache v4.2.0</a><a class="headerlink" href="#monstache-v420" title="Permanent link"></a></h3>
+<h3 id="monstache-v420"><a href="https://github.com/rwynn/monstache/releases/tag/v4.2.0">monstache v4.2.0</a><a class="headerlink" href="#monstache-v420" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add filtering to Javascript and Golang plugins. Filtered documents are completely
   ignored while dropped documents result in a delete request.</li>
 </ul>
-<h3 id="monstache-v390"><a href="https://github.com/rwynn/monstache/releases/tag/v3.9.0">monstache v3.9.0</a><a class="headerlink" href="#monstache-v390" title="Permanent link"></a></h3>
+<h3 id="monstache-v390"><a href="https://github.com/rwynn/monstache/releases/tag/v3.9.0">monstache v3.9.0</a><a class="headerlink" href="#monstache-v390" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add filtering to Javascript and Golang plugins. Filtered documents are completely
   ignored while dropped documents result in a delete request.</li>
 </ul>
-<h3 id="monstache-v412"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.2">monstache v4.1.2</a><a class="headerlink" href="#monstache-v412" title="Permanent link"></a></h3>
+<h3 id="monstache-v412"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.2">monstache v4.1.2</a><a class="headerlink" href="#monstache-v412" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix custom routing for golang plugins</li>
 <li>Configuration now supports paths to Javascript files in addition to inline scripts</li>
 </ul>
-<h3 id="monstache-v382"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.2">monstache v3.8.2</a><a class="headerlink" href="#monstache-v382" title="Permanent link"></a></h3>
+<h3 id="monstache-v382"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.2">monstache v3.8.2</a><a class="headerlink" href="#monstache-v382" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix custom routing for golang plugins</li>
 <li>Configuration now supports paths to Javascript files in addition to inline scripts</li>
 </ul>
-<h3 id="monstache-v411"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.1">monstache v4.1.1</a><a class="headerlink" href="#monstache-v411" title="Permanent link"></a></h3>
+<h3 id="monstache-v411"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.1">monstache v4.1.1</a><a class="headerlink" href="#monstache-v411" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Route time machine docs by MongoDB source id</li>
 </ul>
-<h3 id="monstache-v381"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.1">monstache v3.8.1</a><a class="headerlink" href="#monstache-v381" title="Permanent link"></a></h3>
+<h3 id="monstache-v381"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.1">monstache v3.8.1</a><a class="headerlink" href="#monstache-v381" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Route time machine docs by MongoDB source id</li>
 </ul>
-<h3 id="monstache-v410"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.0">monstache v4.1.0</a><a class="headerlink" href="#monstache-v410" title="Permanent link"></a></h3>
+<h3 id="monstache-v410"><a href="https://github.com/rwynn/monstache/releases/tag/v4.1.0">monstache v4.1.0</a><a class="headerlink" href="#monstache-v410" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add a nifty time machine feature</li>
 </ul>
-<h3 id="monstache-v380"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.0">monstache v3.8.0</a><a class="headerlink" href="#monstache-v380" title="Permanent link"></a></h3>
+<h3 id="monstache-v380"><a href="https://github.com/rwynn/monstache/releases/tag/v3.8.0">monstache v3.8.0</a><a class="headerlink" href="#monstache-v380" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add a nifty time machine feature</li>
 </ul>
-<h3 id="monstache-v401"><a href="https://github.com/rwynn/monstache/releases/tag/v4.0.1">monstache v4.0.1</a><a class="headerlink" href="#monstache-v401" title="Permanent link"></a></h3>
+<h3 id="monstache-v401"><a href="https://github.com/rwynn/monstache/releases/tag/v4.0.1">monstache v4.0.1</a><a class="headerlink" href="#monstache-v401" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixed a bug where monstache would think direct reads were done when they had not even started</li>
 <li>Performance improvements for direct reads on large collections</li>
 </ul>
-<h3 id="monstache-v370"><a href="https://github.com/rwynn/monstache/releases/tag/v3.7.0">monstache v3.7.0</a><a class="headerlink" href="#monstache-v370" title="Permanent link"></a></h3>
+<h3 id="monstache-v370"><a href="https://github.com/rwynn/monstache/releases/tag/v3.7.0">monstache v3.7.0</a><a class="headerlink" href="#monstache-v370" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixed a bug where monstache would think direct reads were done when they had not even started</li>
 <li>Performance improvements for direct reads on large collections</li>
 </ul>
-<h3 id="monstache-v400"><a href="https://github.com/rwynn/monstache/releases/tag/v4.0.0">monstache v4.0.0</a><a class="headerlink" href="#monstache-v400" title="Permanent link"></a></h3>
+<h3 id="monstache-v400"><a href="https://github.com/rwynn/monstache/releases/tag/v4.0.0">monstache v4.0.0</a><a class="headerlink" href="#monstache-v400" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Monstache v4+ should be used for ES6+. There will still be bug fixes and maintenance done to the Monstache v3 releases to support ES2-5. You can still download v3.x releases from the downloads page or by directing go get to gopkg.in/rwynn/monstache.v3</p>
@@ -348,7 +362,7 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Monstache will now default to using the ES type _doc (as opposed to the MongoDB collection name) when it detects ES 6.2+. This is the new recommended type name going forward. See issue #42.</p>
 </li>
 </ul>
-<h3 id="monstache-v365"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.5">monstache v3.6.5</a><a class="headerlink" href="#monstache-v365" title="Permanent link"></a></h3>
+<h3 id="monstache-v365"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.5">monstache v3.6.5</a><a class="headerlink" href="#monstache-v365" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Remove brittle normalization of index names, type names, and ids</p>
@@ -363,7 +377,7 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Technically this release will still work with ES+ but that won't last forever. There are some deprecation warnings. In summary, if you need pre-ES6 use v3.x releases of monstache and v4.x releases of monstache for ES6+ going forward.</p>
 </li>
 </ul>
-<h3 id="monstache-v364"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.4">monstache v3.6.4</a><a class="headerlink" href="#monstache-v364" title="Permanent link"></a></h3>
+<h3 id="monstache-v364"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.4">monstache v3.6.4</a><a class="headerlink" href="#monstache-v364" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>Trying to set the record for github releases in one night</p>
@@ -372,109 +386,109 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <p>Fix a regression whereby monstache would exit after direct reads were complete when it should have kept tailing the oplog</p>
 </li>
 </ul>
-<h3 id="monstache-v363"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.3">monstache v3.6.3</a><a class="headerlink" href="#monstache-v363" title="Permanent link"></a></h3>
+<h3 id="monstache-v363"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.3">monstache v3.6.3</a><a class="headerlink" href="#monstache-v363" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for a benign race condition in shutdown, introduced in 3.6.2, that caused a panic</li>
 </ul>
-<h3 id="monstache-v362"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.2">monstache v3.6.2</a><a class="headerlink" href="#monstache-v362" title="Permanent link"></a></h3>
+<h3 id="monstache-v362"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.2">monstache v3.6.2</a><a class="headerlink" href="#monstache-v362" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Resume usage of upstream elastic client library now that fix for Elasticsearch going down has been merged</li>
 <li>When Elasticsearch goes down the elastic client will now put back pressure on Add and Flush calls. When Elasticsearch comes back up it will resume Adding and Flushing were it left off. Do to the blocking nature of Add and Flush the shutdown function of monstache has been refactored to take this into account. Shutdown will not hang if Elasticsearch is down. It will try to Flush pending documents but if this blocks due to a down server it will still exit after a 5 second deadline.</li>
 </ul>
-<h3 id="monstache-v361"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.1">monstache v3.6.1</a><a class="headerlink" href="#monstache-v361" title="Permanent link"></a></h3>
+<h3 id="monstache-v361"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.1">monstache v3.6.1</a><a class="headerlink" href="#monstache-v361" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added more detailed error logging. Each bulk request line that failed will be logged separately with details. This is much more lightweight than having to turn on verbose to get error details. Verbose is not a recommended setting for production.</li>
 </ul>
-<h3 id="monstache-v360"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.0">monstache v3.6.0</a><a class="headerlink" href="#monstache-v360" title="Permanent link"></a></h3>
+<h3 id="monstache-v360"><a href="https://github.com/rwynn/monstache/releases/tag/v3.6.0">monstache v3.6.0</a><a class="headerlink" href="#monstache-v360" title="Permanent link">&para;</a></h3>
 <ul>
 <li>This release focuses on improvements with regards to handling dropped connections to either Elasticsearch or MongoDB and resuming gracefully when they come back online</li>
 </ul>
-<h3 id="monstache-v352"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.2">monstache v3.5.2</a><a class="headerlink" href="#monstache-v352" title="Permanent link"></a></h3>
+<h3 id="monstache-v352"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.2">monstache v3.5.2</a><a class="headerlink" href="#monstache-v352" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The previous release safeguards the integrity of inserts and updates with a version number, but neglected deletes.  This release adds versions to deletes such that an [insert, delete] sequence that gets sent to Elasticsearch in 2 different requests (due to <code>elasticsearch-max-conns</code> &gt; 1) cannot actually perform a [delete, insert] instead.  In this case the insert would now carry a version number &lt; the delete version number and be rejected.    </li>
 </ul>
-<h3 id="monstache-v351"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.1">monstache v3.5.1</a><a class="headerlink" href="#monstache-v351" title="Permanent link"></a></h3>
+<h3 id="monstache-v351"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.1">monstache v3.5.1</a><a class="headerlink" href="#monstache-v351" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for issue #37 - out of order indexing due to concurrent bulk indexing requests.  With <code>elasticsearch-max-conns</code> set to greater than 1 you may get out of order index requests; however after this fix <strong>each document is versioned</strong> such that Elasticsearch will not replace a newer version with an older one.  The version of the document is the timestamp from the MongoDB oplog of when the change (insert, update) occurred.  Out of order indexing typically happens when both an insert and an update are queued for a bulk request at around the same time.  In this case, do to the way the bulk processor multiplexes requests onto multiple connections, the document may be received out of order. </li>
 </ul>
-<h3 id="monstache-v350"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.0">monstache v3.5.0</a><a class="headerlink" href="#monstache-v350" title="Permanent link"></a></h3>
+<h3 id="monstache-v350"><a href="https://github.com/rwynn/monstache/releases/tag/v3.5.0">monstache v3.5.0</a><a class="headerlink" href="#monstache-v350" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Support for sharded MongoDB cluster.  See docs for details</li>
 <li>Performance optimizations</li>
 <li>Turn off bulk retries if configured to do so</li>
 </ul>
-<h3 id="monstache-v342"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.2">monstache v3.4.2</a><a class="headerlink" href="#monstache-v342" title="Permanent link"></a></h3>
+<h3 id="monstache-v342"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.2">monstache v3.4.2</a><a class="headerlink" href="#monstache-v342" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Allow the stats index name format to be configurable.  Continues to default to index per day.  </li>
 </ul>
-<h3 id="monstache-v341"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.1">monstache v3.4.1</a><a class="headerlink" href="#monstache-v341" title="Permanent link"></a></h3>
+<h3 id="monstache-v341"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.1">monstache v3.4.1</a><a class="headerlink" href="#monstache-v341" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for the javascript mapping functions.  An Otto Export does not appear to recurse into arrays.  Need to do a recursive Export for this scenario.  </li>
 </ul>
-<h3 id="monstache-v340"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.0">monstache v3.4.0</a><a class="headerlink" href="#monstache-v340" title="Permanent link"></a></h3>
+<h3 id="monstache-v340"><a href="https://github.com/rwynn/monstache/releases/tag/v3.4.0">monstache v3.4.0</a><a class="headerlink" href="#monstache-v340" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add ability to embed documents during the mapping phase.  Javascript plugins get 3 new global functions: findId, findOne, and find.  Golang plugins get access to the mgo.Session.  See the docs for details.  </li>
 </ul>
-<h3 id="monstache-v331"><a href="https://github.com/rwynn/monstache/releases/tag/v3.3.1">monstache v3.3.1</a><a class="headerlink" href="#monstache-v331" title="Permanent link"></a></h3>
+<h3 id="monstache-v331"><a href="https://github.com/rwynn/monstache/releases/tag/v3.3.1">monstache v3.3.1</a><a class="headerlink" href="#monstache-v331" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Improve support for additional indexing metadata.</li>
 <li>Fix issue where indexing metadata was not honored</li>
 </ul>
-<h3 id="monstache-v330"><a href="https://github.com/rwynn/monstache/releases/tag/v3.3.0">monstache v3.3.0</a><a class="headerlink" href="#monstache-v330" title="Permanent link"></a></h3>
+<h3 id="monstache-v330"><a href="https://github.com/rwynn/monstache/releases/tag/v3.3.0">monstache v3.3.0</a><a class="headerlink" href="#monstache-v330" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added optional http server.  Enable with --enable-http-server flag.  Listens on :8080 by default.  Configure address with --http-server-addr :8000.  The server responds to the following endpoints (/started, /healthz, /config, and /stats).  The stats endpoint is only enabled if stats are enabled. The /started and /healthz endpoints can be used to check for liveness.  </li>
 <li>Upgraded the gtm library with performance improvements</li>
 </ul>
-<h3 id="monstache-v320"><a href="https://github.com/rwynn/monstache/releases/tag/v3.2.0">monstache v3.2.0</a><a class="headerlink" href="#monstache-v320" title="Permanent link"></a></h3>
+<h3 id="monstache-v320"><a href="https://github.com/rwynn/monstache/releases/tag/v3.2.0">monstache v3.2.0</a><a class="headerlink" href="#monstache-v320" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add systemd support</li>
 </ul>
-<h3 id="monstache-v312"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.2">monstache v3.1.2</a><a class="headerlink" href="#monstache-v312" title="Permanent link"></a></h3>
+<h3 id="monstache-v312"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.2">monstache v3.1.2</a><a class="headerlink" href="#monstache-v312" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Built with go1.9</li>
 <li>Fix golint warnings</li>
 </ul>
-<h3 id="monstache-v311"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.1">monstache v3.1.1</a><a class="headerlink" href="#monstache-v311" title="Permanent link"></a></h3>
+<h3 id="monstache-v311"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.1">monstache v3.1.1</a><a class="headerlink" href="#monstache-v311" title="Permanent link">&para;</a></h3>
 <ul>
 <li>timestamp stats indexes by day for easier cleanup using e.g. curator</li>
 </ul>
-<h3 id="monstache-v310"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.0">monstache v3.1.0</a><a class="headerlink" href="#monstache-v310" title="Permanent link"></a></h3>
+<h3 id="monstache-v310"><a href="https://github.com/rwynn/monstache/releases/tag/v3.1.0">monstache v3.1.0</a><a class="headerlink" href="#monstache-v310" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add print-config argument to display the configuration and exit</li>
 <li>add index-stats option to write indexing statistics into Elasticsearch for analysis</li>
 </ul>
-<h3 id="monstache-v307"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.7">monstache v3.0.7</a><a class="headerlink" href="#monstache-v307" title="Permanent link"></a></h3>
+<h3 id="monstache-v307"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.7">monstache v3.0.7</a><a class="headerlink" href="#monstache-v307" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix elasticsearch client http scheme for secure connections</li>
 </ul>
-<h3 id="monstache-v306"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.6">monstache v3.0.6</a><a class="headerlink" href="#monstache-v306" title="Permanent link"></a></h3>
+<h3 id="monstache-v306"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.6">monstache v3.0.6</a><a class="headerlink" href="#monstache-v306" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix invalid struct field tag</li>
 </ul>
-<h3 id="monstache-v305"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.5">monstache v3.0.5</a><a class="headerlink" href="#monstache-v305" title="Permanent link"></a></h3>
+<h3 id="monstache-v305"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.5">monstache v3.0.5</a><a class="headerlink" href="#monstache-v305" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add direct-read-batch-size option</li>
 <li>upgrade gtm to accept batch size and to ensure all direct read errors are logged</li>
 </ul>
-<h3 id="monstache-v304"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.4">monstache v3.0.4</a><a class="headerlink" href="#monstache-v304" title="Permanent link"></a></h3>
+<h3 id="monstache-v304"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.4">monstache v3.0.4</a><a class="headerlink" href="#monstache-v304" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix slowdown on direct reads for large mongodb collections</li>
 </ul>
-<h3 id="monstache-v303"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.3">monstache v3.0.3</a><a class="headerlink" href="#monstache-v303" title="Permanent link"></a></h3>
+<h3 id="monstache-v303"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.3">monstache v3.0.3</a><a class="headerlink" href="#monstache-v303" title="Permanent link">&para;</a></h3>
 <ul>
 <li>small changes to the settings for the exponential back off on retry.  see the docs for details.</li>
 <li>only record timestamps originating from the oplog and not from direct reads</li>
 <li>apply the worker routing filter to direct reads in worker mode</li>
 </ul>
-<h3 id="monstache-v302"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.2">monstache v3.0.2</a><a class="headerlink" href="#monstache-v302" title="Permanent link"></a></h3>
+<h3 id="monstache-v302"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.2">monstache v3.0.2</a><a class="headerlink" href="#monstache-v302" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add option to configure elasticsearch client http timout.  up the default timeout to 60 seconds</li>
 </ul>
-<h3 id="monstache-v301"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.1">monstache v3.0.1</a><a class="headerlink" href="#monstache-v301" title="Permanent link"></a></h3>
+<h3 id="monstache-v301"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.1">monstache v3.0.1</a><a class="headerlink" href="#monstache-v301" title="Permanent link">&para;</a></h3>
 <ul>
 <li>upgrade gtm to fix an issue where a mongodb query error (such as CappedPositionLost) causes the tail go routine to exit (after which no more events will be processed)</li>
 </ul>
-<h3 id="monstache-v300"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.0">monstache v3.0.0</a><a class="headerlink" href="#monstache-v300" title="Permanent link"></a></h3>
+<h3 id="monstache-v300"><a href="https://github.com/rwynn/monstache/releases/tag/v3.0.0">monstache v3.0.0</a><a class="headerlink" href="#monstache-v300" title="Permanent link">&para;</a></h3>
 <ul>
 <li>new major release</li>
 <li>configuration changes with regards to Elasticsearch.  see docs for details</li>
@@ -483,32 +497,32 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <li>changed go Elasticsearch client from elastigo to elastic which provides more API coverage</li>
 <li>upgrade gtm</li>
 </ul>
-<h3 id="monstache-v2140"><a href="https://github.com/rwynn/monstache/releases/tag/v2.14.0">monstache v2.14.0</a><a class="headerlink" href="#monstache-v2140" title="Permanent link"></a></h3>
+<h3 id="monstache-v2140"><a href="https://github.com/rwynn/monstache/releases/tag/v2.14.0">monstache v2.14.0</a><a class="headerlink" href="#monstache-v2140" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add support for golang plugins.  you can now do in golang what you previously could do in javascript</li>
 <li>add more detail to bulk indexing errors</li>
 <li>upgrade gtm</li>
 </ul>
-<h3 id="monstache-v2130"><a href="https://github.com/rwynn/monstache/releases/tag/v2.13.0">monstache v2.13.0</a><a class="headerlink" href="#monstache-v2130" title="Permanent link"></a></h3>
+<h3 id="monstache-v2130"><a href="https://github.com/rwynn/monstache/releases/tag/v2.13.0">monstache v2.13.0</a><a class="headerlink" href="#monstache-v2130" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add direct-read-ns option.  allows one to sync documents directly from a set of collections in addition to going through the oplog</li>
 <li>add exit-after-direct-reads option.  tells monstache to exit after performing direct reads.  useful for running monstache as a cron job.  </li>
 <li>fix issue around custom routing where db name was being stored as an array</li>
 <li>upgrade gtm</li>
 </ul>
-<h3 id="monstache-v2120"><a href="https://github.com/rwynn/monstache/releases/tag/v2.12.0">monstache v2.12.0</a><a class="headerlink" href="#monstache-v2120" title="Permanent link"></a></h3>
+<h3 id="monstache-v2120"><a href="https://github.com/rwynn/monstache/releases/tag/v2.12.0">monstache v2.12.0</a><a class="headerlink" href="#monstache-v2120" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix order of operations surrounding db or collection drops in the oplog.  Required the removal of some gtm-options introduced in 2.11.  </li>
 <li>Built with latest version of gtm which includes some performance gains</li>
 <li>Add ssl option under mongo-dial-settings.  Previously, in order to enable connections with TLS one had to provide a PEM file.  Now, one can enable TLS without a PEM file by setting this new option to true.  This was tested with MongoDB Atlas which requires SSL but does not provide a PEM file</li>
 </ul>
-<h3 id="monstache-v2112"><a href="https://github.com/rwynn/monstache/releases/tag/v2.11.2">monstache v2.11.2</a><a class="headerlink" href="#monstache-v2112" title="Permanent link"></a></h3>
+<h3 id="monstache-v2112"><a href="https://github.com/rwynn/monstache/releases/tag/v2.11.2">monstache v2.11.2</a><a class="headerlink" href="#monstache-v2112" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Built with Go 1.8</li>
 <li>Added option <code>fail-fast</code></li>
 <li>Added option <code>index-oplog-time</code></li>
 </ul>
-<h3 id="monstache-v2111"><a href="https://github.com/rwynn/monstache/releases/tag/v2.11.1">monstache v2.11.1</a><a class="headerlink" href="#monstache-v2111" title="Permanent link"></a></h3>
+<h3 id="monstache-v2111"><a href="https://github.com/rwynn/monstache/releases/tag/v2.11.1">monstache v2.11.1</a><a class="headerlink" href="#monstache-v2111" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Built with Go 1.8</li>
 <li>Performance improvements</li>
@@ -516,80 +530,80 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <li>Support for overriding Elasticsearch index and type in JavaScript</li>
 <li>More configuration options surfaced</li>
 </ul>
-<h3 id="monstache-v2100"><a href="https://github.com/rwynn/monstache/releases/tag/v2.10.0">monstache v2.10.0</a><a class="headerlink" href="#monstache-v2100" title="Permanent link"></a></h3>
+<h3 id="monstache-v2100"><a href="https://github.com/rwynn/monstache/releases/tag/v2.10.0">monstache v2.10.0</a><a class="headerlink" href="#monstache-v2100" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add shard routing capability</li>
 <li>add Makefile</li>
 </ul>
-<h3 id="monstache-v293"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.3">monstache v2.9.3</a><a class="headerlink" href="#monstache-v293" title="Permanent link"></a></h3>
+<h3 id="monstache-v293"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.3">monstache v2.9.3</a><a class="headerlink" href="#monstache-v293" title="Permanent link">&para;</a></h3>
 <ul>
 <li>extend ttl for active in cluster to reduce process switching</li>
 </ul>
-<h3 id="monstache-v292"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.2">monstache v2.9.2</a><a class="headerlink" href="#monstache-v292" title="Permanent link"></a></h3>
+<h3 id="monstache-v292"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.2">monstache v2.9.2</a><a class="headerlink" href="#monstache-v292" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix potential collision on floating point _id closes #16</li>
 </ul>
-<h3 id="monstache-v291"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.1">monstache v2.9.1</a><a class="headerlink" href="#monstache-v291" title="Permanent link"></a></h3>
+<h3 id="monstache-v291"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9.1">monstache v2.9.1</a><a class="headerlink" href="#monstache-v291" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix an edge case #18 where a process resuming for the cluster would remain paused</li>
 </ul>
-<h3 id="monstache-v29"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9">monstache v2.9</a><a class="headerlink" href="#monstache-v29" title="Permanent link"></a></h3>
+<h3 id="monstache-v29"><a href="https://github.com/rwynn/monstache/releases/tag/v2.9">monstache v2.9</a><a class="headerlink" href="#monstache-v29" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix an issue with formatting of integer ids</li>
 <li>enable option for new clustering feature for high availability</li>
 <li>add TLS skip verify options for mongodb and elasticsearch</li>
 <li>add an option to specify a specific timestamp to start syncing from</li>
 </ul>
-<h3 id="monstache-v281"><a href="https://github.com/rwynn/monstache/releases/tag/v2.8.1">monstache v2.8.1</a><a class="headerlink" href="#monstache-v281" title="Permanent link"></a></h3>
+<h3 id="monstache-v281"><a href="https://github.com/rwynn/monstache/releases/tag/v2.8.1">monstache v2.8.1</a><a class="headerlink" href="#monstache-v281" title="Permanent link">&para;</a></h3>
 <ul>
 <li>fix an index out of bounds panic during error reporting</li>
 <li>surface gtm options for setting the oplog database and collection name as well as the cursor timeout</li>
 <li>report an error if unable to unzip a response when verbose is true</li>
 </ul>
-<h3 id="monstache-v28"><a href="https://github.com/rwynn/monstache/releases/tag/v2.8">monstache v2.8</a><a class="headerlink" href="#monstache-v28" title="Permanent link"></a></h3>
+<h3 id="monstache-v28"><a href="https://github.com/rwynn/monstache/releases/tag/v2.8">monstache v2.8</a><a class="headerlink" href="#monstache-v28" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add a version flag -v</li>
 <li>document the elasticsearch-pem-file option</li>
 <li>add the elasticsearch-hosts option to configure pool of available nodes within a cluster</li>
 </ul>
-<h3 id="monstache-v27"><a href="https://github.com/rwynn/monstache/releases/tag/v2.7">monstache v2.7</a><a class="headerlink" href="#monstache-v27" title="Permanent link"></a></h3>
+<h3 id="monstache-v27"><a href="https://github.com/rwynn/monstache/releases/tag/v2.7">monstache v2.7</a><a class="headerlink" href="#monstache-v27" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add a gzip configuration option to increase performance</li>
 <li>default resume-name to the worker name if defined</li>
 <li>decrease binary size by building with -ldflags "-w"</li>
 </ul>
-<h3 id="monstache-v26"><a href="https://github.com/rwynn/monstache/releases/tag/v2.6">monstache v2.6</a><a class="headerlink" href="#monstache-v26" title="Permanent link"></a></h3>
+<h3 id="monstache-v26"><a href="https://github.com/rwynn/monstache/releases/tag/v2.6">monstache v2.6</a><a class="headerlink" href="#monstache-v26" title="Permanent link">&para;</a></h3>
 <ul>
 <li>reuse allocations made for gridfs files</li>
 <li>add workers feature to distribute synching between multiple processes</li>
 </ul>
-<h3 id="monstache-v25"><a href="https://github.com/rwynn/monstache/releases/tag/v2.5">monstache v2.5</a><a class="headerlink" href="#monstache-v25" title="Permanent link"></a></h3>
+<h3 id="monstache-v25"><a href="https://github.com/rwynn/monstache/releases/tag/v2.5">monstache v2.5</a><a class="headerlink" href="#monstache-v25" title="Permanent link">&para;</a></h3>
 <ul>
 <li>add option to speed up writes when saving resume state</li>
 <li>remove extra buffering when adding file content</li>
 </ul>
-<h3 id="monstache-v24"><a href="https://github.com/rwynn/monstache/releases/tag/v2.4">monstache v2.4</a><a class="headerlink" href="#monstache-v24" title="Permanent link"></a></h3>
+<h3 id="monstache-v24"><a href="https://github.com/rwynn/monstache/releases/tag/v2.4">monstache v2.4</a><a class="headerlink" href="#monstache-v24" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixed issue #10</li>
 <li>Fixed issue #11</li>
 </ul>
-<h3 id="monstache-v23"><a href="https://github.com/rwynn/monstache/releases/tag/v2.3">monstache v2.3</a><a class="headerlink" href="#monstache-v23" title="Permanent link"></a></h3>
+<h3 id="monstache-v23"><a href="https://github.com/rwynn/monstache/releases/tag/v2.3">monstache v2.3</a><a class="headerlink" href="#monstache-v23" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added configuration option for max file size</li>
 <li>Added code to normalize index and type names based on restrictions in Elasticsearch</li>
 <li>Performance improvements for GridFs files</li>
 </ul>
-<h3 id="monstache-v22"><a href="https://github.com/rwynn/monstache/releases/tag/v2.2">monstache v2.2</a><a class="headerlink" href="#monstache-v22" title="Permanent link"></a></h3>
+<h3 id="monstache-v22"><a href="https://github.com/rwynn/monstache/releases/tag/v2.2">monstache v2.2</a><a class="headerlink" href="#monstache-v22" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added configuration option for dropped databases and dropped collections.  See the README for more
   information.</li>
 </ul>
-<h3 id="monstache-v21"><a href="https://github.com/rwynn/monstache/releases/tag/v2.1">monstache v2.1</a><a class="headerlink" href="#monstache-v21" title="Permanent link"></a></h3>
+<h3 id="monstache-v21"><a href="https://github.com/rwynn/monstache/releases/tag/v2.1">monstache v2.1</a><a class="headerlink" href="#monstache-v21" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added support for dropped databases and collections. Now when you drop a database or collection from
   mongodb the corresponding indexes are deleted in elasticsearch.</li>
 </ul>
-<h3 id="monstache-v20"><a href="https://github.com/rwynn/monstache/releases/tag/v2.0">monstache v2.0</a><a class="headerlink" href="#monstache-v20" title="Permanent link"></a></h3>
+<h3 id="monstache-v20"><a href="https://github.com/rwynn/monstache/releases/tag/v2.0">monstache v2.0</a><a class="headerlink" href="#monstache-v20" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixes an issue with the default mapping between mongodb and elasticsearch.  Previously, each database
   in mongodb was mapped to an index of the same name in elasticsearch.  This creates a problem because
@@ -604,41 +618,41 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
   and type used for a particular mongodb namespace.</li>
 <li>Bumps the go version to 1.7.3 </li>
 </ul>
-<h3 id="monstache-v131"><a href="https://github.com/rwynn/monstache/releases/tag/v1.3.1">monstache v1.3.1</a><a class="headerlink" href="#monstache-v131" title="Permanent link"></a></h3>
+<h3 id="monstache-v131"><a href="https://github.com/rwynn/monstache/releases/tag/v1.3.1">monstache v1.3.1</a><a class="headerlink" href="#monstache-v131" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Version 1.3 rebuilt with go1.7.1</li>
 </ul>
-<h3 id="monstache-v13"><a href="https://github.com/rwynn/monstache/releases/tag/v1.3">monstache v1.3</a><a class="headerlink" href="#monstache-v13" title="Permanent link"></a></h3>
+<h3 id="monstache-v13"><a href="https://github.com/rwynn/monstache/releases/tag/v1.3">monstache v1.3</a><a class="headerlink" href="#monstache-v13" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Improve log messages</li>
 <li>Add support for the ingest-attachment plugin in elasticsearch 5</li>
 </ul>
-<h3 id="monstache-v12"><a href="https://github.com/rwynn/monstache/releases/tag/v1.2">monstache v1.2</a><a class="headerlink" href="#monstache-v12" title="Permanent link"></a></h3>
+<h3 id="monstache-v12"><a href="https://github.com/rwynn/monstache/releases/tag/v1.2">monstache v1.2</a><a class="headerlink" href="#monstache-v12" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Improve Error Reporting and Add Config Options</li>
 </ul>
-<h3 id="monstache-v11"><a href="https://github.com/rwynn/monstache/releases/tag/v1.1">monstache v1.1</a><a class="headerlink" href="#monstache-v11" title="Permanent link"></a></h3>
+<h3 id="monstache-v11"><a href="https://github.com/rwynn/monstache/releases/tag/v1.1">monstache v1.1</a><a class="headerlink" href="#monstache-v11" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixes crash during replay (issue #2)</li>
 <li>Adds supports for indexing GridFS content (issue #3)</li>
 </ul>
-<h3 id="monstache-v10"><a href="https://github.com/rwynn/monstache/releases/tag/v1.0">monstache v1.0</a><a class="headerlink" href="#monstache-v10" title="Permanent link"></a></h3>
+<h3 id="monstache-v10"><a href="https://github.com/rwynn/monstache/releases/tag/v1.0">monstache v1.0</a><a class="headerlink" href="#monstache-v10" title="Permanent link">&para;</a></h3>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul>
-<h3 id="monstache-v08-beta2"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta.2">monstache v0.8-beta.2</a><a class="headerlink" href="#monstache-v08-beta2" title="Permanent link"></a></h3>
+<h3 id="monstache-v08-beta2"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta.2">monstache v0.8-beta.2</a><a class="headerlink" href="#monstache-v08-beta2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul>
-<h3 id="monstache-v08-beta1"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta.1">monstache v0.8-beta.1</a><a class="headerlink" href="#monstache-v08-beta1" title="Permanent link"></a></h3>
+<h3 id="monstache-v08-beta1"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta.1">monstache v0.8-beta.1</a><a class="headerlink" href="#monstache-v08-beta1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul>
-<h3 id="monstache-v08-beta"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta">monstache v0.8-beta</a><a class="headerlink" href="#monstache-v08-beta" title="Permanent link"></a></h3>
+<h3 id="monstache-v08-beta"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-beta">monstache v0.8-beta</a><a class="headerlink" href="#monstache-v08-beta" title="Permanent link">&para;</a></h3>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul>
-<h3 id="monstache-v08-alpha"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-alpha">monstache v0.8-alpha</a><a class="headerlink" href="#monstache-v08-alpha" title="Permanent link"></a></h3>
+<h3 id="monstache-v08-alpha"><a href="https://github.com/rwynn/monstache/releases/tag/v0.8-alpha">monstache v0.8-alpha</a><a class="headerlink" href="#monstache-v08-alpha" title="Permanent link">&para;</a></h3>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul></div>

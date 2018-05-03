@@ -70,7 +70,7 @@ retried before being considered a failure.
 
 boolean (default false)
 
-If you MongoDB data contains values like +Infinity, -Infinity, or NaN you will want to set this option to true.  The
+If you MongoDB data contains values like +Infinity, -Infinity, NaN, or invalid dates you will want to set this option to true.  The
 Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When this
 is set to true Monstache will drop those fields so that indexing errors do not occur.
 

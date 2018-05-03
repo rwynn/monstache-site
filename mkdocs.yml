@@ -18,6 +18,6 @@ pages:
     - "About": about.md
 markdown_extensions:
     - toc:
-        permalink: 
+        permalink: True
     - admonition
     - def_list

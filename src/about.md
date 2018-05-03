@@ -81,6 +81,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.6.3](https://github.com/rwynn/monstache/releases/tag/v4.6.3)
+
+* Fix for issue #65, year outside of [0,9999].  Invalid time will be removed now with `prune-invalid-json` turned on
+* Fix for issue #62, the number of connections to MongoDB is now limited to a max of 32 per namespace
+* Fix for issue #59, unsupported values of +/- Infinity and NaN.  These values can now be removed with the `prune-invalid-json` setting
+* Fix for issue $46 and #66, having to do with filtering.  Filters now use locks to ensure the javascript environment is used by one at a time.
+
+### [monstache v3.13.3](https://github.com/rwynn/monstache/releases/tag/v3.13.3)
+
+* Fix for issue #65, year outside of [0,9999].  Invalid time will be removed now with `prune-invalid-json` turned on
+* Fix for issue #62, the number of connections to MongoDB is now limited to a max of 32 per namespace
+* Fix for issue #59, unsupported values of +/- Infinity and NaN.  These values can now be removed with the `prune-invalid-json` setting
+* Fix for issue $46 and #66, having to do with filtering.  Filters now use locks to ensure the javascript environment is used by one at a time.
+
 ### [monstache v4.6.2](https://github.com/rwynn/monstache/releases/tag/v4.6.2)
 
 * Fix regression in 3.13 series where collections under 50K documents were not synching
