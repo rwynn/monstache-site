@@ -228,6 +228,17 @@ By default, Elasticsearch refreshes every second.  You will want to increase thi
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.
 
+## direct-read-split-max
+
+int (default 9)
+
+The maximum number of times to split a collection for direct reads.  This setting greatly impacts the memory consumption
+of Monstache.  When direct reads are performed, the collection is first broken up into ranges which are then read 
+concurrently is separate go routines.  If you increase this value you will notice the connection count increase in mongostat
+when direct reads are performed.  You will also notice the memory consumption of Monstache grow.  Increasing this value can
+increase the throughput for reading large collections, but you need to have enough memory available to Monstache to do so.
+You can decrease this value for a memory constrained Monstache process.
+
 ## exit-after-direct-reads
 
 boolean (default false)

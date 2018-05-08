@@ -1034,31 +1034,29 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 
 There are Docker images available for Monstache on [Docker Hub](https://hub.docker.com/r/rwynn/monstache/tags/)
 
-The first set of images are based on Alpine to keep the size down.  The monstache executables built for these images
-are statically linked with `CGO=0`.  Check the Monstache [Makefile](https://github.com/rwynn/monstache/blob/master/Makefile) on Github for details.
-
-You can pull and run these images with
+You can pull and run the latest images with
 
 ```
-docker run rwynn/monstache:4.6.3 -v
+# for elasticsearch > 5
+docker run rwynn/monstache:latest -v
 
-docker run rwynn/monstache:3.13.3 -v
+# for elasticsearch <= 5
+docker run rwynn/monstache:rel3 -v
 ```
 
-If you use the golang plugin feature of Monstache, you should instead use the larger Debian based images. The go
-implementation of plugins does not work with statically linked executables.
+You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.6.3.cgo -v
+docker run rwynn/monstache:4.6.4 -v
 
-docker run rwynn/monstache:3.13.3.cgo -v
+docker run rwynn/monstache:3.13.4 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.3.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4.cgo -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 

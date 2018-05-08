@@ -122,6 +122,7 @@
             <li><a href="#delete-strategy">delete-strategy</a></li>
             <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
+            <li><a href="#direct-read-split-max">direct-read-split-max</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
             <li><a href="#namespace-regex">namespace-regex</a></li>
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
@@ -315,6 +316,14 @@ index basis by using the Index Settings or Index Template APIs.  For more inform
 <p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
 phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
 phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
+<h2 id="direct-read-split-max">direct-read-split-max<a class="headerlink" href="#direct-read-split-max" title="Permanent link">&para;</a></h2>
+<p>int (default 9)</p>
+<p>The maximum number of times to split a collection for direct reads.  This setting greatly impacts the memory consumption
+of Monstache.  When direct reads are performed, the collection is first broken up into ranges which are then read 
+concurrently is separate go routines.  If you increase this value you will notice the connection count increase in mongostat
+when direct reads are performed.  You will also notice the memory consumption of Monstache grow.  Increasing this value can
+increase the throughput for reading large collections, but you need to have enough memory available to Monstache to do so.
+You can decrease this value for a memory constrained Monstache process.</p>
 <h2 id="exit-after-direct-reads">exit-after-direct-reads<a class="headerlink" href="#exit-after-direct-reads" title="Permanent link">&para;</a></h2>
 <p>boolean (default false)</p>
 <p>The <a href="#direct-read-namespaces">direct-read-namespaces</a> option gives you a way to do a full sync on multiple collections.  At times you may want
