@@ -88,11 +88,12 @@ mongo-url = "mongodb://someuser:password@localhost:40001"
 elasticsearch-urls = ["https://example:9200"]
 
 # frequently required settings
+
 # if you don't want to listen for changes to all collections in MongoDB but only a few
 # e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
 # this setting does not initiate a copy, it is a filter on the change listener only
 namespace-regex = '^mydb\.(mycollection|\$cmd)$'
-# additionally, f you need to seed an index from a collection and not just listen for changes from the oplog
+# additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
 # you can copy entire collections from MongoDB to Elasticsearch
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 
