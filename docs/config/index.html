@@ -332,14 +332,14 @@ monstache will exit after syncing the direct read collections instead of continu
 if you would like to run monstache to run a full sync on a set of collections via a cron job.</p>
 <h2 id="namespace-regex">namespace-regex<a class="headerlink" href="#namespace-regex" title="Permanent link">&para;</a></h2>
 <p>regexp (default "")</p>
-<p>When namespace-regex is given this regex is tested against the namespace, database.collection, of the event. If
-the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+<p>When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
+drop in MongoDB. If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced#namespaces">Namespaces</a>.</p>
 <h2 id="namespace-exclude-regex">namespace-exclude-regex<a class="headerlink" href="#namespace-exclude-regex" title="Permanent link">&para;</a></h2>
 <p>regex (default "")</p>
-<p>When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of the event. If
-the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+<p>When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
+drop in MongoDB. If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced#namespaces">Namespaces</a>.</p>
 <h2 id="mongo-url">mongo-url<a class="headerlink" href="#mongo-url" title="Permanent link">&para;</a></h2>
@@ -568,6 +568,9 @@ path relative to the directory monstache is executed from or an absolute path.</
 <h4 id="info">info<a class="headerlink" href="#info" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
 <p>The file path to write info level logs to</p>
+<h4 id="warn">warn<a class="headerlink" href="#warn" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The file path to write warning level logs to</p>
 <h4 id="error">error<a class="headerlink" href="#error" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
 <p>The file path to write error level logs to</p>

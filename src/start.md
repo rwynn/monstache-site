@@ -87,6 +87,14 @@ mongo-url = "mongodb://someuser:password@localhost:40001"
 # connect to the Elasticsearch REST API at the following URLs
 elasticsearch-urls = ["https://example:9200"]
 
+# frequently required settings
+# if you don't want to listen for changes to all collections in MongoDB but only a few
+# e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
+# this setting does not initiate a copy, it is a filter on the change listener only
+namespace-regex = '^mydb\.(mycollection|\$cmd)$'
+# additionally, f you need to seed an index from a collection and not just listen for changes from the oplog
+# you can copy entire collections from MongoDB to Elasticsearch
+direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 
 # additional settings
 
@@ -104,8 +112,8 @@ mongo-validate-pem-file = false
 elasticsearch-user = "someuser"
 # use the following password for Elasticsearch basic auth
 elasticsearch-password = "somepassword"
-# use 10 go routines concurrently pushing documents to Elasticsearch
-elasticsearch-max-conns = 10
+# use 4 go routines concurrently pushing documents to Elasticsearch
+elasticsearch-max-conns = 4 
 # use the following PEM file to connections to Elasticsearch
 elasticsearch-pem-file = "/path/to/elasticCert.pem"
 # validate connections to Elasticsearch
@@ -115,6 +123,9 @@ dropped-collections = true
 # propogate dropped databases in MongoDB as index deletes in Elasticsearch
 dropped-databases = true
 # do not start processing at the beginning of the MongoDB oplog
+# if you set the replay to true you may see version conflict messages
+# in the log if you had synced previously. This just means that you are replaying old docs which are already
+# in Elasticsearch with a newer version. Elasticsearch is preventing the old docs from overwriting new ones.
 replay = false
 # resume processing from a timestamp saved in a previous run
 resume = true
@@ -122,8 +133,6 @@ resume = true
 resume-write-unsafe = false
 # override the name under which resume state is saved
 resume-name = "default"
-# include documents whose namespace matches the following pattern
-namespace-regex = '^mydb\.(mycollection|\$cmd)$'
 # exclude documents whose namespace matches the following pattern
 namespace-exclude-regex = '^mydb\.(ignorecollection|\$cmd)$'
 # turn on indexing of GridFS file content

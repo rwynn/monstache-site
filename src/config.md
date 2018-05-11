@@ -252,8 +252,8 @@ if you would like to run monstache to run a full sync on a set of collections vi
 
 regexp (default "")
 
-When namespace-regex is given this regex is tested against the namespace, database.collection, of the event. If
-the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
+drop in MongoDB. If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
 
@@ -261,8 +261,8 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 regex (default "")
 
-When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of the event. If
-the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
+drop in MongoDB. If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
 
@@ -662,6 +662,12 @@ Allows writing logs to a file using a rolling appender instead of stdout.  Suppl
 	string (default "")
 
 	The file path to write info level logs to
+
+	#### warn
+
+	string (default "")
+
+	The file path to write warning level logs to
 
 	#### error
 
