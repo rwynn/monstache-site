@@ -1056,7 +1056,7 @@ For example, to run monstache via Docker with a golang plugin that resides at `~
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4.cgo -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
