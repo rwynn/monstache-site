@@ -582,11 +582,12 @@ When cluster-name is given monstache will enter a high availablity mode. Process
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
 one of the processes in paused state will take control and start syncing.  See the section [high availability](/advanced#high-availability) for more information.
 
-## filter
+## mapping
 
 [] array of TOML table (default nil)
 
-When filter is given monstache will pass the mongodb document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
+When mapping is given monstache will be directed to override the default index and type assigned to documents in Elasticsearch.
+See the section [Index Mapping](/advanced#index-mapping) for more information.
 
 !!! note ""
 
@@ -594,13 +595,42 @@ When filter is given monstache will pass the mongodb document from an insert or 
 
 	string (default "")
 
-	The MongoDB namespace, db.collection, to apply the script to
+	The MongoDB namespace, db.collection, to apply the mapping to.
+
+	#### index
+
+	string (default "same as namespace including the dot. e.g. test.test")
+
+	Allows you to override the default index that monstache will send documents to.  By default, the index is the same as the MongoDB namespace.
+
+	#### type
+
+	string (default "_doc for ES 6.2+ and the name of the MongoDB collection otherwise")
+
+	Allows you to override the default type that monstache will index documents with.  Overriding the type is not recommended for Elasticsearch version
+	6.2+.
+
+## filter
+
+[] array of TOML table (default nil)
+
+When filter is given monstache will pass the mongodb document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
+See the section [Middleware](/advanced#middleware) for more information.
+
+!!! note ""
+
+	#### namespace
+
+	string (default "")
+
+	The MongoDB namespace, db.collection, to apply the script to.  If you omit namespace the filter function will be applied to all documents.
 
 	#### script
 
 	string (default "")
 
-	An inline script.  You can use TOML multiline syntax here
+	An inline script.  You can use TOML multiline syntax here. The function should take 2 arguments, a doc and a namespace, and return true/false to
+	include or filter the document.
 
 	#### path
 
@@ -613,8 +643,8 @@ When filter is given monstache will pass the mongodb document from an insert or 
 
 [] array of TOML table (default nil)
 
-When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.  See the section [Middleware](/advanced#middleware)
-for more information.
+When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.
+See the section [Middleware](/advanced#middleware) for more information.
 
 !!! note ""
 
@@ -622,7 +652,7 @@ for more information.
 
 	string (default "")
 
-	The MongoDB namespace, db.collection, to apply the script to
+	The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the mapping function with be applied to all documents.
 
 	#### routing
 
@@ -634,14 +664,15 @@ for more information.
 
 	string (default "")
 
-	An inline script.  You can use TOML multiline syntax here
+	An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a doc and a namespace, and return a modified doc.
+	You can also return true to index the original document or false to ignore the document and schedule any previous documents with the same id
+	for deletion.
 
 	#### path
 
 	string (default "")
 
-	The file path to load a script from.  Use this or an inline script but not both. Can be a
-    path relative to the directory monstache is executed from or an absolute path.
+	The file path to load a script from.  Use this or an inline script but not both. Can be a path relative to the directory monstache is executed from or an absolute path.
 
 ## graylog-addr
 

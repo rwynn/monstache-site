@@ -53,7 +53,7 @@ go get -u github.com/rwynn/monstache
 
 ### Running the tests
 
-To run the tests, you will need to have local mongod and elasticsearch servers running.  
+To run the tests without Docker, you will need to have local mongod and elasticsearch servers running.  
 Then you will need to start a monstache process in one terminal or in the background.
 
 ```bash
@@ -73,6 +73,11 @@ go test -v
     MongoDB and will index documents in the `test.test` index in Elasticsearch.  If you have
     data that you need to keep on your local servers, make a back up before running the tests.
 
+If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
+is via Docker. After cloning the monstache repo you can cd into the `docker/test` directory and run 
+`run-tests.sh`.  You will need `docker` and `docker-compose` to run the tests this way.  Services for
+MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.
+
 ### Submitting Pull Requests
 
 Once you are happy with your changes or you are ready for some feedback, push
@@ -80,6 +85,17 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
+
+### [monstache v4.6.4](https://github.com/rwynn/monstache/releases/tag/v4.6.4)
+
+* Expose new setting direct-read-split-max which limits the number of times a collection is split for reading during direct-reads and thus the number of go routines and MongoDB connections spawned. The default is 9. Tune this setting to increase/decrease the amount of memory the monstache process will consume.
+* Better Docker support due to the contributions of @a-magdy.
+
+
+### [monstache v3.13.4](https://github.com/rwynn/monstache/releases/tag/v3.13.4)
+
+* Expose new setting direct-read-split-max which limits the number of times a collection is split for reading during direct-reads and thus the number of go routines and MongoDB connections spawned. The default is 9. Tune this setting to increase/decrease the amount of memory the monstache process will consume.
+* Better Docker support due to the contributions of @a-magdy.
 
 ### [monstache v4.6.3](https://github.com/rwynn/monstache/releases/tag/v4.6.3)
 

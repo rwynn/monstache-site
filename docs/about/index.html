@@ -147,7 +147,7 @@ have encountered is fixed in the git master.</p>
 </code></pre>
 
 <h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link">&para;</a></h3>
-<p>To run the tests, you will need to have local mongod and elasticsearch servers running.<br />
+<p>To run the tests without Docker, you will need to have local mongod and elasticsearch servers running.<br />
 Then you will need to start a monstache process in one terminal or in the background.</p>
 <pre><code class="bash">monstache -verbose
 </code></pre>
@@ -163,11 +163,25 @@ go test -v
 MongoDB and will index documents in the <code>test.test</code> index in Elasticsearch.  If you have
 data that you need to keep on your local servers, make a back up before running the tests.</p>
 </div>
+<p>If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
+is via Docker. After cloning the monstache repo you can cd into the <code>docker/test</code> directory and run 
+<code>run-tests.sh</code>.  You will need <code>docker</code> and <code>docker-compose</code> to run the tests this way.  Services for
+MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.</p>
 <h3 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link">&para;</a></h3>
 <p>Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v464"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.4">monstache v4.6.4</a><a class="headerlink" href="#monstache-v464" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Expose new setting direct-read-split-max which limits the number of times a collection is split for reading during direct-reads and thus the number of go routines and MongoDB connections spawned. The default is 9. Tune this setting to increase/decrease the amount of memory the monstache process will consume.</li>
+<li>Better Docker support due to the contributions of @a-magdy.</li>
+</ul>
+<h3 id="monstache-v3134"><a href="https://github.com/rwynn/monstache/releases/tag/v3.13.4">monstache v3.13.4</a><a class="headerlink" href="#monstache-v3134" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Expose new setting direct-read-split-max which limits the number of times a collection is split for reading during direct-reads and thus the number of go routines and MongoDB connections spawned. The default is 9. Tune this setting to increase/decrease the amount of memory the monstache process will consume.</li>
+<li>Better Docker support due to the contributions of @a-magdy.</li>
+</ul>
 <h3 id="monstache-v463"><a href="https://github.com/rwynn/monstache/releases/tag/v4.6.3">monstache v4.6.3</a><a class="headerlink" href="#monstache-v463" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for issue #65, year outside of [0,9999].  Invalid time will be removed now with <code>prune-invalid-json</code> turned on</li>

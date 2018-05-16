@@ -362,6 +362,10 @@ before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  
 
 When you implement a `Filter` function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting `output.Drop` from the mapping function because when you set `output.Drop` to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the `Filter` function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.
 
+!!! note
+	Under the `docker/plugin` folder there is a `build.sh` script to help you build a plugin. There is a README file in that directory
+	with instructions.
+
 ### Javascript
 
 #### Transformation
@@ -1037,10 +1041,10 @@ There are Docker images available for Monstache on [Docker Hub](https://hub.dock
 You can pull and run the latest images with
 
 ```
-# for elasticsearch > 5
+# for elasticsearch >= 6
 docker run rwynn/monstache:latest -v
 
-# for elasticsearch <= 5
+# for elasticsearch < 6
 docker run rwynn/monstache:rel3 -v
 ```
 
@@ -1059,14 +1063,6 @@ For example, to run monstache via Docker with a golang plugin that resides at `~
 docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
-
-#### Shells & Binaries
-
-Images ending with `.cgo` like: `rwynn/monstache:4.4.0.cgo` have both: `sh` & `bash` shells, but don't have `wget` or `curl` binaries
-
-Images with just the version number like: `rwynn/monstache:4.4.0` have only `sh` shell and `wget` binary
-
-This information might be useful if you `exec` in the container or use `healthcheck`
 
 ## HTTP Server
 
@@ -1089,8 +1085,4 @@ Returns at 200 status code with the text "ok" when monstache is running
 #### /stats
 
 Returns the current indexing statistics in JSON format. Only available if stats are enabled
-
-#### /config
-
-Returns the configuration monstache is using in JSON format
 

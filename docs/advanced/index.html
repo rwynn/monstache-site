@@ -411,6 +411,11 @@ correctly.</p>
 <p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
 <p>When you implement a <code>Filter</code> function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting <code>output.Drop</code> from the mapping function because when you set <code>output.Drop</code> to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the <code>Filter</code> function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Under the <code>docker/plugin</code> folder there is a <code>build.sh</code> script to help you build a plugin. There is a README file in that directory
+with instructions.</p>
+</div>
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link">&para;</a></h3>
 <h4 id="transformation">Transformation<a class="headerlink" href="#transformation" title="Permanent link">&para;</a></h4>
 <p>Monstache uses the amazing <a href="https://github.com/robertkrimen/otto">otto</a> library to provide transformation at the document field
@@ -974,10 +979,10 @@ to restart monstache if it does not start or respond within the WatchdDog interv
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <p>There are Docker images available for Monstache on <a href="https://hub.docker.com/r/rwynn/monstache/tags/">Docker Hub</a></p>
 <p>You can pull and run the latest images with</p>
-<pre><code># for elasticsearch &gt; 5
+<pre><code># for elasticsearch &gt;= 6
 docker run rwynn/monstache:latest -v
 
-# for elasticsearch &lt;= 5
+# for elasticsearch &lt; 6
 docker run rwynn/monstache:rel3 -v
 </code></pre>
 
@@ -993,10 +998,6 @@ docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4 -mapper
 
 </code></pre>
 
-<h4 id="shells-binaries">Shells &amp; Binaries<a class="headerlink" href="#shells-binaries" title="Permanent link">&para;</a></h4>
-<p>Images ending with <code>.cgo</code> like: <code>rwynn/monstache:4.4.0.cgo</code> have both: <code>sh</code> &amp; <code>bash</code> shells, but don't have <code>wget</code> or <code>curl</code> binaries</p>
-<p>Images with just the version number like: <code>rwynn/monstache:4.4.0</code> have only <code>sh</code> shell and <code>wget</code> binary</p>
-<p>This information might be useful if you <code>exec</code> in the container or use <code>healthcheck</code></p>
 <h2 id="http-server">HTTP Server<a class="headerlink" href="#http-server" title="Permanent link">&para;</a></h2>
 <p>Monstache has a built in HTTP server that you can enable with --enable-http-server. It
 listens on :8080 by default but you can change this with --http-server-addr.</p>
@@ -1008,9 +1009,7 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <h4 id="healthz">/healthz<a class="headerlink" href="#healthz" title="Permanent link">&para;</a></h4>
 <p>Returns at 200 status code with the text "ok" when monstache is running</p>
 <h4 id="stats">/stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h4>
-<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
-<h4 id="config">/config<a class="headerlink" href="#config" title="Permanent link">&para;</a></h4>
-<p>Returns the configuration monstache is using in JSON format</p></div>
+<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p></div>
         </div>
 
         <footer class="col-md-12">

@@ -67,7 +67,16 @@ configuration.
 ```
 
 Without any explicit configuration monstache will connect to Elasticsearch and MongoDB on localhost
-on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB will be reflected in Elasticsearch.
+on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB while Monstache is running will be reflected in Elasticsearch.
+
+To see the indexes created by Monstache you may want to issue the following command which will show the indices in Elasticsearch. By default, the
+index names will match the db.collection name in MongoDB.
+
+```sh
+
+curl localhost:9200/_cat/indices?v
+
+```
 
 Monstache uses the [TOML](https://github.com/toml-lang/toml) format for its configuration.  You can run 
 monstache with an explicit configuration by passing the -f flag.
