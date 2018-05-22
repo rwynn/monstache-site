@@ -16,7 +16,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.6.4
+# 4.6.5
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -155,8 +155,6 @@ file-namespaces = ["users.fs.files"]
 verbose = true
 # enable clustering mode
 cluster-name = 'apollo'
-# do a full-sync of the following collections
-direct-read-namespaces = ["db.collection", "test.test"]
 # do not exit after full-sync, rather continue tailing the oplog
 exit-after-direct-reads = false
 ```

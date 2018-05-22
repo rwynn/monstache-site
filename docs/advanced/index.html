@@ -987,14 +987,14 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.6.4 -v
+<pre><code>docker run rwynn/monstache:4.6.5 -v
 
-docker run rwynn/monstache:3.13.4 -v
+docker run rwynn/monstache:3.13.5 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.4 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.5 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 

@@ -115,7 +115,7 @@
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.6.4
+# 4.6.5
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
@@ -235,8 +235,6 @@ file-namespaces = [&quot;users.fs.files&quot;]
 verbose = true
 # enable clustering mode
 cluster-name = 'apollo'
-# do a full-sync of the following collections
-direct-read-namespaces = [&quot;db.collection&quot;, &quot;test.test&quot;]
 # do not exit after full-sync, rather continue tailing the oplog
 exit-after-direct-reads = false
 </code></pre>

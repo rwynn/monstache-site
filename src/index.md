@@ -27,7 +27,7 @@ Kibana visualizations and dashboards.
 
 - Index the content of GridFS files
 
-- Support for hard and soft deletes in MongoDB
+- Support for propogating hard/soft deletes
 
 - Support for propogating database and collection drops
 
@@ -48,5 +48,5 @@ Kibana visualizations and dashboards.
 See [Getting Started](/start/) for instructions how to get
 it up and running.
 
-See the [Release Notes](/about/#release-notes) for updates.
+See [Release Notes](/about/#release-notes) for updates.
 

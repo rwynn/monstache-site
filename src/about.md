@@ -69,14 +69,16 @@ go test -v
 
 !!! warning
 
-    Running the Monstache tests will perform modifications to the `test.test` namespace in 
-    MongoDB and will index documents in the `test.test` index in Elasticsearch.  If you have
-    data that you need to keep on your local servers, make a back up before running the tests.
+	Running the Monstache tests will perform modifications to the `test.test` namespace in 
+	MongoDB and will index documents in the `test.test` index in Elasticsearch.  If you have
+	data that you need to keep on your local servers, make a back up before running the tests.
 
-If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
-is via Docker. After cloning the monstache repo you can cd into the `docker/test` directory and run 
-`run-tests.sh`.  You will need `docker` and `docker-compose` to run the tests this way.  Services for
-MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.
+!!! note
+
+	If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
+	is via Docker. After cloning the monstache repo you can cd into the `docker/test` directory and run 
+	`run-tests.sh`.  You will need `docker` and `docker-compose` to run the tests this way.  Services for
+	MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.
 
 ### Submitting Pull Requests
 
@@ -85,6 +87,22 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
+
+### [monstache v4.6.5](https://github.com/rwynn/monstache/releases/tag/v4.6.5)
+
+* decrease the fetch channel flush timeout
+* clarify version conflicts and invalid json messages as warnings
+* remove the /config endpoint for better security (use -print-config instead)
+* fix LoadPlugins method (contributed by @YouthLab)
+* performance tweaks in gtm
+
+### [monstache v3.13.5](https://github.com/rwynn/monstache/releases/tag/v3.13.5)
+
+* decrease the fetch channel flush timeout
+* clarify version conflicts and invalid json messages as warnings
+* remove the /config endpoint for better security (use -print-config instead)
+* fix LoadPlugins method (contributed by @YouthLab)
+* performance tweaks in gtm
 
 ### [monstache v4.6.4](https://github.com/rwynn/monstache/releases/tag/v4.6.4)
 
