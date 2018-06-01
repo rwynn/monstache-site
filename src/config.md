@@ -316,13 +316,6 @@ string (default $oplog.main)
 
 When mongo-oplog-collection-name is given monstache will look for the mongodb oplog in the supplied collection
 
-## mongo-cursor-timeout
-
-string (default 100s)
-
-When mongo-cursor-timeout is given monstache will time out and re-query the oplog after the supplied duration.
-Duration values are expected in the form 50s.
-
 ## mongo-dial-settings
 
 TOML table (default nil)

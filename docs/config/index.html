@@ -133,7 +133,6 @@
             <li><a href="#mongo-validate-pem">mongo-validate-pem</a></li>
             <li><a href="#mongo-oplog-database-name">mongo-oplog-database-name</a></li>
             <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
-            <li><a href="#mongo-cursor-timeout">mongo-cursor-timeout</a></li>
             <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
             <li><a href="#mongo-session-settings">mongo-session-settings</a></li>
             <li><a href="#gtm-settings">gtm-settings</a></li>
@@ -372,10 +371,6 @@ pool when connecting to mongodb. This should only be used when mongodb is config
 <h2 id="mongo-oplog-collection-name">mongo-oplog-collection-name<a class="headerlink" href="#mongo-oplog-collection-name" title="Permanent link">&para;</a></h2>
 <p>string (default $oplog.main)</p>
 <p>When mongo-oplog-collection-name is given monstache will look for the mongodb oplog in the supplied collection</p>
-<h2 id="mongo-cursor-timeout">mongo-cursor-timeout<a class="headerlink" href="#mongo-cursor-timeout" title="Permanent link">&para;</a></h2>
-<p>string (default 100s)</p>
-<p>When mongo-cursor-timeout is given monstache will time out and re-query the oplog after the supplied duration.
-Duration values are expected in the form 50s.</p>
 <h2 id="mongo-dial-settings">mongo-dial-settings<a class="headerlink" href="#mongo-dial-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default nil)</p>
 <p>The following mongodb dial properties are available</p>
