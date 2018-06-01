@@ -1051,16 +1051,16 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.6.5 -v
+docker run rwynn/monstache:4.7.0 -v
 
-docker run rwynn/monstache:3.13.5 -v
+docker run rwynn/monstache:3.14.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.6.5 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.7.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
@@ -1085,4 +1085,14 @@ Returns at 200 status code with the text "ok" when monstache is running
 #### /stats
 
 Returns the current indexing statistics in JSON format. Only available if stats are enabled
+
+#### /debug (if pprof is enabled)
+
+If the pprof setting is enabled the following endpoints are also made available:
+
+/debug/pprof/
+/debug/pprof/cmdline
+/debug/pprof/profile
+/debug/pprof/symbol
+/debug/pprof/trace
 

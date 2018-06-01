@@ -88,6 +88,18 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.7.0](https://github.com/rwynn/monstache/releases/tag/v4.7.0)
+
+* add -pprof setting. When enabled and combined with -enable-http-server you can read profiling information.  See [Profiling for Go](https://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/) for more information. 
+* add -enable-easy-json setting. When enabled easy-json will be used for serialization to Elasticsearch.
+* tweaks to the tailing code in gtm
+
+### [monstache v3.14.0](https://github.com/rwynn/monstache/releases/tag/v3.14.0)
+
+* add -pprof setting. When enabled and combined with -enable-http-server you can read profiling information.  See [Profiling for Go](https://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/) for more information. 
+* add -enable-easy-json setting. When enabled easy-json will be used for serialization to Elasticsearch.
+* tweaks to the tailing code in gtm
+
 ### [monstache v4.6.5](https://github.com/rwynn/monstache/releases/tag/v4.6.5)
 
 * decrease the fetch channel flush timeout

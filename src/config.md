@@ -20,6 +20,12 @@ boolean (default false)
 
 When stats is true monstache will periodically print statistics accumulated by the indexer
 
+## enable-easy-json
+
+boolean (default false)
+
+When enable-easy-json is true monstache will the easy-json library to serialize requests to Elasticsearch
+
 ## stats-duration
 
 string (default 30s)
@@ -729,3 +735,11 @@ Add this flag to enable an embedded HTTP server at localhost:8080
 string (default ":8080")
 
 The address to bind the embedded HTTP server on if enabled
+
+## pprof
+
+boolean (default false)
+
+When pprof is true and the http server is enabled, monstache will make profiling information available.
+
+See [Profiling for Go](https://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/) for more information. 

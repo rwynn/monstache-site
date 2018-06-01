@@ -102,6 +102,7 @@
         <li class="main active"><a href="#configuration">Configuration</a></li>
             <li><a href="#print-config">print-config</a></li>
             <li><a href="#stats">stats</a></li>
+            <li><a href="#enable-easy-json">enable-easy-json</a></li>
             <li><a href="#stats-duration">stats-duration</a></li>
             <li><a href="#index-stats">index-stats</a></li>
             <li><a href="#stats-index-format">stats-index-format</a></li>
@@ -168,6 +169,7 @@
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
+            <li><a href="#pprof">pprof</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -186,6 +188,9 @@ Program arguments take precedance over configuration specified in the TOML confi
 <h2 id="stats">stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h2>
 <p>boolean (default false)</p>
 <p>When stats is true monstache will periodically print statistics accumulated by the indexer</p>
+<h2 id="enable-easy-json">enable-easy-json<a class="headerlink" href="#enable-easy-json" title="Permanent link">&para;</a></h2>
+<p>boolean (default false)</p>
+<p>When enable-easy-json is true monstache will the easy-json library to serialize requests to Elasticsearch</p>
 <h2 id="stats-duration">stats-duration<a class="headerlink" href="#stats-duration" title="Permanent link">&para;</a></h2>
 <p>string (default 30s)</p>
 <p>Sets the duration after which statistics are printed if stats is enabled</p>
@@ -606,7 +611,11 @@ for deletion.</p>
 <p>Add this flag to enable an embedded HTTP server at localhost:8080</p>
 <h2 id="http-server-addr">http-server-addr<a class="headerlink" href="#http-server-addr" title="Permanent link">&para;</a></h2>
 <p>string (default ":8080")</p>
-<p>The address to bind the embedded HTTP server on if enabled</p></div>
+<p>The address to bind the embedded HTTP server on if enabled</p>
+<h2 id="pprof">pprof<a class="headerlink" href="#pprof" title="Permanent link">&para;</a></h2>
+<p>boolean (default false)</p>
+<p>When pprof is true and the http server is enabled, monstache will make profiling information available.</p>
+<p>See <a href="https://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/">Profiling for Go</a> for more information. </p></div>
         </div>
 
         <footer class="col-md-12">
