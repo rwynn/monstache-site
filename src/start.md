@@ -93,8 +93,8 @@ and Elasticsearch connection settings and only specify additional options as nee
 
 # connect to MongoDB using the following URL
 mongo-url = "mongodb://someuser:password@localhost:40001"
-# connect to the Elasticsearch REST API at the following URLs
-elasticsearch-urls = ["https://example:9200"]
+# connect to the Elasticsearch REST API at the following node URLs
+elasticsearch-urls = ["https://es1:9200", "https://es2:900"]
 
 # frequently required settings
 

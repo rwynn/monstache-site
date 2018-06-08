@@ -2,7 +2,7 @@
 
 ---
 
-Configuration can be specified in your TOML config file or be passed into monstache as Go program arguments on the command line.
+Configuration can be specified in your TOML config file or passed into monstache as Go program arguments on the command line.
 Program arguments take precedance over configuration specified in the TOML config file.
 
 !!! warning
@@ -36,8 +36,10 @@ Sets the duration after which statistics are printed if stats is enabled
 
 boolean (default false)
 
-When index-stats is true monstache will write statistics about its indexing progress in
-Elasticsearch.  The indexes used to store the statistics are time stamped by day and 
+When both stats and index-stats are true monstache will write statistics about its indexing progress in
+Elasticsearch instead of standard out.
+
+The indexes used to store the statistics are time stamped by day and 
 prefixed `monstache.stats.`. E.g. monstache.stats.2017-07-01 and so on. 
 
 As these indexes will accrue over time your can use a tool like [curator](https://github.com/elastic/curator)
@@ -55,11 +57,11 @@ are partitioned by day.  To use less indices for stats you can shorten this form
 
 boolean (default false)
 
-When gzip is true, monstache will compress requests to elasticsearch to increase performance. 
-If you enable gzip in monstache and are using elasticsearch prior to version 5 you will also 
-need to update the elasticsearch config file to set http.compression: true. In elasticsearch 
-version 5 and above http.compression is enabled by default. Enabling gzip is recommended 
-especially if you enable the index-files setting.
+When gzip is true, monstache will compress requests to Elasticsearch. 
+If you enable gzip in monstache and are using Elasticsearch prior to version 5 you will also 
+need to update the Elasticsearch config file to set http.compression: true. In Elasticsearch 
+version 5 and above http.compression is enabled by default. Enabling gzip compression is recommended 
+if you enable the index-files setting.
 
 ## fail-fast
 
@@ -76,8 +78,8 @@ retried before being considered a failure.
 
 boolean (default false)
 
-If you MongoDB data contains values like +Infinity, -Infinity, NaN, or invalid dates you will want to set this option to true.  The
-Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When this
+If your MongoDB data contains values like +Infinity, -Infinity, NaN, or invalid dates you will want to set this option to true.  The
+Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When prune-invalid-json
 is set to true Monstache will drop those fields so that indexing errors do not occur.
 
 ## index-oplog-time
@@ -96,14 +98,14 @@ a given event occurred.
 
 For data read via the direct read feature the oplog time will only be available if the id of the MongoDB
 document is an ObjectID.  If the id of the MongoDB document is not an ObjectID and the document source is
-a direct read query then the oplog time with not be available.
+a direct read query then the oplog time will not be available.
 
 ## resume
 
 boolean (default false)
 
-When resume is true, monstache writes the timestamp of mongodb operations it has successfully synced to elasticsearch
-to the collection monstache.monstache.  It also reads the timestamp from that collection when it starts in order to replay
+When resume is true, monstache writes the timestamp of MongoDB operations it has successfully synced to Elasticsearch
+to the collection monstache.monstache.  It also reads that timestamp from that collection when it starts in order to replay
 events which it might have missed because monstache was stopped. If monstache is started with the [cluster-name](#cluster-name) option
 set then resume is automatically turned on.  
 
@@ -112,11 +114,11 @@ set then resume is automatically turned on.
 string (default "default")
 
 monstache uses the value of resume-name as an id when storing and retrieving timestamps
-to and from the mongodb collection monstache.monstache. The default value for this option is `default`.
+to and from the MongoDB collection monstache.monstache. The default value for this option is the string `default`.
 However, there are some exceptions.  If monstache is started with the [cluster-name](#cluster-name) option set then the
 name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
 from the last timestamp successfully processed.  The other exception occurs when resume-name is not given but
-[worker-name](#worker-name) is.  In that cause the worker name becomes the resume-name.
+[worker-name](#worker-name) is.  In that case the worker name becomes the resume-name.
 
 ## resume-from-timestamp
 
@@ -130,19 +132,24 @@ a specific timestamp from the oplog and would like to start syncing from after t
 
 boolean (default false)
 
-When replay is true, monstache replays all events from the beginning of the mongodb oplog and syncs them to elasticsearch.
+When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. 
 
-When [resume](#resume) and replay are both true, monstache replays all events from the beginning of the mongodb oplog, syncs them
-to elasticsearch and also writes the timestamp of processed events to monstache.monstache. 
+!!! note ""
+
+	If you've previously synced Monstache to Elasticsearch you may see many WARN statments in the log indicating that there was a version conflict.
+	This is normal during a replay and it just means that you already have data in Elasticsearch that is newer than the point in time data from the oplog.
+
+When [resume](#resume) and replay are both true, monstache replays all events from the beginning of the MongoDB oplog, syncs them
+to Elasticsearch and also writes the timestamps of processed events to monstache.monstache. 
 
 When neither resume nor replay are true, monstache reads the last timestamp in the oplog and starts listening for events
-occurring after this timestamp.  Timestamps are not written to monstache.monstache.  This is the default behavior. 
+occurring after this timestamp (tails starting at the end).  Timestamps are not written to monstache.monstache.  This is the default behavior. 
 
 ## resume-write-unsafe
 
 boolean (default false)
 
-When resume-write-unsafe is true monstache sets the safety mode of the mongodb session such that writes are fire and forget.
+When resume-write-unsafe is true monstache sets the safety mode of the MongoDB session such that writes are fire and forget.
 This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
 of no error checking on the write of the timestamp.  Since errors writing the last synched timestamp are only logged by monstache
 and do not stop execution it's not unreasonable to set this to true to get a speedup.
@@ -193,11 +200,11 @@ int (default 0)
 The strategy to use for handling document deletes when custom indexing is done in scripts.
 
 !!! warning
-	Breaking change in versions [v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0) & [v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0). Monstache was saving routing foreach document in mongodb in a db called `monstache` collection `meta` using the same mongodb URL and credentials provided in config by default.
+	Breaking change in versions [v4.4.0](https://github.com/rwynn/monstache/releases/tag/v4.4.0) & [v3.11.0](https://github.com/rwynn/monstache/releases/tag/v3.11.0). Monstache was saving routing foreach document in MongoDB in a db called `monstache` collection `meta` using the same MongoDB URL and credentials provided in config by default.
 	Monstache was only saving this information if the document metadata was being altered via `_monstache_meta` in a script or via the API in a golang plugin.  Monstache needed to save this information in order to locate and perform deletes in Elasticsearch if the corresponding document was deleted in MongoDB.
 	If you want to maintain this stategy use value 1.  Otherwise, you can drop the `monstache.meta` collection as this is no longer used by default.
 
-But now this has changed to be stateless, you can read more: [discussion](https://github.com/rwynn/monstache/issues/55#issuecomment-382055317) & [commit](https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e)
+But now the default has changed to be stateless, you can read more: [discussion](https://github.com/rwynn/monstache/issues/55#issuecomment-382055317) & [commit](https://github.com/rwynn/monstache/commit/1e093e60c1b431c85bd4895b10b5b3885e420e0e)
 
 **Strategy 0** -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.
 
@@ -217,10 +224,12 @@ mydb then you can set this to `mydb*`.
 
 []string (default nil)
 
-At times even being able to replay from the beginning of the oplog is not enough to sync all of your mongodb data.
-The oplog is a capped collection and may only contain a subset of the data.  In this case you can perform a direct
-sync of mongodb to elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
-like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to elasticsearch.
+This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
+actually indexed to Elasticsearch, so you need not necessarily copy the entire collection.
+
+Since the oplog is a capped collection it may only contain a subset of all your data.  In this case you can perform a direct
+sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
+like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to Elasticsearch.
 
 This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
 
@@ -279,14 +288,14 @@ string (default localhost)
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
 For sharded clusters this URL should point to the `mongos` router server and the [mongo-config-url](#mongo-config-url)
-option should be set to point to the config server.
+option must be set to point to the config server.
 
 ## mongo-config-url
 
 string (default "")
 
-This config should only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
-This URL should point to the MongoDB `config` server.
+This config must only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
+This URL must point to the MongoDB `config` server.
 
 Monstache will read the list of shards using this connection and then setup a listener to react
 to new shards being added to the cluster at a later time.
@@ -296,7 +305,7 @@ to new shards being added to the cluster at a later time.
 string (default "")
 
 When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
-pool when connecting to mongodb. This should only be used when mongodb is configured with SSL enabled.
+pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.
 
 ## mongo-validate-pem
 
@@ -308,19 +317,19 @@ When mongo-validate-pem-file is false TLS will be configured to skip verificatio
 
 string (default local)
 
-When mongo-oplog-database-name is given monstache will look for the mongodb oplog in the supplied database
+When mongo-oplog-database-name is given monstache will look for the MongoDB oplog in the supplied database
 
 ## mongo-oplog-collection-name
 
 string (default $oplog.main)
 
-When mongo-oplog-collection-name is given monstache will look for the mongodb oplog in the supplied collection
+When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection
 
 ## mongo-dial-settings
 
 TOML table (default nil)
 
-The following mongodb dial properties are available
+The following MongoDB dial properties are available
 
 !!! note ""
 
@@ -334,13 +343,13 @@ The following mongodb dial properties are available
 
 	##### int (default 10)
 
-	Seconds to wait when establishing a connection to mongodb before giving up
+	Seconds to wait when establishing a connection to MongoDB before giving up
 
 ## mongo-session-settings
 
 TOML table (default nil)
 
-The following mongodb session properties are available
+The following MongoDB session properties are available
 
 !!! note ""
 
@@ -377,24 +386,24 @@ The following gtm configuration properties are available.  See [gtm](https://git
 	int (default 32)
 
 	Determines how many documents are buffered by a gtm worker go routine before they are batch fetched from
-	mongodb.  When many documents are inserted or updated at once it is better to fetch them together.
+	MongoDB.  When many documents are inserted or updated at once it is better to fetch them together.
 
 	#### buffer-duration
 
 	string (default 750ms)
 
 	A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
-	fetched in batch from mongodb and flushed for indexing.
+	fetched in batch from MongoDB and flushed for indexing.
 
 ## index-files
 
 boolean (default false)
 
-When index-files is true monstache will index the raw content of files stored in GridFS into elasticsearch as an attachment type.
+When index-files is true monstache will index the raw content of files stored in GridFS into Elasticsearch as an attachment type.
 By default index-files is false meaning that monstache will only index metadata associated with files stored in GridFS.
-In order for index-files to index the raw content of files stored in GridFS you must install a plugin for elasticsearch.
-For versions of elasticsearch prior to version 5, you should install the [mapper-attachments](https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html) plugin.  In version 5 or greater
-of elasticsearch the mapper-attachment plugin is deprecated and you should install the [ingest-attachment](https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html) plugin instead.
+In order for index-files to index the raw content of files stored in GridFS you must install a plugin for Elasticsearch.
+For versions of Elasticsearch prior to version 5, you should install the [mapper-attachments](https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html) plugin.  In version 5 or greater
+of Elasticsearch the mapper-attachment plugin is deprecated and you should install the [ingest-attachment](https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html) plugin instead.
 For further information on how to configure monstache to index content from GridFS, see the section [GridFS support](/advanced#gridfs-support).
 
 ## max-file-size
@@ -407,9 +416,9 @@ When max-file-size is greater than 0 monstache will not index the content of Gri
 
 []string (default nil)
 
-The file-namespaces config must be set when index-files is enabled.  file-namespaces must be set to an array of mongodb
+The file-namespaces config must be set when index-files is enabled.  file-namespaces must be set to an array of MongoDB
 namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
-raw content indexed into elasticsearch via either the mapper-attachments or ingest-attachment plugin. 
+raw content indexed into Elasticsearch via either the mapper-attachments or ingest-attachment plugin. 
 
 This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar
 
@@ -418,13 +427,13 @@ This option may be passed on the command line as ./monstache --file-namespace te
 boolean (default false)
 
 When file-highlighting is true monstache will enable the ability to return highlighted keywords in the extracted text of files
-for queries on files which were indexed in elasticsearch from gridfs.
+for queries on files which were indexed in Elasticsearch from gridfs.
 
 ## verbose
 
 boolean (default false)
 
-When verbose is true monstache with enable debug logging including a trace of requests to elasticsearch
+When verbose is true monstache with enable debug logging including a trace of requests to Elasticsearch
 
 ## elasticsearch-user
 
@@ -451,8 +460,8 @@ This option may be passed on the command line as ./monstache --elasticsearch-url
 string (by default determined by connecting to the server)
 
 When elasticsearch-version is provided monstache will parse the given server version to determine how to interact with
-the elasticsearch API.  This is normally not recommended because monstache will connect to elasticsearch to find out
-which version is being used.  This option is provided for cases where connecting to the base URL of the elasticsearch REST
+the Elasticsearch API.  This is normally not recommended because monstache will connect to Elasticsearch to find out
+which version is being used.  This option is provided for cases where connecting to the base URL of the Elasticsearch REST
 API to get the version is not possible or desired.
 
 ## elasticsearch-max-conns
@@ -475,7 +484,7 @@ You will want to tune this variable in sync with the `elasticsearch-max-bytes` o
 
 boolean (default false)
 
-When elasticseach-retry is true a failed request to elasticsearch will be retried with an exponential backoff policy. The policy
+When elasticseach-retry is true a failed request to Elasticsearch will be retried with an exponential backoff policy. The policy
 is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how 
 this works see [Back Off Strategy](https://github.com/olivere/elastic/blob/release-branch.v5/backoff.go)
 
@@ -483,13 +492,13 @@ this works see [Back Off Strategy](https://github.com/olivere/elastic/blob/relea
 
 int (default 60)
 
-The number of seconds before a request to elasticsearch times out
+The number of seconds before a request to Elasticsearch times out
 
 ## elasticsearch-max-docs
 
 int (default -1)
 
-When elasticsearch-max-docs is given a bulk index request to elasticsearch will be forced when the buffer reaches the given number of documents.
+When elasticsearch-max-docs is given a bulk index request to Elasticsearch will be forced when the buffer reaches the given number of documents.
 
 !!! warning
 	It is not recommended to change this option but rather use `elasticsearch-max-bytes` instead since the document count is not a good gauge of when
@@ -499,7 +508,7 @@ When elasticsearch-max-docs is given a bulk index request to elasticsearch will 
 
 int (default 8MB as bytes)
 
-When elasticsearch-max-bytes is given a bulk index request to elasticsearch will be forced when a connection buffer reaches the given number of bytes. This
+When elasticsearch-max-bytes is given a bulk index request to Elasticsearch will be forced when a connection buffer reaches the given number of bytes. This
 setting greatly impacts performance. A high value for this setting will cause high memory monstache memory usage as the documents are buffered in memory.
 
 Each connection in `elasticsearch-max-conns` will flush when its queue gets filled to this size. 
@@ -508,7 +517,7 @@ Each connection in `elasticsearch-max-conns` will flush when its queue gets fill
 
 int (default 1)
 
-When elasticsearch-max-seconds is given a bulk index request to elasticsearch will be forced when a request has not been made in the given number of seconds.
+When elasticsearch-max-seconds is given a bulk index request to Elasticsearch will be forced when a request has not been made in the given number of seconds.
 The default value is automatically increased to `5` when direct read namespaces are detected.  This is to ensure that flushes do not happen too often in this
 case which would cut performance.
 
@@ -517,7 +526,7 @@ case which would cut performance.
 string (default "")
 
 When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
-pool when connecting to elasticsearch. This should only be used when elasticsearch is configured with SSL enabled.
+pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.
 
 ## elasticsearch-validate-pem
 
@@ -529,13 +538,13 @@ When elasticsearch-validate-pem-file is false TLS will be configured to skip ver
 
 boolean (default true)
 
-When dropped-databases is false monstache will not delete the mapped indexes in elasticsearch if a mongodb database is dropped
+When dropped-databases is false monstache will not delete the mapped indexes in Elasticsearch if a MongoDB database is dropped
 
 ## dropped-collections
 
 boolean (default true)
 
-When dropped-collections is false monstache will not delete the mapped index in elasticsearch if a mongodb collection is dropped
+When dropped-collections is false monstache will not delete the mapped index in Elasticsearch if a MongoDB collection is dropped
 
 ## worker
 
@@ -543,7 +552,7 @@ string (default "")
 
 When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
-same worker and none of the other workers. See the section [workers](/workers/) for more information.
+same worker and none of the other workers. See the [Workers](/advanced/#workers) section for more information.
 
 ## workers
 
@@ -557,13 +566,13 @@ This option may be passed on the command line as ./monstache --workers w1 --work
 
 boolean (default false) 
 
-Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) patches in your elasticsearch documents
+Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) patches in your Elasticsearch documents
 
 ## patch-namespaces
 
 []string (default nil)
 
-An array of mongodb namespaces that you would like to enable rfc7396 patches on
+An array of MongoDB namespaces that you would like to enable rfc7396 patches on
 
 This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar 
 
@@ -613,7 +622,7 @@ See the section [Index Mapping](/advanced#index-mapping) for more information.
 
 [] array of TOML table (default nil)
 
-When filter is given monstache will pass the mongodb document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
+When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
 See the section [Middleware](/advanced#middleware) for more information.
 
 !!! note ""
@@ -642,7 +651,7 @@ See the section [Middleware](/advanced#middleware) for more information.
 
 [] array of TOML table (default nil)
 
-When script is given monstache will pass the mongodb document into the script before indexing into elasticsearch.
+When script is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
 See the section [Middleware](/advanced#middleware) for more information.
 
 !!! note ""

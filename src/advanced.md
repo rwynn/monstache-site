@@ -190,10 +190,10 @@ one of the available workers.
 You can run monstache in high availability mode by starting multiple processes with the same value for [cluster-name](/config#cluster-name).
 Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.
 
-High availability works by ensuring one active process in the `monstache.cluster` collection in mongodb at any given time. Only the process in
+High availability works by ensuring one active process in the `monstache.cluster` collection in MongoDB at any given time. Only the process in
 this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the 
 `monstache.cluster` collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
-the collection by mongodb and another process in the monstache cluster will have a chance to write to the collection and become the
+the collection by MongoDB and another process in the monstache cluster will have a chance to write to the collection and become the
 new active process.
 
 When [cluster-name](/config#cluster-name) is supplied the [resume](/config#resume) feature is automatically turned on and the [resume-name](/config#resume-name) becomes the name of the cluster.
@@ -223,22 +223,22 @@ When the clustering feature is combined with workers then the [resume-name](/con
 
 ## Index Mapping
 
-When indexing documents from MongoDB into elasticsearch the default mapping is as follows:
+When indexing documents from MongoDB into Elasticsearch the default mapping is as follows:
 
 For Elasticsearch prior to 6.2
 
 ```text
-elasticsearch index name    <= mongodb database name . mongodb collection name
-elasticsearch type          <= mongodb collection name
-elasticsearch document _id  <= mongodb document _id
+Elasticsearch index name    <= MongoDB database name . MongoDB collection name
+Elasticsearch type          <= MongoDB collection name
+Elasticsearch document _id  <= MongoDB document _id
 ```
 
 For Elasticsearch 6.2+
 
 ```text
-elasticsearch index name    <= mongodb database name . mongodb collection name
-elasticsearch type          <= _doc 
-elasticsearch document _id  <= mongodb document _id
+Elasticsearch index name    <= MongoDB database name . MongoDB collection name
+Elasticsearch type          <= _doc 
+Elasticsearch document _id  <= MongoDB document _id
 ```
 
 If these default won't work for some reason you can override the index and type mapping on a per collection basis by adding
@@ -257,7 +257,7 @@ type = "type2"
 ```
 
 With the configuration above documents in the `test.test` namespace in MongoDB are indexed into the `index1` 
-index in elasticsearch with the `type1` type.
+index in Elasticsearch with the `type1` type.
 
 If you need your index and type mapping to be more dynamic, such as based on values inside the MongoDB document, then
 see the sections [Middleware](#middleware) and  [Routing](#routing).
@@ -272,15 +272,15 @@ If automatic index creation must be controlled, whitelist any indexes in elastic
 
 ## Namespaces
 
-When a document is inserted, updated, or deleted in mongodb a document is appended to the oplog representing the event.  This document has a field `ns` which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for `use test; db.foo.insert({hello: "world"});` the namespace for the event in the oplog would be `test.foo`.
+When a document is inserted, updated, or deleted in MongoDB a document is appended to the oplog representing the event.  This document has a field `ns` which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for `use test; db.foo.insert({hello: "world"});` the namespace for the event in the oplog would be `test.foo`.
 
-In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in mongodb an event is appended to the oplog.  Like the other types of changes this event has a field `ns` representing the namespace.  However, for drops the namespace is the database name and the string `$cmd` joined by a dot.  E.g. for `use test; db.foo.drop()` the namespace for the event in the oplog would be `test.$cmd`.  
+In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in MongoDB an event is appended to the oplog.  Like the other types of changes this event has a field `ns` representing the namespace.  However, for drops the namespace is the database name and the string `$cmd` joined by a dot.  E.g. for `use test; db.foo.drop()` the namespace for the event in the oplog would be `test.$cmd`.  
 
 When configuring namespaces in monstache you will need to account for both cases.  
 
 !!! warning
 
-	Be careful if you have configured `dropped-databases=true` or `dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the elasticsearch index not deleted on a drop.
+	Be careful if you have configured `dropped-databases=true` or `dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the Elasticsearch index not deleted on a drop.
 
 
 ## Middleware
@@ -371,7 +371,7 @@ When you implement a `Filter` function the function is called immediately after 
 #### Transformation
 
 Monstache uses the amazing [otto](https://github.com/robertkrimen/otto) library to provide transformation at the document field
-level in Javascript.  You can associate one javascript mapping function per mongodb collection.  You can also associate a function 
+level in Javascript.  You can associate one javascript mapping function per MongoDB collection.  You can also associate a function 
 at the global level by not specifying a namespace.  These javascript functions are
 added to your TOML config file, for example:
 	
@@ -410,12 +410,12 @@ linked to a specific namespace.
 
 You will notice that the multi-line string feature of TOML is used to assign a javascript snippet to the variable named
 `script`.  The javascript assigned to script must assign a function to the exports property of the `module` object.  This 
-function will be passed the document from mongodb just before it is indexed in elasticsearch.  Inside the function you can
+function will be passed the document from MongoDB just before it is indexed in Elasticsearch.  Inside the function you can
 manipulate the document to drop fields, add fields, or augment the existing fields.
 
-The `this` reference in the mapping function is assigned to the document from mongodb.  
+The `this` reference in the mapping function is assigned to the document from MongoDB.  
 
-When the return value from the mapping function is an `object` then that mapped object is what actually gets indexed in elasticsearch.
+When the return value from the mapping function is an `object` then that mapped object is what actually gets indexed in Elasticsearch.
 For these purposes an object is a javascript non-primitive, excluding `Function`, `Array`, `String`, `Number`, `Boolean`, `Date`, `Error` and `RegExp`.
 
 #### Filtering
@@ -440,9 +440,9 @@ path = "path/to/script.js"
 
 If the return value from the mapping function is not an `object` per the definition above then the result is converted into a `boolean`
 and if the boolean value is `false` then that indicates to monstache that you would not like to index the document. If the boolean value is `true` then
-the original document from mongodb gets indexed in elasticsearch.
+the original document from MongoDB gets indexed in Elasticsearch.
 
-This allows you to return false or null if you have implemented soft deletes in mongodb.
+This allows you to return false or null if you have implemented soft deletes in MongoDB.
 
 ```toml
 [[script]]
@@ -459,7 +459,7 @@ module.exports = function(doc) {
 
 In the above example monstache will index any document except the ones with a `deletedAt` property.  If the document is first
 inserted without a `deletedAt` property, but later updated to include the `deletedAt` property then monstache will remove, or drop, the
-previously indexed document from the elasticsearch index. 
+previously indexed document from the Elasticsearch index. 
 
 !!! note
     Dropping a document is different that filtering a document.  A filtered document is completely ignored.  A dropped document results in a delete request being issued to Elasticsearch in case the document had previously been indexed.
@@ -571,7 +571,7 @@ or
 ```
 
 Given the above the following snippet sets up a parent-child relationship in Elasticsearch based on the
-incoming documents from MongoDB and updates the ns (namespace) from test.company to company in elasticsearch
+incoming documents from MongoDB and updates the ns (namespace) from test.company to company in Elasticsearch
 
 ```
 [[script]]
@@ -591,7 +591,7 @@ module.exports = function(doc, ns) {
 ```
 
 The snippet above will route these documents to the `company` index in Elasticsearch instead of the
-default of `test.company`, if you didn't specify a namespace, it'll route all documents to indexes named as the collection only without the database _db_._collection_ (mongodb) => _collection_ (elasticsearch).  Also, instead of using `company` as the Elasticsearch type, the type
+default of `test.company`, if you didn't specify a namespace, it'll route all documents to indexes named as the collection only without the database _db_._collection_ (MongoDB) => _collection_ (Elasticsearch).  Also, instead of using `company` as the Elasticsearch type, the type
 attribute from the document will be used as the Elasticsearch type.  Finally, if the type is
 employee then the document will be indexed as a child of the branch the person belongs to.
 
@@ -682,7 +682,7 @@ documents which have been deleted in MongoDB, this option is available. See [Del
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
 
-In addition to letting your customize the shard routing for a specific document, you can also customize the elasticsearch
+In addition to letting your customize the shard routing for a specific document, you can also customize the Elasticsearch
 `index` and `type` using a script by putting the custom information in the meta attribute. 
 
 ```toml
@@ -903,7 +903,7 @@ The index pattern in the query is a wildcard to pick up all the timestamped inde
 
 A unique feature of monstache is support for JSON Merge Patches [rfc-7396](https://tools.ietf.org/html/rfc7396).
 
-If merge patches are enabled monstache will add an additional field to documents indexed into elasticsearch. The
+If merge patches are enabled monstache will add an additional field to documents indexed into Elasticsearch. The
 name of this field is configurable but it defaults to `json-merge-patches`.  
 
 Consider the following example with merge patches enabled... 
@@ -911,7 +911,7 @@ Consider the following example with merge patches enabled...
 ```javascript
 db.test.insert({name: "Joe", age: 16, friends: [1, 2, 3]})
 ```
-At this point you would have the following document source in elasticsearch.
+At this point you would have the following document source in Elasticsearch.
 
 	 "_source" : {
 	  "age" : 16,
@@ -938,7 +938,7 @@ Now let's update the document to remove a friend and update the age.
 db.test.update({name: "Joe"}, {$set: {age: 21, friends: [1, 3]}})
 ```
 
-If we now look at the document in elasticsearch we see the following:
+If we now look at the document in Elasticsearch we see the following:
 
 	"_source" : {
 	  "age" : 21,
@@ -963,7 +963,7 @@ If we now look at the document in elasticsearch we see the following:
 
 You can see that the document was updated as expected and an additional merge patch was added.
 
-Each time the document is updated in mongodb the corresponding document in elasticsearch gains a
+Each time the document is updated in MongoDB the corresponding document in Elasticsearch gains a
 timestamped merge patch.  Using this information we can time travel is the document's history.
 
 There is a merge patch for each version of the document.  To recreate a specific version we simply need
@@ -1041,10 +1041,10 @@ There are Docker images available for Monstache on [Docker Hub](https://hub.dock
 You can pull and run the latest images with
 
 ```
-# for elasticsearch >= 6
+# for Elasticsearch >= 6
 docker run rwynn/monstache:latest -v
 
-# for elasticsearch < 6
+# for Elasticsearch < 6
 docker run rwynn/monstache:rel3 -v
 ```
 
