@@ -551,7 +551,7 @@ When dropped-collections is false monstache will not delete the mapped index in 
 string (default "")
 
 When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
-multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each mongo document id always goes to the
+multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each MongoDB document id always goes to the
 same worker and none of the other workers. See the [Workers](/advanced/#workers) section for more information.
 
 ## workers
