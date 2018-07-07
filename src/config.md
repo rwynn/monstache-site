@@ -45,6 +45,16 @@ prefixed `monstache.stats.`. E.g. monstache.stats.2017-07-01 and so on.
 As these indexes will accrue over time your can use a tool like [curator](https://github.com/elastic/curator)
 to prune them with a Delete Indices action and an age filter.
 
+## index-as-update
+
+boolean (default false)
+
+When index-as-update is set to true monstache will sync create and update operations in MongoDB
+as updates to Elasticsearch.  By default, monstache will overwrite the entire document in Elasticsearch.
+This setting may be useful if you make updates to Elasticsearch to the documents monstache has previously
+synced and would like to retain these updates when the document changes in MongoDB. 
+You will only be able to retain fields in Elasticsearch that do not overlap with fields in MongoDB.
+
 ## stats-index-format
 
 string (default monstache.stats.2006-01-02)
@@ -267,8 +277,8 @@ if you would like to run monstache to run a full sync on a set of collections vi
 
 regexp (default "")
 
-When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
-drop in MongoDB. If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
+When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
+If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
 
@@ -276,10 +286,26 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 regex (default "")
 
-When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete or
-drop in MongoDB. If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
+When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
+If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
 collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
+
+## namespace-drop-regex
+
+regexp (default "")
+
+When namespace-drop-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. For database drops
+the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.  If the regex matches
+the namespace then the operation will by synced.
+
+## namespace-drop-exclude-regex
+
+regex (default "")
+
+When namespace-drop-exclude-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. 
+For database drops the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.
+If the regex does not match the namespace then the operation will by synced.
 
 ## mongo-url
 

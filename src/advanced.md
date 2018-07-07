@@ -276,13 +276,6 @@ When a document is inserted, updated, or deleted in MongoDB a document is append
 
 In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in MongoDB an event is appended to the oplog.  Like the other types of changes this event has a field `ns` representing the namespace.  However, for drops the namespace is the database name and the string `$cmd` joined by a dot.  E.g. for `use test; db.foo.drop()` the namespace for the event in the oplog would be `test.$cmd`.  
 
-When configuring namespaces in monstache you will need to account for both cases.  
-
-!!! warning
-
-	Be careful if you have configured `dropped-databases=true` or `dropped-collections=true` AND you also have a `namespace-regex` set.  If your namespace regex does not take into account the `db.$cmd` namespace the event may be filtered and the Elasticsearch index not deleted on a drop.
-
-
 ## Middleware
 
 monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
@@ -1051,16 +1044,16 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.7.0 -v
+docker run rwynn/monstache:4.8.0 -v
 
-docker run rwynn/monstache:3.14.0 -v
+docker run rwynn/monstache:3.15.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.7.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.8.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 

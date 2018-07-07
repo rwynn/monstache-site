@@ -342,11 +342,6 @@ Also, using <code>_doc</code> as the type will not work with Elasticsearch prior
 <h2 id="namespaces">Namespaces<a class="headerlink" href="#namespaces" title="Permanent link">&para;</a></h2>
 <p>When a document is inserted, updated, or deleted in MongoDB a document is appended to the oplog representing the event.  This document has a field <code>ns</code> which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for <code>use test; db.foo.insert({hello: "world"});</code> the namespace for the event in the oplog would be <code>test.foo</code>.</p>
 <p>In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in MongoDB an event is appended to the oplog.  Like the other types of changes this event has a field <code>ns</code> representing the namespace.  However, for drops the namespace is the database name and the string <code>$cmd</code> joined by a dot.  E.g. for <code>use test; db.foo.drop()</code> the namespace for the event in the oplog would be <code>test.$cmd</code>.  </p>
-<p>When configuring namespaces in monstache you will need to account for both cases.  </p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Be careful if you have configured <code>dropped-databases=true</code> or <code>dropped-collections=true</code> AND you also have a <code>namespace-regex</code> set.  If your namespace regex does not take into account the <code>db.$cmd</code> namespace the event may be filtered and the Elasticsearch index not deleted on a drop.</p>
-</div>
 <h2 id="middleware">Middleware<a class="headerlink" href="#middleware" title="Permanent link">&para;</a></h2>
 <p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
 drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
@@ -987,14 +982,14 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.7.0 -v
+<pre><code>docker run rwynn/monstache:4.8.0 -v
 
-docker run rwynn/monstache:3.14.0 -v
+docker run rwynn/monstache:3.15.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.7.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.8.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 

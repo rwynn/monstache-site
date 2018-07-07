@@ -16,7 +16,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.7.0
+# 4.8.0
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -101,7 +101,7 @@ elasticsearch-urls = ["https://es1:9200", "https://es2:9200"]
 # if you don't want to listen for changes to all collections in MongoDB but only a few
 # e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
 # this setting does not initiate a copy, it is a filter on the change listener only
-namespace-regex = '^mydb\.(mycollection|\$cmd)$'
+namespace-regex = '^mydb\.mycollection$'
 # additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
 # you can copy entire collections from MongoDB to Elasticsearch
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
@@ -144,7 +144,7 @@ resume-write-unsafe = false
 # override the name under which resume state is saved
 resume-name = "default"
 # exclude documents whose namespace matches the following pattern
-namespace-exclude-regex = '^mydb\.(ignorecollection|\$cmd)$'
+namespace-exclude-regex = '^mydb\.ignorecollection$'
 # turn on indexing of GridFS file content
 index-files = true
 # turn on search result highlighting of GridFS content

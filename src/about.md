@@ -88,6 +88,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.8.0](https://github.com/rwynn/monstache/releases/tag/v4.8.0)
+
+* Seperate namespace regexes for drop operations vs create/update/delete operations
+* Better handling of panics
+* A new `index-as-update` boolean config option that allow merge instead of replace
+* Fixes to the `find` and `findOne` functions available in scripts
+
+### [monstache v3.15.0](https://github.com/rwynn/monstache/releases/tag/v3.15.0)
+
+* Seperate namespace regexes for drop operations vs create/update/delete operations
+* Better handling of panics
+* A new `index-as-update` boolean config option that allow merge instead of replace
+* Fixes to the `find` and `findOne` functions available in scripts
+
 ### [monstache v4.7.0](https://github.com/rwynn/monstache/releases/tag/v4.7.0)
 
 * add -pprof setting. When enabled and combined with -enable-http-server you can read profiling information.  See [Profiling for Go](https://artem.krylysov.com/blog/2017/03/13/profiling-and-optimizing-go-web-applications/) for more information. 
