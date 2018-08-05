@@ -10,24 +10,25 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Advanced - Monstache</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../css/highlight.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <link href="../css/extra.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../js/jquery-1.10.2.min.js"></script>
-        <script src="../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../js/highlight.pack.js"></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
             ga('create', 'UA-113057322-1', 'rwynn.github.io');
             ga('send', 'pageview');
@@ -37,64 +38,64 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+            <div class="container">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="..">Monstache</a>
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Monstache</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="..">Home</a>
+                            </li>
+                            <li >
+                                <a href="../start/">Getting Started</a>
+                            </li>
+                            <li >
+                                <a href="../config/">Configuration</a>
+                            </li>
+                            <li class="active">
+                                <a href="./">Advanced</a>
+                            </li>
+                            <li >
+                                <a href="../about/">About</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../config/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../about/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/rwynn/monstache-site/edit/master/src/advanced.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                    <li >
-                        <a href="..">Home</a>
-                    </li>
-                    <li >
-                        <a href="../start/">Getting Started</a>
-                    </li>
-                    <li >
-                        <a href="../config/">Configuration</a>
-                    </li>
-                    <li class="active">
-                        <a href="./">Advanced</a>
-                    </li>
-                    <li >
-                        <a href="../about/">About</a>
-                    </li>
-                </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                    <li >
-                        <a rel="next" href="../config/">
-                            <i class="fa fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../about/">
-                            Next <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/rwynn/monstache-site/edit/master/src/advanced.md"><i class="fa fa-github"></i> Edit on GitHub</a>
-                    </li>
-            </ul>
-        </div>
-    </div>
-</div>
 
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
@@ -127,7 +128,7 @@ For versions of Elasticsearch prior to version 5 you should install the
 For version 5 or later of Elasticsearch you should instead install the 
 <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html">ingest-attachment</a> plugin.</p>
 <p>Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is
-as simple as configuring monstache.  You will want to enable the <a href="../config#index-files">index-files</a> option and also tell monstache the 
+as simple as configuring monstache.  You will want to enable the <a href="/config#index-files">index-files</a> option and also tell monstache the 
 namespace of all collections which will hold GridFS files. For example in your TOML config file,</p>
 <pre><code>index-files = true
 
@@ -209,7 +210,7 @@ file named <code>resume.docx</code> into GridFS and after a short time this file
     }
 }'
 </code></pre>
-<p>When <a href="../config#file-highlighting">file-highlighting</a> is enabled you can add a highlight clause to your query</p>
+<p>When <a href="/config#file-highlighting">file-highlighting</a> is enabled you can add a highlight clause to your query</p>
 <p>For Elasticsearch versions prior to version 5...</p>
 <pre><code>curl -H "Content-Type:application/json" localhost:9200/users.fs.files/_search?pretty -d '{
     "fields": ["file.content"],
@@ -272,14 +273,14 @@ monstache -f config.toml -worker Harry
 <p>monstache will hash the id of each document using consistent hashing so that each id is handled by only
 one of the available workers.</p>
 <h2 id="high-availability">High Availability<a class="headerlink" href="#high-availability" title="Permanent link">&para;</a></h2>
-<p>You can run monstache in high availability mode by starting multiple processes with the same value for <a href="../config#cluster-name">cluster-name</a>.
+<p>You can run monstache in high availability mode by starting multiple processes with the same value for <a href="/config#cluster-name">cluster-name</a>.
 Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.</p>
 <p>High availability works by ensuring one active process in the <code>monstache.cluster</code> collection in MongoDB at any given time. Only the process in
 this collection will be syncing for the cluster.  Processes not present in this collection will be paused.  Documents in the 
 <code>monstache.cluster</code> collection have a TTL assigned to them.  When a document in this collection times out it will be removed from
 the collection by MongoDB and another process in the monstache cluster will have a chance to write to the collection and become the
 new active process.</p>
-<p>When <a href="../config#cluster-name">cluster-name</a> is supplied the <a href="../config#resume">resume</a> feature is automatically turned on and the <a href="../config#resume-name">resume-name</a> becomes the name of the cluster.
+<p>When <a href="/config#cluster-name">cluster-name</a> is supplied the <a href="/config#resume">resume</a> feature is automatically turned on and the <a href="/config#resume-name">resume-name</a> becomes the name of the cluster.
 This is to ensure that each of the processes is able to pick up syncing where the last one left off.  </p>
 <p>You can combine the HA feature with the workers feature.  For 3 cluster nodes with 3 workers per node you would have something like the following:</p>
 <pre><code>// config.toml
@@ -300,7 +301,7 @@ monstache -cluster-name HA -worker Tom -f config.toml
 monstache -cluster-name HA -worker Dick -f config.toml
 monstache -cluster-name HA -worker Harry -f config.toml
 </code></pre>
-<p>When the clustering feature is combined with workers then the <a href="../config#resume-name">resume-name</a> becomes the cluster name concatenated with the worker name.</p>
+<p>When the clustering feature is combined with workers then the <a href="/config#resume-name">resume-name</a> becomes the cluster name concatenated with the worker name.</p>
 <h2 id="index-mapping">Index Mapping<a class="headerlink" href="#index-mapping" title="Permanent link">&para;</a></h2>
 <p>When indexing documents from MongoDB into Elasticsearch the default mapping is as follows:</p>
 <p>For Elasticsearch prior to 6.2</p>
@@ -607,7 +608,7 @@ employee then the document will be indexed as a child of the branch the person b
 since the type information will be stored in Elasticsearch under <code>_type</code> and the branch information
 will be stored under <code>_parent</code>.</p>
 <p>The example is based on the Elasticsearch docs for <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html">parent-child</a></p>
-<p>For more on updating the namespace name, check the <a href="../config/#delete-strategy">Delete Strategy</a> as there is a change of the default behviour in v4.4.0 &amp; v3.11.0</p>
+<p>For more on updating the namespace name, check the <a href="/config/#delete-strategy">Delete Strategy</a> as there is a change of the default behviour in v4.4.0 &amp; v3.11.0</p>
 <h2 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link">&para;</a></h2>
 <p>Routing is the process by which Elasticsearch determines which shard a document will reside in.  Monstache
 supports user defined, or custom, routing of your MongoDB documents into Elasticsearch.  </p>
@@ -668,7 +669,7 @@ giving monstache the ability to write to the collection <code>monstache.meta</co
 documents that were given custom indexing metadata.  This stategy slows down indexing and takes up space in MongoDB.<br />
 However, it is precise because it records exactly how each document was indexed. The final stategy simply punts on deletes and
 leaves document deletion to the user.  If you don't generally delete documents in MongoDB or don't care if Elasticsearch contains
-documents which have been deleted in MongoDB, this option is available. See <a href="../config/#delete-strategy">Delete Strategy</a> for more information.</p>
+documents which have been deleted in MongoDB, this option is available. See <a href="/config/#delete-strategy">Delete Strategy</a> for more information.</p>
 <p>For more information see <a href="https://www.elastic.co/blog/customizing-your-document-routing">Customizing Document Routing</a></p>
 <p>In addition to letting your customize the shard routing for a specific document, you can also customize the Elasticsearch
 <code>index</code> and <code>type</code> using a script by putting the custom information in the meta attribute. </p>
@@ -838,7 +839,7 @@ that the document _ids across the MongoDB collections do not collide for any 2 d
 they will be used as the _id in the target index. </p>
 </div>
 <h2 id="time-machines">Time Machines<a class="headerlink" href="#time-machines" title="Permanent link">&para;</a></h2>
-<p>If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use <a href="../config#time-machine-namespaces">time machine namespaces</a>.   For example, you've inserted and later updated a document with id 123 in the <code>test.test</code> collection in MongoDB. If <code>test.test</code> is a time machine namespace you will have 2 documents representing those changes in the <code>log.test.test.2018-02-20</code> index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:</p>
+<p>If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use <a href="/config#time-machine-namespaces">time machine namespaces</a>.   For example, you've inserted and later updated a document with id 123 in the <code>test.test</code> collection in MongoDB. If <code>test.test</code> is a time machine namespace you will have 2 documents representing those changes in the <code>log.test.test.2018-02-20</code> index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:</p>
 <pre><code>$ curl -XGET 'http://localhost:9200/log.test.test.*/_search?routing=123' -d '
 {
    &quot;query&quot;:{
@@ -982,14 +983,14 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.8.0 -v
+<pre><code>docker run rwynn/monstache:4.9.0 -v
 
-docker run rwynn/monstache:3.15.0 -v
+docker run rwynn/monstache:3.16.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.8.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.9.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 
@@ -1017,12 +1018,14 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
         <footer class="col-md-12">
             <hr>
                 <p>Copyright &copy; 2016-2018 Ryan Wynn</p>
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script>var base_url = '..';</script>
-        <script src="../js/base.js"></script>
-        <script src="../search/require.js"></script>
-        <script src="../search/search.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -1038,7 +1041,7 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
                 </p>
                 <form role="form">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -1064,19 +1067,19 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><kbd>?</kbd></td>
+                    <td class="help shortcut"><kbd>?</kbd></td>
                     <td>Open this help</td>
                   </tr>
                   <tr>
-                    <td><kbd>&larr;</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td><kbd>&rarr;</kbd></td>
+                    <td class="next shortcut"><kbd>n</kbd></td>
                     <td>Next page</td>
                   </tr>
                   <tr>
-                    <td><kbd>s</kbd></td>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
                     <td>Search</td>
                   </tr>
                 </tbody>
@@ -1087,7 +1090,6 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
         </div>
     </div>
 </div>
-
 
     </body>
 </html>

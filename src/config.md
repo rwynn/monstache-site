@@ -10,31 +10,31 @@ Program arguments take precedance over configuration specified in the TOML confi
 
 ## print-config
 
-boolean (default false)
+boolean (default `false`)
 
 When print-config is true monstache will print its configuration and then exit
 
 ## stats
 
-boolean (default false)
+boolean (default `false`)
 
 When stats is true monstache will periodically print statistics accumulated by the indexer
 
 ## enable-easy-json
 
-boolean (default false)
+boolean (default `false`)
 
 When enable-easy-json is true monstache will the easy-json library to serialize requests to Elasticsearch
 
 ## stats-duration
 
-string (default 30s)
+string (default `30s`)
 
 Sets the duration after which statistics are printed if stats is enabled
 
 ## index-stats
 
-boolean (default false)
+boolean (default `false`)
 
 When both stats and index-stats are true monstache will write statistics about its indexing progress in
 Elasticsearch instead of standard out.
@@ -47,7 +47,7 @@ to prune them with a Delete Indices action and an age filter.
 
 ## index-as-update
 
-boolean (default false)
+boolean (default `false`)
 
 When index-as-update is set to true monstache will sync create and update operations in MongoDB
 as updates to Elasticsearch.  By default, monstache will overwrite the entire document in Elasticsearch.
@@ -57,7 +57,7 @@ You will only be able to retain fields in Elasticsearch that do not overlap with
 
 ## stats-index-format
 
-string (default monstache.stats.2006-01-02)
+string (default `monstache.stats.2006-01-02`)
 
 The `time.Time` supported index name format for stats indices.  By default, stats indexes 
 are partitioned by day.  To use less indices for stats you can shorten this format string 
@@ -65,7 +65,7 @@ are partitioned by day.  To use less indices for stats you can shorten this form
 
 ## gzip
 
-boolean (default false)
+boolean (default `false`)
 
 When gzip is true, monstache will compress requests to Elasticsearch. 
 If you enable gzip in monstache and are using Elasticsearch prior to version 5 you will also 
@@ -75,7 +75,7 @@ if you enable the index-files setting.
 
 ## fail-fast
 
-boolean (default false)
+boolean (default `false`)
 
 When fail-fast is true, if monstache receives a failed bulk indexing response from Elasticsearch, monstache
 will log the request that produced the response as an ERROR and then exit immediately with an error status. 
@@ -86,7 +86,7 @@ retried before being considered a failure.
 
 ## prune-invalid-json
 
-boolean (default false)
+boolean (default `false`)
 
 If your MongoDB data contains values like +Infinity, -Infinity, NaN, or invalid dates you will want to set this option to true.  The
 Golang json serializer is not able to handle these values and the indexer will get stuck in an infinite loop. When prune-invalid-json
@@ -94,11 +94,11 @@ is set to true Monstache will drop those fields so that indexing errors do not o
 
 ## index-oplog-time
 
-boolean (default false)
+boolean (default `false`)
 
 If this option is set to true monstache will include 2 automatic fields in the source document indexed into
-Elasticsearch.  The first is _oplog_ts which is the timestamp for the event copied directly from the MongoDB
-oplog. The second is _oplog_date which is an Elasticsearch date field corresponding to the time of the same
+Elasticsearch.  The first is `oplog_ts` which is the timestamp for the event copied directly from the MongoDB
+oplog. The second is `oplog_date` which is an Elasticsearch date field corresponding to the time of the same
 event.
 
 This information is generally useful in Elasticsearch giving the notion of last updated.  However, it's also
@@ -110,9 +110,29 @@ For data read via the direct read feature the oplog time will only be available 
 document is an ObjectID.  If the id of the MongoDB document is not an ObjectID and the document source is
 a direct read query then the oplog time will not be available.
 
+## oplog-ts-field-name
+
+string (default `oplog_ts`)
+
+Use this option to override the name of the field used to store the oplog timestamp
+
+## oplog-date-field-name
+
+string (default `oplog_date`)
+
+Use this option to override the name of the field used to store the oplog date string
+
+## oplog-date-field-format
+
+string (default `2006/01/02 15:04:05`)
+
+Use this option to override the layout for formatting the `oplog_date` field.  Refer to 
+the [Format](https://golang.org/pkg/time/#Time.Format) function for the reference time 
+values to use in the layout.
+
 ## resume
 
-boolean (default false)
+boolean (default `false`)
 
 When resume is true, monstache writes the timestamp of MongoDB operations it has successfully synced to Elasticsearch
 to the collection monstache.monstache.  It also reads that timestamp from that collection when it starts in order to replay
@@ -121,7 +141,7 @@ set then resume is automatically turned on.
 
 ## resume-name
 
-string (default "default")
+string (default `default`)
 
 monstache uses the value of resume-name as an id when storing and retrieving timestamps
 to and from the MongoDB collection monstache.monstache. The default value for this option is the string `default`.
@@ -132,7 +152,7 @@ from the last timestamp successfully processed.  The other exception occurs when
 
 ## resume-from-timestamp
 
-int64 (default 0)
+int64 (default `0`)
 
 When resume-from-timestamp (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
 represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
@@ -140,7 +160,7 @@ a specific timestamp from the oplog and would like to start syncing from after t
 
 ## replay
 
-boolean (default false)
+boolean (default `false`)
 
 When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. 
 
@@ -157,7 +177,7 @@ occurring after this timestamp (tails starting at the end).  Timestamps are not 
 
 ## resume-write-unsafe
 
-boolean (default false)
+boolean (default `false`)
 
 When resume-write-unsafe is true monstache sets the safety mode of the MongoDB session such that writes are fire and forget.
 This speeds up writing of timestamps used to resume synching in a subsequent run of monstache.  This speed up comes at the cost
@@ -166,7 +186,7 @@ and do not stop execution it's not unreasonable to set this to true to get a spe
 
 ## time-machine-namespaces
 
-[]string (default nil)
+[]string (default `nil`)
 
 Monstache is good at keeping your MongoDB collections and Elasticsearch indexes in sync.  When a document is updated in MongoDB the corresponding document in Elasticsearch is updated too.  Same goes for deleting documents in MongoDB.  But what if you also wanted to keep a log of all the changes to a MongoDB document over its lifespan.  That's what time-machine-namespaces are for.  When you configure a list of namespaces in MongoDB to add to the time machine, in addition to keeping documents in sync, Monstache will index of copy of your MongoDB document at the time it changes in a separate timestamped index.
 
@@ -180,32 +200,32 @@ This option may be passed on the command line as ./monstache --time-machine-name
 
 ## time-machine-index-prefix
 
-string (default "log")
+string (default `log`)
 
 If you have enabled time machine namespaces and want to change the prefix assigned to the index names use this setting.
 
 ## time-machine-index-suffix
 
-string (default "2006-01-02")
+string (default `2006-01-02`)
 
 If you have enabled time machine namespaces and want to suffix the index names using a different date format use this setting.  Consult the golang docs for how date formats work.  By default this suffixes the index name with the year, month, and day.
 
 ## time-machine-direct-reads
 
-boolean (default false)
+boolean (default `false`)
 
 This setting controls whether or not direct reads are added to the time machine log index. This is false by default so only changes read from the oplog are added. 
 
 ## routing-namespaces
 
-[]string (default nil)
+[]string (default `nil`)
 
 You only need to set this configuration option if you use golang and javascript plugins are do custom routing: override parent or routing attributes. This array should be set to a list of all the namespaces that custom routing is done on. This ensures that deletes in MongoDB are routed correctly to 
 Elasticsearch.
 
 ## delete-strategy
 
-int (default 0)
+int (default `0`)
 
 The strategy to use for handling document deletes when custom indexing is done in scripts.
 
@@ -224,7 +244,7 @@ But now the default has changed to be stateless, you can read more: [discussion]
 
 ## delete-index-pattern
 
-string (default *)
+string (default `*`)
 
 When using a stateless delete strategy, set this to a valid Elasticsearch index pattern to restrict the scope of possible indexes that a stateless delete
 will consider.  If monstache only indexes to index a, b, and c then you can set this to `a,b,c`.  If monstache only indexes to indexes starting with 
@@ -232,7 +252,7 @@ mydb then you can set this to `mydb*`.
 
 ## direct-read-namespaces
 
-[]string (default nil)
+[]string (default `nil`)
 
 This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
 actually indexed to Elasticsearch, so you need not necessarily copy the entire collection.
@@ -255,7 +275,7 @@ phase has completed if you decide to temporarily turn off refresh, otherwise you
 
 ## direct-read-split-max
 
-int (default 9)
+int (default `9`)
 
 The maximum number of times to split a collection for direct reads.  This setting greatly impacts the memory consumption
 of Monstache.  When direct reads are performed, the collection is first broken up into ranges which are then read 
@@ -266,7 +286,7 @@ You can decrease this value for a memory constrained Monstache process.
 
 ## exit-after-direct-reads
 
-boolean (default false)
+boolean (default `false`)
 
 The [direct-read-namespaces](#direct-read-namespaces) option gives you a way to do a full sync on multiple collections.  At times you may want
 to perform a full sync via the direct-read-namespaces option and then quit monstache.  Set this option to true and
@@ -275,7 +295,7 @@ if you would like to run monstache to run a full sync on a set of collections vi
 
 ## namespace-regex
 
-regexp (default "")
+regexp (default `""`)
 
 When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
@@ -284,7 +304,7 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 ## namespace-exclude-regex
 
-regex (default "")
+regex (default `""`)
 
 When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
@@ -293,7 +313,7 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 ## namespace-drop-regex
 
-regexp (default "")
+regexp (default `""`)
 
 When namespace-drop-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. For database drops
 the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.  If the regex matches
@@ -301,7 +321,7 @@ the namespace then the operation will by synced.
 
 ## namespace-drop-exclude-regex
 
-regex (default "")
+regex (default `""`)
 
 When namespace-drop-exclude-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. 
 For database drops the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.
@@ -309,7 +329,7 @@ If the regex does not match the namespace then the operation will by synced.
 
 ## mongo-url
 
-string (default localhost)
+string (default `localhost`)
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
@@ -318,7 +338,7 @@ option must be set to point to the config server.
 
 ## mongo-config-url
 
-string (default "")
+string (default `""`)
 
 This config must only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
 This URL must point to the MongoDB `config` server.
@@ -328,32 +348,32 @@ to new shards being added to the cluster at a later time.
 
 ## mongo-pem-file
 
-string (default "")
+string (default `""`)
 
 When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.
 
 ## mongo-validate-pem
 
-boolean (default true)
+boolean (default `true`)
 
 When mongo-validate-pem-file is false TLS will be configured to skip verification
 
 ## mongo-oplog-database-name
 
-string (default local)
+string (default `local`)
 
 When mongo-oplog-database-name is given monstache will look for the MongoDB oplog in the supplied database
 
 ## mongo-oplog-collection-name
 
-string (default $oplog.main)
+string (default `$oplog.main`)
 
 When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection
 
 ## mongo-dial-settings
 
-TOML table (default nil)
+TOML table (default `nil`)
 
 The following MongoDB dial properties are available
 
@@ -373,7 +393,7 @@ The following MongoDB dial properties are available
 
 ## mongo-session-settings
 
-TOML table (default nil)
+TOML table (default `nil`)
 
 The following MongoDB session properties are available
 
@@ -394,7 +414,7 @@ The following MongoDB session properties are available
 
 ## gtm-settings
 
-TOML table (default nil)
+TOML table (default `nil`)
 
 The following gtm configuration properties are available.  See [gtm](https://github.com/rwynn/gtm) for details
 
@@ -423,7 +443,7 @@ The following gtm configuration properties are available.  See [gtm](https://git
 
 ## index-files
 
-boolean (default false)
+boolean (default `false`)
 
 When index-files is true monstache will index the raw content of files stored in GridFS into Elasticsearch as an attachment type.
 By default index-files is false meaning that monstache will only index metadata associated with files stored in GridFS.
@@ -434,13 +454,13 @@ For further information on how to configure monstache to index content from Grid
 
 ## max-file-size
 
-int (default 0)
+int (default `0`)
 
 When max-file-size is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.
 
 ## file-namespaces
 
-[]string (default nil)
+[]string (default `nil`)
 
 The file-namespaces config must be set when index-files is enabled.  file-namespaces must be set to an array of MongoDB
 namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
@@ -450,26 +470,26 @@ This option may be passed on the command line as ./monstache --file-namespace te
 
 ## file-highlighting
 
-boolean (default false)
+boolean (default `false`)
 
 When file-highlighting is true monstache will enable the ability to return highlighted keywords in the extracted text of files
 for queries on files which were indexed in Elasticsearch from gridfs.
 
 ## verbose
 
-boolean (default false)
+boolean (default `false`)
 
 When verbose is true monstache with enable debug logging including a trace of requests to Elasticsearch
 
 ## elasticsearch-user
 
-string (default "")
+string (default `""`)
 
 Optional Elasticsearch username for basic auth
 
 ## elasticsearch-password
 
-string (default "")
+string (default `""`)
 
 Optional Elasticsearch password for basic auth
 
@@ -483,7 +503,7 @@ This option may be passed on the command line as ./monstache --elasticsearch-url
 
 ## elasticsearch-version
 
-string (by default determined by connecting to the server)
+string (by default `determined by connecting to the server`)
 
 When elasticsearch-version is provided monstache will parse the given server version to determine how to interact with
 the Elasticsearch API.  This is normally not recommended because monstache will connect to Elasticsearch to find out
@@ -492,7 +512,7 @@ API to get the version is not possible or desired.
 
 ## elasticsearch-max-conns
 
-int (default 4)
+int (default `4`)
 
 The size of the Elasticsearch HTTP connection pool. This determines the concurrency of bulk indexing requests to Elasticsearch.
 If you increase this value too high you may begin to see bulk indexing failures if the bulk index queue gets overloaded.
@@ -508,7 +528,7 @@ You will want to tune this variable in sync with the `elasticsearch-max-bytes` o
 
 ## elasticsearch-retry
 
-boolean (default false)
+boolean (default `false`)
 
 When elasticseach-retry is true a failed request to Elasticsearch will be retried with an exponential backoff policy. The policy
 is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how 
@@ -516,13 +536,13 @@ this works see [Back Off Strategy](https://github.com/olivere/elastic/blob/relea
 
 ## elasticsearch-client-timeout
 
-int (default 60)
+int (default `60`)
 
 The number of seconds before a request to Elasticsearch times out
 
 ## elasticsearch-max-docs
 
-int (default -1)
+int (default `-1`)
 
 When elasticsearch-max-docs is given a bulk index request to Elasticsearch will be forced when the buffer reaches the given number of documents.
 
@@ -541,7 +561,7 @@ Each connection in `elasticsearch-max-conns` will flush when its queue gets fill
 
 ## elasticsearch-max-seconds
 
-int (default 1)
+int (default `1`)
 
 When elasticsearch-max-seconds is given a bulk index request to Elasticsearch will be forced when a request has not been made in the given number of seconds.
 The default value is automatically increased to `5` when direct read namespaces are detected.  This is to ensure that flushes do not happen too often in this
@@ -549,32 +569,32 @@ case which would cut performance.
 
 ## elasticsearch-pem-file
 
-string (default "")
+string (default `""`)
 
 When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.
 
 ## elasticsearch-validate-pem
 
-boolean (default true)
+boolean (default `true`)
 
 When elasticsearch-validate-pem-file is false TLS will be configured to skip verification
 
 ## dropped-databases
 
-boolean (default true)
+boolean (default `true`)
 
 When dropped-databases is false monstache will not delete the mapped indexes in Elasticsearch if a MongoDB database is dropped
 
 ## dropped-collections
 
-boolean (default true)
+boolean (default `true`)
 
 When dropped-collections is false monstache will not delete the mapped index in Elasticsearch if a MongoDB collection is dropped
 
 ## worker
 
-string (default "")
+string (default `""`)
 
 When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each MongoDB document id always goes to the
@@ -582,7 +602,7 @@ same worker and none of the other workers. See the [Workers](/advanced/#workers)
 
 ## workers
 
-[]string (default nil)
+[]string (default `nil`)
 
 An array of worker names to be used in conjunction with the worker option. 
 
@@ -590,13 +610,13 @@ This option may be passed on the command line as ./monstache --workers w1 --work
 
 ## enable-patches
 
-boolean (default false) 
+boolean (default `false`) 
 
 Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) patches in your Elasticsearch documents
 
 ## patch-namespaces
 
-[]string (default nil)
+[]string (default `nil`)
 
 An array of MongoDB namespaces that you would like to enable rfc7396 patches on
 
@@ -604,13 +624,13 @@ This option may be passed on the command line as ./monstache --patch-namespace t
 
 ## merge-patch-attribute
 
-string (default "json-merge-patches") 
+string (default `json-merge-patches`) 
 
 Customize the name of the property under which merge patches are stored
 
 ## cluster-name
 
-string (default "")
+string (default `""`)
 
 When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
@@ -618,7 +638,7 @@ one of the processes in paused state will take control and start syncing.  See t
 
 ## mapping
 
-[] array of TOML table (default nil)
+[] array of TOML table (default `nil`)
 
 When mapping is given monstache will be directed to override the default index and type assigned to documents in Elasticsearch.
 See the section [Index Mapping](/advanced#index-mapping) for more information.
@@ -646,7 +666,7 @@ See the section [Index Mapping](/advanced#index-mapping) for more information.
 
 ## filter
 
-[] array of TOML table (default nil)
+[] array of TOML table (default `nil`)
 
 When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
 See the section [Middleware](/advanced#middleware) for more information.
@@ -675,7 +695,7 @@ See the section [Middleware](/advanced#middleware) for more information.
 
 ## script
 
-[] array of TOML table (default nil)
+[] array of TOML table (default `nil`)
 
 When script is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
 See the section [Middleware](/advanced#middleware) for more information.
@@ -716,7 +736,7 @@ The address of a graylog server to redirect logs to in GELF
 
 ## logs
 
-TOML table (default nil)
+TOML table (default `nil`)
 
 Allows writing logs to a file using a rolling appender instead of stdout.  Supply a file path for each type of log you would like to send to a file.
 
@@ -754,19 +774,19 @@ Allows writing logs to a file using a rolling appender instead of stdout.  Suppl
 
 ## enable-http-server
 
-boolean (default false)
+boolean (default `false`)
 
 Add this flag to enable an embedded HTTP server at localhost:8080
 
 ## http-server-addr
 
-string (default ":8080")
+string (default `:8080`)
 
 The address to bind the embedded HTTP server on if enabled
 
 ## pprof
 
-boolean (default false)
+boolean (default `false`)
 
 When pprof is true and the http server is enabled, monstache will make profiling information available.
 

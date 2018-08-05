@@ -88,6 +88,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.9.0](https://github.com/rwynn/monstache/releases/tag/v4.9.0)
+
+* Fix to omit version information on deletes when the index-as-update setting is ON (to match the omitted version information at indexing time)
+* Fix issue #89 by making the indexed oplog field names and date format configurable
+
+### [monstache v3.16.0](https://github.com/rwynn/monstache/releases/tag/v3.16.0)
+
+* Fix to omit version information on deletes when the index-as-update setting is ON (to match the omitted version information at indexing time)
+* Fix issue #89 by making the indexed oplog field names and date format configurable
+
 ### [monstache v4.8.0](https://github.com/rwynn/monstache/releases/tag/v4.8.0)
 
 * Seperate namespace regexes for drop operations vs create/update/delete operations
