@@ -24,6 +24,6 @@ markdown_extensions:
 theme:
     name: mkdocs
     highlightjs: True
-    hljs_style: atelier-cave-light
+    hljs_style: github-gist
     hljs_languages:
         - go
