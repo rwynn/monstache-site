@@ -21,3 +21,9 @@ markdown_extensions:
         permalink: True
     - admonition
     - def_list
+theme:
+    name: mkdocs
+    highlightjs: True
+    hljs_style: atom-one-dark
+    hljs_languages:
+        - go
