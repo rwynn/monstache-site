@@ -24,6 +24,6 @@ markdown_extensions:
 theme:
     name: mkdocs
     highlightjs: True
-    hljs_style: mono-blue
+    hljs_style: dracula
     hljs_languages:
         - go
