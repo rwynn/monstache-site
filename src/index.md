@@ -45,8 +45,8 @@ Kibana visualizations and dashboards.
 
 - Optional http server to get access to liveness, stats, profiling, etc
 
-See [Getting Started](../start/) for instructions how to get
+See [Getting Started](./start/) for instructions how to get
 it up and running.
 
-See [Release Notes](../about/#release-notes) for updates.
+See [Release Notes](./about/#release-notes) for updates.
 
