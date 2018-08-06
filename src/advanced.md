@@ -12,7 +12,7 @@ For version 5 or later of Elasticsearch you should instead install the
 [ingest-attachment](https://www.elastic.co/guide/en/elasticsearch/plugins/current/ingest-attachment.html) plugin.
 
 Once you have installed the appropriate plugin for Elasticsearch, getting file content from GridFS into Elasticsearch is
-as simple as configuring monstache.  You will want to enable the [index-files](/config#index-files) option and also tell monstache the 
+as simple as configuring monstache.  You will want to enable the [index-files](../config/#index-files) option and also tell monstache the 
 namespace of all collections which will hold GridFS files. For example in your TOML config file,
 
 ```
@@ -107,7 +107,7 @@ For Elasticsearch version 5 and above...
 		}
 	}'
 
-When [file-highlighting](/config#file-highlighting) is enabled you can add a highlight clause to your query
+When [file-highlighting](../config/#file-highlighting) is enabled you can add a highlight clause to your query
 
 For Elasticsearch versions prior to version 5...
 
@@ -187,7 +187,7 @@ one of the available workers.
 ## High Availability
 
 
-You can run monstache in high availability mode by starting multiple processes with the same value for [cluster-name](/config#cluster-name).
+You can run monstache in high availability mode by starting multiple processes with the same value for [cluster-name](../config/#cluster-name).
 Each process will join a cluster which works together to ensure that a monstache process is always syncing to Elasticsearch.
 
 High availability works by ensuring one active process in the `monstache.cluster` collection in MongoDB at any given time. Only the process in
@@ -196,7 +196,7 @@ this collection will be syncing for the cluster.  Processes not present in this 
 the collection by MongoDB and another process in the monstache cluster will have a chance to write to the collection and become the
 new active process.
 
-When [cluster-name](/config#cluster-name) is supplied the [resume](/config#resume) feature is automatically turned on and the [resume-name](/config#resume-name) becomes the name of the cluster.
+When [cluster-name](../config/#cluster-name) is supplied the [resume](../config/#resume) feature is automatically turned on and the [resume-name](../config/#resume-name) becomes the name of the cluster.
 This is to ensure that each of the processes is able to pick up syncing where the last one left off.  
 
 You can combine the HA feature with the workers feature.  For 3 cluster nodes with 3 workers per node you would have something like the following:
@@ -219,7 +219,7 @@ You can combine the HA feature with the workers feature.  For 3 cluster nodes wi
 	monstache -cluster-name HA -worker Dick -f config.toml
 	monstache -cluster-name HA -worker Harry -f config.toml
 
-When the clustering feature is combined with workers then the [resume-name](/config#resume-name) becomes the cluster name concatenated with the worker name.
+When the clustering feature is combined with workers then the [resume-name](../config/#resume-name) becomes the cluster name concatenated with the worker name.
 
 ## Index Mapping
 
@@ -594,7 +594,7 @@ will be stored under `_parent`.
 
 The example is based on the Elasticsearch docs for [parent-child](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html)
 
-For more on updating the namespace name, check the [Delete Strategy](/config/#delete-strategy) as there is a change of the default behviour in v4.4.0 & v3.11.0
+For more on updating the namespace name, check the [Delete Strategy](../config/#delete-strategy) as there is a change of the default behviour in v4.4.0 & v3.11.0
 
 ## Routing
 
@@ -671,7 +671,7 @@ giving monstache the ability to write to the collection `monstache.meta`.  In th
 documents that were given custom indexing metadata.  This stategy slows down indexing and takes up space in MongoDB.  
 However, it is precise because it records exactly how each document was indexed. The final stategy simply punts on deletes and
 leaves document deletion to the user.  If you don't generally delete documents in MongoDB or don't care if Elasticsearch contains
-documents which have been deleted in MongoDB, this option is available. See [Delete Strategy](/config/#delete-strategy) for more information.
+documents which have been deleted in MongoDB, this option is available. See [Delete Strategy](../config/#delete-strategy) for more information.
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
 
@@ -865,7 +865,7 @@ index.
 
 ## Time Machines
 
-If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use [time machine namespaces](/config#time-machine-namespaces).   For example, you've inserted and later updated a document with id 123 in the `test.test` collection in MongoDB. If `test.test` is a time machine namespace you will have 2 documents representing those changes in the `log.test.test.2018-02-20` index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:
+If you are not just interested in what the current value of a document in MongoDB is, but also would like to see how it has changed over time use [time machine namespaces](../config/#time-machine-namespaces).   For example, you've inserted and later updated a document with id 123 in the `test.test` collection in MongoDB. If `test.test` is a time machine namespace you will have 2 documents representing those changes in the `log.test.test.2018-02-20` index (timestamp will change) in Elasticsearch.  If you later want all the changes made to that document in MongoDB you can issue a query like this:
 
 ```
 $ curl -XGET 'http://localhost:9200/log.test.test.*/_search?routing=123' -d '
