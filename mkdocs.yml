@@ -10,7 +10,7 @@ copyright: Copyright &copy; 2016-2018 Ryan Wynn
 google_analytics: ['UA-113057322-1', 'rwynn.github.io']
 extra_css:
     - css/extra.css
-pages:
+nav:
     - "Home": index.md
     - "Getting Started": start.md
     - "Configuration": config.md
