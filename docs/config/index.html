@@ -371,13 +371,13 @@ if you would like to run monstache to run a full sync on a set of collections vi
 <p>When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
-collections suffixed with .chunks, and the system collections. For more information see the section <a href="/advanced#namespaces">Namespaces</a>.</p>
+collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced/#namespaces">Namespaces</a>.</p>
 <h2 id="namespace-exclude-regex">namespace-exclude-regex<a class="headerlink" href="#namespace-exclude-regex" title="Permanent link">&para;</a></h2>
 <p>regex (default <code>""</code>)</p>
 <p>When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
-collections suffixed with .chunks, and the system collections. For more information see the section <a href="/advanced#namespaces">Namespaces</a>.</p>
+collections suffixed with .chunks, and the system collections. For more information see the section <a href="../advanced/#namespaces">Namespaces</a>.</p>
 <h2 id="namespace-drop-regex">namespace-drop-regex<a class="headerlink" href="#namespace-drop-regex" title="Permanent link">&para;</a></h2>
 <p>regexp (default <code>""</code>)</p>
 <p>When namespace-drop-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. For database drops
@@ -459,7 +459,7 @@ By default index-files is false meaning that monstache will only index metadata 
 In order for index-files to index the raw content of files stored in GridFS you must install a plugin for Elasticsearch.
 For versions of Elasticsearch prior to version 5, you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html">mapper-attachments</a> plugin.  In version 5 or greater
 of Elasticsearch the mapper-attachment plugin is deprecated and you should install the <a href="https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html">ingest-attachment</a> plugin instead.
-For further information on how to configure monstache to index content from GridFS, see the section <a href="/advanced#gridfs-support">GridFS support</a>.</p>
+For further information on how to configure monstache to index content from GridFS, see the section <a href="../advanced/#gridfs-support">GridFS support</a>.</p>
 <h2 id="max-file-size">max-file-size<a class="headerlink" href="#max-file-size" title="Permanent link">&para;</a></h2>
 <p>int (default <code>0</code>)</p>
 <p>When max-file-size is greater than 0 monstache will not index the content of GridFS files that exceed this limit in bytes.</p>
@@ -546,7 +546,7 @@ pool when connecting to Elasticsearch. This should only be used when Elasticsear
 <p>string (default <code>""</code>)</p>
 <p>When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each MongoDB document id always goes to the
-same worker and none of the other workers. See the <a href="/advanced/#workers">Workers</a> section for more information.</p>
+same worker and none of the other workers. See the <a href="../advanced/#workers">Workers</a> section for more information.</p>
 <h2 id="workers">workers<a class="headerlink" href="#workers" title="Permanent link">&para;</a></h2>
 <p>[]string (default <code>nil</code>)</p>
 <p>An array of worker names to be used in conjunction with the worker option. </p>
@@ -565,11 +565,11 @@ same worker and none of the other workers. See the <a href="/advanced/#workers">
 <p>string (default <code>""</code>)</p>
 <p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
-one of the processes in paused state will take control and start syncing.  See the section <a href="/advanced#high-availability">high availability</a> for more information.</p>
+one of the processes in paused state will take control and start syncing.  See the section <a href="../advanced/#high-availability">high availability</a> for more information.</p>
 <h2 id="mapping">mapping<a class="headerlink" href="#mapping" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
 <p>When mapping is given monstache will be directed to override the default index and type assigned to documents in Elasticsearch.
-See the section <a href="/advanced#index-mapping">Index Mapping</a> for more information.</p>
+See the section <a href="../advanced/#index-mapping">Index Mapping</a> for more information.</p>
 <div class="admonition note">
 <h4 id="namespace">namespace<a class="headerlink" href="#namespace" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
@@ -584,8 +584,8 @@ See the section <a href="/advanced#index-mapping">Index Mapping</a> for more inf
 </div>
 <h2 id="filter">filter<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
-<p>When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section <a href="/advanced#middleware">Middleware</a> for more information.
-See the section <a href="/advanced#middleware">Middleware</a> for more information.</p>
+<p>When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section <a href="../advanced/#middleware">Middleware</a> for more information.
+See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
 <div class="admonition note">
 <h4 id="namespace_1">namespace<a class="headerlink" href="#namespace_1" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
@@ -602,7 +602,7 @@ path relative to the directory monstache is executed from or an absolute path.</
 <h2 id="script_1">script<a class="headerlink" href="#script_1" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
 <p>When script is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
-See the section <a href="/advanced#middleware">Middleware</a> for more information.</p>
+See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
 <div class="admonition note">
 <h4 id="namespace_2">namespace<a class="headerlink" href="#namespace_2" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>

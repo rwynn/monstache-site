@@ -300,7 +300,7 @@ regexp (default `""`)
 When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
-collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
+collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](../advanced/#namespaces).
 
 ## namespace-exclude-regex
 
@@ -309,7 +309,7 @@ regex (default `""`)
 When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
 processes events in all databases and all collections with the exception of the reserved database monstache, any
-collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](/advanced#namespaces).
+collections suffixed with .chunks, and the system collections. For more information see the section [Namespaces](../advanced/#namespaces).
 
 ## namespace-drop-regex
 
@@ -450,7 +450,7 @@ By default index-files is false meaning that monstache will only index metadata 
 In order for index-files to index the raw content of files stored in GridFS you must install a plugin for Elasticsearch.
 For versions of Elasticsearch prior to version 5, you should install the [mapper-attachments](https://www.elastic.co/guide/en/elasticsearch/plugins/2.4/mapper-attachments.html) plugin.  In version 5 or greater
 of Elasticsearch the mapper-attachment plugin is deprecated and you should install the [ingest-attachment](https://www.elastic.co/guide/en/elasticsearch/plugins/master/ingest-attachment.html) plugin instead.
-For further information on how to configure monstache to index content from GridFS, see the section [GridFS support](/advanced#gridfs-support).
+For further information on how to configure monstache to index content from GridFS, see the section [GridFS support](../advanced/#gridfs-support).
 
 ## max-file-size
 
@@ -598,7 +598,7 @@ string (default `""`)
 
 When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each MongoDB document id always goes to the
-same worker and none of the other workers. See the [Workers](/advanced/#workers) section for more information.
+same worker and none of the other workers. See the [Workers](../advanced/#workers) section for more information.
 
 ## workers
 
@@ -634,14 +634,14 @@ string (default `""`)
 
 When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
-one of the processes in paused state will take control and start syncing.  See the section [high availability](/advanced#high-availability) for more information.
+one of the processes in paused state will take control and start syncing.  See the section [high availability](../advanced/#high-availability) for more information.
 
 ## mapping
 
 [] array of TOML table (default `nil`)
 
 When mapping is given monstache will be directed to override the default index and type assigned to documents in Elasticsearch.
-See the section [Index Mapping](/advanced#index-mapping) for more information.
+See the section [Index Mapping](../advanced/#index-mapping) for more information.
 
 !!! note ""
 
@@ -668,8 +668,8 @@ See the section [Index Mapping](/advanced#index-mapping) for more information.
 
 [] array of TOML table (default `nil`)
 
-When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](/advanced#middleware) for more information.
-See the section [Middleware](/advanced#middleware) for more information.
+When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](../advanced/#middleware) for more information.
+See the section [Middleware](../advanced/#middleware) for more information.
 
 !!! note ""
 
@@ -698,7 +698,7 @@ See the section [Middleware](/advanced#middleware) for more information.
 [] array of TOML table (default `nil`)
 
 When script is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
-See the section [Middleware](/advanced#middleware) for more information.
+See the section [Middleware](../advanced/#middleware) for more information.
 
 !!! note ""
 
