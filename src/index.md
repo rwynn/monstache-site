@@ -15,6 +15,8 @@ Kibana visualizations and dashboards.
 
 - Single binary with a light footprint 
 
+- Support for MongoDB change streams and aggregation pipelines
+
 - Pre built Docker [containers](https://hub.docker.com/r/rwynn/monstache/tags/)
 
 - Optionally filter the set of collections to sync

@@ -250,6 +250,14 @@ When using a stateless delete strategy, set this to a valid Elasticsearch index 
 will consider.  If monstache only indexes to index a, b, and c then you can set this to `a,b,c`.  If monstache only indexes to indexes starting with 
 mydb then you can set this to `mydb*`.  
 
+## change-stream-namespaces
+
+[]string (default `nil')
+
+This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using `$watch` function.
+This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
+you do not need to specify additional regular expressions to filter the set of collections to watch.
+
 ## direct-read-namespaces
 
 []string (default `nil`)
@@ -727,6 +735,42 @@ See the section [Middleware](../advanced/#middleware) for more information.
 	string (default "")
 
 	The file path to load a script from.  Use this or an inline script but not both. Can be a path relative to the directory monstache is executed from or an absolute path.
+
+## pipeline
+
+[] array of TOML table (default `nil`)
+
+When pipline is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
+See the section [Middleware](../advanced/#middleware) for more information.
+
+!!! note ""
+
+	#### namespace
+
+	string (default "")
+
+	The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the mapping function with be applied to all documents.
+
+	#### script
+
+	string (default "")
+
+	An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a namespace and a boolean ndicating whether or not the data is a change stream.
+	The function should return an array of aggregation pipeline stages. Note, for change streams the root of the pipeline will be the change event with a field `fullDocument` representing the
+	changed doc.  You should alter your pipeline stages according to this boolean.  Monstache needs the change event data so do not replace the root of the document in your pipeline for change
+	streams.
+
+	#### path
+
+	string (default "")
+
+	The file path to load a script from.  Use this or an inline script but not both. Can be a path relative to the directory monstache is executed from or an absolute path.
+
+## pipe-allow-disk
+
+boolean (default `false`)
+
+Add this flag to allow MongoDB to use the disk as a temporary store for data during aggregation pipelines
 
 ## graylog-addr
 

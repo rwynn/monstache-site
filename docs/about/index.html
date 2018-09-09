@@ -177,6 +177,54 @@ MongoDB and Elasticsearch will be started and the tests run on any changes you h
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4100"><a href="https://github.com/rwynn/monstache/releases/tag/v4.10.0">monstache v4.10.0</a><a class="headerlink" href="#monstache-v4100" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for issue #97 where monstache would exit before syncing all documents with <code>-exit-after-direct-reads</code> enabled</li>
+<li>Support added for MongoDB change streams via the <code>change-stream-namespaces</code> option</li>
+<li>New golang plugin functions <code>Process</code> and <code>Pipeline</code> added to the existing <code>Map</code> and <code>Filter</code> functions.  The <code>Process</code> function allows one to code complex processing after an event.  The <code>Process</code> function has access to the MongoDB session, the Elasticsearch client, the Elasticsearch bulk processor, and information about the change that occurred (insert, update, delete). The <code>Pipeline</code> function allows one to assign MongoDB pipeline stages to both direct reads and change streams. Since the pipeline stages may differ between direct reads and change streams the function is passed a boolean indicating the source of the data.  For example, a <code>$match</code> clause on the change stream may need to reference the <code>fullDocument</code> field since the root will be the change event. For direct reads the root will simply be the full document.</li>
+<li>New config option <code>pipeline</code> allows one to create aggregation pipelines in javascript for direct reads and change streams.  This can be used instead of the <code>Pipeline</code> function in a golang plugin.  The exported function in javascript takes a namespace and a boolean indicating whether or not the source was a change stream.  The function should return an array of pipeline stages to apply.</li>
+<li>New config option <code>pipe-allow-disk</code> which when enabled allows large pipelines to use the disk to save intermediate results.</li>
+<li>New global function available in javascript <code>script</code> functions named <code>pipe</code>.  The <code>pipe</code> function is simliar to existing <code>find</code> function but takes an array of aggregation pipeline stages as the first argument.</li>
+</ul>
+<pre><code>direct-read-namespaces = [test.test]
+change-stream-namespaces = [test.test]
+[[pipeline]]
+script = &quot;&quot;&quot;
+module.exports = function(ns, changeStream) {
+  if (changeStream) {
+    return [
+      { $match: {&quot;fullDocument.foo&quot;: 1} }
+    ];
+  } else {
+    return [
+      { $match: {&quot;foo&quot;: 1} }
+    ];
+  }
+}
+&quot;&quot;&quot;
+[[script]]
+namespace = &quot;test.test&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc, ns) {
+  doc.extra = pipe([
+    { $match: {foo: 1} },
+    { $limit: 1 },
+    { $project: { _id: 0, foo: 1}}
+  ]);
+  return doc;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<h3 id="monstache-v3170"><a href="https://github.com/rwynn/monstache/releases/tag/v3.16.0">monstache v3.17.0</a><a class="headerlink" href="#monstache-v3170" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for issue #97 where monstache would exit before syncing all documents with <code>-exit-after-direct-reads</code> enabled</li>
+<li>Support added for MongoDB change streams via the <code>change-stream-namespaces</code> option</li>
+<li>New golang plugin functions <code>Process</code> and <code>Pipeline</code>.  The <code>Process</code> function allows one to code complex processing after an event.  The <code>Process</code> function has access to the MongoDB session, the Elasticsearch client, the Elasticsearch bulk processor, and information about the change that occurred (insert, update, delete). The <code>Pipeline</code> function allows one to assign MongoDB pipeline stages to both direct reads and change streams. Since the pipeline stages may differ between direct reads and change streams the function is passed a boolean indicating the source of the data.  For example, a <code>$match</code> clause on the change stream may need to reference the <code>fullDocument</code> field since the root will be the change event. For direct reads the root will simply be the full document.</li>
+<li>New config option <code>pipeline</code> allows one to create aggregation pipelines in javascript for direct reads and change streams.  This can be used instead of the <code>Pipeline</code> function in a golang plugin.  The exported function in javascript takes a namespace and a boolean indicating whether or not the source was a change stream.  The function should return an array of pipeline stages to apply.</li>
+<li>New config option <code>pipe-allow-disk</code> which when enabled allows large pipelines to use the disk to save intermediate results.</li>
+<li>New global function available in javascript <code>script</code> functions named <code>pipe</code>.  The <code>pipe</code> function is simliar to existing <code>find</code> function but takes an array of aggregation pipeline stages as the first argument.</li>
+</ul>
 <h3 id="monstache-v490"><a href="https://github.com/rwynn/monstache/releases/tag/v4.9.0">monstache v4.9.0</a><a class="headerlink" href="#monstache-v490" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix to omit version information on deletes when the index-as-update setting is ON (to match the omitted version information at indexing time)</li>

@@ -367,6 +367,18 @@ use the go command to build a .so file for your plugin, and finally pass the pat
 <pre><code class="go">func Filter(input *monstachemap.MapperPluginInput) (keep bool, err error)
 </code></pre>
 
+<ul>
+<li>optionally implement a function named <code>Pipeline</code> with the following signature</li>
+</ul>
+<pre><code class="go">func Pipeline(ns string, changeStream bool) (stages []interface, err error)
+</code></pre>
+
+<ul>
+<li>optionally implement a function named <code>Process</code> with the following signature</li>
+</ul>
+<pre><code class="go">func Process(input*monstachemap.ProcessPluginInput) error
+</code></pre>
+
 <p>plugins can be compiled using</p>
 <pre><code>go build -buildmode=plugin -o myplugin.so myplugin.go
 </code></pre>
@@ -394,7 +406,8 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 </code></pre>
 
 <p>The input parameter will contain information about the document's origin database and collection.</p>
-<p>To drop the document (direct monstache not to index it) set <code>output.Drop = true</code>.</p>
+<p>To skip the document (direct monstache to ignore it) set <code>output.Skip = true</code>.</p>
+<p>To drop the document (direct monstache not to index it but remove it) set <code>output.Drop = true</code>.</p>
 <p>To simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
 <p>To set custom indexing metadata on the document use <code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code>.</p>
 <div class="admonition note">
@@ -408,6 +421,8 @@ correctly.</p>
 <p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
 <p>When you implement a <code>Filter</code> function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting <code>output.Drop</code> from the mapping function because when you set <code>output.Drop</code> to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the <code>Filter</code> function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.</p>
+<p>When you implement a <code>Pipeline</code> function the function will be called to setup an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">aggregation pipeline</a> for both direct reads and any change streams that you have configured. The aggregation pipeline stages that you return may be different depending if applied to a direct read or to a change stream. For direct reads the root document will be the document in the collection.  For change streams the root document will be a change event with a <code>fullDocument</code> field inside it. Use the boolean parameter <code>changeStream</code> to alter the stages that you return from this function accordingly.</p>
+<p>When you implement a <code>Process</code> function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Under the <code>docker/plugin</code> folder there is a <code>build.sh</code> script to help you build a plugin. There is a README file in that directory
@@ -472,6 +487,29 @@ namespace = &quot;db2.collection2&quot;
 path = &quot;path/to/script.js&quot;
 </code></pre>
 
+<h4 id="aggregation-pipelines">Aggregation Pipelines<a class="headerlink" href="#aggregation-pipelines" title="Permanent link">&para;</a></h4>
+<p>You can alter or filter direct reads and change streams by using a pipeline definition. Note, when building a pipeline for a change stream the
+root of the document will be the change event and the associated document will be under a field named <code>fullDocument</code>.</p>
+<p>You can scope a pipeline to a particular namespace using the <code>namespace</code> attribute or leave it off to have the pipeline applied to all namespaces.</p>
+<p>[[pipeline]]
+script = """
+module.exports = function(ns, changeStream) {
+  if (changeEvent) {
+    return [
+      { $match: {"fullDocument.foo": 1} }
+    ];
+  } else {
+    return [
+      { $match: {"foo": 1} }
+    ];
+  }
+}
+"""</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You should not replace the root using <code>$replaceRoot</code> for a change stream since monstache needs this information.  You should only make
+modifications to the <code>fullDocument</code> field in a pipeline.</p>
+</div>
 <h4 id="dropping">Dropping<a class="headerlink" href="#dropping" title="Permanent link">&para;</a></h4>
 <p>If the return value from the mapping function is not an <code>object</code> per the definition above then the result is converted into a <code>boolean</code>
 and if the boolean value is <code>false</code> then that indicates to monstache that you would not like to index the document. If the boolean value is <code>true</code> then
@@ -516,9 +554,13 @@ function findOne(query, [options]) {
 function find(query, [options]) {
     // returns an array of documents or null
 }
+
+function pipe(stages, [options]) {
+    // returns an array of documents or null
+}
 </code></pre>
 
-<p>Each function takes a <code>query</code> object parameter and an optional <code>options</code> object parameter.</p>
+<p>Each function takes a <code>query</code> type object parameter and an optional <code>options</code> object parameter.</p>
 <p>The options object takes the following keys and values:</p>
 <pre><code class="javascript">var options = {
     database: &quot;test&quot;,
@@ -567,6 +609,23 @@ module.exports = function(post) {
         });
     }
     return post;
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>This example runs an aggregation pipeline and stores the results in an extra field in the document</p>
+<pre><code>[[script]]
+namespace = &quot;test.test&quot;
+script = &quot;&quot;&quot;
+module.exports = function(doc, ns) {
+  doc.extra = pipe([
+    { $match: {foo: 1} },
+    { $limit: 1 },
+    { $project: { _id: 0, foo: 1}}
+  ]
+  // optional , { database: &quot;foo&quot;, collection: &quot;bar&quot;} // defaults to same namespace
+  );
+  return doc;
 }
 &quot;&quot;&quot;
 </code></pre>
@@ -984,14 +1043,14 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.9.0 -v
+<pre><code>docker run rwynn/monstache:4.10.0 -v
 
-docker run rwynn/monstache:3.16.0 -v
+docker run rwynn/monstache:3.17.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.9.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.10.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 

@@ -304,6 +304,17 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 func Filter(input *monstachemap.MapperPluginInput) (keep bool, err error)
 ```
 
+- optionally implement a function named `Pipeline` with the following signature
+
+```go
+func Pipeline(ns string, changeStream bool) (stages []interface, err error)
+```
+
+- optionally implement a function named `Process` with the following signature
+```go
+func Process(input*monstachemap.ProcessPluginInput) error
+```
+
 plugins can be compiled using
 
 	go build -buildmode=plugin -o myplugin.so myplugin.go
@@ -336,7 +347,9 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 
 The input parameter will contain information about the document's origin database and collection.
 
-To drop the document (direct monstache not to index it) set `output.Drop = true`.
+To skip the document (direct monstache to ignore it) set `output.Skip = true`.
+
+To drop the document (direct monstache not to index it but remove it) set `output.Drop = true`.
 
 To simply pass the original document through to Elasticsearch, set `output.Passthrough = true`
 
@@ -354,6 +367,10 @@ If would like to embed other MongoDB documents (possibly from a different collec
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
 
 When you implement a `Filter` function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting `output.Drop` from the mapping function because when you set `output.Drop` to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the `Filter` function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.
+
+When you implement a `Pipeline` function the function will be called to setup an [aggregation pipeline](https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/) for both direct reads and any change streams that you have configured. The aggregation pipeline stages that you return may be different depending if applied to a direct read or to a change stream. For direct reads the root document will be the document in the collection.  For change streams the root document will be a change event with a `fullDocument` field inside it. Use the boolean parameter `changeStream` to alter the stages that you return from this function accordingly.
+
+When you implement a `Process` function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios.
 
 !!! note
 	Under the `docker/plugin` folder there is a `build.sh` script to help you build a plugin. There is a README file in that directory
@@ -429,6 +446,32 @@ namespace = "db2.collection2"
 path = "path/to/script.js"
 ```
 
+#### Aggregation Pipelines
+
+You can alter or filter direct reads and change streams by using a pipeline definition. Note, when building a pipeline for a change stream the
+root of the document will be the change event and the associated document will be under a field named `fullDocument`.
+
+You can scope a pipeline to a particular namespace using the `namespace` attribute or leave it off to have the pipeline applied to all namespaces.
+
+[[pipeline]]
+script = """
+module.exports = function(ns, changeStream) {
+  if (changeEvent) {
+    return [
+      { $match: {"fullDocument.foo": 1} }
+    ];
+  } else {
+    return [
+      { $match: {"foo": 1} }
+    ];
+  }
+}
+"""
+
+!!! warning
+	You should not replace the root using `$replaceRoot` for a change stream since monstache needs this information.  You should only make
+	modifications to the `fullDocument` field in a pipeline.
+
 #### Dropping
 
 If the return value from the mapping function is not an `object` per the definition above then the result is converted into a `boolean`
@@ -483,9 +526,13 @@ function findOne(query, [options]) {
 function find(query, [options]) {
     // returns an array of documents or null
 }
+
+function pipe(stages, [options]) {
+    // returns an array of documents or null
+}
 ```
 
-Each function takes a `query` object parameter and an optional `options` object parameter.
+Each function takes a `query` type object parameter and an optional `options` object parameter.
 
 The options object takes the following keys and values:
 
@@ -543,6 +590,25 @@ module.exports = function(post) {
         });
     }
     return post;
+}
+"""
+```
+
+This example runs an aggregation pipeline and stores the results in an extra field in the document
+
+```
+[[script]]
+namespace = "test.test"
+script = """
+module.exports = function(doc, ns) {
+  doc.extra = pipe([
+    { $match: {foo: 1} },
+    { $limit: 1 },
+    { $project: { _id: 0, foo: 1}}
+  ]
+  // optional , { database: "foo", collection: "bar"} // defaults to same namespace
+  );
+  return doc;
 }
 """
 ```
@@ -1044,16 +1110,16 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.9.0 -v
+docker run rwynn/monstache:4.10.0 -v
 
-docker run rwynn/monstache:3.16.0 -v
+docker run rwynn/monstache:3.17.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.9.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:4.10.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
