@@ -490,21 +490,24 @@ path = &quot;path/to/script.js&quot;
 <h4 id="aggregation-pipelines">Aggregation Pipelines<a class="headerlink" href="#aggregation-pipelines" title="Permanent link">&para;</a></h4>
 <p>You can alter or filter direct reads and change streams by using a pipeline definition. Note, when building a pipeline for a change stream the
 root of the document will be the change event and the associated document will be under a field named <code>fullDocument</code>.</p>
+<p>For more information on the properties of the root document for change streams see <a href="https://docs.mongodb.com/manual/reference/change-events/">Change Events</a>.</p>
 <p>You can scope a pipeline to a particular namespace using the <code>namespace</code> attribute or leave it off to have the pipeline applied to all namespaces.</p>
-<p>[[pipeline]]
-script = """
+<pre><code class="toml">[[pipeline]]
+script = &quot;&quot;&quot;
 module.exports = function(ns, changeStream) {
   if (changeEvent) {
     return [
-      { $match: {"fullDocument.foo": 1} }
+      { $match: {&quot;fullDocument.foo&quot;: 1} }
     ];
   } else {
     return [
-      { $match: {"foo": 1} }
+      { $match: {&quot;foo&quot;: 1} }
     ];
   }
 }
-"""</p>
+&quot;&quot;&quot;
+</code></pre>
+
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>You should not replace the root using <code>$replaceRoot</code> for a change stream since monstache needs this information.  You should only make

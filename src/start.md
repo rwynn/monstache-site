@@ -105,9 +105,10 @@ namespace-regex = '^mydb\.mycollection$'
 # additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
 # you can copy entire collections from MongoDB to Elasticsearch
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
-# if you want to use MongoDB change streams instead of legacy oplog tailing add the following.  In this case you don't need regexes to filter collections.
-# change streams cannot be combined with resume, replay, or cluster options.  Change streams start listening for new changes
-# since the monstache process is started
+# if you want to use MongoDB change streams instead of legacy oplog tailing add the following
+# in this case you don't need regexes to filter collections.
+# change streams cannot be combined with resume, replay, or cluster options.
+# change streams start listening for new changes since the monstache process is started
 change-stream-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 
 # additional settings

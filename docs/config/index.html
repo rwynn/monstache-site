@@ -630,15 +630,15 @@ for deletion.</p>
 </div>
 <h2 id="pipeline">pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
-<p>When pipline is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
+<p>When pipeline is given monstache will call the function specified to determine an array of aggregation pipeline stages to run.
 See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
 <div class="admonition note">
 <h4 id="namespace_3">namespace<a class="headerlink" href="#namespace_3" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
-<p>The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the mapping function with be applied to all documents.</p>
+<p>The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the pipeline function with be applied to all namespaces.</p>
 <h4 id="script_3">script<a class="headerlink" href="#script_3" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
-<p>An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a namespace and a boolean ndicating whether or not the data is a change stream.
+<p>An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a namespace and a boolean indicating whether or not the data is a change stream.
 The function should return an array of aggregation pipeline stages. Note, for change streams the root of the pipeline will be the change event with a field <code>fullDocument</code> representing the
 changed doc.  You should alter your pipeline stages according to this boolean.  Monstache needs the change event data so do not replace the root of the document in your pipeline for change
 streams.</p>

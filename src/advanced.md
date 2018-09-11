@@ -451,8 +451,11 @@ path = "path/to/script.js"
 You can alter or filter direct reads and change streams by using a pipeline definition. Note, when building a pipeline for a change stream the
 root of the document will be the change event and the associated document will be under a field named `fullDocument`.
 
+For more information on the properties of the root document for change streams see [Change Events](https://docs.mongodb.com/manual/reference/change-events/).
+
 You can scope a pipeline to a particular namespace using the `namespace` attribute or leave it off to have the pipeline applied to all namespaces.
 
+```toml
 [[pipeline]]
 script = """
 module.exports = function(ns, changeStream) {
@@ -467,6 +470,7 @@ module.exports = function(ns, changeStream) {
   }
 }
 """
+```
 
 !!! warning
 	You should not replace the root using `$replaceRoot` for a change stream since monstache needs this information.  You should only make

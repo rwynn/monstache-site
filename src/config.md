@@ -740,7 +740,7 @@ See the section [Middleware](../advanced/#middleware) for more information.
 
 [] array of TOML table (default `nil`)
 
-When pipline is given monstache will pass the MongoDB document into the script before indexing into Elasticsearch.
+When pipeline is given monstache will call the function specified to determine an array of aggregation pipeline stages to run.
 See the section [Middleware](../advanced/#middleware) for more information.
 
 !!! note ""
@@ -749,13 +749,13 @@ See the section [Middleware](../advanced/#middleware) for more information.
 
 	string (default "")
 
-	The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the mapping function with be applied to all documents.
+	The MongoDB namespace, db.collection, to apply the script to. If you omit the namespace the pipeline function with be applied to all namespaces.
 
 	#### script
 
 	string (default "")
 
-	An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a namespace and a boolean ndicating whether or not the data is a change stream.
+	An inline script.  You can use TOML multiline syntax here.  The function should take 2 arguments, a namespace and a boolean indicating whether or not the data is a change stream.
 	The function should return an array of aggregation pipeline stages. Note, for change streams the root of the pipeline will be the change event with a field `fullDocument` representing the
 	changed doc.  You should alter your pipeline stages according to this boolean.  Monstache needs the change event data so do not replace the root of the document in your pipeline for change
 	streams.
