@@ -430,17 +430,23 @@ pool when connecting to MongoDB. This should only be used when MongoDB is config
 <p>Set to true to establish a connection using TLS.</p>
 <h4 id="timeout">timeout<a class="headerlink" href="#timeout" title="Permanent link">&para;</a></h4>
 <h5 id="int-default-10">int (default 10)<a class="headerlink" href="#int-default-10" title="Permanent link">&para;</a></h5>
-<p>Seconds to wait when establishing a connection to MongoDB before giving up</p>
+<p>Seconds to wait when establishing an initial connection to MongoDB before giving up</p>
+<h4 id="read-timeout">read-timeout<a class="headerlink" href="#read-timeout" title="Permanent link">&para;</a></h4>
+<h5 id="int-default-600">int (default 600)<a class="headerlink" href="#int-default-600" title="Permanent link">&para;</a></h5>
+<p>Seconds to wait when reading data from MongoDB before giving up</p>
+<h4 id="write-timeout">write-timeout<a class="headerlink" href="#write-timeout" title="Permanent link">&para;</a></h4>
+<h5 id="int-default-30">int (default 30)<a class="headerlink" href="#int-default-30" title="Permanent link">&para;</a></h5>
+<p>Seconds to wait when writing data to MongoDB before giving up</p>
 </div>
 <h2 id="mongo-session-settings">mongo-session-settings<a class="headerlink" href="#mongo-session-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
 <p>The following MongoDB session properties are available</p>
 <div class="admonition note">
 <h4 id="socket-timeout">socket-timeout<a class="headerlink" href="#socket-timeout" title="Permanent link">&para;</a></h4>
-<p>int (default 60)</p>
+<p>int (default 600)</p>
 <p>Seconds to wait for a non-responding socket before it is forcefully closed</p>
 <h4 id="sync-timeout">sync-timeout<a class="headerlink" href="#sync-timeout" title="Permanent link">&para;</a></h4>
-<p>int (default 60)</p>
+<p>int (default 600)</p>
 <p>Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 Set it to zero to wait forever.</p>
 </div>

@@ -88,6 +88,38 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.10.1](https://github.com/rwynn/monstache/releases/tag/v4.10.1)
+
+* Clean up timeout configurations and increase default timeout values
+* New timeout configurations surfaced - read and write timeout.  Configure as follows (default values shown):
+
+```
+[mongo-dial-settings]
+timeout=10
+read-timeout=600
+write-timeout=30
+
+[mongo-session-settings]
+socket-timeout=600
+sync-timeout=600
+```
+
+### [monstache v3.17.1](https://github.com/rwynn/monstache/releases/tag/v3.17.1)
+
+* Clean up timeout configurations and increase default timeout values
+* New timeout configurations surfaced - read and write timeout.  Configure as follows (default values shown):
+
+```
+[mongo-dial-settings]
+timeout=10
+read-timeout=600
+write-timeout=30
+
+[mongo-session-settings]
+socket-timeout=600
+sync-timeout=600
+```
+
 ### [monstache v4.10.0](https://github.com/rwynn/monstache/releases/tag/v4.10.0)
 
 * Fix for issue #97 where monstache would exit before syncing all documents with `-exit-after-direct-reads` enabled
