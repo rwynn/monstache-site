@@ -88,6 +88,38 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.10.2](https://github.com/rwynn/monstache/releases/tag/v4.10.2)
+
+* Fixes related to i/o timeout errors
+* Default timeout configurations changed to no timeout (0) with the exception of the initial connection to MongoDB which times out after 15 seconds.  Values of 0 disable timeouts.  All other positive values are in seconds.  New defaults shown below.  You probably do not need to specify any of these values unless you encounter problems.   
+
+```
+[mongo-dial-settings]
+timeout=15
+read-timeout=0
+write-timeout=0
+
+[mongo-session-settings]
+socket-timeout=0
+sync-timeout=0
+```
+
+### [monstache v3.17.2](https://github.com/rwynn/monstache/releases/tag/v3.17.2)
+
+* Fixes related to i/o timeout errors
+* Default timeout configurations changed to no timeout (0) with the exception of the initial connection to MongoDB which times out after 15 seconds.  Values of 0 disable timeouts.  All other positive values are in seconds.  New defaults shown below.  You probably do not need to specify any of these values unless you encounter problems.   
+
+```
+[mongo-dial-settings]
+timeout=15
+read-timeout=0
+write-timeout=0
+
+[mongo-session-settings]
+socket-timeout=0
+sync-timeout=0
+```
+
 ### [monstache v4.10.1](https://github.com/rwynn/monstache/releases/tag/v4.10.1)
 
 * Clean up timeout configurations and increase default timeout values

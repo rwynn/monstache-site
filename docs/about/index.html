@@ -177,6 +177,36 @@ MongoDB and Elasticsearch will be started and the tests run on any changes you h
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4102"><a href="https://github.com/rwynn/monstache/releases/tag/v4.10.2">monstache v4.10.2</a><a class="headerlink" href="#monstache-v4102" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fixes related to i/o timeout errors</li>
+<li>Default timeout configurations changed to no timeout (0) with the exception of the initial connection to MongoDB which times out after 15 seconds.  Values of 0 disable timeouts.  All other positive values are in seconds.  New defaults shown below.  You probably do not need to specify any of these values unless you encounter problems.   </li>
+</ul>
+<pre><code>[mongo-dial-settings]
+timeout=15
+read-timeout=0
+write-timeout=0
+
+[mongo-session-settings]
+socket-timeout=0
+sync-timeout=0
+</code></pre>
+
+<h3 id="monstache-v3172"><a href="https://github.com/rwynn/monstache/releases/tag/v3.17.2">monstache v3.17.2</a><a class="headerlink" href="#monstache-v3172" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fixes related to i/o timeout errors</li>
+<li>Default timeout configurations changed to no timeout (0) with the exception of the initial connection to MongoDB which times out after 15 seconds.  Values of 0 disable timeouts.  All other positive values are in seconds.  New defaults shown below.  You probably do not need to specify any of these values unless you encounter problems.   </li>
+</ul>
+<pre><code>[mongo-dial-settings]
+timeout=15
+read-timeout=0
+write-timeout=0
+
+[mongo-session-settings]
+socket-timeout=0
+sync-timeout=0
+</code></pre>
+
 <h3 id="monstache-v4101"><a href="https://github.com/rwynn/monstache/releases/tag/v4.10.1">monstache v4.10.1</a><a class="headerlink" href="#monstache-v4101" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Clean up timeout configurations and increase default timeout values</li>

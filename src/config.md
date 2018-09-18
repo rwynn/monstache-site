@@ -383,7 +383,7 @@ When mongo-oplog-collection-name is given monstache will look for the MongoDB op
 
 TOML table (default `nil`)
 
-The following MongoDB dial properties are available
+The following MongoDB dial properties are available.  Timeout values of 0 disable the timeout.
 
 !!! note ""
 
@@ -395,19 +395,19 @@ The following MongoDB dial properties are available
 
 	#### timeout
 
-	##### int (default 10)
+	##### int (default 15)
 
 	Seconds to wait when establishing an initial connection to MongoDB before giving up
 
 	#### read-timeout
 
-	##### int (default 600)
+	##### int (default 0)
 
 	Seconds to wait when reading data from MongoDB before giving up
 
 	#### write-timeout
 
-	##### int (default 30)
+	##### int (default 0)
 
 	Seconds to wait when writing data to MongoDB before giving up
 
@@ -415,19 +415,19 @@ The following MongoDB dial properties are available
 
 TOML table (default `nil`)
 
-The following MongoDB session properties are available
+The following MongoDB session properties are available. Timeout values of 0 disable the timeout.
 
 !!! note ""
 
 	#### socket-timeout
 
-	int (default 600)
+	int (default 0)
 
 	Seconds to wait for a non-responding socket before it is forcefully closed
 
 	#### sync-timeout
 
-	int (default 600)
+	int (default 0)
 
 	Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 	Set it to zero to wait forever.
