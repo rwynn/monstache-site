@@ -407,7 +407,11 @@ option must be set to point to the config server.</p>
 <p>This config must only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
 This URL must point to the MongoDB <code>config</code> server.</p>
 <p>Monstache will read the list of shards using this connection and then setup a listener to react
-to new shards being added to the cluster at a later time.</p>
+to new shards being added to the cluster at a later time. It will then setup a new direct connection to
+each shard to listen for events.</p>
+<div class="admonition note">
+<p>Setting the mongo-config-url is not necessary if you are using <a href="#change-stream-namespaces">change-stream-namespaces</a>.</p>
+</div>
 <h2 id="mongo-pem-file">mongo-pem-file<a class="headerlink" href="#mongo-pem-file" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>)</p>
 <p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert

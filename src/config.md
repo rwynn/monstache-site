@@ -352,7 +352,11 @@ This config must only be set for sharded MongoDB clusters. Has the same syntax a
 This URL must point to the MongoDB `config` server.
 
 Monstache will read the list of shards using this connection and then setup a listener to react
-to new shards being added to the cluster at a later time.
+to new shards being added to the cluster at a later time. It will then setup a new direct connection to
+each shard to listen for events.
+
+!!! note ""
+	Setting the mongo-config-url is not necessary if you are using [change-stream-namespaces](#change-stream-namespaces).
 
 ## mongo-pem-file
 
