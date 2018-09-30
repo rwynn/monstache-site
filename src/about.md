@@ -88,6 +88,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.0](https://github.com/rwynn/monstache/releases/tag/v4.11.0)
+
+* Reliability improvements
+* Fix allowing one to use a MongoDB view as a direct-read-namespace
+* Addition of the `relate` config to declare dependencies between collections
+* Experimental support for AWS Signing Version 4
+
+### [monstache v3.18.0](https://github.com/rwynn/monstache/releases/tag/v3.18.0)
+
+* Reliability improvements
+* Fix allowing one to use a MongoDB view as a direct-read-namespace
+* Addition of the `relate` config to declare dependencies between collections
+* Experimental support for AWS Signing Version 4
+
 ### [monstache v4.10.2](https://github.com/rwynn/monstache/releases/tag/v4.10.2)
 
 * Fixes related to i/o timeout errors

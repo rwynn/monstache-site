@@ -176,6 +176,7 @@
             <li><a href="#pipeline">pipeline</a></li>
             <li><a href="#pipe-allow-disk">pipe-allow-disk</a></li>
             <li><a href="#graylog-addr">graylog-addr</a></li>
+            <li><a href="#relate">relate</a></li>
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
@@ -528,8 +529,8 @@ To increase the size of the bulk indexing queue you can update the Elasticsearch
 is set with an initial timeout of 50 ms, an exponential factor of 2, and a max wait of 20 seconds. For more information on how 
 this works see <a href="https://github.com/olivere/elastic/blob/release-branch.v5/backoff.go">Back Off Strategy</a></p>
 <h2 id="elasticsearch-client-timeout">elasticsearch-client-timeout<a class="headerlink" href="#elasticsearch-client-timeout" title="Permanent link">&para;</a></h2>
-<p>int (default <code>60</code>)</p>
-<p>The number of seconds before a request to Elasticsearch times out</p>
+<p>int (default <code>0</code>)</p>
+<p>The number of seconds before a request to Elasticsearch times out. A setting of 0, the default, disables the timeout.</p>
 <h2 id="elasticsearch-max-docs">elasticsearch-max-docs<a class="headerlink" href="#elasticsearch-max-docs" title="Permanent link">&para;</a></h2>
 <p>int (default <code>-1</code>)</p>
 <p>When elasticsearch-max-docs is given a bulk index request to Elasticsearch will be forced when the buffer reaches the given number of documents.</p>
@@ -662,6 +663,27 @@ streams.</p>
 <h2 id="graylog-addr">graylog-addr<a class="headerlink" href="#graylog-addr" title="Permanent link">&para;</a></h2>
 <p>string (default "")</p>
 <p>The address of a graylog server to redirect logs to in GELF </p>
+<h2 id="relate">relate<a class="headerlink" href="#relate" title="Permanent link">&para;</a></h2>
+<p>[] array of TOML table (default <code>nil</code>)</p>
+<p>Allows one to relate 2 namespaces together such that a change to one causes a sync of the associated namespace</p>
+<div class="admonition note">
+<h4 id="namespace_4">namespace<a class="headerlink" href="#namespace_4" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The namespace of the collection that, when modified, triggers a sync of the with-namespace</p>
+<h4 id="with-namespace">with-namespace<a class="headerlink" href="#with-namespace" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The namespace of the collection or view that will be synced when namespace changes</p>
+<h4 id="src-field">src-field<a class="headerlink" href="#src-field" title="Permanent link">&para;</a></h4>
+<p>string (default "_id")</p>
+<p>The name of the field in namespace that will be extracted from the change doc and used as the value side of the query into with-namespace</p>
+<h4 id="match-field">match-field<a class="headerlink" href="#match-field" title="Permanent link">&para;</a></h4>
+<p>string (default "_id")</p>
+<p>The name of the field in with-namespace that will be used as the field name to match side of the query into with-namespace</p>
+<h4 id="keep-src">keep-src<a class="headerlink" href="#keep-src" title="Permanent link">&para;</a></h4>
+<p>bool (default "false")</p>
+<p>Whether or not to sync the original change event in addition to the one looked up in with-namespace.
+By default the original change is ignored and only the document from with-namespace is synced.</p>
+</div>
 <h2 id="logs">logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
 <p>Allows writing logs to a file using a rolling appender instead of stdout.  Supply a file path for each type of log you would like to send to a file.</p>

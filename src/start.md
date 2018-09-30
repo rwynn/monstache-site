@@ -16,7 +16,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.10.2
+# 4.11.0
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -103,7 +103,7 @@ elasticsearch-urls = ["https://es1:9200", "https://es2:9200"]
 # this setting does not initiate a copy, it is a filter on the oplog change listener only
 namespace-regex = '^mydb\.mycollection$'
 # additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
-# you can copy entire collections from MongoDB to Elasticsearch
+# you can copy entire collections or views from MongoDB to Elasticsearch
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 # if you want to use MongoDB change streams instead of legacy oplog tailing add the following
 # in this case you don't need regexes to filter collections.

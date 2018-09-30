@@ -102,6 +102,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#advanced">Advanced</a></li>
+            <li><a href="#versions">Versions</a></li>
             <li><a href="#gridfs-support">GridFS Support</a></li>
             <li><a href="#workers">Workers</a></li>
             <li><a href="#high-availability">High Availability</a></li>
@@ -115,12 +116,26 @@
             <li><a href="#systemd">Systemd</a></li>
             <li><a href="#docker">Docker</a></li>
             <li><a href="#http-server">HTTP Server</a></li>
+            <li><a href="#aws-signature-version-4">AWS Signature Version 4</a></li>
+            <li><a href="#mongodb-view-replication">MongoDB view replication</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="advanced">Advanced<a class="headerlink" href="#advanced" title="Permanent link">&para;</a></h1>
 <hr />
+<h2 id="versions">Versions<a class="headerlink" href="#versions" title="Permanent link">&para;</a></h2>
+<p>Monstache has 2 separate code streams to accomodate differences in the Elasticsearch API.  Monstache versions 4.X
+are designed to work with Elasticsearch 6+.  Monstache versions 3.X are designed to work with Elasticsearch 2 and 5.</p>
+<p>If you are working with Elasticsearch 6+ you should use the <code>master</code> branch at github.com/rwynn/monstache.  If you
+are working with Elasticsearch 2 or 5 you should use the <code>rel3</code> branch at github.com/rwynn/monstache.</p>
+<p>If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the <code>master</code> branch
+and your plugin should import <code>github.com/rwynn/monstache/monstachemap</code>. If you are working with Elasticsearch 2 or 5 and coding
+golang plugins for monstache you should use the <code>rel3</code> branch and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
+<p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.0</code>.</p>
+<p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.0</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -351,11 +366,17 @@ require Go version 1.8 or greater on Linux. currently, you are able to use Javas
 <h3 id="golang">Golang<a class="headerlink" href="#golang" title="Permanent link">&para;</a></h3>
 <p>monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the <code>master</code> branch
+and your plugin should import <code>github.com/rwynn/monstache/monstachemap</code>. If you are working with Elasticsearch 2 or 5 and coding
+golang plugins for monstache you should use the <code>rel3</code> branch and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
+</div>
 <p>To create a golang plugin for monstache</p>
 <ul>
-<li>get the necessary dependencies with <code>go get -u github.com/rwynn/monstache/monstachemap</code></li>
+<li>get the necessary dependencies for your version of Elasticsearch with <code>go get -u github.com/rwynn/monstache/monstachemap</code> or <code>go get -u gopkg.in/rwynn/monstache.v3/monstachemap</code></li>
 <li>create a .go source file that belongs to the package <code>main</code></li>
-<li>import <code>github.com/rwynn/monstache/monstachemap</code></li>
+<li>import <code>github.com/rwynn/monstache/monstachemap</code> for Elasticsearch 6+ or <code>gopkg.in/rwynn/monstache.v3/monstachemap</code> for Elasticsearch 2 or 5</li>
 <li>implement a function named <code>Map</code> with the following signature</li>
 </ul>
 <pre><code class="go">func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
@@ -388,7 +409,7 @@ use the go command to build a .so file for your plugin, and finally pass the pat
 <p>the following example plugin simply converts top level string values to uppercase</p>
 <pre><code class="go">package main
 import (
-    &quot;github.com/rwynn/monstache/monstachemap&quot;
+    &quot;github.com/rwynn/monstache/monstachemap&quot; // or gopkg.in/rwynn/monstache.v3/monstachemap for Elasticsearch 2 or 5
     &quot;strings&quot;
 )
 // a plugin to convert document values to uppercase
@@ -1075,7 +1096,61 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 /debug/pprof/cmdline
 /debug/pprof/profile
 /debug/pprof/symbol
-/debug/pprof/trace</p></div>
+/debug/pprof/trace</p>
+<h2 id="aws-signature-version-4">AWS Signature Version 4<a class="headerlink" href="#aws-signature-version-4" title="Permanent link">&para;</a></h2>
+<p>Monstache has included AWS Signature Version 4 request signing for testing.  This is in its initial stages and needs testing
+and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:</p>
+<pre><code>[aws-connect]
+access-key = &quot;XXX&quot;
+secrete-key = &quot;YYY&quot;
+region = &quot;ZZZ&quot;
+</code></pre>
+
+<p>You can read more about <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a> and 
+<a href="https://aws.amazon.com/elasticsearch-service/">Amazon Elasticsearch Service</a>.</p>
+<h2 id="mongodb-view-replication">MongoDB view replication<a class="headerlink" href="#mongodb-view-replication" title="Permanent link">&para;</a></h2>
+<p>You may have a situation where you want to replicate a MongoDB view in Elasticsearch.  Or you have a collection that should trigger sync of 
+another collection. You can use the <code>relate</code> config to do this.</p>
+<p>Consider you have a collections <code>thing</code> and <code>state</code>.  A thing has an associated state and a thing is linked to a state via
+a field <code>s</code> which points to the <code>_id</code> of the associated state in the <code>state</code> collection.</p>
+<p>You can create a view in MongoDB that uses a <code>$lookup</code> to pull the state information in and present a view of things with the state 
+information included.</p>
+<pre><code>use thingdb;
+db.createView(&quot;thingview&quot;, &quot;thing&quot;, [ {$lookup: {from: &quot;state&quot;, localField: &quot;s, foreignField: &quot;_id&quot;, as: &quot;s&quot;}}])
+</code></pre>
+
+<p>Given this view you can use the following config to keep things up to date in a <code>things</code> index in Elasticsearch.</p>
+<pre><code>direct-read-namespaces = [&quot;thingdb.thingview&quot;] # read direct from the view of the collection to seed index
+
+change-stream-namespaces = [&quot;thingdb.thing&quot;, &quot;thingdb.state&quot;] # change events happen on the underlying collections not views
+
+[[mapping]]
+namespace = &quot;thingdb.thing&quot; # map change events on the thing collection to the things index
+index = &quot;things&quot;
+
+[[mapping]]
+namespace = &quot;thingdb.thingview&quot; # map direct reads of the thingview to the same things index
+index = &quot;things&quot;
+
+[[relate]]
+namespace = &quot;thingdb.thing&quot;  # when a thing changes look it up in the assoicated view by _id and index that
+with-namespace = &quot;thingdb.thingview&quot;
+keep-src = false # ignore the original thing that changed and instead just use the lookup of that thing via the view
+
+[[relate]]
+namespace = &quot;thingdb.states&quot; # when a state changes trigger a thing change event since thing is associated to a state
+with-namespace = &quot;thingdb.thing&quot;
+src-field = &quot;_id&quot; # use the _id field of the state that changed to lookup associated things
+match-field = &quot;s&quot; # only trigger change events for the things where thing.s (match-field) = state._id (src-field).
+keep-src = false
+</code></pre>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Be careful of the expense of using <code>relate</code> with a view.  In the example above, if there were many things associated to a single state then a 
+change to that state would trigger n+1 queries to MongoDB when n is the number of things related to the state.  1 query would be used
+to find all associated things and n queries would be used to lookup each thing in the view.</p>
+</div></div>
         </div>
 
         <footer class="col-md-12">

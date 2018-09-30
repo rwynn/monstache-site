@@ -560,9 +560,9 @@ this works see [Back Off Strategy](https://github.com/olivere/elastic/blob/relea
 
 ## elasticsearch-client-timeout
 
-int (default `60`)
+int (default `0`)
 
-The number of seconds before a request to Elasticsearch times out
+The number of seconds before a request to Elasticsearch times out. A setting of 0, the default, disables the timeout.
 
 ## elasticsearch-max-docs
 
@@ -793,6 +793,45 @@ Add this flag to allow MongoDB to use the disk as a temporary store for data dur
 string (default "")
 
 The address of a graylog server to redirect logs to in GELF 
+
+## relate
+
+[] array of TOML table (default `nil`)
+
+Allows one to relate 2 namespaces together such that a change to one causes a sync of the associated namespace
+
+!!! note ""
+
+	#### namespace
+
+	string (default "")
+
+	The namespace of the collection that, when modified, triggers a sync of the with-namespace
+
+	#### with-namespace
+
+	string (default "")
+
+	The namespace of the collection or view that will be synced when namespace changes
+
+	#### src-field
+
+	string (default "_id")
+
+	The name of the field in namespace that will be extracted from the change doc and used as the value side of the query into with-namespace
+
+	#### match-field
+
+	string (default "_id")
+
+	The name of the field in with-namespace that will be used as the field name to match side of the query into with-namespace
+
+	#### keep-src
+
+	bool (default "false")
+
+	Whether or not to sync the original change event in addition to the one looked up in with-namespace.
+	By default the original change is ignored and only the document from with-namespace is synced.
 
 ## logs
 

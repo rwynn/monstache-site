@@ -2,6 +2,24 @@
 
 ---
 
+## Versions
+
+Monstache has 2 separate code streams to accomodate differences in the Elasticsearch API.  Monstache versions 4.X
+are designed to work with Elasticsearch 6+.  Monstache versions 3.X are designed to work with Elasticsearch 2 and 5.
+
+If you are working with Elasticsearch 6+ you should use the `master` branch at github.com/rwynn/monstache.  If you
+are working with Elasticsearch 2 or 5 you should use the `rel3` branch at github.com/rwynn/monstache.
+
+If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
+and your plugin should import `github.com/rwynn/monstache/monstachemap`. If you are working with Elasticsearch 2 or 5 and coding
+golang plugins for monstache you should use the `rel3` branch and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
+
+If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.11.0`.
+
+If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.18.0`.
+
 ## GridFS Support
 
 Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
@@ -287,11 +305,16 @@ require Go version 1.8 or greater on Linux. currently, you are able to use Javas
 monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
 use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
 
+!!! note
+	If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
+	and your plugin should import `github.com/rwynn/monstache/monstachemap`. If you are working with Elasticsearch 2 or 5 and coding
+	golang plugins for monstache you should use the `rel3` branch and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
+
 To create a golang plugin for monstache
 
-- get the necessary dependencies with `go get -u github.com/rwynn/monstache/monstachemap`
+- get the necessary dependencies for your version of Elasticsearch with `go get -u github.com/rwynn/monstache/monstachemap` or `go get -u gopkg.in/rwynn/monstache.v3/monstachemap`
 - create a .go source file that belongs to the package `main`
-- import `github.com/rwynn/monstache/monstachemap`
+- import `github.com/rwynn/monstache/monstachemap` for Elasticsearch 6+ or `gopkg.in/rwynn/monstache.v3/monstachemap` for Elasticsearch 2 or 5
 - implement a function named `Map` with the following signature
 
 ```go
@@ -328,7 +351,7 @@ the following example plugin simply converts top level string values to uppercas
 ```go
 package main
 import (
-	"github.com/rwynn/monstache/monstachemap"
+	"github.com/rwynn/monstache/monstachemap" // or gopkg.in/rwynn/monstache.v3/monstachemap for Elasticsearch 2 or 5
 	"strings"
 )
 // a plugin to convert document values to uppercase
@@ -1158,4 +1181,68 @@ If the pprof setting is enabled the following endpoints are also made available:
 /debug/pprof/profile
 /debug/pprof/symbol
 /debug/pprof/trace
+
+## AWS Signature Version 4 
+
+Monstache has included AWS Signature Version 4 request signing for testing.  This is in its initial stages and needs testing
+and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:
+
+```
+[aws-connect]
+access-key = "XXX"
+secrete-key = "YYY"
+region = "ZZZ"
+```
+
+You can read more about [Signature Version 4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) and 
+[Amazon Elasticsearch Service](https://aws.amazon.com/elasticsearch-service/).
+
+## MongoDB view replication
+
+You may have a situation where you want to replicate a MongoDB view in Elasticsearch.  Or you have a collection that should trigger sync of 
+another collection. You can use the `relate` config to do this.
+
+Consider you have a collections `thing` and `state`.  A thing has an associated state and a thing is linked to a state via
+a field `s` which points to the `_id` of the associated state in the `state` collection.
+
+You can create a view in MongoDB that uses a `$lookup` to pull the state information in and present a view of things with the state 
+information included.
+
+```
+use thingdb;
+db.createView("thingview", "thing", [ {$lookup: {from: "state", localField: "s, foreignField: "_id", as: "s"}}])
+```
+
+Given this view you can use the following config to keep things up to date in a `things` index in Elasticsearch.
+
+```
+direct-read-namespaces = ["thingdb.thingview"] # read direct from the view of the collection to seed index
+
+change-stream-namespaces = ["thingdb.thing", "thingdb.state"] # change events happen on the underlying collections not views
+
+[[mapping]]
+namespace = "thingdb.thing" # map change events on the thing collection to the things index
+index = "things"
+
+[[mapping]]
+namespace = "thingdb.thingview" # map direct reads of the thingview to the same things index
+index = "things"
+
+[[relate]]
+namespace = "thingdb.thing"  # when a thing changes look it up in the assoicated view by _id and index that
+with-namespace = "thingdb.thingview"
+keep-src = false # ignore the original thing that changed and instead just use the lookup of that thing via the view
+
+[[relate]]
+namespace = "thingdb.states" # when a state changes trigger a thing change event since thing is associated to a state
+with-namespace = "thingdb.thing"
+src-field = "_id" # use the _id field of the state that changed to lookup associated things
+match-field = "s" # only trigger change events for the things where thing.s (match-field) = state._id (src-field).
+keep-src = false
+```
+
+!!! warning
+	Be careful of the expense of using `relate` with a view.  In the example above, if there were many things associated to a single state then a 
+	change to that state would trigger n+1 queries to MongoDB when n is the number of things related to the state.  1 query would be used
+	to find all associated things and n queries would be used to lookup each thing in the view.
 
