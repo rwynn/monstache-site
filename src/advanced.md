@@ -1193,7 +1193,7 @@ and feedback.  To enable the experimental AWS Signature Version 4 support add th
 ```
 [aws-connect]
 access-key = "XXX"
-secrete-key = "YYY"
+secret-key = "YYY"
 region = "ZZZ"
 ```
 

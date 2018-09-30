@@ -177,6 +177,7 @@
             <li><a href="#pipe-allow-disk">pipe-allow-disk</a></li>
             <li><a href="#graylog-addr">graylog-addr</a></li>
             <li><a href="#relate">relate</a></li>
+            <li><a href="#aws-connect">aws-connect</a></li>
             <li><a href="#logs">logs</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#http-server-addr">http-server-addr</a></li>
@@ -683,6 +684,20 @@ streams.</p>
 <p>bool (default "false")</p>
 <p>Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 By default the original change is ignored and only the document from with-namespace is synced.</p>
+</div>
+<h2 id="aws-connect">aws-connect<a class="headerlink" href="#aws-connect" title="Permanent link">&para;</a></h2>
+<p>TOML table (default <code>nil</code>)</p>
+<p>Enable experimental support for using a connection to Elasticsearch that uses AWS Signature Version 4</p>
+<div class="admonition note">
+<h4 id="access-key">access-key<a class="headerlink" href="#access-key" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>AWS Access Key</p>
+<h4 id="secret-key">secret-key<a class="headerlink" href="#secret-key" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>AWS Secrete Key</p>
+<h4 id="region">region<a class="headerlink" href="#region" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>AWS Region</p>
 </div>
 <h2 id="logs">logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>

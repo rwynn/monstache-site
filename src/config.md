@@ -833,6 +833,32 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 	Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 	By default the original change is ignored and only the document from with-namespace is synced.
 
+## aws-connect
+
+TOML table (default `nil`)
+
+Enable experimental support for using a connection to Elasticsearch that uses AWS Signature Version 4
+
+!!! note ""
+
+	#### access-key
+
+	string (default "")
+
+	AWS Access Key
+
+	#### secret-key
+
+	string (default "")
+
+	AWS Secrete Key
+
+	#### region
+
+	string (default "")
+
+	AWS Region
+
 ## logs
 
 TOML table (default `nil`)
