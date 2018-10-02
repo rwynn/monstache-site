@@ -1117,7 +1117,7 @@ a field <code>s</code> which points to the <code>_id</code> of the associated st
 <p>You can create a view in MongoDB that uses a <code>$lookup</code> to pull the state information in and present a view of things with the state 
 information included.</p>
 <pre><code>use thingdb;
-db.createView(&quot;thingview&quot;, &quot;thing&quot;, [ {$lookup: {from: &quot;state&quot;, localField: &quot;s, foreignField: &quot;_id&quot;, as: &quot;s&quot;}}])
+db.createView(&quot;thingview&quot;, &quot;thing&quot;, [ {$lookup: {from: &quot;state&quot;, localField: &quot;s&quot;, foreignField: &quot;_id&quot;, as: &quot;s&quot;}}])
 </code></pre>
 
 <p>Given this view you can use the following config to keep things up to date in a <code>things</code> index in Elasticsearch.</p>
@@ -1161,7 +1161,7 @@ to find all associated things and n queries would be used to lookup each thing i
         </footer>
         <script>
             var base_url = "..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"previous": 80, "search": 83, "help": 191, "next": 78};
         </script>
         <script src="../js/base.js" defer></script>
         <script src="../search/main.js" defer></script>

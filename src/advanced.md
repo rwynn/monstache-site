@@ -1213,7 +1213,7 @@ information included.
 
 ```
 use thingdb;
-db.createView("thingview", "thing", [ {$lookup: {from: "state", localField: "s, foreignField: "_id", as: "s"}}])
+db.createView("thingview", "thing", [ {$lookup: {from: "state", localField: "s", foreignField: "_id", as: "s"}}])
 ```
 
 Given this view you can use the following config to keep things up to date in a `things` index in Elasticsearch.
