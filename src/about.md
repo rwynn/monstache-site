@@ -88,6 +88,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.1](https://github.com/rwynn/monstache/releases/tag/v4.11.1)
+
+* Fix for connection checker thread exiting early in cluster mode
+* Better handling of JSON serialization errors
+
+### [monstache v3.18.1](https://github.com/rwynn/monstache/releases/tag/v3.18.1)
+
+* Fix for connection checker thread exiting early in cluster mode
+* Better handling of JSON serialization errors
+
 ### [monstache v4.11.0](https://github.com/rwynn/monstache/releases/tag/v4.11.0)
 
 * Reliability improvements
