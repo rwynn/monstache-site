@@ -7,9 +7,9 @@
 Monstache has 2 separate code streams to accomodate differences in the Elasticsearch API.  Monstache versions 4.X
 are designed to work with Elasticsearch 6+.  Monstache versions 3.X are designed to work with Elasticsearch 2 and 5.
 
-If you are working with Elasticsearch 6+ you should use the `master` branch at github.com/rwynn/monstache.
+If you are working with Elasticsearch 6+ you should use the `master` branch at `github.com/rwynn/monstache`.
 
-If you are working with Elasticsearch 2 or 5 you should use the `rel3` branch at github.com/rwynn/monstache.
+If you are working with Elasticsearch 2 or 5 you should use the `rel3` branch at `github.com/rwynn/monstache`.
 
 If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
 and your plugin should import `github.com/rwynn/monstache/monstachemap`. 
@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.11.1`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.11.3`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.18.1`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.18.3`.
 
 ## GridFS Support
 
@@ -1140,9 +1140,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.11.1 -v
+docker run rwynn/monstache:4.11.3 -v
 
-docker run rwynn/monstache:3.18.1 -v
+docker run rwynn/monstache:3.18.3 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount

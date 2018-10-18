@@ -127,16 +127,16 @@
 <h2 id="versions">Versions<a class="headerlink" href="#versions" title="Permanent link">&para;</a></h2>
 <p>Monstache has 2 separate code streams to accomodate differences in the Elasticsearch API.  Monstache versions 4.X
 are designed to work with Elasticsearch 6+.  Monstache versions 3.X are designed to work with Elasticsearch 2 and 5.</p>
-<p>If you are working with Elasticsearch 6+ you should use the <code>master</code> branch at github.com/rwynn/monstache.</p>
-<p>If you are working with Elasticsearch 2 or 5 you should use the <code>rel3</code> branch at github.com/rwynn/monstache.</p>
+<p>If you are working with Elasticsearch 6+ you should use the <code>master</code> branch at <code>github.com/rwynn/monstache</code>.</p>
+<p>If you are working with Elasticsearch 2 or 5 you should use the <code>rel3</code> branch at <code>github.com/rwynn/monstache</code>.</p>
 <p>If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the <code>master</code> branch
 and your plugin should import <code>github.com/rwynn/monstache/monstachemap</code>. </p>
 <p>If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the <code>rel3</code> branch 
 and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
 <p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.1</code>.</p>
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.3</code>.</p>
 <p>If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.1</code>.</p>
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.3</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -1068,9 +1068,9 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.11.1 -v
+<pre><code>docker run rwynn/monstache:4.11.3 -v
 
-docker run rwynn/monstache:3.18.1 -v
+docker run rwynn/monstache:3.18.3 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>

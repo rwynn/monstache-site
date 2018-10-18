@@ -88,6 +88,24 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.3](https://github.com/rwynn/monstache/releases/tag/v4.11.3)
+
+* Fix an issue where a paused monstache process would not resume correctly in cluster mode
+
+### [monstache v3.18.3](https://github.com/rwynn/monstache/releases/tag/v3.18.3)
+
+* Fix an issue where a paused monstache process would not resume correctly in cluster mode
+
+### [monstache v4.11.2](https://github.com/rwynn/monstache/releases/tag/v4.11.2)
+
+* Fix an issue with workers where only one worker would be used for change documents
+* Redact sensitive connection information when logging connection failures
+
+### [monstache v3.18.2](https://github.com/rwynn/monstache/releases/tag/v3.18.2)
+
+* Fix an issue with workers where only one worker would be used for change documents
+* Redact sensitive connection information when logging connection failures
+
 ### [monstache v4.11.1](https://github.com/rwynn/monstache/releases/tag/v4.11.1)
 
 * Fix for connection checker thread exiting early in cluster mode
