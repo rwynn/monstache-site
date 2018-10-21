@@ -4,9 +4,10 @@
 
 ## Installation
 
-Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP.
+Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. Monstache is written in
+Go but you don't need to install the Go language unless you decide to write your own Go plugins.
 
-You just need to [download the latest version](https://github.com/rwynn/monstache/releases).
+If you simply want to run Monstache you just need to [download the latest version](https://github.com/rwynn/monstache/releases).
 
 You will want to use 4.x releases for ES6+ and 3.x releases for ES2-5.
 
@@ -107,7 +108,8 @@ namespace-regex = '^mydb\.mycollection$'
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 # if you want to use MongoDB change streams instead of legacy oplog tailing add the following
 # in this case you don't need regexes to filter collections.
-# change streams cannot be combined with resume, replay, or cluster options.
+# change streams require MongoDB version 3.6+
+# change streams cannot be combined yet with resume, replay, or cluster options.
 # change streams start listening for new changes since the monstache process is started
 change-stream-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 

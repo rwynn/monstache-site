@@ -111,8 +111,9 @@
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
 <hr />
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP.</p>
-<p>You just need to <a href="https://github.com/rwynn/monstache/releases">download the latest version</a>.</p>
+<p>Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. Monstache is written in
+Go but you don't need to install the Go language unless you decide to write your own Go plugins.</p>
+<p>If you simply want to run Monstache you just need to <a href="https://github.com/rwynn/monstache/releases">download the latest version</a>.</p>
 <p>You will want to use 4.x releases for ES6+ and 3.x releases for ES2-5.</p>
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
@@ -189,7 +190,8 @@ namespace-regex = '^mydb\.mycollection$'
 direct-read-namespaces = [&quot;mydb.mycollection&quot;, &quot;db.collection&quot;, &quot;test.test&quot;]
 # if you want to use MongoDB change streams instead of legacy oplog tailing add the following
 # in this case you don't need regexes to filter collections.
-# change streams cannot be combined with resume, replay, or cluster options.
+# change streams require MongoDB version 3.6+
+# change streams cannot be combined yet with resume, replay, or cluster options.
 # change streams start listening for new changes since the monstache process is started
 change-stream-namespaces = [&quot;mydb.mycollection&quot;, &quot;db.collection&quot;, &quot;test.test&quot;]
 
