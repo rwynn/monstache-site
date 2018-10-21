@@ -371,7 +371,37 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 }
 ```
 
-The input parameter will contain information about the document's origin database and collection.
+The input parameter will contain information about the document's origin database and collection:
+
+| field        | meaning                                                                |
+| ------------ | ---------------------------------------------------------------------- |
+| `Document`   | MongoDB document updated, inserted or deleted                          |
+| `Namespace`  | Operation [namespace](#namespaces) as described above                  |
+| `Database`   | MongoDB database from where the event came                             |
+| `Collection` | MongoDB collection where the document was inserted, deleted or updated |
+| `Operation`  | Which kind of operation triggered this event, see [gtm.mapOperation()](https://github.com/rwynn/gtm/blob/master/gtm.go#L116). "i" for insert, "u" for update, "d" for delete and "c" for invalidate |
+| `Session`    | *mgo.Session                                                           |
+
+The output parameter will contain information about how the document should be treated by monstache:
+
+| field             | meaning                                                                     |
+| ----------------- | --------------------------------------------------------------------------- |
+| `Document`        | an updated document to index into Elasticsearch                             |
+| `Index`           | the name of the index to use                                                |
+| `Type`            | the document type                                                           |
+| `Routing`         | the routing value to use                                                    |
+| `Drop`            | set to true to indicate that the document should not be indexed but removed |
+| `Passthrough`     | set to true to indicate the original document should be indexed unchanged   |
+| `Parent`          | the parent id to use                                                        |
+| `Version`         | the version of the document                                                 |
+| `VersionType`     | the version type of the document (internal, external, external_gte)         |
+| `Pipeline`        | the pipeline to index with                                                  |
+| `RetryOnConflict` | how many times to retry updates before failing                              |
+| `Skip`            | set to true to indicate the the document should be ignored                  |
+
+*For detailed information see [monstachemap/plugin.go](https://github.com/rwynn/monstache/blob/master/monstachemap/plugin.go)*
+
+Few examples are:
 
 To skip the document (direct monstache to ignore it) set `output.Skip = true`.
 
