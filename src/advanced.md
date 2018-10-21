@@ -521,7 +521,7 @@ You can scope a pipeline to a particular namespace using the `namespace` attribu
 [[pipeline]]
 script = """
 module.exports = function(ns, changeStream) {
-  if (changeEvent) {
+  if (changeStream) {
     return [
       { $match: {"fullDocument.foo": 1} }
     ];
@@ -1141,14 +1141,14 @@ systemd configuration.
 
     [Service]
     Type=notify
-    ExecStart=/usr/local/bin/monstache
+    ExecStart=/usr/local/bin/monstache -f /etc/monstache/config.toml
     WatchdogSec=30s
-    Restart=on-failure
+    Restart=always
 
     [Install]
     WantedBy=multi-user.target
 
-System-d unit files are normally saved to `/lib/systemd/system`.  
+Systemd unit files are normally saved to `/lib/systemd/system`.  Verify same with your OS documentation. 
 
 After saving the monstache.service file you can run `systemctl daemon-reload` to tell systemd to reload 
 all unit files. 
