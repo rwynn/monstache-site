@@ -427,7 +427,102 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 }
 </code></pre>
 
-<p>The input parameter will contain information about the document's origin database and collection.</p>
+<p>The input parameter will contain information about the document's origin database and collection:</p>
+<table>
+<thead>
+<tr>
+<th>field</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Document</code></td>
+<td>MongoDB document updated, inserted or deleted</td>
+</tr>
+<tr>
+<td><code>Namespace</code></td>
+<td>Operation <a href="#namespaces">namespace</a> as described above</td>
+</tr>
+<tr>
+<td><code>Database</code></td>
+<td>MongoDB database from where the event came</td>
+</tr>
+<tr>
+<td><code>Collection</code></td>
+<td>MongoDB collection where the document was inserted, deleted or updated</td>
+</tr>
+<tr>
+<td><code>Operation</code></td>
+<td>Which kind of operation triggered this event, see <a href="https://github.com/rwynn/gtm/blob/master/gtm.go#L116">gtm.mapOperation()</a>. "i" for insert, "u" for update, "d" for delete and "c" for invalidate. The <code>Map</code> function will only receive inserts and updates.  To handle deletes or invalidates implement the <code>Process</code> function described below.</td>
+</tr>
+<tr>
+<td><code>Session</code></td>
+<td><a href="https://godoc.org/github.com/globalsign/mgo#Session">*mgo.Session</a>. You need not <code>Close</code> the session as monstache will do this automatically when the function exits</td>
+</tr>
+</tbody>
+</table>
+<p>The output parameter will contain information about how the document should be treated by monstache:</p>
+<table>
+<thead>
+<tr>
+<th>field</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Document</code></td>
+<td>an updated document to index into Elasticsearch</td>
+</tr>
+<tr>
+<td><code>Index</code></td>
+<td>the name of the index to use</td>
+</tr>
+<tr>
+<td><code>Type</code></td>
+<td>the document type</td>
+</tr>
+<tr>
+<td><code>Routing</code></td>
+<td>the routing value to use</td>
+</tr>
+<tr>
+<td><code>Drop</code></td>
+<td>set to true to indicate that the document should not be indexed but removed</td>
+</tr>
+<tr>
+<td><code>Passthrough</code></td>
+<td>set to true to indicate the original document should be indexed unchanged</td>
+</tr>
+<tr>
+<td><code>Parent</code></td>
+<td>the parent id to use</td>
+</tr>
+<tr>
+<td><code>Version</code></td>
+<td>the version of the document</td>
+</tr>
+<tr>
+<td><code>VersionType</code></td>
+<td>the version type of the document (internal, external, external_gte)</td>
+</tr>
+<tr>
+<td><code>Pipeline</code></td>
+<td>the pipeline to index with</td>
+</tr>
+<tr>
+<td><code>RetryOnConflict</code></td>
+<td>how many times to retry updates before failing</td>
+</tr>
+<tr>
+<td><code>Skip</code></td>
+<td>set to true to indicate the the document should be ignored</td>
+</tr>
+</tbody>
+</table>
+<p><em>For detailed information see <a href="https://github.com/rwynn/monstache/blob/master/monstachemap/plugin.go">monstachemap/plugin.go</a></em></p>
+<p>Few examples are:</p>
 <p>To skip the document (direct monstache to ignore it) set <code>output.Skip = true</code>.</p>
 <p>To drop the document (direct monstache not to index it but remove it) set <code>output.Drop = true</code>.</p>
 <p>To simply pass the original document through to Elasticsearch, set <code>output.Passthrough = true</code></p>
@@ -444,7 +539,29 @@ correctly.</p>
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
 <p>When you implement a <code>Filter</code> function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting <code>output.Drop</code> from the mapping function because when you set <code>output.Drop</code> to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the <code>Filter</code> function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.</p>
 <p>When you implement a <code>Pipeline</code> function the function will be called to setup an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">aggregation pipeline</a> for both direct reads and any change streams that you have configured. The aggregation pipeline stages that you return may be different depending if applied to a direct read or to a change stream. For direct reads the root document will be the document in the collection.  For change streams the root document will be a change event with a <code>fullDocument</code> field inside it. Use the boolean parameter <code>changeStream</code> to alter the stages that you return from this function accordingly.</p>
-<p>When you implement a <code>Process</code> function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios.</p>
+<p>When you implement a <code>Process</code> function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios. The input parameter for the <code>Process</code> function will have all the same fields as the input to a <code>Map</code> function described above plus the following:</p>
+<table>
+<thead>
+<tr>
+<th>field</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ElasticClient</code></td>
+<td>A full featured Elasticsearch <a href="https://godoc.org/github.com/olivere/elastic#Client">client</a></td>
+</tr>
+<tr>
+<td><code>ElasticBulkProcessor</code></td>
+<td>The same bulk <a href="https://godoc.org/github.com/olivere/elastic#BulkProcessor">processor</a> monstache uses to index documents. You need only <code>Add</code> requests to the processor and they will be flushed in bulk automatically</td>
+</tr>
+<tr>
+<td><code>Timestamp</code></td>
+<td>The MongoDB <a href="https://docs.mongodb.com/manual/reference/bson-types/#timestamps">timestamp</a> of the change event from the oplog. In the case of direct reads the timestamp is the time at which the document was read from MongoDB.</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Under the <code>docker/plugin</code> folder there is a <code>build.sh</code> script to help you build a plugin. There is a README file in that directory

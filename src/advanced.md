@@ -379,8 +379,8 @@ The input parameter will contain information about the document's origin databas
 | `Namespace`  | Operation [namespace](#namespaces) as described above                  |
 | `Database`   | MongoDB database from where the event came                             |
 | `Collection` | MongoDB collection where the document was inserted, deleted or updated |
-| `Operation`  | Which kind of operation triggered this event, see [gtm.mapOperation()](https://github.com/rwynn/gtm/blob/master/gtm.go#L116). "i" for insert, "u" for update, "d" for delete and "c" for invalidate |
-| `Session`    | *mgo.Session                                                           |
+| `Operation`  | Which kind of operation triggered this event, see [gtm.mapOperation()](https://github.com/rwynn/gtm/blob/master/gtm.go#L116). "i" for insert, "u" for update, "d" for delete and "c" for invalidate. The `Map` function will only receive inserts and updates.  To handle deletes or invalidates implement the `Process` function described below. |
+| `Session`    | [*mgo.Session](https://godoc.org/github.com/globalsign/mgo#Session). You need not `Close` the session as monstache will do this automatically when the function exits|
 
 The output parameter will contain information about how the document should be treated by monstache:
 
@@ -426,7 +426,13 @@ When you implement a `Filter` function the function is called immediately after 
 
 When you implement a `Pipeline` function the function will be called to setup an [aggregation pipeline](https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/) for both direct reads and any change streams that you have configured. The aggregation pipeline stages that you return may be different depending if applied to a direct read or to a change stream. For direct reads the root document will be the document in the collection.  For change streams the root document will be a change event with a `fullDocument` field inside it. Use the boolean parameter `changeStream` to alter the stages that you return from this function accordingly.
 
-When you implement a `Process` function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios.
+When you implement a `Process` function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios. The input parameter for the `Process` function will have all the same fields as the input to a `Map` function described above plus the following:
+
+| field                   | meaning                                                                |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `ElasticClient`         | A full featured Elasticsearch [client](https://godoc.org/github.com/olivere/elastic#Client)|
+| `ElasticBulkProcessor`  | The same bulk [processor](https://godoc.org/github.com/olivere/elastic#BulkProcessor) monstache uses to index documents. You need only `Add` requests to the processor and they will be flushed in bulk automatically|
+| `Timestamp`             | The MongoDB [timestamp](https://docs.mongodb.com/manual/reference/bson-types/#timestamps) of the change event from the oplog. In the case of direct reads the timestamp is the time at which the document was read from MongoDB.                      |
 
 !!! note
 	Under the `docker/plugin` folder there is a `build.sh` script to help you build a plugin. There is a README file in that directory
