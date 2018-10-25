@@ -88,6 +88,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.4](https://github.com/rwynn/monstache/releases/tag/v4.11.4)
+
+* Use less CPU resources
+* Fix for race conditions
+
+### [monstache v3.18.4](https://github.com/rwynn/monstache/releases/tag/v3.18.4)
+
+* Use less CPU resources
+* Fix for race conditions
+
 ### [monstache v4.11.3](https://github.com/rwynn/monstache/releases/tag/v4.11.3)
 
 * Fix an issue where a paused monstache process would not resume correctly in cluster mode
