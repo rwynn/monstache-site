@@ -460,7 +460,7 @@ The following gtm configuration properties are available.  See [gtm](https://git
 
 	#### buffer-duration
 
-	string (default 750ms)
+	string (default 75ms)
 
 	A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
 	fetched in batch from MongoDB and flushed for indexing.

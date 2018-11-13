@@ -17,7 +17,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.11.4
+# 4.11.7
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -86,8 +86,10 @@ monstache with an explicit configuration by passing the -f flag.
 monstache -f /path/to/config.toml
 ```
 
-The following shows how to specify options in a TOML config file.  It is recommended that you start with only your MongoDB
-and Elasticsearch connection settings and only specify additional options as needed. 
+The following shows how to specify options in a TOML config file.
+
+!!! note
+	It is highly recommended that you start with only your MongoDB and Elasticsearch connection settings and only specify additional options as needed. 
 
 ```
 # connection settings

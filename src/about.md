@@ -88,6 +88,32 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.7](https://github.com/rwynn/monstache/releases/tag/v4.11.7)
+
+* Ensure `input.Document` map contains an `_id` field on deletes when sent to the `Process` function in a plugin
+* Ensure failed bulk response items are logged as errors
+
+### [monstache v3.18.7](https://github.com/rwynn/monstache/releases/tag/v3.18.7)
+
+* Ensure `input.Document` map contains an `_id` field on deletes when sent to the `Process` function in a plugin
+* Ensure failed bulk response items are logged as errors
+
+### [monstache v4.11.6](https://github.com/rwynn/monstache/releases/tag/v4.11.6)
+
+* Fix issue where the `file-namespaces` config option was not being processed correctly
+
+### [monstache v3.18.6](https://github.com/rwynn/monstache/releases/tag/v3.18.6)
+
+* Fix issue where the `file-namespaces` config option was not being processed correctly
+
+### [monstache v4.11.5](https://github.com/rwynn/monstache/releases/tag/v4.11.5)
+
+* Fix a race condition when a `related` config is used and a golang plugin implements `Process`.
+
+### [monstache v3.18.5](https://github.com/rwynn/monstache/releases/tag/v3.18.5)
+
+* Fix a race condition when a `related` config is used and a golang plugin implements `Process`.
+
 ### [monstache v4.11.4](https://github.com/rwynn/monstache/releases/tag/v4.11.4)
 
 * Use less CPU resources

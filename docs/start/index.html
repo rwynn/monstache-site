@@ -118,7 +118,7 @@ Go but you don't need to install the Go language unless you decide to write your
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.11.4
+# 4.11.7
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
@@ -170,8 +170,11 @@ monstache with an explicit configuration by passing the -f flag.</p>
 <pre><code class="sh">monstache -f /path/to/config.toml
 </code></pre>
 
-<p>The following shows how to specify options in a TOML config file.  It is recommended that you start with only your MongoDB
-and Elasticsearch connection settings and only specify additional options as needed. </p>
+<p>The following shows how to specify options in a TOML config file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is highly recommended that you start with only your MongoDB and Elasticsearch connection settings and only specify additional options as needed. </p>
+</div>
 <pre><code># connection settings
 
 # connect to MongoDB using the following URL

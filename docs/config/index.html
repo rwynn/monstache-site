@@ -469,7 +469,7 @@ are processed at once a larger channel size may prevent blocking in gtm.</p>
 <p>Determines how many documents are buffered by a gtm worker go routine before they are batch fetched from
 MongoDB.  When many documents are inserted or updated at once it is better to fetch them together.</p>
 <h4 id="buffer-duration">buffer-duration<a class="headerlink" href="#buffer-duration" title="Permanent link">&para;</a></h4>
-<p>string (default 750ms)</p>
+<p>string (default 75ms)</p>
 <p>A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
 fetched in batch from MongoDB and flushed for indexing.</p>
 </div>
