@@ -134,9 +134,9 @@ and your plugin should import <code>github.com/rwynn/monstache/monstachemap</cod
 <p>If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the <code>rel3</code> branch 
 and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
 <p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.7</code>.</p>
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.9</code>.</p>
 <p>If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.7</code>.</p>
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.9</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -438,7 +438,7 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 <tbody>
 <tr>
 <td><code>Document</code></td>
-<td>MongoDB document updated, inserted or deleted</td>
+<td>MongoDB document updated or inserted</td>
 </tr>
 <tr>
 <td><code>Namespace</code></td>
@@ -539,7 +539,7 @@ correctly.</p>
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
 <p>When you implement a <code>Filter</code> function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting <code>output.Drop</code> from the mapping function because when you set <code>output.Drop</code> to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the <code>Filter</code> function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.</p>
 <p>When you implement a <code>Pipeline</code> function the function will be called to setup an <a href="https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/">aggregation pipeline</a> for both direct reads and any change streams that you have configured. The aggregation pipeline stages that you return may be different depending if applied to a direct read or to a change stream. For direct reads the root document will be the document in the collection.  For change streams the root document will be a change event with a <code>fullDocument</code> field inside it. Use the boolean parameter <code>changeStream</code> to alter the stages that you return from this function accordingly.</p>
-<p>When you implement a <code>Process</code> function the function will be called after monstache processes an event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios. The input parameter for the <code>Process</code> function will have all the same fields as the input to a <code>Map</code> function described above plus the following:</p>
+<p>When you implement a <code>Process</code> function the function will be called after monstache processes each event.  This function has full access to the MongoDB and Elasticsearch clients (including the Elasticsearch bulk processor) in the input and allows you to handle complex event processing scenarios. The input parameter for the <code>Process</code> function will have all the same fields as the input to a <code>Map</code> function described above plus the following:</p>
 <table>
 <thead>
 <tr>
@@ -549,12 +549,16 @@ before indexing, you can access the <code>*mgo.Session</code> pointer as <code>i
 </thead>
 <tbody>
 <tr>
+<td><code>Document</code></td>
+<td>MongoDB document updated, inserted, or deleted</td>
+</tr>
+<tr>
 <td><code>ElasticClient</code></td>
 <td>A full featured Elasticsearch <a href="https://godoc.org/github.com/olivere/elastic#Client">client</a></td>
 </tr>
 <tr>
 <td><code>ElasticBulkProcessor</code></td>
-<td>The same bulk <a href="https://godoc.org/github.com/olivere/elastic#BulkProcessor">processor</a> monstache uses to index documents. You need only <code>Add</code> requests to the processor and they will be flushed in bulk automatically</td>
+<td>The same bulk <a href="https://godoc.org/github.com/olivere/elastic#BulkProcessor">processor</a> monstache uses to index documents. You need only <code>Add</code> requests to the processor and they will be flushed in bulk automatically. <code>Note</code> you must delete the <code>_id</code> field from any argument to the bulk processor <code>Add</code> function</td>
 </tr>
 <tr>
 <td><code>Timestamp</code></td>
@@ -1185,9 +1189,9 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.11.7 -v
+<pre><code>docker run rwynn/monstache:4.11.9 -v
 
-docker run rwynn/monstache:3.18.7 -v
+docker run rwynn/monstache:3.18.9 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>

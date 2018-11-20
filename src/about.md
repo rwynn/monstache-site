@@ -88,6 +88,28 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.11.9](https://github.com/rwynn/monstache/releases/tag/v4.11.9)
+
+* Fix for lock ups by removing default of no timeout
+* Default timeouts for MongoDB set to 7s
+* Better recovery for change-streams
+* Breaking changes - timeouts set in config file must be greater than 0 (no timeout)
+
+### [monstache v3.18.9](https://github.com/rwynn/monstache/releases/tag/v3.18.9)
+
+* Fix for lock ups by removing default of no timeout
+* Default timeouts for MongoDB set to 7s
+* Better recovery for change-streams
+* Breaking changes - timeouts set in config file must be greater than 0 (no timeout)
+
+### [monstache v4.11.8](https://github.com/rwynn/monstache/releases/tag/v4.11.8)
+
+* Fix panic on nil access for issue #129
+
+### [monstache v3.18.8](https://github.com/rwynn/monstache/releases/tag/v3.18.8)
+
+* Fix panic on nil access for issue #129
+
 ### [monstache v4.11.7](https://github.com/rwynn/monstache/releases/tag/v4.11.7)
 
 * Ensure `input.Document` map contains an `_id` field on deletes when sent to the `Process` function in a plugin

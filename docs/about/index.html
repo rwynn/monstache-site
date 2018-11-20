@@ -177,6 +177,28 @@ MongoDB and Elasticsearch will be started and the tests run on any changes you h
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4119"><a href="https://github.com/rwynn/monstache/releases/tag/v4.11.9">monstache v4.11.9</a><a class="headerlink" href="#monstache-v4119" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for lock ups by removing default of no timeout</li>
+<li>Default timeouts for MongoDB set to 7s</li>
+<li>Better recovery for change-streams</li>
+<li>Breaking changes - timeouts set in config file must be greater than 0 (no timeout)</li>
+</ul>
+<h3 id="monstache-v3189"><a href="https://github.com/rwynn/monstache/releases/tag/v3.18.9">monstache v3.18.9</a><a class="headerlink" href="#monstache-v3189" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for lock ups by removing default of no timeout</li>
+<li>Default timeouts for MongoDB set to 7s</li>
+<li>Better recovery for change-streams</li>
+<li>Breaking changes - timeouts set in config file must be greater than 0 (no timeout)</li>
+</ul>
+<h3 id="monstache-v4118"><a href="https://github.com/rwynn/monstache/releases/tag/v4.11.8">monstache v4.11.8</a><a class="headerlink" href="#monstache-v4118" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix panic on nil access for issue #129</li>
+</ul>
+<h3 id="monstache-v3188"><a href="https://github.com/rwynn/monstache/releases/tag/v3.18.8">monstache v3.18.8</a><a class="headerlink" href="#monstache-v3188" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix panic on nil access for issue #129</li>
+</ul>
 <h3 id="monstache-v4117"><a href="https://github.com/rwynn/monstache/releases/tag/v4.11.7">monstache v4.11.7</a><a class="headerlink" href="#monstache-v4117" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Ensure <code>input.Document</code> map contains an <code>_id</code> field on deletes when sent to the <code>Process</code> function in a plugin</li>

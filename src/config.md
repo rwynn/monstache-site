@@ -50,10 +50,29 @@ to prune them with a Delete Indices action and an age filter.
 boolean (default `false`)
 
 When index-as-update is set to true monstache will sync create and update operations in MongoDB
-as updates to Elasticsearch.  By default, monstache will overwrite the entire document in Elasticsearch.
+as updates to Elasticsearch. This does not change the fact that Monstache always sends an entire copy of
+the data in MongoDB.  It just means that any existing non-overlapping fields in Elasticsearch will be maintained.
+
+By default, monstache will overwrite the entire document in Elasticsearch.
 This setting may be useful if you make updates to Elasticsearch to the documents monstache has previously
-synced and would like to retain these updates when the document changes in MongoDB. 
+synced out of band and would like to retain these updates when the document changes in MongoDB. 
 You will only be able to retain fields in Elasticsearch that do not overlap with fields in MongoDB.
+
+When this setting is turned on some guarantees about the order of operations applied in Elasticsearch are lost.
+The reason for this is that the version field cannot be set with this enabled.  The version field by default is set to
+the timestamp of the event in MongoDB. Elasticsearch will only apply changes if the version number is greater or
+equal to the last value indexed maintaining serialization. 
+
+If you enable this setting and do not see serialized updates in MongoDB being indexed
+correctly then you can mitigate this problem with the following settings:
+
+```
+elasticsearch-max-conns = 1
+
+[gtm-settings]
+buffer-size = 2048
+buffer-duration = 4s
+```
 
 ## stats-index-format
 
@@ -405,15 +424,15 @@ The following MongoDB dial properties are available.  Timeout values of 0 disabl
 
 	#### read-timeout
 
-	##### int (default 0)
+	##### int (default 7)
 
-	Seconds to wait when reading data from MongoDB before giving up
+	Seconds to wait when reading data from MongoDB before giving up. Must be greater than 0.
 
 	#### write-timeout
 
-	##### int (default 0)
+	##### int (default 7)
 
-	Seconds to wait when writing data to MongoDB before giving up
+	Seconds to wait when writing data to MongoDB before giving up. Must be greated than 0.
 
 ## mongo-session-settings
 
@@ -431,10 +450,10 @@ The following MongoDB session properties are available. Timeout values of 0 disa
 
 	#### sync-timeout
 
-	int (default 0)
+	int (default 7)
 
 	Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
-	Set it to zero to wait forever.
+	Must be greater than 0.
 
 ## gtm-settings
 
