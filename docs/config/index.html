@@ -395,7 +395,7 @@ If you want to maintain this stategy use value 1.  Otherwise, you can drop the <
 will consider.  If monstache only indexes to index a, b, and c then you can set this to <code>a,b,c</code>.  If monstache only indexes to indexes starting with 
 mydb then you can set this to <code>mydb*</code>.  </p>
 <h2 id="change-stream-namespaces">change-stream-namespaces<a class="headerlink" href="#change-stream-namespaces" title="Permanent link">&para;</a></h2>
-<p>[]string (default <code>nil') (env var name</code>MONSTACHE_CHANGE_STREAM_NS`)</p>
+<p>[]string (default <code>nil</code>) (env var name <code>MONSTACHE_CHANGE_STREAM_NS</code>)</p>
 <p>This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using <code>$watch</code> function.
 This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
 you do not need to specify additional regular expressions to filter the set of collections to watch.</p>

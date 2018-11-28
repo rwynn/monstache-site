@@ -314,7 +314,7 @@ mydb then you can set this to `mydb*`.
 
 ## change-stream-namespaces
 
-[]string (default `nil') (env var name `MONSTACHE_CHANGE_STREAM_NS`)
+[]string (default `nil`) (env var name `MONSTACHE_CHANGE_STREAM_NS`)
 
 This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using `$watch` function.
 This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
