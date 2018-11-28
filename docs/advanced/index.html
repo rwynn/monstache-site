@@ -134,9 +134,9 @@ and your plugin should import <code>github.com/rwynn/monstache/monstachemap</cod
 <p>If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the <code>rel3</code> branch 
 and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
 <p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.11.9</code>.</p>
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.12.0</code>.</p>
 <p>If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.18.9</code>.</p>
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.19.0</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -529,11 +529,9 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 <p>To set custom indexing metadata on the document use <code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> and <code>output.Routing</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you override <code>output.Parent</code> or <code>output.Routing</code> for any MongoDB namespaces in a 
-golang plugin you should also add those namespaces to the <code>routing-namespaces</code> array 
-in your config file.</p>
-<p>This instructs Monstache to save the routing information so that deletes of the document work
-correctly.</p>
+<p>If you override <code>output.Index</code>, <code>output.Type</code>, <code>output.Parent</code> or <code>output.Routing</code> for any MongoDB namespaces in a 
+golang plugin you should also add those namespaces to the <code>routing-namespaces</code> array in your config file.</p>
+<p>This instructs Monstache to query the document metadata so that deletes of the document work correctly.</p>
 </div>
 <p>If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the <code>*mgo.Session</code> pointer as <code>input.Session</code>.  With the mgo session you can use the <a href="https://godoc.org/github.com/globalsign/mgo">mgo API</a> to find documents in MongoDB and embed them in the Document set on output.</p>
@@ -1189,9 +1187,9 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.11.9 -v
+<pre><code>docker run rwynn/monstache:4.12.0 -v
 
-docker run rwynn/monstache:3.18.9 -v
+docker run rwynn/monstache:3.19.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>

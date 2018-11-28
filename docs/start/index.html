@@ -118,7 +118,7 @@ Go but you don't need to install the Go language unless you decide to write your
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.11.7
+# 4.12.0
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
@@ -150,7 +150,8 @@ resume or clustering features the user will need to be able to write to and crea
 <p>Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
 pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time
 out due to an overloaded queue. The queue size can be increased by making changes to your elasticsearch.yml
-configuration.</p>
+configuration. Check the Elasticsearch documentation for default queue size values as they change between releases.
+It is recommended to have a bulk queue size of at least 200.</p>
 <pre><code> thread_pool:
    bulk:
      queue_size: 200

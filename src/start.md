@@ -17,7 +17,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.11.7
+# 4.12.0
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -59,7 +59,8 @@ master = true
 Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
 pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time
 out due to an overloaded queue. The queue size can be increased by making changes to your elasticsearch.yml
-configuration.
+configuration. Check the Elasticsearch documentation for default queue size values as they change between releases.
+It is recommended to have a bulk queue size of at least 200.
 
 ```
  thread_pool:

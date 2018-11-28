@@ -2,11 +2,54 @@
 
 ---
 
-Configuration can be specified in your TOML config file or passed into monstache as Go program arguments on the command line.
-Program arguments take precedance over configuration specified in the TOML config file.
+Configuration can be specified in environment variables (a limited set of options), in a TOML config file or 
+passed into monstache as Go program arguments on the command line.
+
+!!! note
+	Command line arguments take precedance over environment variables which in turn take precedance over the TOML config file. You can verify
+	the final configuration used by Monstache by running monstache with `-print-config`.
 
 !!! warning
-	Please keep any simple -one line config- above any `[[script]]` or toml table configs, as [`there is a bug`](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381) in the toml parser where if you have definitions below a TOML table, e.g. a `[[script]]` then the parser thinks that lines below that belong to the table instead of at the global level
+	Keep simple one-line configs **above** any TOML table definitions in your config file.  A TOML table is only ended by another TOML table or 
+	the end of the file.  Anything below a TOML table will be interpreted to be part of the table by the parser unless it is ended.
+	See the following [Issue 58](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381) for more information.
+
+## env-delimiter
+
+string (default `,`)
+
+This option is only supported on the command line.  The value for this delimiter will be used to split environment variable values when the
+environment variable is used in conjunction with an option of array type.  E.g. with `export MONSTACHE_DIRECT_READ_NS=test.test,foo.bar`.
+
+## tpl
+
+boolean (default `false`)
+
+This option is only supported on the command line.  When the tpl mode is turned on then any config file passed via -f will be interpreted and executed
+as a golang template before being loaded.  The template will have access to all environment variables.  The environment variables will be passed as a map
+to the template. The env map can be accessed as the dot `.` symbol in the golang template and values from the map obtained using the `index` function.
+
+For example, the given an environment variable THRESHOLD, then with `-tpl -f config.toml` the config.toml might contain...
+
+```
+[[script]]
+namespace = "mydb.mycollection"
+script = """
+module.exports = function(doc) {
+    if ( doc.score > {{index . "THRESHOLD"}} ) {
+      doc.important = true;
+    }
+    return doc;
+}
+"""
+```
+
+## disable-change-events
+
+boolean (default `false`)
+
+When disable-change-events is true monstache will not listen to change events from the oplog or call watch on any collections.  This option is only
+useful if you are using [direct-read-namespaces](#direct-read-namespaces) to copy collections and would prefer not to sync change events.
 
 ## print-config
 
@@ -205,7 +248,7 @@ and do not stop execution it's not unreasonable to set this to true to get a spe
 
 ## time-machine-namespaces
 
-[]string (default `nil`)
+[]string (default `nil`) (env var name `MONSTACHE_TIME_MACHINE_NS`)
 
 Monstache is good at keeping your MongoDB collections and Elasticsearch indexes in sync.  When a document is updated in MongoDB the corresponding document in Elasticsearch is updated too.  Same goes for deleting documents in MongoDB.  But what if you also wanted to keep a log of all the changes to a MongoDB document over its lifespan.  That's what time-machine-namespaces are for.  When you configure a list of namespaces in MongoDB to add to the time machine, in addition to keeping documents in sync, Monstache will index of copy of your MongoDB document at the time it changes in a separate timestamped index.
 
@@ -271,7 +314,7 @@ mydb then you can set this to `mydb*`.
 
 ## change-stream-namespaces
 
-[]string (default `nil')
+[]string (default `nil') (env var name `MONSTACHE_CHANGE_STREAM_NS`)
 
 This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using `$watch` function.
 This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
@@ -279,7 +322,7 @@ you do not need to specify additional regular expressions to filter the set of c
 
 ## direct-read-namespaces
 
-[]string (default `nil`)
+[]string (default `nil`) (env var name `MONSTACHE_DIRECT_READ_NS`)
 
 This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
 actually indexed to Elasticsearch, so you need not necessarily copy the entire collection.
@@ -289,6 +332,11 @@ sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to Elasticsearch.
 
 This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
+
+!!! warning
+	When direct reads are enabled Monstache still processes change events while the direct reads are being performed.  It does
+	not wait until direct reads are completed to start listening for changes.  This is to ensure that any changes that occur during
+	the direct read process get synchronized.
 
 By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
 
@@ -322,7 +370,7 @@ if you would like to run monstache to run a full sync on a set of collections vi
 
 ## namespace-regex
 
-regexp (default `""`)
+regexp (default `""`) (env var name `MONSTACHE_NS_REGEX`)
 
 When namespace-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache continues processing event filters, otherwise it drops the event. By default monstache
@@ -331,7 +379,7 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 ## namespace-exclude-regex
 
-regex (default `""`)
+regex (default `""`) (env var name `MONSTACHE_NS_EXCLUDE_REGEX`)
 
 When namespace-exclude-regex is given this regex is tested against the namespace, database.collection, of any insert, update, delete in MongoDB.
 If the regex matches monstache ignores the event, otherwise it continues processing event filters. By default monstache
@@ -340,7 +388,7 @@ collections suffixed with .chunks, and the system collections. For more informat
 
 ## namespace-drop-regex
 
-regexp (default `""`)
+regexp (default `""`) (env var name `MONSTACHE_NS_DROP_REGEX`)
 
 When namespace-drop-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. For database drops
 the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.  If the regex matches
@@ -348,7 +396,7 @@ the namespace then the operation will by synced.
 
 ## namespace-drop-exclude-regex
 
-regex (default `""`)
+regex (default `""`) (env var name `MONSTACHE_NS_DROP_EXCLUDE_REGEX`)
 
 When namespace-drop-exclude-regex is given this regex is tested against the namespace, database.collection, of drops in MongoDB. 
 For database drops the namespace will be database-name.$cmd.  For collections drops the namespace will be database-name.collection-name.
@@ -356,7 +404,7 @@ If the regex does not match the namespace then the operation will by synced.
 
 ## mongo-url
 
-string (default `localhost`)
+string (default `localhost`) (env var name `MONSTACHE_MONGO_URL`)
 
 The URL to connect to MongoDB which must follow the [Standard Connection String Format](https://docs.mongodb.com/v3.0/reference/connection-string/#standard-connection-string-format)
 
@@ -365,7 +413,7 @@ option must be set to point to the config server.
 
 ## mongo-config-url
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_MONGO_CONFIG_URL`)
 
 This config must only be set for sharded MongoDB clusters. Has the same syntax as mongo-url.
 This URL must point to the MongoDB `config` server.
@@ -379,7 +427,7 @@ each shard to listen for events.
 
 ## mongo-pem-file
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_MONGO_PEM`)
 
 When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.
@@ -392,13 +440,13 @@ When mongo-validate-pem-file is false TLS will be configured to skip verificatio
 
 ## mongo-oplog-database-name
 
-string (default `local`)
+string (default `local`) (env var name `MONSTACHE_MONGO_OPLOG_DB`)
 
 When mongo-oplog-database-name is given monstache will look for the MongoDB oplog in the supplied database
 
 ## mongo-oplog-collection-name
 
-string (default `$oplog.main`)
+string (default `$oplog.main`) (env var name `MONSTACHE_MONGO_OPLOG_COL`)
 
 When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection
 
@@ -503,7 +551,7 @@ When max-file-size is greater than 0 monstache will not index the content of Gri
 
 ## file-namespaces
 
-[]string (default `nil`)
+[]string (default `nil`) (env var name `MONSTACHE_FILE_NS`)
 
 The file-namespaces config must be set when index-files is enabled.  file-namespaces must be set to an array of MongoDB
 namespace strings.  Files uploaded through gridfs to any of the namespaces in file-namespaces will be retrieved and their
@@ -526,19 +574,19 @@ When verbose is true monstache with enable debug logging including a trace of re
 
 ## elasticsearch-user
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_ES_USER`)
 
 Optional Elasticsearch username for basic auth
 
 ## elasticsearch-password
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_ES_PASS`)
 
 Optional Elasticsearch password for basic auth
 
 ## elasticsearch-urls
 
-[]string (default `[ "http://localhost:9200" ]`)
+[]string (default `[ "http://localhost:9200" ]`) (env var name `MONSTACHE_ES_URLS`)
 
 An array of URLs to connect to the Elasticsearch REST Interface
 
@@ -612,7 +660,7 @@ case which would cut performance.
 
 ## elasticsearch-pem-file
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_ES_PEM`)
 
 When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.
@@ -637,7 +685,7 @@ When dropped-collections is false monstache will not delete the mapped index in 
 
 ## worker
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_WORKER`)
 
 When worker is given monstache will enter multi-worker mode and will require you to also provide the config option workers.  Use this mode to run
 multiple monstache processes and distribute the work between them.  In this mode monstache will ensure that each MongoDB document id always goes to the
@@ -659,7 +707,7 @@ Set to true to enable storing [rfc7396](https://tools.ietf.org/html/rfc7396) pat
 
 ## patch-namespaces
 
-[]string (default `nil`)
+[]string (default `nil`) (env var name `MONSTACHE_PATCH_NS`)
 
 An array of MongoDB namespaces that you would like to enable rfc7396 patches on
 
@@ -673,7 +721,7 @@ Customize the name of the property under which merge patches are stored
 
 ## cluster-name
 
-string (default `""`)
+string (default `""`) (env var name `MONSTACHE_CLUSTER`)
 
 When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
 processes in a cluster will sync changes.  The other processes will be in a paused state.  If the process which is syncing changes goes down for some reason
@@ -809,7 +857,7 @@ Add this flag to allow MongoDB to use the disk as a temporary store for data dur
 
 ## graylog-addr
 
-string (default "")
+string (default "") (env var name `MONSTACHE_GRAYLOG_ADDR`)
 
 The address of a graylog server to redirect logs to in GELF 
 
@@ -862,27 +910,28 @@ Enable experimental support for using a connection to Elasticsearch that uses AW
 
 	#### access-key
 
-	string (default "")
+	string (default "") (env var name `MONSTACHE_AWS_ACCESS_KEY`)
 
 	AWS Access Key
 
 	#### secret-key
 
-	string (default "")
+	string (default "") (env var name `MONSTACHE_AWS_SECRET_KEY`)
 
 	AWS Secrete Key
 
 	#### region
 
-	string (default "")
+	string (default "") (env var name `MONSTACHE_AWS_REGION`)
 
 	AWS Region
 
 ## logs
 
-TOML table (default `nil`)
+TOML table (default `nil`) (env var name `MONSTACHE_LOG_DIR`)
 
 Allows writing logs to a file using a rolling appender instead of stdout.  Supply a file path for each type of log you would like to send to a file.
+When the `MONSTACHE_LOG_DIR` environment variable is used then a log file for each log level will be generated in the given directory.
 
 !!! note ""
 
@@ -924,7 +973,7 @@ Add this flag to enable an embedded HTTP server at localhost:8080
 
 ## http-server-addr
 
-string (default `:8080`)
+string (default `:8080`) (env var name `MONSTACHE_HTTP_ADDR`)
 
 The address to bind the embedded HTTP server on if enabled
 

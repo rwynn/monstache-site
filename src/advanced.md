@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.11.9`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.12.0`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.18.9`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.19.0`.
 
 ## GridFS Support
 
@@ -412,12 +412,10 @@ To simply pass the original document through to Elasticsearch, set `output.Passt
 To set custom indexing metadata on the document use `output.Index`, `output.Type`, `output.Parent` and `output.Routing`.
 
 !!! note
-    If you override `output.Parent` or `output.Routing` for any MongoDB namespaces in a 
-    golang plugin you should also add those namespaces to the `routing-namespaces` array 
-    in your config file.
+    If you override `output.Index`, `output.Type`, `output.Parent` or `output.Routing` for any MongoDB namespaces in a 
+    golang plugin you should also add those namespaces to the `routing-namespaces` array in your config file.
 
-    This instructs Monstache to save the routing information so that deletes of the document work
-    correctly.
+    This instructs Monstache to query the document metadata so that deletes of the document work correctly.
 
 If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
@@ -1177,9 +1175,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.11.9 -v
+docker run rwynn/monstache:4.12.0 -v
 
-docker run rwynn/monstache:3.18.9 -v
+docker run rwynn/monstache:3.19.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount

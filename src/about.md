@@ -88,6 +88,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.12.0](https://github.com/rwynn/monstache/releases/tag/v4.12.0)
+
+* Added the ability to configure monstache with environment variables. See issue #133 for details
+* Added a `-tpl` flag to preprocess TOML config files as golang templates with access to env vars
+* Added a `disable-change-events` option to turn off listening to the oplog
+* Upgraded the monstache docker image from Alpine 3.7 to 3.8
+
+### [monstache v3.19.0](https://github.com/rwynn/monstache/releases/tag/v3.19.0)
+
+* Added the ability to configure monstache with environment variables. See issue #133 for details.
+* Added a `-tpl` flag to preprocess TOML config files as golang templates with access to env vars
+* Added a `disable-change-events` option to turn off listening to the oplog
+* Upgraded the monstache docker image from Alpine 3.7 to 3.8
+
 ### [monstache v4.11.9](https://github.com/rwynn/monstache/releases/tag/v4.11.9)
 
 * Fix for lock ups by removing default of no timeout
