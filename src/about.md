@@ -88,6 +88,14 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.12.1](https://github.com/rwynn/monstache/releases/tag/v4.12.1)
+
+* Fix read of `MONSTACHE-MONGO-CONFIG-URL` environment variable
+
+### [monstache v3.19.1](https://github.com/rwynn/monstache/releases/tag/v3.19.1)
+
+* Fix read of `MONSTACHE-MONGO-CONFIG-URL` environment variable
+
 ### [monstache v4.12.0](https://github.com/rwynn/monstache/releases/tag/v4.12.0)
 
 * Added the ability to configure monstache with environment variables. See issue #133 for details
