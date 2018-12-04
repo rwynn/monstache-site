@@ -88,6 +88,22 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.12.3](https://github.com/rwynn/monstache/releases/tag/v4.12.3)
+
+* Upgrade elastic client to pickup fix for AWS request signing
+
+### [monstache v3.19.3](https://github.com/rwynn/monstache/releases/tag/v3.19.3)
+
+* Upgrade elastic client to pickup fix for AWS request signing
+
+### [monstache v4.12.2](https://github.com/rwynn/monstache/releases/tag/v4.12.2)
+
+* Fix parse of env value with = character
+
+### [monstache v3.19.2](https://github.com/rwynn/monstache/releases/tag/v3.19.2)
+
+* Fix parse of env value with = character
+
 ### [monstache v4.12.1](https://github.com/rwynn/monstache/releases/tag/v4.12.1)
 
 * Fix read of `MONSTACHE-MONGO-CONFIG-URL` environment variable

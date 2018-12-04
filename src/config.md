@@ -303,7 +303,6 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 [] array of TOML table (default `nil`)
 
 When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section [Middleware](../advanced/#middleware) for more information.
-See the section [Middleware](../advanced/#middleware) for more information.
 
 !!! note ""
 

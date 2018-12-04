@@ -385,8 +385,7 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 </div>
 <h2 id="filter">filter<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
-<p>When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section <a href="../advanced/#middleware">Middleware</a> for more information.
-See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
+<p>When filter is given monstache will pass the MongoDB document from an insert or update operation into the filter function immediately after it is read from the oplog.  Return true from the function to continue processing the document or false to completely ignore the document. See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
 <div class="admonition note">
 <h4 id="namespace">namespace<a class="headerlink" href="#namespace" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
