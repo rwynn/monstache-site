@@ -495,7 +495,7 @@ When the `MONSTACHE_LOG_DIR` environment variable is used then a log file for ea
 
 ## mapper-plugin-path
 
-string (default ``)
+string (default `""`)
 
 The path to an .so file golang plugin.
 
