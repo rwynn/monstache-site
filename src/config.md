@@ -280,6 +280,12 @@ Normally, monstache just logs the error and continues processing events.
 If monstache has been configured with [elasticsearch-retry](#elasticsearch-retry) true, a failed request will be
 retried before being considered a failure.
 
+## file-downloaders
+
+int (default `10`)
+
+Number of go routines concurrently processing GridFS files when file `index-files` is turned on.
+
 ## file-highlighting
 
 boolean (default `false`)
@@ -486,6 +492,12 @@ When the `MONSTACHE_LOG_DIR` environment variable is used then a log file for ea
 	string (default "")
 
 	The file path to write indexing statistics to. Stats logs are enabled via the stats option.
+
+## mapper-plugin-path
+
+string (default ``)
+
+The path to an .so file golang plugin.
 
 ## mapping
 
@@ -727,6 +739,12 @@ boolean (default `false`)
 
 Add this flag to allow MongoDB to use the disk as a temporary store for data during aggregation pipelines
 
+## post-processors
+
+int (default `10`)
+
+Number of go routines concurrently calling the `Process` method in any golang middleware plugins installed via `mapper-plugin-path`.
+
 ## pprof
 
 boolean (default `false`)
@@ -787,6 +805,12 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 
 	Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 	By default the original change is ignored and only the document from with-namespace is synced.
+
+## relate-threads
+
+int (default `10`) 
+
+Number of go routines concurrently processing relationships when `relate` is enabled
 
 ## replay
 

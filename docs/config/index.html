@@ -130,6 +130,7 @@
             <li><a href="#env-delimiter">env-delimiter</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
             <li><a href="#fail-fast">fail-fast</a></li>
+            <li><a href="#file-downloaders">file-downloaders</a></li>
             <li><a href="#file-highlighting">file-highlighting</a></li>
             <li><a href="#file-namespaces">file-namespaces</a></li>
             <li><a href="#filter">filter</a></li>
@@ -142,6 +143,7 @@
             <li><a href="#index-oplog-time">index-oplog-time</a></li>
             <li><a href="#index-stats">index-stats</a></li>
             <li><a href="#logs">logs</a></li>
+            <li><a href="#mapper-plugin-path">mapper-plugin-path</a></li>
             <li><a href="#mapping">mapping</a></li>
             <li><a href="#max-file-size">max-file-size</a></li>
             <li><a href="#merge-patch-attribute">merge-patch-attribute</a></li>
@@ -163,10 +165,12 @@
             <li><a href="#patch-namespaces">patch-namespaces</a></li>
             <li><a href="#pipeline">pipeline</a></li>
             <li><a href="#pipe-allow-disk">pipe-allow-disk</a></li>
+            <li><a href="#post-processors">post-processors</a></li>
             <li><a href="#pprof">pprof</a></li>
             <li><a href="#print-config">print-config</a></li>
             <li><a href="#prune-invalid-json">prune-invalid-json</a></li>
             <li><a href="#relate">relate</a></li>
+            <li><a href="#relate-threads">relate-threads</a></li>
             <li><a href="#replay">replay</a></li>
             <li><a href="#resume">resume</a></li>
             <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
@@ -370,6 +374,9 @@ will log the request that produced the response as an ERROR and then exit immedi
 Normally, monstache just logs the error and continues processing events.</p>
 <p>If monstache has been configured with <a href="#elasticsearch-retry">elasticsearch-retry</a> true, a failed request will be
 retried before being considered a failure.</p>
+<h2 id="file-downloaders">file-downloaders<a class="headerlink" href="#file-downloaders" title="Permanent link">&para;</a></h2>
+<p>int (default <code>10</code>)</p>
+<p>Number of go routines concurrently processing GridFS files when file <code>index-files</code> is turned on.</p>
 <h2 id="file-highlighting">file-highlighting<a class="headerlink" href="#file-highlighting" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When file-highlighting is true monstache will enable the ability to return highlighted keywords in the extracted text of files
@@ -501,6 +508,9 @@ When the <code>MONSTACHE_LOG_DIR</code> environment variable is used then a log 
 <p>string (default "")</p>
 <p>The file path to write indexing statistics to. Stats logs are enabled via the stats option.</p>
 </div>
+<h2 id="mapper-plugin-path">mapper-plugin-path<a class="headerlink" href="#mapper-plugin-path" title="Permanent link">&para;</a></h2>
+<p>string (default ``)</p>
+<p>The path to an .so file golang plugin.</p>
 <h2 id="mapping">mapping<a class="headerlink" href="#mapping" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
 <p>When mapping is given monstache will be directed to override the default index and type assigned to documents in Elasticsearch.
@@ -641,6 +651,9 @@ streams.</p>
 <h2 id="pipe-allow-disk">pipe-allow-disk<a class="headerlink" href="#pipe-allow-disk" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>Add this flag to allow MongoDB to use the disk as a temporary store for data during aggregation pipelines</p>
+<h2 id="post-processors">post-processors<a class="headerlink" href="#post-processors" title="Permanent link">&para;</a></h2>
+<p>int (default <code>10</code>)</p>
+<p>Number of go routines concurrently calling the <code>Process</code> method in any golang middleware plugins installed via <code>mapper-plugin-path</code>.</p>
 <h2 id="pprof">pprof<a class="headerlink" href="#pprof" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When pprof is true and the http server is enabled, monstache will make profiling information available.</p>
@@ -674,6 +687,9 @@ is set to true Monstache will drop those fields so that indexing errors do not o
 <p>Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 By default the original change is ignored and only the document from with-namespace is synced.</p>
 </div>
+<h2 id="relate-threads">relate-threads<a class="headerlink" href="#relate-threads" title="Permanent link">&para;</a></h2>
+<p>int (default <code>10</code>) </p>
+<p>Number of go routines concurrently processing relationships when <code>relate</code> is enabled</p>
 <h2 id="replay">replay<a class="headerlink" href="#replay" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. </p>

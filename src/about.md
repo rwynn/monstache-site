@@ -88,6 +88,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.12.4](https://github.com/rwynn/monstache/releases/tag/v4.12.4)
+
+* Repeatable builds with go modules
+* Fixes for deadlock and race conditions
+
+### [monstache v3.19.4](https://github.com/rwynn/monstache/releases/tag/v3.19.4)
+
+* Repeatable builds with go modules
+* Fixes for deadlock and race conditions
+
 ### [monstache v4.12.3](https://github.com/rwynn/monstache/releases/tag/v4.12.3)
 
 * Upgrade elastic client to pickup fix for AWS request signing
