@@ -129,16 +129,11 @@ Go but you don't need to install the Go language unless you decide to write your
 <p><code>go get -u gopkg.in/rwynn/monstache.v3</code></p>
 </div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to make sure that MongoDB is configured to
-produce an oplog.  The oplog can be enabled by using one of the following options:</p>
-<ul>
-<li>Setting up <a href="http://docs.mongodb.org/manual/tutorial/deploy-replica-set/">replica sets</a></li>
-<li>Passing --master to the mongod process</li>
-<li>Setting the following in /etc/mongod.conf</li>
-</ul>
-<pre><code class="toml">master = true
-</code></pre>
-
+<p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to ensure
+that MongoDB is configured to produce an oplog by <a href="http://docs.mongodb.org/manual/tutorial/deploy-replica-set/">deploying a replica set</a>.
+If you haven't already done so, follow the 5 step <a href="https://docs.mongodb.com/manual/tutorial/deploy-replica-set/#procedure">procedure</a> 
+to initiate and validate your replica set. For local testing your replica set may contain a 
+<a href="https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/">single member</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you have enabled security in MongoDB you will need to give the user in your connection string

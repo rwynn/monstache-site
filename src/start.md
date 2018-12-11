@@ -38,16 +38,11 @@ The version number should start with 3.x if you are using Elasticsearch prior to
 
 ## Usage
 
-Monstache uses the MongoDB [oplog](https://docs.mongodb.com/manual/core/replica-set-oplog/) as an event source. You will need to make sure that MongoDB is configured to
-produce an oplog.  The oplog can be enabled by using one of the following options:
-
-+ Setting up [replica sets](http://docs.mongodb.org/manual/tutorial/deploy-replica-set/)
-+ Passing --master to the mongod process
-+ Setting the following in /etc/mongod.conf
-
-```toml
-master = true
-```
+Monstache uses the MongoDB [oplog](https://docs.mongodb.com/manual/core/replica-set-oplog/) as an event source. You will need to ensure
+that MongoDB is configured to produce an oplog by [deploying a replica set](http://docs.mongodb.org/manual/tutorial/deploy-replica-set/).
+If you haven't already done so, follow the 5 step [procedure](https://docs.mongodb.com/manual/tutorial/deploy-replica-set/#procedure) 
+to initiate and validate your replica set. For local testing your replica set may contain a 
+[single member](https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/).
 
 !!! note
 	If you have enabled security in MongoDB you will need to give the user in your connection string
