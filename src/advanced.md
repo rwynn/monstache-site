@@ -299,24 +299,40 @@ In addition to inserts, updates, and deletes monstache also supports database an
 
 ## Middleware
 
-monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
-drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
-require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).
+monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  Middleware is able to transform documents, drop documents, or define indexing metadata.  Middleware may be written in either Javascript or in Golang as a plugin.
+
+!!! warning
+	If you enable a Golang plugin then monstache will ignore an javascript middleware in your configuration. This may
+	change in the future but for now the choice of middleware language is mutually exclusive.
+
 
 ### Golang
 
-monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
-use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.
+monstache supports golang plugins.  You should have golang version 1.11 or greater installed and will need to perform the build in a linux environment.  
+
+To implement a plugin for monstache you simply need to implement specific function signatures,
+use the go command to build a .so file for your plugin, 
+and finally pass the path to your plugin .so file when running monstache.
 
 !!! note
 	If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
-	and your plugin should import `github.com/rwynn/monstache/monstachemap`. If you are working with Elasticsearch 2 or 5 and coding
-	golang plugins for monstache you should use the `rel3` branch and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
+	and your plugin should import `github.com/rwynn/monstache/monstachemap`. 
+	If you are working with Elasticsearch 2 or 5 and coding
+	golang plugins for monstache you should use the `rel3` branch and your plugin should 
+	import `gopkg.in/rwynn/monstache.v3/monstachemap`.
+
+!!! warning
+	Golang plugins must be built with the exact same source code (including dependencies) of the loading program.
+	So it is very important that when you build your plugin that you do so in a directory that contains the `go.mod`
+	and `go.sum` files that monstache uses.  If you don't build your plugin this way then monstache may fail to load it
+	at runtime due to source code mismatches.  
 
 To create a golang plugin for monstache
 
-- get the necessary dependencies for your version of Elasticsearch with `go get -u github.com/rwynn/monstache/monstachemap` or `go get -u gopkg.in/rwynn/monstache.v3/monstachemap`
-- create a .go source file that belongs to the package `main`
+- git clone `monstache` somewhere outside your $GOPATH
+- only if you are using Elasticsearch 2 or 5 then switch to the `rel3` branch with `git checkout rel3`. Otherwise, stay on `master`
+- in the monstache root directory run `go install`
+- create a .go source file for your plugin in the monstache root directory with the package name `main`
 - import `github.com/rwynn/monstache/monstachemap` for Elasticsearch 6+ or `gopkg.in/rwynn/monstache.v3/monstachemap` for Elasticsearch 2 or 5
 - implement a function named `Map` with the following signature
 

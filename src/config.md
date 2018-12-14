@@ -851,11 +851,11 @@ a specific timestamp from the oplog and would like to start syncing from after t
 string (default `default`)
 
 monstache uses the value of resume-name as an id when storing and retrieving timestamps
-to and from the MongoDB collection monstache.monstache. The default value for this option is the string `default`.
+to and from the MongoDB collection `monstache.monstache`. The default value for this option is the string `default`.
 However, there are some exceptions.  If monstache is started with the [cluster-name](#cluster-name) option set then the
 name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
-from the last timestamp successfully processed.  The other exception occurs when resume-name is not given but
-[worker-name](#worker-name) is.  In that case the worker name becomes the resume-name.
+from the last timestamp successfully processed.  Another exception occurs when [worker](#worker) is enabled.
+In that case the worker name becomes the resume-name.
 
 ## resume-write-unsafe
 

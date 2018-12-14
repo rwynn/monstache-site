@@ -361,22 +361,38 @@ Also, using <code>_doc</code> as the type will not work with Elasticsearch prior
 <p>When a document is inserted, updated, or deleted in MongoDB a document is appended to the oplog representing the event.  This document has a field <code>ns</code> which is the namespace.  For inserts, updates, and deletes the namespace is the database name and collection name of the document changed joined by a dot. E.g. for <code>use test; db.foo.insert({hello: "world"});</code> the namespace for the event in the oplog would be <code>test.foo</code>.</p>
 <p>In addition to inserts, updates, and deletes monstache also supports database and collection drops.  When a database or collection is dropped in MongoDB an event is appended to the oplog.  Like the other types of changes this event has a field <code>ns</code> representing the namespace.  However, for drops the namespace is the database name and the string <code>$cmd</code> joined by a dot.  E.g. for <code>use test; db.foo.drop()</code> the namespace for the event in the oplog would be <code>test.$cmd</code>.  </p>
 <h2 id="middleware">Middleware<a class="headerlink" href="#middleware" title="Permanent link">&para;</a></h2>
-<p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  middleware is able to transform documents,
-drop documents, or define indexing metadata.  middleware may be written in either Javascript or in Golang as a plugin.  Golang plugins
-require Go version 1.8 or greater on Linux. currently, you are able to use Javascript or Golang but not both (this may change in the future).</p>
+<p>monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  Middleware is able to transform documents, drop documents, or define indexing metadata.  Middleware may be written in either Javascript or in Golang as a plugin.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you enable a Golang plugin then monstache will ignore an javascript middleware in your configuration. This may
+change in the future but for now the choice of middleware language is mutually exclusive.</p>
+</div>
 <h3 id="golang">Golang<a class="headerlink" href="#golang" title="Permanent link">&para;</a></h3>
-<p>monstache supports Golang 1.8+ plugins on Linux.  To implement a plugin for monstache you simply need to implement a specific function signature,
-use the go command to build a .so file for your plugin, and finally pass the path to your plugin .so file when running monstache.</p>
+<p>monstache supports golang plugins.  You should have golang version 1.11 or greater installed and will need to perform the build in a linux environment.  </p>
+<p>To implement a plugin for monstache you simply need to implement specific function signatures,
+use the go command to build a .so file for your plugin, 
+and finally pass the path to your plugin .so file when running monstache.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the <code>master</code> branch
-and your plugin should import <code>github.com/rwynn/monstache/monstachemap</code>. If you are working with Elasticsearch 2 or 5 and coding
-golang plugins for monstache you should use the <code>rel3</code> branch and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
+and your plugin should import <code>github.com/rwynn/monstache/monstachemap</code>. 
+If you are working with Elasticsearch 2 or 5 and coding
+golang plugins for monstache you should use the <code>rel3</code> branch and your plugin should 
+import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Golang plugins must be built with the exact same source code (including dependencies) of the loading program.
+So it is very important that when you build your plugin that you do so in a directory that contains the <code>go.mod</code>
+and <code>go.sum</code> files that monstache uses.  If you don't build your plugin this way then monstache may fail to load it
+at runtime due to source code mismatches.  </p>
 </div>
 <p>To create a golang plugin for monstache</p>
 <ul>
-<li>get the necessary dependencies for your version of Elasticsearch with <code>go get -u github.com/rwynn/monstache/monstachemap</code> or <code>go get -u gopkg.in/rwynn/monstache.v3/monstachemap</code></li>
-<li>create a .go source file that belongs to the package <code>main</code></li>
+<li>git clone <code>monstache</code> somewhere outside your $GOPATH</li>
+<li>only if you are using Elasticsearch 2 or 5 then switch to the <code>rel3</code> branch with <code>git checkout rel3</code>. Otherwise, stay on <code>master</code></li>
+<li>in the monstache root directory run <code>go install</code></li>
+<li>create a .go source file for your plugin in the monstache root directory with the package name <code>main</code></li>
 <li>import <code>github.com/rwynn/monstache/monstachemap</code> for Elasticsearch 6+ or <code>gopkg.in/rwynn/monstache.v3/monstachemap</code> for Elasticsearch 2 or 5</li>
 <li>implement a function named <code>Map</code> with the following signature</li>
 </ul>

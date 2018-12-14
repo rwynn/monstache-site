@@ -715,11 +715,11 @@ a specific timestamp from the oplog and would like to start syncing from after t
 <h2 id="resume-name">resume-name<a class="headerlink" href="#resume-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>default</code>)</p>
 <p>monstache uses the value of resume-name as an id when storing and retrieving timestamps
-to and from the MongoDB collection monstache.monstache. The default value for this option is the string <code>default</code>.
+to and from the MongoDB collection <code>monstache.monstache</code>. The default value for this option is the string <code>default</code>.
 However, there are some exceptions.  If monstache is started with the <a href="#cluster-name">cluster-name</a> option set then the
 name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
-from the last timestamp successfully processed.  The other exception occurs when resume-name is not given but
-<a href="#worker-name">worker-name</a> is.  In that case the worker name becomes the resume-name.</p>
+from the last timestamp successfully processed.  Another exception occurs when <a href="#worker">worker</a> is enabled.
+In that case the worker name becomes the resume-name.</p>
 <h2 id="resume-write-unsafe">resume-write-unsafe<a class="headerlink" href="#resume-write-unsafe" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When resume-write-unsafe is true monstache sets the safety mode of the MongoDB session such that writes are fire and forget.
