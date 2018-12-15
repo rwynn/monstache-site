@@ -117,6 +117,7 @@
             <li><a href="#docker">Docker</a></li>
             <li><a href="#http-server">HTTP Server</a></li>
             <li><a href="#aws-signature-version-4">AWS Signature Version 4</a></li>
+            <li><a href="#watching-changes-on-specific-fields-only">Watching changes on specific fields only</a></li>
             <li><a href="#mongodb-view-replication">MongoDB view replication</a></li>
     </ul>
 </div></div>
@@ -134,9 +135,9 @@ and your plugin should import <code>github.com/rwynn/monstache/monstachemap</cod
 <p>If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the <code>rel3</code> branch 
 and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
 <p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.12.4</code>.</p>
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.12.5</code>.</p>
 <p>If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.19.4</code>.</p>
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.19.5</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -1203,9 +1204,9 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.12.4 -v
+<pre><code>docker run rwynn/monstache:4.12.5 -v
 
-docker run rwynn/monstache:3.19.4 -v
+docker run rwynn/monstache:3.19.5 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
@@ -1236,14 +1237,70 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <h2 id="aws-signature-version-4">AWS Signature Version 4<a class="headerlink" href="#aws-signature-version-4" title="Permanent link">&para;</a></h2>
 <p>Monstache has included AWS Signature Version 4 request signing for testing.  This is in its initial stages and needs testing
 and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:</p>
-<pre><code>[aws-connect]
+<pre><code>
+elasticsearch-urls = [&quot;https://&lt;endpoint_from_aws_overview_screen&gt;:443&quot;]
+
+[aws-connect]
 access-key = &quot;XXX&quot;
 secret-key = &quot;YYY&quot;
 region = &quot;ZZZ&quot;
+
 </code></pre>
 
+<p>Notice how the <code>elasticsearch-url</code> references the port number <code>443</code> in the connection string.  This is because AWS makes
+your cluster available on the standard https port and not the default Elasticsearch port of <code>9200</code>.  If you have connection
+problems make sure you are using the correct port.  You cannot omit the port because the driver will default to <code>9200</code> if a 
+port is not specified.  </p>
 <p>You can read more about <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a> and 
 <a href="https://aws.amazon.com/elasticsearch-service/">Amazon Elasticsearch Service</a>.</p>
+<p>For information on how to obtain the <code>access-key</code> and <code>secret-key</code> required to connect you can read this
+<a href="https://medium.com/@ahuijsen/setting-up-permissions-for-elasticsearch-service-in-aws-2fef7cc02b4c">blog post</a>.</p>
+<p>In short, you will need to create or use an existing IAM user in your AWS account.  You will then need to give this user 
+access to your Elasticsearch domain. The <code>access-key</code> and <code>secret-key</code> you put in your configuration file are those associated
+with the IAM user.</p>
+<pre><code>{
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Principal&quot;: {
+        &quot;AWS&quot;: &quot;arn:aws:iam::&lt;account-id&gt;:user/&lt;iam-user-name&gt;&quot;
+      },
+      &quot;Action&quot;: &quot;es:*&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:es:us-east-1:&lt;account-id&gt;:domain/&lt;elasticsearch-domain-name&gt;/*&quot;
+}
+
+</code></pre>
+
+<h2 id="watching-changes-on-specific-fields-only">Watching changes on specific fields only<a class="headerlink" href="#watching-changes-on-specific-fields-only" title="Permanent link">&para;</a></h2>
+<p>If you are using MongoDB 3.6+ you can use a change stream pipeline to only listen for change events on specific fields.</p>
+<p>For example, if you wanted to listen for <code>create</code>, <code>delete</code>, and <code>update</code> events on the namespace <code>test.test</code>, but you only
+wanted to sync changes when the <code>foo</code> or <code>bar</code> field changed on the doc, you could use the following configuration. </p>
+<p>If, for example, a field named <code>count</code> changed on the document, then this change would be ignored by monstache. </p>
+<pre><code>change-stream-namespaces = [&quot;test.test&quot;]
+
+[[pipeline]]
+namespace = &quot;test.test&quot;
+script = &quot;&quot;&quot;
+module.exports = function(ns, changeStream) {
+  if (changeStream) {
+    return [
+      {
+        $match: {
+          $or: [
+            { &quot;updateDescription&quot;: {$exists: false} },
+            { &quot;updateDescription.updatedFields.foo&quot;: {$exists: true}},
+            { &quot;updateDescription.updatedFields.bar&quot;: {$exists: true}}
+          ]
+        }
+      }
+    ];
+  } else {
+    return [];
+  }
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>To build complicated change stream pipelines see <a href="https://docs.mongodb.com/manual/reference/change-events/">Change Events</a> 
+for information on the structure of change events. This information will shape your pipeline.</p>
 <h2 id="mongodb-view-replication">MongoDB view replication<a class="headerlink" href="#mongodb-view-replication" title="Permanent link">&para;</a></h2>
 <p>You may have a situation where you want to replicate a MongoDB view in Elasticsearch.  Or you have a collection that should trigger sync of 
 another collection. You can use the <code>relate</code> config to do this.</p>

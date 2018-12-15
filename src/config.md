@@ -48,6 +48,14 @@ This option allows you to opt in to using MongoDB change streams.  The namespace
 This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
 you do not need to specify additional regular expressions to filter the set of collections to watch.
 
+## config-database-name
+
+string (default `monstache`) 
+
+The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific
+point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify `cluster-name` or 
+enable `resume`.
+
 ## cluster-name
 
 string (default `""`) (env var name `MONSTACHE_CLUSTER`)

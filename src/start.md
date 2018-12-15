@@ -17,7 +17,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.12.4
+# 4.12.5
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -27,13 +27,20 @@ The version number should start with 3.x if you are using Elasticsearch prior to
 	You can also build monstache from source. For Elasticsearch 6 and up use
 
 	```
-	go get -u github.com/rwynn/monstache
+	cd ~/build # somewhere outside your $GOPATH
+	git clone https://github.com/rwynn/monstache.git
+	cd monstache
+	go install
 	```
 
 	For Elasticsearch before version 6 use
 
 	```
-	go get -u gopkg.in/rwynn/monstache.v3
+	cd ~/build # somewhere outside your $GOPATH
+	git clone https://github.com/rwynn/monstache.git
+	cd monstache
+	git checkout rel3
+	go install
 	```
 
 ## Usage

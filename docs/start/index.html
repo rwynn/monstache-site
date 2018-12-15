@@ -118,15 +118,22 @@ Go but you don't need to install the Go language unless you decide to write your
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.12.4
+# 4.12.5
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
 <div class="admonition note">
 <p>You can also build monstache from source. For Elasticsearch 6 and up use</p>
-<p><code>go get -u github.com/rwynn/monstache</code></p>
+<p><code>cd ~/build # somewhere outside your $GOPATH
+git clone https://github.com/rwynn/monstache.git
+cd monstache
+go install</code></p>
 <p>For Elasticsearch before version 6 use</p>
-<p><code>go get -u gopkg.in/rwynn/monstache.v3</code></p>
+<p><code>cd ~/build # somewhere outside your $GOPATH
+git clone https://github.com/rwynn/monstache.git
+cd monstache
+git checkout rel3
+go install</code></p>
 </div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to ensure

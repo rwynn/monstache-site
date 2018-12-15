@@ -88,6 +88,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.12.5](https://github.com/rwynn/monstache/releases/tag/v4.12.5)
+
+* Fix regression preventing `resume-name` from being set correctly
+* Add configuration option `config-database-name` to configure the MongoDB database under which monstache stores metadata. Previously hard coded to `monstache`, the default value.
+
+### [monstache v3.19.5](https://github.com/rwynn/monstache/releases/tag/v3.19.5)
+
+* Fix regression preventing `resume-name` from being set correctly
+* Add configuration option `config-database-name` to configure the MongoDB database under which monstache stores metadata. Previously hard coded to `monstache`, the default value.
+
 ### [monstache v4.12.4](https://github.com/rwynn/monstache/releases/tag/v4.12.4)
 
 * Repeatable builds with go modules

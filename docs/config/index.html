@@ -104,6 +104,7 @@
         <li class="main active"><a href="#configuration">Configuration</a></li>
             <li><a href="#aws-connect">aws-connect</a></li>
             <li><a href="#change-stream-namespaces">change-stream-namespaces</a></li>
+            <li><a href="#config-database-name">config-database-name</a></li>
             <li><a href="#cluster-name">cluster-name</a></li>
             <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
             <li><a href="#delete-strategy">delete-strategy</a></li>
@@ -227,6 +228,11 @@ See the following <a href="https://github.com/rwynn/monstache/issues/58#issuecom
 <p>This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using <code>$watch</code> function.
 This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
 you do not need to specify additional regular expressions to filter the set of collections to watch.</p>
+<h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
+<p>string (default <code>monstache</code>) </p>
+<p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific
+point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify <code>cluster-name</code> or 
+enable <code>resume</code>.</p>
 <h2 id="cluster-name">cluster-name<a class="headerlink" href="#cluster-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_CLUSTER</code>)</p>
 <p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the

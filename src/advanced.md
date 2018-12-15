@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.12.4`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.12.5`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.19.4`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.19.5`.
 
 ## GridFS Support
 
@@ -1191,9 +1191,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.12.4 -v
+docker run rwynn/monstache:4.12.5 -v
 
-docker run rwynn/monstache:3.19.4 -v
+docker run rwynn/monstache:3.19.5 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
@@ -1242,14 +1242,80 @@ Monstache has included AWS Signature Version 4 request signing for testing.  Thi
 and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:
 
 ```
+
+elasticsearch-urls = ["https://<endpoint_from_aws_overview_screen>:443"]
+
 [aws-connect]
 access-key = "XXX"
 secret-key = "YYY"
 region = "ZZZ"
+
 ```
+
+Notice how the `elasticsearch-url` references the port number `443` in the connection string.  This is because AWS makes
+your cluster available on the standard https port and not the default Elasticsearch port of `9200`.  If you have connection
+problems make sure you are using the correct port.  You cannot omit the port because the driver will default to `9200` if a 
+port is not specified.  
 
 You can read more about [Signature Version 4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) and 
 [Amazon Elasticsearch Service](https://aws.amazon.com/elasticsearch-service/).
+
+For information on how to obtain the `access-key` and `secret-key` required to connect you can read this
+[blog post](https://medium.com/@ahuijsen/setting-up-permissions-for-elasticsearch-service-in-aws-2fef7cc02b4c).
+
+In short, you will need to create or use an existing IAM user in your AWS account.  You will then need to give this user 
+access to your Elasticsearch domain. The `access-key` and `secret-key` you put in your configuration file are those associated
+with the IAM user.
+
+```
+{
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::<account-id>:user/<iam-user-name>"
+      },
+      "Action": "es:*",
+      "Resource": "arn:aws:es:us-east-1:<account-id>:domain/<elasticsearch-domain-name>/*"
+}
+
+```
+
+## Watching changes on specific fields only
+
+If you are using MongoDB 3.6+ you can use a change stream pipeline to only listen for change events on specific fields.
+
+For example, if you wanted to listen for `create`, `delete`, and `update` events on the namespace `test.test`, but you only
+wanted to sync changes when the `foo` or `bar` field changed on the doc, you could use the following configuration. 
+
+If, for example, a field named `count` changed on the document, then this change would be ignored by monstache. 
+
+```
+change-stream-namespaces = ["test.test"]
+
+[[pipeline]]
+namespace = "test.test"
+script = """
+module.exports = function(ns, changeStream) {
+  if (changeStream) {
+    return [
+      {
+        $match: {
+          $or: [
+            { "updateDescription": {$exists: false} },
+            { "updateDescription.updatedFields.foo": {$exists: true}},
+            { "updateDescription.updatedFields.bar": {$exists: true}}
+          ]
+        }
+      }
+    ];
+  } else {
+    return [];
+  }
+}
+"""
+```
+
+To build complicated change stream pipelines see [Change Events](https://docs.mongodb.com/manual/reference/change-events/) 
+for information on the structure of change events. This information will shape your pipeline.
 
 ## MongoDB view replication
 
