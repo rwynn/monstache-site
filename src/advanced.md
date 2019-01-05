@@ -392,6 +392,7 @@ The input parameter will contain information about the document's origin databas
 | field        | meaning                                                                |
 | ------------ | ---------------------------------------------------------------------- |
 | `Document`   | MongoDB document updated or inserted                                   |
+| `UpdateDescription`   | If available, the [update description](https://docs.mongodb.com/manual/reference/change-events/#update-event)|
 | `Namespace`  | Operation [namespace](#namespaces) as described above                  |
 | `Database`   | MongoDB database from where the event came                             |
 | `Collection` | MongoDB collection where the document was inserted, deleted or updated |
@@ -484,8 +485,9 @@ routing = true
 # this script does not declare a namespace
 # it is global to all collections
 script = """
-module.exports = function(doc, ns) {
+module.exports = function(doc, ns, updateDesc) {
 	// the doc namespace e.g. test.test is passed as the 2nd arg
+        // if available, an object containing the update description is passed as the 3rd arg
 	return _.omit(doc, "password", "secret");
 }
 """
@@ -514,7 +516,7 @@ You can completely ignore documents by adding filter configurations to your TOML
 [[filter]]
 namespace = "db.collection"
 script = """
-module.exports = function(doc) {
+module.exports = function(doc, ns, updateDesc) {
     return !!doc.interesting;
 }
 """

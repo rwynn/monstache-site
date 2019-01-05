@@ -458,6 +458,10 @@ func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPlug
 <td>MongoDB document updated or inserted</td>
 </tr>
 <tr>
+<td><code>UpdateDescription</code></td>
+<td>If available, the <a href="https://docs.mongodb.com/manual/reference/change-events/#update-event">update description</a></td>
+</tr>
+<tr>
 <td><code>Namespace</code></td>
 <td>Operation <a href="#namespaces">namespace</a> as described above</td>
 </tr>
@@ -616,8 +620,9 @@ routing = true
 # this script does not declare a namespace
 # it is global to all collections
 script = &quot;&quot;&quot;
-module.exports = function(doc, ns) {
+module.exports = function(doc, ns, updateDesc) {
     // the doc namespace e.g. test.test is passed as the 2nd arg
+        // if available, an object containing the update description is passed as the 3rd arg
     return _.omit(doc, &quot;password&quot;, &quot;secret&quot;);
 }
 &quot;&quot;&quot;
@@ -639,7 +644,7 @@ For these purposes an object is a javascript non-primitive, excluding <code>Func
 <pre><code class="toml">[[filter]]
 namespace = &quot;db.collection&quot;
 script = &quot;&quot;&quot;
-module.exports = function(doc) {
+module.exports = function(doc, ns, updateDesc) {
     return !!doc.interesting;
 }
 &quot;&quot;&quot;
