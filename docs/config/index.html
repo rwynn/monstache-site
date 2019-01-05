@@ -156,6 +156,7 @@
             <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
             <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
             <li><a href="#mongo-session-settings">mongo-session-settings</a></li>
+            <li><a href="#mongo-x509-settings">mongo-x509-settings</a></li>
             <li><a href="#namespace-drop-exclude-regex">namespace-drop-exclude-regex</a></li>
             <li><a href="#namespace-drop-regex">namespace-drop-regex</a></li>
             <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
@@ -595,6 +596,20 @@ pool when connecting to MongoDB. This should only be used when MongoDB is config
 <p>int (default 7)</p>
 <p>Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 Must be greater than 0.</p>
+</div>
+<h2 id="mongo-x509-settings">mongo-x509-settings<a class="headerlink" href="#mongo-x509-settings" title="Permanent link">&para;</a></h2>
+<p>TOML table (default <code>nil</code>)</p>
+<p>Allows one to configure x509 authentication with MongoDB. For more information see 
+<a href="https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/">x509 auth</a>.</p>
+<div class="admonition note">
+<pre><code>You must supply both of the following file paths
+</code></pre>
+<h4 id="client-cert-pem-file">client-cert-pem-file<a class="headerlink" href="#client-cert-pem-file" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The path to a PEM encoded file containing the client cert</p>
+<h4 id="client-key-pem-file">client-key-pem-file<a class="headerlink" href="#client-key-pem-file" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The path to a PEM encoded file containing the client key</p>
 </div>
 <h2 id="namespace-drop-exclude-regex">namespace-drop-exclude-regex<a class="headerlink" href="#namespace-drop-exclude-regex" title="Permanent link">&para;</a></h2>
 <p>regex (default <code>""</code>) (env var name <code>MONSTACHE_NS_DROP_EXCLUDE_REGEX</code>)</p>

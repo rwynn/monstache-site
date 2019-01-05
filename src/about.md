@@ -88,6 +88,24 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.13.0](https://github.com/rwynn/monstache/releases/tag/v4.13.0)
+
+* Fixed issue where keep-src was not being honored for relate configs
+* Added mongo-x509-settings config option to allow x509 auth when connecting
+* Added ability to see field level changes (updateDescription) if available in javascript and golang
+* Handle delete events if possible such that they trigger resync of related docs when a relationship exists
+* Remove the requirement that golang plugins must implement a Map function
+* Added the ability to override the ID sent to Elasticsearch in the mapping phase.
+
+### [monstache v3.20.0](https://github.com/rwynn/monstache/releases/tag/v3.20.0)
+
+* Fixed issue where keep-src was not being honored for relate configs
+* Added mongo-x509-settings config option to allow x509 auth when connecting
+* Added ability to see field level changes (updateDescription) if available in javascript and golang
+* Handle delete events if possible such that they trigger resync of related docs when a relationship exists
+* Remove the requirement that golang plugins must implement a Map function
+* Added the ability to override the ID sent to Elasticsearch in the mapping phase.
+
 ### [monstache v4.12.5](https://github.com/rwynn/monstache/releases/tag/v4.12.5)
 
 * Fix regression preventing `resume-name` from being set correctly

@@ -648,6 +648,29 @@ The following MongoDB session properties are available. Timeout values of 0 disa
 	Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 	Must be greater than 0.
 
+## mongo-x509-settings
+
+TOML table (default `nil`)
+
+Allows one to configure x509 authentication with MongoDB. For more information see 
+[x509 auth](https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/).
+
+!!! note ""
+
+        You must supply both of the following file paths
+
+	#### client-cert-pem-file
+
+	string (default "")
+
+	The path to a PEM encoded file containing the client cert
+
+	#### client-key-pem-file
+
+	string (default "")
+
+	The path to a PEM encoded file containing the client key
+
 ## namespace-drop-exclude-regex
 
 regex (default `""`) (env var name `MONSTACHE_NS_DROP_EXCLUDE_REGEX`)

@@ -135,9 +135,9 @@ and your plugin should import <code>github.com/rwynn/monstache/monstachemap</cod
 <p>If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the <code>rel3</code> branch 
 and your plugin should import <code>gopkg.in/rwynn/monstache.v3/monstachemap</code>.</p>
 <p>If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.12.5</code>.</p>
+image <code>rwynn/monstache:latest</code> or a specific 4.X image such as <code>rwynn/monstache:4.13.0</code>.</p>
 <p>If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.19.5</code>.</p>
+image <code>rwynn/monstache:rel3</code> or a specific 3.X image such as <code>rwynn/monstache:3.20.0</code>.</p>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -794,6 +794,57 @@ module.exports = function(doc, ns) {
 <h4 id="indexing-metadata">Indexing Metadata<a class="headerlink" href="#indexing-metadata" title="Permanent link">&para;</a></h4>
 <p>You can override the indexing metadata for an individual document by setting a special field named
 <code>_meta_monstache</code> on the document you return from your Javascript function.</p>
+<p>The <code>_meta_monstache</code> object supports the following properties.</p>
+<table>
+<thead>
+<tr>
+<th>prop</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>routing</code></td>
+<td>the routing value</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>the name of the index to use</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>the document type</td>
+</tr>
+<tr>
+<td><code>parent</code></td>
+<td>the document parent</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>the document version</td>
+</tr>
+<tr>
+<td><code>versionType</code></td>
+<td>the document version type</td>
+</tr>
+<tr>
+<td><code>pipeline</code></td>
+<td>the name of a pipeline to apply to the document</td>
+</tr>
+<tr>
+<td><code>retryOnConflict</code></td>
+<td>control how retry works on conflicts</td>
+</tr>
+<tr>
+<td><code>skip</code></td>
+<td>set this boolean to true to skip indexing</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>override the ID used to index the document</td>
+</tr>
+</tbody>
+</table>
 <p>Assume there is a collection in MongoDB named <code>company</code> in the <code>test</code> database.
 The documents in this collection look like either</p>
 <pre><code>{ &quot;_id&quot;: &quot;london&quot;, &quot;type&quot;: &quot;branch&quot;, &quot;name&quot;: &quot;London Westminster&quot;, &quot;city&quot;: &quot;London&quot;, &quot;country&quot;: &quot;UK&quot; }
@@ -1204,9 +1255,9 @@ docker run rwynn/monstache:rel3 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:4.12.5 -v
+<pre><code>docker run rwynn/monstache:4.13.0 -v
 
-docker run rwynn/monstache:3.19.5 -v
+docker run rwynn/monstache:3.20.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
@@ -1340,9 +1391,10 @@ keep-src = false
 
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Be careful of the expense of using <code>relate</code> with a view.  In the example above, if there were many things associated to a single state then a 
-change to that state would trigger n+1 queries to MongoDB when n is the number of things related to the state.  1 query would be used
-to find all associated things and n queries would be used to lookup each thing in the view.</p>
+<p>Be careful of the expense of using <code>relate</code> with a view.  In the example above, if there were many things 
+associated to a single state then a change to that state would trigger n+1 queries to MongoDB when n is the 
+number of things related to the state.  1 query would be used to find all associated things and n queries would be 
+used to lookup each thing in the view.</p>
 </div></div>
         </div>
 

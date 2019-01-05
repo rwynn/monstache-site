@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.12.5`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.13.0`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.19.5`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.20.0`.
 
 ## GridFS Support
 
@@ -699,6 +699,21 @@ module.exports = function(doc, ns) {
 You can override the indexing metadata for an individual document by setting a special field named
 `_meta_monstache` on the document you return from your Javascript function.
 
+The `_meta_monstache` object supports the following properties.
+
+| prop              | meaning                                                                     |
+| ----------------- | --------------------------------------------------------------------------- |
+| `routing`         | the routing value                                                           |
+| `index`           | the name of the index to use                                                |
+| `type`            | the document type                                                           |
+| `parent`          | the document parent                                                         |
+| `version`         | the document version                                                        |
+| `versionType`     | the document version type                                                   |
+| `pipeline`        | the name of a pipeline to apply to the document                             |
+| `retryOnConflict` | control how retry works on conflicts                                        |
+| `skip`            | set this boolean to true to skip indexing                                   |
+| `id`              | override the ID used to index the document                                  |
+
 Assume there is a collection in MongoDB named `company` in the `test` database.
 The documents in this collection look like either
 
@@ -1191,9 +1206,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.12.5 -v
+docker run rwynn/monstache:4.13.0 -v
 
-docker run rwynn/monstache:3.19.5 -v
+docker run rwynn/monstache:3.20.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
@@ -1362,7 +1377,8 @@ keep-src = false
 ```
 
 !!! warning
-	Be careful of the expense of using `relate` with a view.  In the example above, if there were many things associated to a single state then a 
-	change to that state would trigger n+1 queries to MongoDB when n is the number of things related to the state.  1 query would be used
-	to find all associated things and n queries would be used to lookup each thing in the view.
+	Be careful of the expense of using `relate` with a view.  In the example above, if there were many things 
+	associated to a single state then a change to that state would trigger n+1 queries to MongoDB when n is the 
+	number of things related to the state.  1 query would be used to find all associated things and n queries would be 
+	used to lookup each thing in the view.
 

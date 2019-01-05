@@ -177,6 +177,24 @@ MongoDB and Elasticsearch will be started and the tests run on any changes you h
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4130"><a href="https://github.com/rwynn/monstache/releases/tag/v4.13.0">monstache v4.13.0</a><a class="headerlink" href="#monstache-v4130" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fixed issue where keep-src was not being honored for relate configs</li>
+<li>Added mongo-x509-settings config option to allow x509 auth when connecting</li>
+<li>Added ability to see field level changes (updateDescription) if available in javascript and golang</li>
+<li>Handle delete events if possible such that they trigger resync of related docs when a relationship exists</li>
+<li>Remove the requirement that golang plugins must implement a Map function</li>
+<li>Added the ability to override the ID sent to Elasticsearch in the mapping phase.</li>
+</ul>
+<h3 id="monstache-v3200"><a href="https://github.com/rwynn/monstache/releases/tag/v3.20.0">monstache v3.20.0</a><a class="headerlink" href="#monstache-v3200" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fixed issue where keep-src was not being honored for relate configs</li>
+<li>Added mongo-x509-settings config option to allow x509 auth when connecting</li>
+<li>Added ability to see field level changes (updateDescription) if available in javascript and golang</li>
+<li>Handle delete events if possible such that they trigger resync of related docs when a relationship exists</li>
+<li>Remove the requirement that golang plugins must implement a Map function</li>
+<li>Added the ability to override the ID sent to Elasticsearch in the mapping phase.</li>
+</ul>
 <h3 id="monstache-v4125"><a href="https://github.com/rwynn/monstache/releases/tag/v4.12.5">monstache v4.12.5</a><a class="headerlink" href="#monstache-v4125" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix regression preventing <code>resume-name</code> from being set correctly</li>
