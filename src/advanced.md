@@ -405,6 +405,7 @@ The output parameter will contain information about how the document should be t
 | `Document`        | an updated document to index into Elasticsearch                             |
 | `Index`           | the name of the index to use                                                |
 | `Type`            | the document type                                                           |
+| `ID`              | override the document ID                                                    |
 | `Routing`         | the routing value to use                                                    |
 | `Drop`            | set to true to indicate that the document should not be indexed but removed |
 | `Passthrough`     | set to true to indicate the original document should be indexed unchanged   |
