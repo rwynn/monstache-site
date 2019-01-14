@@ -591,9 +591,19 @@ When mongo-oplog-database-name is given monstache will look for the MongoDB oplo
 
 ## mongo-oplog-collection-name
 
-string (default `$oplog.main`) (env var name `MONSTACHE_MONGO_OPLOG_COL`)
+string (default `oplog.rs`) (env var name `MONSTACHE_MONGO_OPLOG_COL`)
 
-When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection
+When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection.
+The collection defaults to `oplog.rs` which is what will be produced when replica sets are enabled.  If you are 
+using an old version of MongoDB with `master` based replication instead of replica sets, then you will need to 
+configure this setting to `oplog.$main`.
+
+!!! warning
+	If this setting was not supplied monstache would previously search for the first collection prefixed `oplog`
+	in the `local` database.  However, starting in monstache `v4.13.1` and `v3.20.1` this behavior has changed.
+	Now, monstache will not do dynamic resolution.  Since `master` based replication in MongoDB is no longer
+	supported, monstache now defaults to `oplog.rs` and will only use another collection (e.g. `oplog.$main`) if 
+	you explicitly config it to do so.
 
 ## mongo-dial-settings
 

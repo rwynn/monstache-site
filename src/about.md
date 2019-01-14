@@ -88,6 +88,18 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.13.1](https://github.com/rwynn/monstache/releases/tag/v4.13.1)
+
+* Fix issue #157 related to the `relate` config
+* Improve reliability for issue #153 by ensuring direct reads are more resilient in cluster mode
+* Breaking: removes the dynamic nature of finding the oplog collection.  Now defaults to `oplog.rs`.  If you are still using MongoDB with `master` mode instead of replica sets then you now need to explicitly set `mongo-oplog-collection-name` to `oplog.$main`.
+
+### [monstache v3.20.1](https://github.com/rwynn/monstache/releases/tag/v3.20.1)
+
+* Fix issue #157 related to the `relate` config
+* Improve reliability for issue #153 by ensuring direct reads are more resilient in cluster mode
+* Breaking: removes the dynamic nature of finding the oplog collection.  Now defaults to `oplog.rs`.  If you are still using MongoDB with `master` mode instead of replica sets then you now need to explicitly set `mongo-oplog-collection-name` to `oplog.$main`.
+
 ### [monstache v4.13.0](https://github.com/rwynn/monstache/releases/tag/v4.13.0)
 
 * Fixed issue where keep-src was not being honored for relate configs

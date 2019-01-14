@@ -17,14 +17,15 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.13.0
+# 4.13.1
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
 
 !!! note ""
 
-	You can also build monstache from source. For Elasticsearch 6 and up use
+	You can also build monstache from source. Monstache uses [vgo](https://github.com/golang/go/wiki/Modules). 
+	For Elasticsearch 6 and up use
 
 	```
 	cd ~/build # somewhere outside your $GOPATH

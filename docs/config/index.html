@@ -566,8 +566,19 @@ pool when connecting to MongoDB. This should only be used when MongoDB is config
 <p>string (default <code>local</code>) (env var name <code>MONSTACHE_MONGO_OPLOG_DB</code>)</p>
 <p>When mongo-oplog-database-name is given monstache will look for the MongoDB oplog in the supplied database</p>
 <h2 id="mongo-oplog-collection-name">mongo-oplog-collection-name<a class="headerlink" href="#mongo-oplog-collection-name" title="Permanent link">&para;</a></h2>
-<p>string (default <code>$oplog.main</code>) (env var name <code>MONSTACHE_MONGO_OPLOG_COL</code>)</p>
-<p>When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection</p>
+<p>string (default <code>oplog.rs</code>) (env var name <code>MONSTACHE_MONGO_OPLOG_COL</code>)</p>
+<p>When mongo-oplog-collection-name is given monstache will look for the MongoDB oplog in the supplied collection.
+The collection defaults to <code>oplog.rs</code> which is what will be produced when replica sets are enabled.  If you are 
+using an old version of MongoDB with <code>master</code> based replication instead of replica sets, then you will need to 
+configure this setting to <code>oplog.$main</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If this setting was not supplied monstache would previously search for the first collection prefixed <code>oplog</code>
+in the <code>local</code> database.  However, starting in monstache <code>v4.13.1</code> and <code>v3.20.1</code> this behavior has changed.
+Now, monstache will not do dynamic resolution.  Since <code>master</code> based replication in MongoDB is no longer
+supported, monstache now defaults to <code>oplog.rs</code> and will only use another collection (e.g. <code>oplog.$main</code>) if 
+you explicitly config it to do so.</p>
+</div>
 <h2 id="mongo-dial-settings">mongo-dial-settings<a class="headerlink" href="#mongo-dial-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
 <p>The following MongoDB dial properties are available.  Timeout values of 0 disable the timeout.</p>

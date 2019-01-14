@@ -118,12 +118,13 @@ Go but you don't need to install the Go language unless you decide to write your
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.13.0
+# 4.13.1
 </code></pre>
 
 <p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
 <div class="admonition note">
-<p>You can also build monstache from source. For Elasticsearch 6 and up use</p>
+<p>You can also build monstache from source. Monstache uses <a href="https://github.com/golang/go/wiki/Modules">vgo</a>. 
+For Elasticsearch 6 and up use</p>
 <p><code>cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
