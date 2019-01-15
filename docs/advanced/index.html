@@ -1298,6 +1298,7 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <h2 id="mongodb-atlas">MongoDB Atlas<a class="headerlink" href="#mongodb-atlas" title="Permanent link">&para;</a></h2>
 <p>Monstache is able to connect to MongoDB Atlas with some configuration.  To connect successfully you will need to make sure you:</p>
 <ul>
+<li>Enable <code>ssl</code> by configuring the <a href="../config/#mongo-dial-settings">mongo-dial-settings</a> toml table with <code>ssl = true</code></li>
 <li>Use the legacy <code>mongodb://</code> scheme instead of the new <code>mongodb+srv://</code> scheme.  Atlas should provide you will both connection strings but direct you initially to the new scheme.</li>
 <li>Append the connection parameter <code>&amp;authMechanism=SCRAM-SHA-1</code> to the given URL if your user uses <code>SCRAM</code> authentication.</li>
 <li>If monstache complains about unrecognized params in the connection string given to you by Atlas you can remove those params from your connection string.

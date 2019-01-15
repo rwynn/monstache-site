@@ -1258,6 +1258,7 @@ If the pprof setting is enabled the following endpoints are also made available:
 
 Monstache is able to connect to MongoDB Atlas with some configuration.  To connect successfully you will need to make sure you:
 
+* Enable `ssl` by configuring the [mongo-dial-settings](../config/#mongo-dial-settings) toml table with `ssl = true`
 * Use the legacy `mongodb://` scheme instead of the new `mongodb+srv://` scheme.  Atlas should provide you will both connection strings but direct you initially to the new scheme.
 * Append the connection parameter `&authMechanism=SCRAM-SHA-1` to the given URL if your user uses `SCRAM` authentication.
 * If monstache complains about unrecognized params in the connection string given to you by Atlas you can remove those params from your connection string.
