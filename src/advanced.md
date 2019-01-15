@@ -1254,10 +1254,23 @@ If the pprof setting is enabled the following endpoints are also made available:
 /debug/pprof/symbol
 /debug/pprof/trace
 
+## MongoDB Atlas
+
+Monstache is able to connect to MongoDB Atlas with some configuration.  To connect successfully you will need to make sure you:
+
+* Use the legacy `mongodb://` scheme instead of the new `mongodb+srv://` scheme.  Atlas should provide you will both connection strings but direct you initially to the new scheme.
+* Append the connection parameter `&authMechanism=SCRAM-SHA-1` to the given URL if your user uses `SCRAM` authentication.
+* If monstache complains about unrecognized params in the connection string given to you by Atlas you can remove those params from your connection string.
+  Newer parameters may be currently unsupported by the underlying  golang driver.
+* Use the `change-stream-namespaces` to listen for changes.  This option uses the MongoDB change stream API and doesn't require access to the `local` database.
+
+!!! note
+	You may be able to omit `change-stream-namespaces` but this will require that your user has access to read the `local` database.  You can follow the instructions
+	[here](https://docs.atlas.mongodb.com/faq/#does-mongodb-service-expose-the-oplog) to configure Atlas to expose the oplog for your user.
+
 ## AWS Signature Version 4 
 
-Monstache has included AWS Signature Version 4 request signing for testing.  This is in its initial stages and needs testing
-and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:
+Monstache has included AWS Signature Version 4 request signing.  To enable the AWS Signature Version 4 support add the following to your config file:
 
 ```
 

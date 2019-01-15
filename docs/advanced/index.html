@@ -116,6 +116,7 @@
             <li><a href="#systemd">Systemd</a></li>
             <li><a href="#docker">Docker</a></li>
             <li><a href="#http-server">HTTP Server</a></li>
+            <li><a href="#mongodb-atlas">MongoDB Atlas</a></li>
             <li><a href="#aws-signature-version-4">AWS Signature Version 4</a></li>
             <li><a href="#watching-changes-on-specific-fields-only">Watching changes on specific fields only</a></li>
             <li><a href="#mongodb-view-replication">MongoDB view replication</a></li>
@@ -1294,9 +1295,22 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 /debug/pprof/profile
 /debug/pprof/symbol
 /debug/pprof/trace</p>
+<h2 id="mongodb-atlas">MongoDB Atlas<a class="headerlink" href="#mongodb-atlas" title="Permanent link">&para;</a></h2>
+<p>Monstache is able to connect to MongoDB Atlas with some configuration.  To connect successfully you will need to make sure you:</p>
+<ul>
+<li>Use the legacy <code>mongodb://</code> scheme instead of the new <code>mongodb+srv://</code> scheme.  Atlas should provide you will both connection strings but direct you initially to the new scheme.</li>
+<li>Append the connection parameter <code>&amp;authMechanism=SCRAM-SHA-1</code> to the given URL if your user uses <code>SCRAM</code> authentication.</li>
+<li>If monstache complains about unrecognized params in the connection string given to you by Atlas you can remove those params from your connection string.
+  Newer parameters may be currently unsupported by the underlying  golang driver.</li>
+<li>Use the <code>change-stream-namespaces</code> to listen for changes.  This option uses the MongoDB change stream API and doesn't require access to the <code>local</code> database.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may be able to omit <code>change-stream-namespaces</code> but this will require that your user has access to read the <code>local</code> database.  You can follow the instructions
+<a href="https://docs.atlas.mongodb.com/faq/#does-mongodb-service-expose-the-oplog">here</a> to configure Atlas to expose the oplog for your user.</p>
+</div>
 <h2 id="aws-signature-version-4">AWS Signature Version 4<a class="headerlink" href="#aws-signature-version-4" title="Permanent link">&para;</a></h2>
-<p>Monstache has included AWS Signature Version 4 request signing for testing.  This is in its initial stages and needs testing
-and feedback.  To enable the experimental AWS Signature Version 4 support add the following to your config file:</p>
+<p>Monstache has included AWS Signature Version 4 request signing.  To enable the AWS Signature Version 4 support add the following to your config file:</p>
 <pre><code>
 elasticsearch-urls = [&quot;https://&lt;endpoint_from_aws_overview_screen&gt;:443&quot;]
 

@@ -665,9 +665,11 @@ TOML table (default `nil`)
 Allows one to configure x509 authentication with MongoDB. For more information see 
 [x509 auth](https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/).
 
-!!! note ""
+!!! note
+	You must configure your `mongo-url` with the request parameter `authMechanism=MONGODB-X509`.
+	You must also supply both of the following file paths:
 
-        You must supply both of the following file paths
+!!! note ""
 
 	#### client-cert-pem-file
 

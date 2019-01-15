@@ -613,8 +613,11 @@ Must be greater than 0.</p>
 <p>Allows one to configure x509 authentication with MongoDB. For more information see 
 <a href="https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/">x509 auth</a>.</p>
 <div class="admonition note">
-<pre><code>You must supply both of the following file paths
-</code></pre>
+<p class="admonition-title">Note</p>
+<p>You must configure your <code>mongo-url</code> with the request parameter <code>authMechanism=MONGODB-X509</code>.
+You must also supply both of the following file paths:</p>
+</div>
+<div class="admonition note">
 <h4 id="client-cert-pem-file">client-cert-pem-file<a class="headerlink" href="#client-cert-pem-file" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
 <p>The path to a PEM encoded file containing the client cert</p>
