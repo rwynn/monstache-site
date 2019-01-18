@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.13.1`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.13.2`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.20.1`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.20.2`.
 
 ## GridFS Support
 
@@ -334,27 +334,18 @@ To create a golang plugin for monstache
 - in the monstache root directory run `go install`
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
 - import `github.com/rwynn/monstache/monstachemap` for Elasticsearch 6+ or `gopkg.in/rwynn/monstache.v3/monstachemap` for Elasticsearch 2 or 5
-- implement a function named `Map` with the following signature
+- implement at least one of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
 
 ```go
+
 func Map(input *monstachemap.MapperPluginInput) (output *monstachemap.MapperPluginOutput, err error)
-```
 
-- optionally implement a function named `Filter` with the following signature
-
-```go
 func Filter(input *monstachemap.MapperPluginInput) (keep bool, err error)
-```
 
-- optionally implement a function named `Pipeline` with the following signature
-
-```go
 func Pipeline(ns string, changeStream bool) (stages []interface, err error)
-```
 
-- optionally implement a function named `Process` with the following signature
-```go
 func Process(input*monstachemap.ProcessPluginInput) error
+
 ```
 
 plugins can be compiled using
@@ -1209,9 +1200,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.13.1 -v
+docker run rwynn/monstache:4.13.2 -v
 
-docker run rwynn/monstache:3.20.1 -v
+docker run rwynn/monstache:3.20.2 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
@@ -1253,6 +1244,75 @@ If the pprof setting is enabled the following endpoints are also made available:
 /debug/pprof/profile
 /debug/pprof/symbol
 /debug/pprof/trace
+
+## MongoDB Authentication
+
+If you enable [Authentication](https://docs.mongodb.com/manual/tutorial/enable-authentication/)
+for MongoDB and don't use monstache's `change-stream-namespaces` option
+then you need to give your monstache user additional access such that he may read from the `local` database to
+tail the oplog at `local.oplog.rs`.
+
+```
+db.createUser(
+  {
+    user: "monstache",
+    pwd: "monstache",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" }, {role: 'read', db: 'local'}, "readWriteAnyDatabase" ]
+  }
+)
+```
+
+After creating the user, starting mongod with [auth enabled](https://docs.mongodb.com/manual/reference/configuration-options/#security.authorization), and authenticating with a username/password, then you can view the previously created user with
+his authorization mechanism.
+
+```
+rs1:PRIMARY> use admin;
+switched to db admin
+rs1:PRIMARY> db.auth('monstache', 'monstache');
+rs1:PRIMARY> show collections;
+rs1:PRIMARY> db.getUser('monstache');
+{
+        "_id" : "admin.monstache",
+        "user" : "monstache",
+        "db" : "admin",
+        "roles" : [
+                {
+                        "role" : "userAdminAnyDatabase",
+                        "db" : "admin"
+                },
+                {
+                        "role" : "read",
+                        "db" : "local"
+                },
+                {
+                        "role" : "readWriteAnyDatabase",
+                        "db" : "admin"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+
+```
+
+In this the case the auth mechanisms supported for the user are `SCRAM-SHA1` and `SCRAM-SHA-256`.
+Monstache currently supports connecting with `SCRAM-SHA-1`.
+
+```
+monstache -mongo-url mongodb://monstache:monstache@localhost?authMechanism=SCRAM-SHA-1
+INFO 2019/01/18 17:36:13 Started monstache version 4.13.2
+INFO 2019/01/18 17:36:13 Successfully connected to MongoDB version 4.0.5
+INFO 2019/01/18 17:36:13 Successfully connected to Elasticsearch version 6.0.0
+INFO 2019/01/18 17:36:13 Listening for events
+```
+
+Without giving the read permission on `local` you may see errors like the following:
+
+```
+Error tailing oplog entries: not authorized for query on local.oplog.rs
+```
 
 ## MongoDB Atlas
 

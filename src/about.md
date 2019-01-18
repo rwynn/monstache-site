@@ -88,6 +88,18 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.13.2](https://github.com/rwynn/monstache/releases/tag/v4.13.2)
+
+* Fix namespace parsing for collections with dots in the name in find calls in Javascript
+* Add additional validation when certs are appended to the root store to make sure it was successful
+* Ensure the mechanism is set to MONGODB-X509 when logging in with an X509 certificate
+
+### [monstache v3.20.2](https://github.com/rwynn/monstache/releases/tag/v3.20.2)
+
+* Fix namespace parsing for collections with dots in the name in find calls in Javascript
+* Add additional validation when certs are appended to the root store to make sure it was successful
+* Ensure the mechanism is set to MONGODB-X509 when logging in with an X509 certificate
+
 ### [monstache v4.13.1](https://github.com/rwynn/monstache/releases/tag/v4.13.1)
 
 * Fix issue #157 related to the `relate` config

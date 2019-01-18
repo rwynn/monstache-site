@@ -18,7 +18,7 @@ passed into monstache as program arguments on the command line.
 
 TOML table (default `nil`)
 
-Enable experimental support for using a connection to Elasticsearch that uses AWS Signature Version 4
+Enable support for using a connection to Elasticsearch that uses AWS Signature Version 4
 
 !!! note ""
 
