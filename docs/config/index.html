@@ -116,6 +116,8 @@
             <li><a href="#elasticsearch-user">elasticsearch-user</a></li>
             <li><a href="#elasticsearch-password">elasticsearch-password</a></li>
             <li><a href="#elasticsearch-urls">elasticsearch-urls</a></li>
+            <li><a href="#elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup</a></li>
+            <li><a href="#elasticsearch-healthcheck-timeout">elasticsearch-healthcheck-timeout</a></li>
             <li><a href="#elasticsearch-version">elasticsearch-version</a></li>
             <li><a href="#elasticsearch-max-conns">elasticsearch-max-conns</a></li>
             <li><a href="#elasticsearch-retry">elasticsearch-retry</a></li>
@@ -172,6 +174,7 @@
             <li><a href="#print-config">print-config</a></li>
             <li><a href="#prune-invalid-json">prune-invalid-json</a></li>
             <li><a href="#relate">relate</a></li>
+            <li><a href="#relate-buffer">relate-buffer</a></li>
             <li><a href="#relate-threads">relate-threads</a></li>
             <li><a href="#replay">replay</a></li>
             <li><a href="#resume">resume</a></li>
@@ -305,6 +308,13 @@ useful if you are using <a href="#direct-read-namespaces">direct-read-namespaces
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 </p>
 </div>
+<h2 id="elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup<a class="headerlink" href="#elasticsearch-healthcheck-timeout-startup" title="Permanent link">&para;</a></h2>
+<p>int (default <code>15</code>)</p>
+<p>The number of seconds to wait on the initial health check to Elasticsearch to responed before giving up
+and exiting.</p>
+<h2 id="elasticsearch-healthcheck-timeout">elasticsearch-healthcheck-timeout<a class="headerlink" href="#elasticsearch-healthcheck-timeout" title="Permanent link">&para;</a></h2>
+<p>int (default <code>5</code>)</p>
+<p>The number of seconds to wait for a post-initial health check to Elasticsearch to respond</p>
 <h2 id="elasticsearch-version">elasticsearch-version<a class="headerlink" href="#elasticsearch-version" title="Permanent link">&para;</a></h2>
 <p>string (by default <code>determined by connecting to the server</code>)</p>
 <p>When elasticsearch-version is provided monstache will parse the given server version to determine how to interact with
@@ -590,11 +600,15 @@ you explicitly config it to do so.</p>
 <h5 id="int-default-15">int (default 15)<a class="headerlink" href="#int-default-15" title="Permanent link">&para;</a></h5>
 <p>Seconds to wait when establishing an initial connection to MongoDB before giving up</p>
 <h4 id="read-timeout">read-timeout<a class="headerlink" href="#read-timeout" title="Permanent link">&para;</a></h4>
-<h5 id="int-default-7">int (default 7)<a class="headerlink" href="#int-default-7" title="Permanent link">&para;</a></h5>
-<p>Seconds to wait when reading data from MongoDB before giving up. Must be greater than 0.</p>
+<h5 id="int-default-30">int (default 30)<a class="headerlink" href="#int-default-30" title="Permanent link">&para;</a></h5>
+<p>Seconds to wait when reading data from MongoDB before giving up. Must be greater than 0.
+This should be greater than 10 because Monstache waits 10s for new change events
+by retrying the query.</p>
 <h4 id="write-timeout">write-timeout<a class="headerlink" href="#write-timeout" title="Permanent link">&para;</a></h4>
-<h5 id="int-default-7_1">int (default 7)<a class="headerlink" href="#int-default-7_1" title="Permanent link">&para;</a></h5>
-<p>Seconds to wait when writing data to MongoDB before giving up. Must be greated than 0.</p>
+<h5 id="int-default-30_1">int (default 30)<a class="headerlink" href="#int-default-30_1" title="Permanent link">&para;</a></h5>
+<p>Seconds to wait when writing data to MongoDB before giving up. Must be greated than 0.
+This should be greater than 10 because Monstache waits 10s for new change events
+by retrying the query.</p>
 </div>
 <h2 id="mongo-session-settings">mongo-session-settings<a class="headerlink" href="#mongo-session-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
@@ -604,7 +618,7 @@ you explicitly config it to do so.</p>
 <p>int (default 0)</p>
 <p>Seconds to wait for a non-responding socket before it is forcefully closed</p>
 <h4 id="sync-timeout">sync-timeout<a class="headerlink" href="#sync-timeout" title="Permanent link">&para;</a></h4>
-<p>int (default 7)</p>
+<p>int (default 30)</p>
 <p>Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 Must be greater than 0.</p>
 </div>
@@ -722,9 +736,18 @@ is set to true Monstache will drop those fields so that indexing errors do not o
 <p>Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 By default the original change is ignored and only the document from with-namespace is synced.</p>
 </div>
+<h2 id="relate-buffer">relate-buffer<a class="headerlink" href="#relate-buffer" title="Permanent link">&para;</a></h2>
+<p>int (default <code>1000</code>) </p>
+<p>Number of relate events allowed to queue up before skipping the event and reporting an error.
+This setting was introduced to prevent scenarios where relate queries get queued up and stall
+the pipeline.  You can increase this value if you are hitting this limit, but monstache will take
+more memory to hold the events and you may find that MongoDB experiences high CPU due to Monstache
+performing many queries concurrently to try to clear the buffer. This limit is usually hit when
+you have a <code>relate</code> config and then do a mass insert or update against the relate namespace.</p>
 <h2 id="relate-threads">relate-threads<a class="headerlink" href="#relate-threads" title="Permanent link">&para;</a></h2>
 <p>int (default <code>10</code>) </p>
-<p>Number of go routines concurrently processing relationships when <code>relate</code> is enabled</p>
+<p>Number of go routines concurrently processing relationships when <code>relate</code> is enabled.  This dictates
+the concurrency of queries trying to unload the relate queue.</p>
 <h2 id="replay">replay<a class="headerlink" href="#replay" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. </p>

@@ -142,10 +142,16 @@ ways, a few examples are:</p>
 version, MongoDB version, and Elasticsearch version.</p>
 <h3 id="testing-the-development-version">Testing the Development Version<a class="headerlink" href="#testing-the-development-version" title="Permanent link">&para;</a></h3>
 <p>If you want to just install and try out the latest development version of
-Monstache you can do so with the following command. This can be useful if you
+Monstache you can do so with the following commands. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
-have encountered is fixed in the git master.</p>
-<pre><code class="bash">go get -u github.com/rwynn/monstache
+have encountered is fixed in the git master. You will need at least golang <code>1.11</code>
+which includes native go modules support.</p>
+<pre><code class="bash">cd ~/build # somewhere outside your $GOPATH
+git clone https://github.com/rwynn/monstache.git
+cd monstache
+# make changes as necessary
+go install
+# the resulting monstache binary will be in $GOPATH/bin
 </code></pre>
 
 <h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link">&para;</a></h3>
@@ -155,7 +161,7 @@ Then you will need to start a monstache process in one terminal or in the backgr
 </code></pre>
 
 <p>Finally in another terminal you can run the tests by issuing the following commands </p>
-<pre><code class="bash">cd $GOPATH/src/github.com/rwynn/monstache
+<pre><code class="bash">cd monstache
 go test -v
 </code></pre>
 
@@ -169,14 +175,65 @@ data that you need to keep on your local servers, make a back up before running 
 <p class="admonition-title">Note</p>
 <p>If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
 is via Docker. After cloning the monstache repo you can cd into the <code>docker/test</code> directory and run 
-<code>run-tests.sh</code>.  You will need <code>docker</code> and <code>docker-compose</code> to run the tests this way.  Services for
-MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.</p>
+<code>run-tests.sh</code>.  You will need recent versions of <code>docker</code> and <code>docker-compose</code> to run the tests this way.
+Services for MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the 
+source code.</p>
 </div>
 <h3 id="submitting-pull-requests">Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permanent link">&para;</a></h3>
 <p>Once you are happy with your changes or you are ready for some feedback, push
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4141"><a href="https://github.com/rwynn/monstache/releases/tag/v4.14.1">monstache v4.14.1</a><a class="headerlink" href="#monstache-v4141" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for regression in previous release where the MongoDB initial connection timeout
+  was not being honored</li>
+<li>Added a new setting <code>relate-buffer</code> which is the maximum number of relate events to
+  allow in queue before skipping the relate and printing an error.  This was added to
+  prevent the scenario where a large number of relate events stall the pipeline.  The
+  default number of relates to allow in queue is 1000.</li>
+</ul>
+<h3 id="monstache-v3211"><a href="https://github.com/rwynn/monstache/releases/tag/v3.21.1">monstache v3.21.1</a><a class="headerlink" href="#monstache-v3211" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix for regression in previous release where the MongoDB initial connection timeout
+  was not being honored</li>
+<li>Added a new setting <code>relate-buffer</code> which is the maximum number of relate events to
+  allow in queue before skipping the relate and printing an error.  This was added to
+  prevent the scenario where a large number of relate events stall the pipeline.  The
+  default number of relates to allow in queue is 1000.</li>
+</ul>
+<h3 id="monstache-v4140"><a href="https://github.com/rwynn/monstache/releases/tag/v4.14.0">monstache v4.14.0</a><a class="headerlink" href="#monstache-v4140" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Performance and reliability improvements</li>
+<li>Fix for issue #168 by adding new TOML only configs elasticsearch-healthcheck-timeout-startup and 
+  elasticsearch-healthcheck-timeout. These are in seconds.</li>
+<li>Fix a panic occurring when an empty array was returned from a pipeline javascript function.</li>
+<li>Default read/write timeouts changed to 30s, up from 7s.</li>
+</ul>
+<h3 id="monstache-v3210"><a href="https://github.com/rwynn/monstache/releases/tag/v3.21.0">monstache v3.21.0</a><a class="headerlink" href="#monstache-v3210" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Performance and reliability improvements</li>
+<li>Fix for issue #168 by adding new TOML only configs elasticsearch-healthcheck-timeout-startup and 
+  elasticsearch-healthcheck-timeout. These are in seconds.</li>
+<li>Fix a panic occurring when an empty array was returned from a pipeline javascript function.</li>
+<li>Default read/write timeouts changed to 30s, up from 7s.</li>
+</ul>
+<h3 id="monstache-v4134"><a href="https://github.com/rwynn/monstache/releases/tag/v4.13.4">monstache v4.13.4</a><a class="headerlink" href="#monstache-v4134" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Improvements to change-stream-namespaces</li>
+</ul>
+<h3 id="monstache-v3204"><a href="https://github.com/rwynn/monstache/releases/tag/v3.20.4">monstache v3.20.4</a><a class="headerlink" href="#monstache-v3204" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Improvements to change-stream-namespaces</li>
+</ul>
+<h3 id="monstache-v4133"><a href="https://github.com/rwynn/monstache/releases/tag/v4.13.3">monstache v4.13.3</a><a class="headerlink" href="#monstache-v4133" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Improvements in recovery from failed connections and errors</li>
+</ul>
+<h3 id="monstache-v3203"><a href="https://github.com/rwynn/monstache/releases/tag/v3.20.3">monstache v3.20.3</a><a class="headerlink" href="#monstache-v3203" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Improvements in recovery from failed connections and errors</li>
+</ul>
 <h3 id="monstache-v4132"><a href="https://github.com/rwynn/monstache/releases/tag/v4.13.2">monstache v4.13.2</a><a class="headerlink" href="#monstache-v4132" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix namespace parsing for collections with dots in the name in find calls in Javascript</li>

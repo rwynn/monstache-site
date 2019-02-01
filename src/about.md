@@ -43,12 +43,18 @@ version, MongoDB version, and Elasticsearch version.
 ### Testing the Development Version
 
 If you want to just install and try out the latest development version of
-Monstache you can do so with the following command. This can be useful if you
+Monstache you can do so with the following commands. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
-have encountered is fixed in the git master.
+have encountered is fixed in the git master. You will need at least golang `1.11`
+which includes native go modules support.
 
 ```bash
-go get -u github.com/rwynn/monstache
+cd ~/build # somewhere outside your $GOPATH
+git clone https://github.com/rwynn/monstache.git
+cd monstache
+# make changes as necessary
+go install
+# the resulting monstache binary will be in $GOPATH/bin
 ```
 
 ### Running the tests
@@ -63,7 +69,7 @@ monstache -verbose
 Finally in another terminal you can run the tests by issuing the following commands 
 
 ```bash
-cd $GOPATH/src/github.com/rwynn/monstache
+cd monstache
 go test -v
 ```
 
@@ -77,8 +83,9 @@ go test -v
 
 	If you don't want to setup MongoDB and Elasticsearch on your machine another option for running the tests
 	is via Docker. After cloning the monstache repo you can cd into the `docker/test` directory and run 
-	`run-tests.sh`.  You will need `docker` and `docker-compose` to run the tests this way.  Services for
-	MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the source code.
+	`run-tests.sh`.  You will need recent versions of `docker` and `docker-compose` to run the tests this way.
+	Services for MongoDB and Elasticsearch will be started and the tests run on any changes you have made to the 
+	source code.
 
 ### Submitting Pull Requests
 
@@ -87,6 +94,56 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
+
+### [monstache v4.14.1](https://github.com/rwynn/monstache/releases/tag/v4.14.1)
+
+* Fix for regression in previous release where the MongoDB initial connection timeout
+  was not being honored
+* Added a new setting `relate-buffer` which is the maximum number of relate events to
+  allow in queue before skipping the relate and printing an error.  This was added to
+  prevent the scenario where a large number of relate events stall the pipeline.  The
+  default number of relates to allow in queue is 1000.
+
+### [monstache v3.21.1](https://github.com/rwynn/monstache/releases/tag/v3.21.1)
+
+* Fix for regression in previous release where the MongoDB initial connection timeout
+  was not being honored
+* Added a new setting `relate-buffer` which is the maximum number of relate events to
+  allow in queue before skipping the relate and printing an error.  This was added to
+  prevent the scenario where a large number of relate events stall the pipeline.  The
+  default number of relates to allow in queue is 1000.
+
+### [monstache v4.14.0](https://github.com/rwynn/monstache/releases/tag/v4.14.0)
+
+* Performance and reliability improvements
+* Fix for issue #168 by adding new TOML only configs elasticsearch-healthcheck-timeout-startup and 
+  elasticsearch-healthcheck-timeout. These are in seconds.
+* Fix a panic occurring when an empty array was returned from a pipeline javascript function.
+* Default read/write timeouts changed to 30s, up from 7s.
+
+### [monstache v3.21.0](https://github.com/rwynn/monstache/releases/tag/v3.21.0)
+
+* Performance and reliability improvements
+* Fix for issue #168 by adding new TOML only configs elasticsearch-healthcheck-timeout-startup and 
+  elasticsearch-healthcheck-timeout. These are in seconds.
+* Fix a panic occurring when an empty array was returned from a pipeline javascript function.
+* Default read/write timeouts changed to 30s, up from 7s.
+
+### [monstache v4.13.4](https://github.com/rwynn/monstache/releases/tag/v4.13.4)
+
+* Improvements to change-stream-namespaces
+
+### [monstache v3.20.4](https://github.com/rwynn/monstache/releases/tag/v3.20.4)
+
+* Improvements to change-stream-namespaces
+
+### [monstache v4.13.3](https://github.com/rwynn/monstache/releases/tag/v4.13.3)
+
+* Improvements in recovery from failed connections and errors
+
+### [monstache v3.20.3](https://github.com/rwynn/monstache/releases/tag/v3.20.3)
+
+* Improvements in recovery from failed connections and errors
 
 ### [monstache v4.13.2](https://github.com/rwynn/monstache/releases/tag/v4.13.2)
 

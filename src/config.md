@@ -164,6 +164,19 @@ An array of URLs to connect to the Elasticsearch REST Interface
 !!! note
 	This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 
 
+## elasticsearch-healthcheck-timeout-startup
+
+int (default `15`)
+
+The number of seconds to wait on the initial health check to Elasticsearch to responed before giving up
+and exiting.
+
+## elasticsearch-healthcheck-timeout
+
+int (default `5`)
+
+The number of seconds to wait for a post-initial health check to Elasticsearch to respond
+
 ## elasticsearch-version
 
 string (by default `determined by connecting to the server`)
@@ -627,15 +640,19 @@ The following MongoDB dial properties are available.  Timeout values of 0 disabl
 
 	#### read-timeout
 
-	##### int (default 7)
+	##### int (default 30)
 
 	Seconds to wait when reading data from MongoDB before giving up. Must be greater than 0.
+	This should be greater than 10 because Monstache waits 10s for new change events
+	by retrying the query.
 
 	#### write-timeout
 
-	##### int (default 7)
+	##### int (default 30)
 
 	Seconds to wait when writing data to MongoDB before giving up. Must be greated than 0.
+	This should be greater than 10 because Monstache waits 10s for new change events
+	by retrying the query.
 
 ## mongo-session-settings
 
@@ -653,7 +670,7 @@ The following MongoDB session properties are available. Timeout values of 0 disa
 
 	#### sync-timeout
 
-	int (default 7)
+	int (default 30)
 
 	Amount of time in seconds an operation will wait before returning an error in case a connection to a usable server can't be established.
 	Must be greater than 0.
@@ -849,11 +866,23 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 	Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 	By default the original change is ignored and only the document from with-namespace is synced.
 
+## relate-buffer
+
+int (default `1000`) 
+
+Number of relate events allowed to queue up before skipping the event and reporting an error.
+This setting was introduced to prevent scenarios where relate queries get queued up and stall
+the pipeline.  You can increase this value if you are hitting this limit, but monstache will take
+more memory to hold the events and you may find that MongoDB experiences high CPU due to Monstache
+performing many queries concurrently to try to clear the buffer. This limit is usually hit when
+you have a `relate` config and then do a mass insert or update against the relate namespace.
+
 ## relate-threads
 
 int (default `10`) 
 
-Number of go routines concurrently processing relationships when `relate` is enabled
+Number of go routines concurrently processing relationships when `relate` is enabled.  This dictates
+the concurrency of queries trying to unload the relate queue.
 
 ## replay
 
