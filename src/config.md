@@ -44,8 +44,8 @@ Enable support for using a connection to Elasticsearch that uses AWS Signature V
 
 []string (default `nil`) (env var name `MONSTACHE_CHANGE_STREAM_NS`)
 
-!!! note
-	This options requires MongoDB 3.6 or above
+!!! note ""
+	This option requires MongoDB 3.6 or above
 
 This option allows you to opt in to using MongoDB [change streams](https://docs.mongodb.com/manual/changeStreams/).  
 The namespaces included will be tailed using `watch` API.
@@ -57,7 +57,7 @@ even the entire deployment. To tail a database set the value of the namespace to
 For example, instead of `db.collection` the value would simply be `db`. To tail the entire deployment
 use an empty string as the namespace value.  For example, `change-stream-namespaces = [ '' ]`.
 
-!!! note
+!!! note ""
 	This option may be passed on the command line as ./monstache --change-stream-namespace test.foo
 
 ## config-database-name
