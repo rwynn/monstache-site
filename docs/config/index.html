@@ -229,9 +229,22 @@ See the following <a href="https://github.com/rwynn/monstache/issues/58#issuecom
 </div>
 <h2 id="change-stream-namespaces">change-stream-namespaces<a class="headerlink" href="#change-stream-namespaces" title="Permanent link">&para;</a></h2>
 <p>[]string (default <code>nil</code>) (env var name <code>MONSTACHE_CHANGE_STREAM_NS</code>)</p>
-<p>This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using <code>$watch</code> function.
-This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
-you do not need to specify additional regular expressions to filter the set of collections to watch.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This options requires MongoDB 3.6 or above</p>
+</div>
+<p>This option allows you to opt in to using MongoDB <a href="https://docs.mongodb.com/manual/changeStreams/">change streams</a>.<br />
+The namespaces included will be tailed using <code>watch</code> API.
+When this option is enabled the direct tailing of the oplog is disabled, therefore you do not need to specify additional
+regular expressions to filter the set of collections to watch.</p>
+<p>If you are using MongoDB 4 or greater you can open a change stream against entire databases or 
+even the entire deployment. To tail a database set the value of the namespace to the database name. 
+For example, instead of <code>db.collection</code> the value would simply be <code>db</code>. To tail the entire deployment
+use an empty string as the namespace value.  For example, <code>change-stream-namespaces = [ '' ]</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This option may be passed on the command line as ./monstache --change-stream-namespace test.foo</p>
+</div>
 <h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>monstache</code>) </p>
 <p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific
@@ -767,9 +780,15 @@ events which it might have missed because monstache was stopped. If monstache is
 set then resume is automatically turned on.  </p>
 <h2 id="resume-from-timestamp">resume-from-timestamp<a class="headerlink" href="#resume-from-timestamp" title="Permanent link">&para;</a></h2>
 <p>int64 (default <code>0</code>)</p>
-<p>When resume-from-timestamp (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
-represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
-a specific timestamp from the oplog and would like to start syncing from after this event. </p>
+<p>When resume-from-timestamp 
+(a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
+represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.
+This is useful if you have a specific timestamp from the oplog and would like to start syncing from after this event. </p>
+<div class="admonition note">
+<p>If you supply an integer that is greater than 0 but less than or equal to the max value of a 
+32-bit integer then monstache will interpret the value as seconds since the epoch and automatically shift 
+the value 32 bits left.</p>
+</div>
 <h2 id="resume-name">resume-name<a class="headerlink" href="#resume-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>default</code>)</p>
 <p>monstache uses the value of resume-name as an id when storing and retrieving timestamps

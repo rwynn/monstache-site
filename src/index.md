@@ -29,9 +29,9 @@ Kibana visualizations and dashboards.
 
 - Index the content of GridFS files
 
-- Support for propogating hard/soft deletes
+- Support for propogating hard/soft document deletes
 
-- Support for propogating database and collection drops
+- Support for propogating database and collection drops as index deletes
 
 - Optional custom document routing in Elasticsearch
 

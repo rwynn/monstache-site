@@ -17,7 +17,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.14.1
+# 4.15.0
 ```
 
 The version number should start with 3.x if you are using Elasticsearch prior to version 6.
@@ -109,14 +109,17 @@ elasticsearch-urls = ["https://es1:9200", "https://es2:9200"]
 # e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
 # this setting does not initiate a copy, it is a filter on the oplog change listener only
 namespace-regex = '^mydb\.mycollection$'
+
 # additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
 # you can copy entire collections or views from MongoDB to Elasticsearch
 direct-read-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
+
 # if you want to use MongoDB change streams instead of legacy oplog tailing add the following
 # in this case you don't need regexes to filter collections.
 # change streams require MongoDB version 3.6+
-# change streams cannot be combined yet with resume, replay, or cluster options.
-# change streams start listening for new changes since the monstache process is started
+# change streams can only be combined with resume, replay, or cluster-name options on MongoDB 4+
+# if you have MongoDB 4+ you can listen for changes to an entire database or entire deployment
+# to listen to an entire db use only the database name.  For a deployment use an empty string.
 change-stream-namespaces = ["mydb.mycollection", "db.collection", "test.test"]
 
 # additional settings

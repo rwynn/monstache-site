@@ -44,9 +44,21 @@ Enable support for using a connection to Elasticsearch that uses AWS Signature V
 
 []string (default `nil`) (env var name `MONSTACHE_CHANGE_STREAM_NS`)
 
-This option allows you to opt in to using MongoDB change streams.  The namespaces included here will be tailed using `$watch` function.
-This options requires MongoDB version 3.6 and above.  When this option is enabled the legacy direct tailing of the oplog is disabled, therefore
-you do not need to specify additional regular expressions to filter the set of collections to watch.
+!!! note
+	This options requires MongoDB 3.6 or above
+
+This option allows you to opt in to using MongoDB [change streams](https://docs.mongodb.com/manual/changeStreams/).  
+The namespaces included will be tailed using `watch` API.
+When this option is enabled the direct tailing of the oplog is disabled, therefore you do not need to specify additional
+regular expressions to filter the set of collections to watch.
+
+If you are using MongoDB 4 or greater you can open a change stream against entire databases or 
+even the entire deployment. To tail a database set the value of the namespace to the database name. 
+For example, instead of `db.collection` the value would simply be `db`. To tail the entire deployment
+use an empty string as the namespace value.  For example, `change-stream-namespaces = [ '' ]`.
+
+!!! note
+	This option may be passed on the command line as ./monstache --change-stream-namespace test.foo
 
 ## config-database-name
 
@@ -914,9 +926,15 @@ set then resume is automatically turned on.
 
 int64 (default `0`)
 
-When resume-from-timestamp (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
-represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.  This is useful if you have 
-a specific timestamp from the oplog and would like to start syncing from after this event. 
+When resume-from-timestamp 
+(a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
+represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.
+This is useful if you have a specific timestamp from the oplog and would like to start syncing from after this event. 
+
+!!! note ""
+	If you supply an integer that is greater than 0 but less than or equal to the max value of a 
+	32-bit integer then monstache will interpret the value as seconds since the epoch and automatically shift 
+	the value 32 bits left.
 
 ## resume-name
 

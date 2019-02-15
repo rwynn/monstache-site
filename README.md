@@ -28,9 +28,9 @@ Monstache is a sync daemon written in Go that continously indexes your MongoDB c
 
 - Index the content of GridFS files
 
-- Support for hard and soft deletes in MongoDB
+- Support for propogating hard/soft document deletes
 
-- Support for propogating database and collection drops
+- Support for propogating database and collection drops as index deletes
 
 - Optional custom document routing in Elasticsearch
 

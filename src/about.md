@@ -6,7 +6,7 @@
 
 The MIT License (MIT)
 
-Copyright (c) 2016-2018 Ryan Wynn
+Copyright (c) 2016-2019 Ryan Wynn
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,6 +94,44 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
+
+### [monstache v4.15.0](https://github.com/rwynn/monstache/releases/tag/v4.15.0)
+
+* This release adds the ability for MongoDB 4+ users to open change streams against entire
+  databases or entire deployments.  See the documentation for the `change-stream-namespaces`
+  option for details.
+
+* The `resume`, `resume-from-timestamp`, `replay`, and `cluster-name` options can now be used
+  in conjunction with `change-stream-namespaces` if you have MongoDB 4 or greater.
+
+* Improved support for connecting directly to shards when authorization is required on the connection.
+  This is only applicable if you are not using change streams and you are connecting to a sharded 
+  MongoDB deployment. In that case Monstache needs to discover and connect directly to shards. In this
+  case it will reuse the login info from the initial connection to the `mongos` server when connecting to
+  the shards.
+
+### [monstache v3.22.0](https://github.com/rwynn/monstache/releases/tag/v3.22.0)
+
+* This release adds the ability for MongoDB 4+ users to open change streams against entire
+  databases or entire deployments.  See the documentation for the `change-stream-namespaces`
+  option for details.
+
+* The `resume`, `resume-from-timestamp`, `replay`, and `cluster-name` options can now be used
+  in conjunction with `change-stream-namespaces` if you have MongoDB 4 or greater.
+
+* Improved support for connecting directly to shards when authorization is required on the connection.
+  This is only applicable if you are not using change streams and you are connecting to a sharded 
+  MongoDB deployment. In that case Monstache needs to discover and connect directly to shards. In this
+  case it will reuse the login info from the initial connection to the `mongos` server when connecting to
+  the shards.
+
+### [monstache v4.14.2](https://github.com/rwynn/monstache/releases/tag/v4.14.2)
+
+* Change stream performance improvements
+
+### [monstache v3.21.2](https://github.com/rwynn/monstache/releases/tag/v3.21.2)
+
+* Change stream performance improvements
 
 ### [monstache v4.14.1](https://github.com/rwynn/monstache/releases/tag/v4.14.1)
 
