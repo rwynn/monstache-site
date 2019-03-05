@@ -95,6 +95,16 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.15.1](https://github.com/rwynn/monstache/releases/tag/v4.15.1)
+
+* Upgrade golang to 1.12
+* Fix a panic under some conditions when processing the result of a golang plugin `Map` function
+
+### [monstache v3.22.1](https://github.com/rwynn/monstache/releases/tag/v3.22.1)
+
+* Upgrade golang to 1.12
+* Fix a panic under some conditions when processing the result of a golang plugin `Map` function
+
 ### [monstache v4.15.0](https://github.com/rwynn/monstache/releases/tag/v4.15.0)
 
 * This release adds the ability for MongoDB 4+ users to open change streams against entire
