@@ -9,6 +9,10 @@ indexes your MongoDB collections into Elasticsearch. Monstache gives you the abi
 Elasticsearch to do complex searches and aggregations of your MongoDB data and easily build realtime 
 Kibana visualizations and dashboards.
 
+!!! note "Latest news"
+	For a showcase of what monstache can do with open data 
+	see the [monstache-showcase](https://github.com/rwynn/monstache-showcase)
+
 ## Features
 
 - Supports up to and including the latest versions of Elasticsearch and MongoDB

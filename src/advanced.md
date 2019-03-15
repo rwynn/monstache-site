@@ -302,13 +302,17 @@ In addition to inserts, updates, and deletes monstache also supports database an
 monstache supports embedding user defined middleware between MongoDB and Elasticsearch.  Middleware is able to transform documents, drop documents, or define indexing metadata.  Middleware may be written in either Javascript or in Golang as a plugin.
 
 !!! warning
+	It is HIGHLY recommended to use a golang plugin in production over a javascript plugin due to performance differences.
+	Currently, golang plugins are orders of magnitude faster than javascript plugins.  This is due to concurrency and the
+	need to perform locking on the javascript environment.  Javascript plugins are very useful for quickly prototyping a
+	solution, however at some point it is recommended to convert them to golang plugins.
+
 	If you enable a Golang plugin then monstache will ignore an javascript middleware in your configuration. This may
 	change in the future but for now the choice of middleware language is mutually exclusive.
 
-
 ### Golang
 
-monstache supports golang plugins.  You should have golang version 1.11 or greater installed and will need to perform the build in a linux environment.  
+monstache supports golang plugins.  You should have golang version 1.11 or greater installed and will need to perform the build on the Linux or OSX platform. Golang plugins are not currently supported on the Windows platform due to limits in golang.
 
 To implement a plugin for monstache you simply need to implement specific function signatures,
 use the go command to build a .so file for your plugin, 
@@ -447,6 +451,11 @@ When you implement a `Process` function the function will be called after monsta
 	with instructions.
 
 ### Javascript
+
+Monstache supports plugins written in Javascript.  You may find that Javascript plugins give you much less performance than
+golang plugins.  You also may reach some limits of what can be done in the Javascript.  This is due to the implementation 
+of the Javascript environment and the locking required under high load. Javascript plugins are still very useful for quick 
+prototypes and small data sets.
 
 #### Transformation
 
