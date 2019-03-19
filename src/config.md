@@ -6,13 +6,14 @@ Configuration can be specified in environment variables (a limited set of option
 passed into monstache as program arguments on the command line.
 
 !!! note
-	Command line arguments take precedance over environment variables which in turn take precedance over the TOML config file. You can verify
-	the final configuration used by Monstache by running monstache with `-print-config`.
+	Command line arguments take precedance over environment variables which in turn take precedance over the 
+	TOML config file. You can verify the final configuration used by Monstache by running monstache with `-print-config`.
 
 !!! warning
-	Keep simple one-line configs **above** any TOML table definitions in your config file.  A TOML table is only ended by another TOML table or 
-	the end of the file.  Anything below a TOML table will be interpreted to be part of the table by the parser unless it is ended.
-	See the following [Issue 58](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381) for more information.
+	Keep simple one-line configs **above** any TOML table definitions in your config file.  A TOML table 
+	is only ended by another TOML table or the end of the file.  Anything below a TOML table will be 
+	interpreted to be part of the table by the parser unless it is ended. See the following 
+	[Issue 58](https://github.com/rwynn/monstache/issues/58#issuecomment-381275381) for more information.
 
 ## aws-connect
 
@@ -59,6 +60,9 @@ use an empty string as the namespace value.  For example, `change-stream-namespa
 
 !!! note ""
 	This option may be passed on the command line as ./monstache --change-stream-namespace test.foo
+
+	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar
 
 ## config-database-name
 
@@ -108,7 +112,11 @@ sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to Elasticsearch.
 
 !!! note
-	This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
+	This option may be passed on the command line as 
+	./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
+
+	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_DIRECT_READ_NS=test.foo,test.bar
 
 !!! warning
 	When direct reads are enabled Monstache still processes change events while the direct reads are being performed.  It does
@@ -175,6 +183,9 @@ An array of URLs to connect to the Elasticsearch REST Interface
 
 !!! note
 	This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 
+
+	If specified as an environment variable the value should be URLs separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200
 
 ## elasticsearch-healthcheck-timeout-startup
 
@@ -336,6 +347,9 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 
 !!! note
 	This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar
+
+	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_FILE_NS=test.foo,test.bar
 
 ## filter
 
@@ -775,6 +789,9 @@ An array of MongoDB namespaces that you would like to enable rfc7396 patches on
 !!! note
 	This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar 
 
+	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_PATCH_NS=test.foo,test.bar
+
 ## pipeline
 
 [] array of TOML table (default `nil`)
@@ -1031,7 +1048,11 @@ This lets you do some cool things but mostly you'll want to sort by `_oplog_date
 Because the indexes are timestamped you can drop then after a period of time so they don't take up space.  If you just want the last couple of days of changes, delete the indexes with the old timestamps.  Elastic [curator](https://github.com/elastic/curator) is your friend here.
 
 !!! note
-	This option may be passed on the command line as ./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar
+	This option may be passed on the command line as 
+	./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar
+
+	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
+	defaults to a comma.  E.g. MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar
 
 ## time-machine-index-prefix
 

@@ -204,14 +204,15 @@
 passed into monstache as program arguments on the command line.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Command line arguments take precedance over environment variables which in turn take precedance over the TOML config file. You can verify
-the final configuration used by Monstache by running monstache with <code>-print-config</code>.</p>
+<p>Command line arguments take precedance over environment variables which in turn take precedance over the 
+TOML config file. You can verify the final configuration used by Monstache by running monstache with <code>-print-config</code>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Keep simple one-line configs <strong>above</strong> any TOML table definitions in your config file.  A TOML table is only ended by another TOML table or 
-the end of the file.  Anything below a TOML table will be interpreted to be part of the table by the parser unless it is ended.
-See the following <a href="https://github.com/rwynn/monstache/issues/58#issuecomment-381275381">Issue 58</a> for more information.</p>
+<p>Keep simple one-line configs <strong>above</strong> any TOML table definitions in your config file.  A TOML table 
+is only ended by another TOML table or the end of the file.  Anything below a TOML table will be 
+interpreted to be part of the table by the parser unless it is ended. See the following 
+<a href="https://github.com/rwynn/monstache/issues/58#issuecomment-381275381">Issue 58</a> for more information.</p>
 </div>
 <h2 id="aws-connect">aws-connect<a class="headerlink" href="#aws-connect" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
@@ -242,6 +243,8 @@ For example, instead of <code>db.collection</code> the value would simply be <co
 use an empty string as the namespace value.  For example, <code>change-stream-namespaces = [ '' ]</code>.</p>
 <div class="admonition note">
 <p>This option may be passed on the command line as ./monstache --change-stream-namespace test.foo</p>
+<p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar</p>
 </div>
 <h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>monstache</code>) </p>
@@ -273,7 +276,10 @@ sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to Elasticsearch.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This option may be passed on the command line as ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar</p>
+<p>This option may be passed on the command line as 
+./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar</p>
+<p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_DIRECT_READ_NS=test.foo,test.bar</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -318,6 +324,8 @@ useful if you are using <a href="#direct-read-namespaces">direct-read-namespaces
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 </p>
+<p>If specified as an environment variable the value should be URLs separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200</p>
 </div>
 <h2 id="elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup<a class="headerlink" href="#elasticsearch-healthcheck-timeout-startup" title="Permanent link">&para;</a></h2>
 <p>int (default <code>15</code>)</p>
@@ -417,6 +425,8 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar</p>
+<p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_FILE_NS=test.foo,test.bar</p>
 </div>
 <h2 id="filter">filter<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
@@ -689,6 +699,8 @@ values to use in the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar </p>
+<p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_PATCH_NS=test.foo,test.bar</p>
 </div>
 <h2 id="pipeline">pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
@@ -844,7 +856,10 @@ are partitioned by day.  To use less indices for stats you can shorten this form
 <p>Because the indexes are timestamped you can drop then after a period of time so they don't take up space.  If you just want the last couple of days of changes, delete the indexes with the old timestamps.  Elastic <a href="https://github.com/elastic/curator">curator</a> is your friend here.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This option may be passed on the command line as ./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar</p>
+<p>This option may be passed on the command line as 
+./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar</p>
+<p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
+defaults to a comma.  E.g. MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar</p>
 </div>
 <h2 id="time-machine-index-prefix">time-machine-index-prefix<a class="headerlink" href="#time-machine-index-prefix" title="Permanent link">&para;</a></h2>
 <p>string (default <code>log</code>)</p>
