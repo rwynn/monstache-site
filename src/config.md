@@ -62,7 +62,7 @@ use an empty string as the namespace value.  For example, `change-stream-namespa
 	This option may be passed on the command line as ./monstache --change-stream-namespace test.foo
 
 	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar
+	defaults to a comma.  E.g. `MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar`
 
 ## config-database-name
 
@@ -116,22 +116,41 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 	./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar
 
 	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_DIRECT_READ_NS=test.foo,test.bar
+	defaults to a comma.  E.g. `MONSTACHE_DIRECT_READ_NS=test.foo,test.bar`
 
 !!! warning
-	When direct reads are enabled Monstache still processes change events while the direct reads are being performed.  It does
-	not wait until direct reads are completed to start listening for changes.  This is to ensure that any changes that occur during
-	the direct read process get synchronized.
+	When direct reads are enabled Monstache still processes change events while the direct reads are being performed.  
+	It does not wait until direct reads are completed to start listening for changes.  This is to ensure that any 
+	changes that occur during the direct read process get synchronized.
 
 By default, Monstache maps a MongoDB collection named `foo` in a database named `test` to the `test.foo` index in Elasticsearch.
 
-For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
-destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
-index basis by using the Index Settings or Index Template APIs.  For more information see [Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html).
+For maximum indexing performance when doing alot of a direct reads you might want to adjust the refresh interval during 
+indexing on the destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml 
+or on a per index basis by using the Index Settings or Index Template APIs.  
 
-By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
-phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
-phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.
+For more information see 
+[Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html).
+
+By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely 
+during the indexing phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a 
+positive value and do a force merge after the indexing phase has completed if you decide to temporarily turn off refresh, 
+otherwise you will not be able to see the new documents in queries.
+
+Another way to speed up bulk indexing is to set the number_of_replicas to 0 while indexing and then later increase 
+the number of replicas.  The following index template shows how one might configure a target index for better indexing
+throughput by controlling replicas and the refresh interval. This index pattern needs to be installed before running monstache.
+
+```
+{
+  "index_patterns": ["test.*"],
+  "settings": {
+    "number_of_shards": 5,
+    "number_of_replicas": 0,
+    "refresh_interval": "30s"
+  }
+}
+```
 
 ## direct-read-split-max
 
@@ -185,7 +204,7 @@ An array of URLs to connect to the Elasticsearch REST Interface
 	This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 
 
 	If specified as an environment variable the value should be URLs separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200
+	defaults to a comma.  E.g. `MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200`
 
 ## elasticsearch-healthcheck-timeout-startup
 
@@ -349,7 +368,7 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 	This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar
 
 	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_FILE_NS=test.foo,test.bar
+	defaults to a comma.  E.g. `MONSTACHE_FILE_NS=test.foo,test.bar`
 
 ## filter
 
@@ -790,7 +809,7 @@ An array of MongoDB namespaces that you would like to enable rfc7396 patches on
 	This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar 
 
 	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_PATCH_NS=test.foo,test.bar
+	defaults to a comma.  E.g. `MONSTACHE_PATCH_NS=test.foo,test.bar`
 
 ## pipeline
 
@@ -1052,7 +1071,7 @@ Because the indexes are timestamped you can drop then after a period of time so 
 	./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar
 
 	If specified as an environment variable the value should be namespaces separated only by the `env-delimiter` which
-	defaults to a comma.  E.g. MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar
+	defaults to a comma.  E.g. `MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar`
 
 ## time-machine-index-prefix
 

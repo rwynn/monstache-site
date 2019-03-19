@@ -244,7 +244,7 @@ use an empty string as the namespace value.  For example, <code>change-stream-na
 <div class="admonition note">
 <p>This option may be passed on the command line as ./monstache --change-stream-namespace test.foo</p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar</p>
+defaults to a comma.  E.g. <code>MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar</code></p>
 </div>
 <h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>monstache</code>) </p>
@@ -279,21 +279,37 @@ like to copy.  Monstache will perform reads directly from the given set of db.co
 <p>This option may be passed on the command line as 
 ./monstache --direct-read-namespace test.foo --direct-read-namespace test.bar</p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_DIRECT_READ_NS=test.foo,test.bar</p>
+defaults to a comma.  E.g. <code>MONSTACHE_DIRECT_READ_NS=test.foo,test.bar</code></p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When direct reads are enabled Monstache still processes change events while the direct reads are being performed.  It does
-not wait until direct reads are completed to start listening for changes.  This is to ensure that any changes that occur during
-the direct read process get synchronized.</p>
+<p>When direct reads are enabled Monstache still processes change events while the direct reads are being performed.<br />
+It does not wait until direct reads are completed to start listening for changes.  This is to ensure that any 
+changes that occur during the direct read process get synchronized.</p>
 </div>
 <p>By default, Monstache maps a MongoDB collection named <code>foo</code> in a database named <code>test</code> to the <code>test.foo</code> index in Elasticsearch.</p>
-<p>For maximum indexing performance when doing alot of a direct reads you will want to adjust the refresh interval during indexing on the
-destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml or on a per
-index basis by using the Index Settings or Index Template APIs.  For more information see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html">Update Indices Settings</a>.</p>
-<p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely during the indexing
-phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a positive value and do a force merge after the indexing 
-phase has completed if you decide to temporarily turn off refresh, otherwise you will not be able to see the new documents in queries.</p>
+<p>For maximum indexing performance when doing alot of a direct reads you might want to adjust the refresh interval during 
+indexing on the destination Elasticsearch indices.  The refresh interval can be set at a global level in elasticsearch.yml 
+or on a per index basis by using the Index Settings or Index Template APIs.  </p>
+<p>For more information see 
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html">Update Indices Settings</a>.</p>
+<p>By default, Elasticsearch refreshes every second.  You will want to increase this value or turn off refresh completely 
+during the indexing phase by setting the refresh_interval to -1.  Remember to reset the refresh_interval to a 
+positive value and do a force merge after the indexing phase has completed if you decide to temporarily turn off refresh, 
+otherwise you will not be able to see the new documents in queries.</p>
+<p>Another way to speed up bulk indexing is to set the number_of_replicas to 0 while indexing and then later increase 
+the number of replicas.  The following index template shows how one might configure a target index for better indexing
+throughput by controlling replicas and the refresh interval. This index pattern needs to be installed before running monstache.</p>
+<pre><code>{
+  &quot;index_patterns&quot;: [&quot;test.*&quot;],
+  &quot;settings&quot;: {
+    &quot;number_of_shards&quot;: 5,
+    &quot;number_of_replicas&quot;: 0,
+    &quot;refresh_interval&quot;: &quot;30s&quot;
+  }
+}
+</code></pre>
+
 <h2 id="direct-read-split-max">direct-read-split-max<a class="headerlink" href="#direct-read-split-max" title="Permanent link">&para;</a></h2>
 <p>int (default <code>9</code>)</p>
 <p>The maximum number of times to split a collection for direct reads.  This setting greatly impacts the memory consumption
@@ -325,7 +341,7 @@ useful if you are using <a href="#direct-read-namespaces">direct-read-namespaces
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --elasticsearch-url URL1 --elasticsearch-url URL2 </p>
 <p>If specified as an environment variable the value should be URLs separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200</p>
+defaults to a comma.  E.g. <code>MONSTACHE_ES_URLS=http://es1:9200,http://es2:9200</code></p>
 </div>
 <h2 id="elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup<a class="headerlink" href="#elasticsearch-healthcheck-timeout-startup" title="Permanent link">&para;</a></h2>
 <p>int (default <code>15</code>)</p>
@@ -426,7 +442,7 @@ raw content indexed into Elasticsearch via either the mapper-attachments or inge
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --file-namespace test.foo --file-namespace test.bar</p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_FILE_NS=test.foo,test.bar</p>
+defaults to a comma.  E.g. <code>MONSTACHE_FILE_NS=test.foo,test.bar</code></p>
 </div>
 <h2 id="filter">filter<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
@@ -700,7 +716,7 @@ values to use in the layout.</p>
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --patch-namespace test.foo --patch-namespace test.bar </p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_PATCH_NS=test.foo,test.bar</p>
+defaults to a comma.  E.g. <code>MONSTACHE_PATCH_NS=test.foo,test.bar</code></p>
 </div>
 <h2 id="pipeline">pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
@@ -859,7 +875,7 @@ are partitioned by day.  To use less indices for stats you can shorten this form
 <p>This option may be passed on the command line as 
 ./monstache --time-machine-namespace test.foo --time-machine-namespace test.bar</p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
-defaults to a comma.  E.g. MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar</p>
+defaults to a comma.  E.g. <code>MONSTACHE_TIME_MACHINE_NS=test.foo,test.bar</code></p>
 </div>
 <h2 id="time-machine-index-prefix">time-machine-index-prefix<a class="headerlink" href="#time-machine-index-prefix" title="Permanent link">&para;</a></h2>
 <p>string (default <code>log</code>)</p>
