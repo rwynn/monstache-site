@@ -108,6 +108,7 @@
             <li><a href="#cluster-name">cluster-name</a></li>
             <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
             <li><a href="#delete-strategy">delete-strategy</a></li>
+            <li><a href="#direct-read-concur">direct-read-concur</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
             <li><a href="#direct-read-split-max">direct-read-split-max</a></li>
             <li><a href="#disable-change-events">disable-change-events</a></li>
@@ -267,6 +268,12 @@ mydb then you can set this to <code>mydb*</code>.  </p>
 <p><strong>Strategy 0</strong> -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.</p>
 <p><strong>Stategy 1</strong> -deprecated- will store indexing metadata in MongoDB in the <code>monstache.meta</code> collection and use this metadata to locate and delete the document.</p>
 <p><strong>Stategy 2</strong> will completely ignore document deletes in MongoDB.</p>
+<h2 id="direct-read-concur">direct-read-concur<a class="headerlink" href="#direct-read-concur" title="Permanent link">&para;</a></h2>
+<p>int (default <code>0</code>) </p>
+<p>This option allows you to control the number of namespaces in <code>direct-read-namespaces</code> which will be syncing concurrently.
+By default monstache starts reading and syncing all namespaces concurrently.  If this places too much stress on MongoDB then
+you can set this option to an integer greater than 0.  If you set it to <code>1</code>, for example, then monstache will sync the
+collections serially.  Numbers greater than 1 allow you to sync collections in batches of that size.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link">&para;</a></h2>
 <p>[]string (default <code>nil</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS</code>)</p>
 <p>This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
@@ -318,6 +325,8 @@ concurrently is separate go routines.  If you increase this value you will notic
 when direct reads are performed.  You will also notice the memory consumption of Monstache grow.  Increasing this value can
 increase the throughput for reading large collections, but you need to have enough memory available to Monstache to do so.
 You can decrease this value for a memory constrained Monstache process.</p>
+<p>To disable collection splitting altogether, set this option to <code>-1</code>.  In this case monstache will not try to segment the
+collection, but rather use a single cursor for the entire read.</p>
 <h2 id="disable-change-events">disable-change-events<a class="headerlink" href="#disable-change-events" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When disable-change-events is true monstache will not listen to change events from the oplog or call watch on any collections.  This option is only

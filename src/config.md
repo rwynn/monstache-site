@@ -100,6 +100,15 @@ The strategy to use for handling document deletes when custom indexing is done i
 
 **Stategy 2** will completely ignore document deletes in MongoDB.
 
+## direct-read-concur
+
+int (default `0`) 
+
+This option allows you to control the number of namespaces in `direct-read-namespaces` which will be syncing concurrently.
+By default monstache starts reading and syncing all namespaces concurrently.  If this places too much stress on MongoDB then
+you can set this option to an integer greater than 0.  If you set it to `1`, for example, then monstache will sync the
+collections serially.  Numbers greater than 1 allow you to sync collections in batches of that size.
+
 ## direct-read-namespaces
 
 []string (default `nil`) (env var name `MONSTACHE_DIRECT_READ_NS`)
@@ -162,6 +171,9 @@ concurrently is separate go routines.  If you increase this value you will notic
 when direct reads are performed.  You will also notice the memory consumption of Monstache grow.  Increasing this value can
 increase the throughput for reading large collections, but you need to have enough memory available to Monstache to do so.
 You can decrease this value for a memory constrained Monstache process.
+
+To disable collection splitting altogether, set this option to `-1`.  In this case monstache will not try to segment the
+collection, but rather use a single cursor for the entire read.
 
 ## disable-change-events
 

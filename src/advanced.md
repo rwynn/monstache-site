@@ -18,10 +18,10 @@ If you are working with Elasticsearch 2 or 5 and coding golang plugins for monst
 and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.15.1`.
+image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.16.0`.
 
 If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.22.1`.
+image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.23.0`.
 
 ## GridFS Support
 
@@ -1209,9 +1209,9 @@ docker run rwynn/monstache:rel3 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.15.1 -v
+docker run rwynn/monstache:4.16.0 -v
 
-docker run rwynn/monstache:3.22.1 -v
+docker run rwynn/monstache:3.23.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount

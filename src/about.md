@@ -95,6 +95,24 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.16.0 (4tsb)](https://github.com/rwynn/monstache/releases/tag/v4.16.0)
+
+* Add a new integer setting `direct-read-concur` which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have `direct-read-namespaces` set to 23 namespaces and `direct-read-concur` set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  
+* Add the ability to disable direct read collection splitting by setting `direct-read-split-max` to -1.  By default, monstache will split each direct read collection up to 9 times and read each segment in a separate go routine.  If you don't want to split collections at all then set `direct-read-split-max` to -1. 
+
+### [monstache v3.23.0 (4tsb)](https://github.com/rwynn/monstache/releases/tag/v3.23.0)
+
+* Add a new integer setting `direct-read-concur` which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have `direct-read-namespaces` set to 23 namespaces and `direct-read-concur` set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  
+* Add the ability to disable direct read collection splitting by setting `direct-read-split-max` to -1.  By default, monstache will split each direct read collection up to 9 times and read each segment in a separate go routine.  If you don't want to split collections at all then set `direct-read-split-max` to -1. 
+
+### [monstache v4.15.2](https://github.com/rwynn/monstache/releases/tag/v4.15.2)
+
+* Fix issue using monstache with GoCenter
+
+### [monstache v3.22.2](https://github.com/rwynn/monstache/releases/tag/v3.22.2)
+
+* Fix issue using monstache with GoCenter
+
 ### [monstache v4.15.1](https://github.com/rwynn/monstache/releases/tag/v4.15.1)
 
 * Upgrade golang to 1.12

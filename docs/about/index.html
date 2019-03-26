@@ -184,6 +184,24 @@ source code.</p>
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4160-4tsb"><a href="https://github.com/rwynn/monstache/releases/tag/v4.16.0">monstache v4.16.0 (4tsb)</a><a class="headerlink" href="#monstache-v4160-4tsb" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add a new integer setting <code>direct-read-concur</code> which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have <code>direct-read-namespaces</code> set to 23 namespaces and <code>direct-read-concur</code> set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  </li>
+<li>Add the ability to disable direct read collection splitting by setting <code>direct-read-split-max</code> to -1.  By default, monstache will split each direct read collection up to 9 times and read each segment in a separate go routine.  If you don't want to split collections at all then set <code>direct-read-split-max</code> to -1. </li>
+</ul>
+<h3 id="monstache-v3230-4tsb"><a href="https://github.com/rwynn/monstache/releases/tag/v3.23.0">monstache v3.23.0 (4tsb)</a><a class="headerlink" href="#monstache-v3230-4tsb" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add a new integer setting <code>direct-read-concur</code> which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have <code>direct-read-namespaces</code> set to 23 namespaces and <code>direct-read-concur</code> set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  </li>
+<li>Add the ability to disable direct read collection splitting by setting <code>direct-read-split-max</code> to -1.  By default, monstache will split each direct read collection up to 9 times and read each segment in a separate go routine.  If you don't want to split collections at all then set <code>direct-read-split-max</code> to -1. </li>
+</ul>
+<h3 id="monstache-v4152"><a href="https://github.com/rwynn/monstache/releases/tag/v4.15.2">monstache v4.15.2</a><a class="headerlink" href="#monstache-v4152" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix issue using monstache with GoCenter</li>
+</ul>
+<h3 id="monstache-v3222"><a href="https://github.com/rwynn/monstache/releases/tag/v3.22.2">monstache v3.22.2</a><a class="headerlink" href="#monstache-v3222" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix issue using monstache with GoCenter</li>
+</ul>
 <h3 id="monstache-v4151"><a href="https://github.com/rwynn/monstache/releases/tag/v4.15.1">monstache v4.15.1</a><a class="headerlink" href="#monstache-v4151" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Upgrade golang to 1.12</li>
