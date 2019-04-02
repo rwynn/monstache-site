@@ -95,6 +95,20 @@ most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
 
+### [monstache v4.16.1](https://github.com/rwynn/monstache/releases/tag/v4.16.1)
+
+* Fix bug in mongoX509Settings validate (issue #198)
+* Fix issue stopping monstache when using legacy oplog tailing (non change-stream) of a sharded cluster
+* Upgrade golang on release builds to 1.12.1
+* Upgrade docker images to use Alpine 3.9.2
+
+### [monstache v3.23.1](https://github.com/rwynn/monstache/releases/tag/v3.23.1)
+
+* Fix bug in mongoX509Settings validate (issue #198)
+* Fix issue stopping monstache when using legacy oplog tailing (non change-stream) of a sharded cluster
+* Upgrade golang on release builds to 1.12.1
+* Upgrade docker images to use Alpine 3.9.2
+
 ### [monstache v4.16.0 (4tsb)](https://github.com/rwynn/monstache/releases/tag/v4.16.0)
 
 * Add a new integer setting `direct-read-concur` which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have `direct-read-namespaces` set to 23 namespaces and `direct-read-concur` set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  

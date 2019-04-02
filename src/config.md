@@ -148,7 +148,7 @@ otherwise you will not be able to see the new documents in queries.
 
 Another way to speed up bulk indexing is to set the number_of_replicas to 0 while indexing and then later increase 
 the number of replicas.  The following index template shows how one might configure a target index for better indexing
-throughput by controlling replicas and the refresh interval. This index pattern needs to be installed before running monstache.
+throughput by controlling replicas and the refresh interval. The index template needs to be installed before running monstache.
 
 ```
 {

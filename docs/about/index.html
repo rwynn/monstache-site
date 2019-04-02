@@ -184,6 +184,20 @@ source code.</p>
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="monstache-v4161"><a href="https://github.com/rwynn/monstache/releases/tag/v4.16.1">monstache v4.16.1</a><a class="headerlink" href="#monstache-v4161" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix bug in mongoX509Settings validate (issue #198)</li>
+<li>Fix issue stopping monstache when using legacy oplog tailing (non change-stream) of a sharded cluster</li>
+<li>Upgrade golang on release builds to 1.12.1</li>
+<li>Upgrade docker images to use Alpine 3.9.2</li>
+</ul>
+<h3 id="monstache-v3231"><a href="https://github.com/rwynn/monstache/releases/tag/v3.23.1">monstache v3.23.1</a><a class="headerlink" href="#monstache-v3231" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix bug in mongoX509Settings validate (issue #198)</li>
+<li>Fix issue stopping monstache when using legacy oplog tailing (non change-stream) of a sharded cluster</li>
+<li>Upgrade golang on release builds to 1.12.1</li>
+<li>Upgrade docker images to use Alpine 3.9.2</li>
+</ul>
 <h3 id="monstache-v4160-4tsb"><a href="https://github.com/rwynn/monstache/releases/tag/v4.16.0">monstache v4.16.0 (4tsb)</a><a class="headerlink" href="#monstache-v4160-4tsb" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add a new integer setting <code>direct-read-concur</code> which, when set, limits the number of concurrent direct reads that will be performed.  E.g. if you have <code>direct-read-namespaces</code> set to 23 namespaces and <code>direct-read-concur</code> set to 2, then monstache will read and sync namespace 1 and 2 concurrently and wait for both to finish before starting 3 and 4 - and so on.  </li>
