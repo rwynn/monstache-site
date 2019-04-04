@@ -304,7 +304,7 @@ string (default `""`) (env var name `MONSTACHE_ES_PEM`)
 When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.
 
-## elasticsearch-validate-pem
+## elasticsearch-validate-pem-file
 
 boolean (default `true`)
 
@@ -647,7 +647,7 @@ string (default `""`) (env var name `MONSTACHE_MONGO_PEM`)
 When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.
 
-## mongo-validate-pem
+## mongo-validate-pem-file
 
 boolean (default `true`)
 

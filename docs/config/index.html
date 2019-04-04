@@ -127,7 +127,7 @@
             <li><a href="#elasticsearch-max-bytes">elasticsearch-max-bytes</a></li>
             <li><a href="#elasticsearch-max-seconds">elasticsearch-max-seconds</a></li>
             <li><a href="#elasticsearch-pem-file">elasticsearch-pem-file</a></li>
-            <li><a href="#elasticsearch-validate-pem">elasticsearch-validate-pem</a></li>
+            <li><a href="#elasticsearch-validate-pem-file">elasticsearch-validate-pem-file</a></li>
             <li><a href="#enable-easy-json">enable-easy-json</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
             <li><a href="#enable-patches">enable-patches</a></li>
@@ -154,7 +154,7 @@
             <li><a href="#mongo-url">mongo-url</a></li>
             <li><a href="#mongo-config-url">mongo-config-url</a></li>
             <li><a href="#mongo-pem-file">mongo-pem-file</a></li>
-            <li><a href="#mongo-validate-pem">mongo-validate-pem</a></li>
+            <li><a href="#mongo-validate-pem-file">mongo-validate-pem-file</a></li>
             <li><a href="#mongo-oplog-database-name">mongo-oplog-database-name</a></li>
             <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
             <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
@@ -406,7 +406,7 @@ case which would cut performance.</p>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_ES_PEM</code>)</p>
 <p>When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.</p>
-<h2 id="elasticsearch-validate-pem">elasticsearch-validate-pem<a class="headerlink" href="#elasticsearch-validate-pem" title="Permanent link">&para;</a></h2>
+<h2 id="elasticsearch-validate-pem-file">elasticsearch-validate-pem-file<a class="headerlink" href="#elasticsearch-validate-pem-file" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>true</code>)</p>
 <p>When elasticsearch-validate-pem-file is false TLS will be configured to skip verification</p>
 <h2 id="enable-easy-json">enable-easy-json<a class="headerlink" href="#enable-easy-json" title="Permanent link">&para;</a></h2>
@@ -615,7 +615,7 @@ each shard to listen for events.</p>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_MONGO_PEM</code>)</p>
 <p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.</p>
-<h2 id="mongo-validate-pem">mongo-validate-pem<a class="headerlink" href="#mongo-validate-pem" title="Permanent link">&para;</a></h2>
+<h2 id="mongo-validate-pem-file">mongo-validate-pem-file<a class="headerlink" href="#mongo-validate-pem-file" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>true</code>)</p>
 <p>When mongo-validate-pem-file is false TLS will be configured to skip verification</p>
 <h2 id="mongo-oplog-database-name">mongo-oplog-database-name<a class="headerlink" href="#mongo-oplog-database-name" title="Permanent link">&para;</a></h2>
