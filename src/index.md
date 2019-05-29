@@ -15,8 +15,14 @@ Kibana visualizations and dashboards.
 	see the [monstache-showcase](https://github.com/rwynn/monstache-showcase)
 
     If you find monstache useful check out some other projects related to MongoDB
+
+    Sync MongoDB to InfluxDB
     [mongofluxd](https://github.com/rwynn/mongofluxd)
+
+    Sync MongoDB to RediSearch
     [redisetgo](https://github.com/rwynn/redisetgo)
+
+    Sync MongoDB to Kafka
     [route81](https://github.com/rwynn/route81)
 
 ## Features
