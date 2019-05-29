@@ -613,10 +613,18 @@ each shard to listen for events.</p>
 </div>
 <h2 id="mongo-pem-file">mongo-pem-file<a class="headerlink" href="#mongo-pem-file" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_MONGO_PEM</code>)</p>
+<div class="admonition note">
+<p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+uses the connection string for all settings.</p>
+</div>
 <p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.</p>
 <h2 id="mongo-validate-pem-file">mongo-validate-pem-file<a class="headerlink" href="#mongo-validate-pem-file" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>true</code>)</p>
+<div class="admonition note">
+<p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+uses the connection string for all settings.</p>
+</div>
 <p>When mongo-validate-pem-file is false TLS will be configured to skip verification</p>
 <h2 id="mongo-oplog-database-name">mongo-oplog-database-name<a class="headerlink" href="#mongo-oplog-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>local</code>) (env var name <code>MONSTACHE_MONGO_OPLOG_DB</code>)</p>
@@ -637,6 +645,10 @@ you explicitly config it to do so.</p>
 </div>
 <h2 id="mongo-dial-settings">mongo-dial-settings<a class="headerlink" href="#mongo-dial-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
+<div class="admonition note">
+<p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+uses the connection string for all settings.</p>
+</div>
 <p>The following MongoDB dial properties are available.  Timeout values of 0 disable the timeout.</p>
 <div class="admonition note">
 <h4 id="ssl">ssl<a class="headerlink" href="#ssl" title="Permanent link">&para;</a></h4>
@@ -658,6 +670,10 @@ by retrying the query.</p>
 </div>
 <h2 id="mongo-session-settings">mongo-session-settings<a class="headerlink" href="#mongo-session-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
+<div class="admonition note">
+<p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+uses the connection string for all settings.</p>
+</div>
 <p>The following MongoDB session properties are available. Timeout values of 0 disable the timeout.</p>
 <div class="admonition note">
 <h4 id="socket-timeout">socket-timeout<a class="headerlink" href="#socket-timeout" title="Permanent link">&para;</a></h4>
@@ -670,6 +686,10 @@ Must be greater than 0.</p>
 </div>
 <h2 id="mongo-x509-settings">mongo-x509-settings<a class="headerlink" href="#mongo-x509-settings" title="Permanent link">&para;</a></h2>
 <p>TOML table (default <code>nil</code>)</p>
+<div class="admonition note">
+<p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+uses the connection string for all settings.</p>
+</div>
 <p>Allows one to configure x509 authentication with MongoDB. For more information see 
 <a href="https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/">x509 auth</a>.</p>
 <div class="admonition note">

@@ -644,12 +644,20 @@ each shard to listen for events.
 
 string (default `""`) (env var name `MONSTACHE_MONGO_PEM`)
 
+!!! note ""
+    This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+    uses the connection string for all settings.
+
 When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.
 
 ## mongo-validate-pem-file
 
 boolean (default `true`)
+
+!!! note ""
+    This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+    uses the connection string for all settings.
 
 When mongo-validate-pem-file is false TLS will be configured to skip verification
 
@@ -678,6 +686,10 @@ configure this setting to `oplog.$main`.
 ## mongo-dial-settings
 
 TOML table (default `nil`)
+
+!!! note ""
+    This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+    uses the connection string for all settings.
 
 The following MongoDB dial properties are available.  Timeout values of 0 disable the timeout.
 
@@ -715,6 +727,10 @@ The following MongoDB dial properties are available.  Timeout values of 0 disabl
 
 TOML table (default `nil`)
 
+!!! note ""
+    This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+    uses the connection string for all settings.
+
 The following MongoDB session properties are available. Timeout values of 0 disable the timeout.
 
 !!! note ""
@@ -735,6 +751,10 @@ The following MongoDB session properties are available. Timeout values of 0 disa
 ## mongo-x509-settings
 
 TOML table (default `nil`)
+
+!!! note ""
+    This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
+    uses the connection string for all settings.
 
 Allows one to configure x509 authentication with MongoDB. For more information see 
 [x509 auth](https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/).
