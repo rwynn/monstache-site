@@ -103,6 +103,7 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#getting-started">Getting Started</a></li>
             <li><a href="#installation">Installation</a></li>
+            <li><a href="#which-version-should-i-use">Which version should I use?</a></li>
             <li><a href="#usage">Usage</a></li>
     </ul>
 </div></div>
@@ -114,28 +115,65 @@
 <p>Monstache is just a single binary without dependencies on runtimes like Ruby, Python or PHP. Monstache is written in
 Go but you don't need to install the Go language unless you decide to write your own Go plugins.</p>
 <p>If you simply want to run Monstache you just need to <a href="https://github.com/rwynn/monstache/releases">download the latest version</a>.</p>
-<p>You will want to use 4.x releases for ES6+ and 3.x releases for ES2-5.</p>
+<h2 id="which-version-should-i-use">Which version should I use?<a class="headerlink" href="#which-version-should-i-use" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Monstache version</th>
+<th>Git branch (used to build plugin)</th>
+<th>Docker tag</th>
+<th>Description</th>
+<th>Elasticsearch</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>rel3</td>
+<td>rel3</td>
+<td>mgo community go driver</td>
+<td>Versions 2 and 5</td>
+<td>Version 3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>master</td>
+<td>rel4 (note this used to be latest)</td>
+<td>mgo community go driver</td>
+<td>Version 6</td>
+<td>Version 3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>rel5</td>
+<td>rel5</td>
+<td>MongoDB, Inc. go driver</td>
+<td>Version 6</td>
+<td>Version 4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>rel6</td>
+<td>rel6, latest</td>
+<td>MongoDB, Inc. go driver</td>
+<td>Version 7</td>
+<td>Version 4</td>
+</tr>
+</tbody>
+</table>
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 4.16.1
+# 6.0.6
 </code></pre>
 
-<p>The version number should start with 3.x if you are using Elasticsearch prior to version 6.</p>
 <p>You can also build monstache from source. Monstache uses <a href="https://github.com/golang/go/wiki/Modules">vgo</a>. 
 You will need to have golang version <code>1.11</code> or greater.</p>
-<p>To build for Elasticsearch 6 and up use</p>
 <pre><code class="sh">cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
-go install
-</code></pre>
-
-<p>To build for Elasticsearch before version 6 use</p>
-<pre><code class="sh">cd ~/build # somewhere outside your $GOPATH
-git clone https://github.com/rwynn/monstache.git
-cd monstache
-git checkout rel3
+git checkout &lt;branch-to-build&gt;
 go install
 </code></pre>
 

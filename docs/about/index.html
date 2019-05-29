@@ -149,7 +149,7 @@ which includes native go modules support.</p>
 <pre><code class="bash">cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
-# make changes as necessary
+git checkout &lt;branch-to-build&gt;
 go install
 # the resulting monstache binary will be in $GOPATH/bin
 </code></pre>
@@ -184,6 +184,7 @@ source code.</p>
 it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.</p>
 <h2 id="release-notes">Release Notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h2>
+<p>See github.com for the most recent release notes.</p>
 <h3 id="monstache-v4161"><a href="https://github.com/rwynn/monstache/releases/tag/v4.16.1">monstache v4.16.1</a><a class="headerlink" href="#monstache-v4161" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix bug in mongoX509Settings validate (issue #198)</li>

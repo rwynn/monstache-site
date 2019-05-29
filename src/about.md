@@ -52,7 +52,7 @@ which includes native go modules support.
 cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
-# make changes as necessary
+git checkout <branch-to-build>
 go install
 # the resulting monstache binary will be in $GOPATH/bin
 ```
@@ -94,6 +94,8 @@ it to your fork and send a pull request. For a change to be accepted it will
 most likely need to have tests and documentation if it is a new feature.
 
 ## Release Notes
+
+See github.com for the most recent release notes.
 
 ### [monstache v4.16.1](https://github.com/rwynn/monstache/releases/tag/v4.16.1)
 

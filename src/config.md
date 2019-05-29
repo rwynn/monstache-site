@@ -926,6 +926,14 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 	Whether or not to sync the original change event in addition to the one looked up in with-namespace.
 	By default the original change is ignored and only the document from with-namespace is synced.
 
+	#### max-depth
+
+	bool (default 0)
+
+    If max-depth is greater than 0 then the relationship will only fire if the number of relationships between
+    this relate and the originating event is less than or equal to the value given.  By default monstache will
+    continue following relationships until none are left.
+
 ## relate-buffer
 
 int (default `1000`) 

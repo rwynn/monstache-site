@@ -10,8 +10,14 @@ Elasticsearch to do complex searches and aggregations of your MongoDB data and e
 Kibana visualizations and dashboards.
 
 !!! note "Latest news"
+
 	For a showcase of what monstache can do with open data 
 	see the [monstache-showcase](https://github.com/rwynn/monstache-showcase)
+
+    If you find monstache useful check out some other projects related to MongoDB
+    [mongofluxd](https://github.com/rwynn/mongofluxd)
+    [redisetgo](https://github.com/rwynn/redisetgo)
+    [route81](https://github.com/rwynn/route81)
 
 ## Features
 

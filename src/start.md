@@ -9,7 +9,14 @@ Go but you don't need to install the Go language unless you decide to write your
 
 If you simply want to run Monstache you just need to [download the latest version](https://github.com/rwynn/monstache/releases).
 
-You will want to use 4.x releases for ES6+ and 3.x releases for ES2-5.
+## Which version should I use?
+
+| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB
+| --- | --- |---|---|---|---
+| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3
+| 4 | master | rel4 (note this used to be latest) | mgo community go driver | Version 6 | Version 3
+| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 4
+| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7 | Version 4
 
 Unzip the download and adjust your PATH variable to include the path to the folder for your platform.
 
@@ -17,30 +24,17 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 4.16.1
+# 6.0.6
 ```
-
-The version number should start with 3.x if you are using Elasticsearch prior to version 6.
 
 You can also build monstache from source. Monstache uses [vgo](https://github.com/golang/go/wiki/Modules). 
 You will need to have golang version `1.11` or greater.
 
-To build for Elasticsearch 6 and up use
-
 ```sh
 cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
-go install
-```
-
-To build for Elasticsearch before version 6 use
-
-```sh
-cd ~/build # somewhere outside your $GOPATH
-git clone https://github.com/rwynn/monstache.git
-cd monstache
-git checkout rel3
+git checkout <branch-to-build>
 go install
 ```
 

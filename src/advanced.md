@@ -4,24 +4,12 @@
 
 ## Versions
 
-Monstache has 2 separate code streams to accomodate differences in the Elasticsearch API.  Monstache versions 4.X
-are designed to work with Elasticsearch 6+.  Monstache versions 3.X are designed to work with Elasticsearch 2 and 5.
-
-If you are working with Elasticsearch 6+ you should use the `master` branch at `github.com/rwynn/monstache`.
-
-If you are working with Elasticsearch 2 or 5 you should use the `rel3` branch at `github.com/rwynn/monstache`.
-
-If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
-and your plugin should import `github.com/rwynn/monstache/monstachemap`. 
-
-If you are working with Elasticsearch 2 or 5 and coding golang plugins for monstache you should use the `rel3` branch 
-and your plugin should import `gopkg.in/rwynn/monstache.v3/monstachemap`.
-
-If you are working with Elasticsearch 6+ and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:latest` or a specific 4.X image such as `rwynn/monstache:4.16.1`.
-
-If you are working with Elasticsearch 2 or 5 and using the monstache Docker images you should use the docker 
-image `rwynn/monstache:rel3` or a specific 3.X image such as `rwynn/monstache:3.23.1`.
+| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB
+| --- | --- |---|---|---|---
+| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3
+| 4 | master | rel4 (note this used to be latest) | mgo community go driver | Version 6 | Version 3
+| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 4
+| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7 | Version 4
 
 ## GridFS Support
 
@@ -314,16 +302,9 @@ monstache supports embedding user defined middleware between MongoDB and Elastic
 
 monstache supports golang plugins.  You should have golang version 1.11 or greater installed and will need to perform the build on the Linux or OSX platform. Golang plugins are not currently supported on the Windows platform due to limits in golang.
 
-To implement a plugin for monstache you simply need to implement specific function signatures,
+To implement a plugin for monstache you need to implement specific function signatures,
 use the go command to build a .so file for your plugin, 
 and finally pass the path to your plugin .so file when running monstache.
-
-!!! note
-	If you are working with Elasticsearch 6+ and coding golang plugins for monstache you should use the `master` branch
-	and your plugin should import `github.com/rwynn/monstache/monstachemap`. 
-	If you are working with Elasticsearch 2 or 5 and coding
-	golang plugins for monstache you should use the `rel3` branch and your plugin should 
-	import `gopkg.in/rwynn/monstache.v3/monstachemap`.
 
 !!! warning
 	Golang plugins must be built with the exact same source code (including dependencies) of the loading program.
@@ -334,11 +315,10 @@ and finally pass the path to your plugin .so file when running monstache.
 To create a golang plugin for monstache
 
 - git clone `monstache` somewhere outside your $GOPATH
-- only if you are using Elasticsearch 2 or 5 then switch to the `rel3` branch with `git checkout rel3`. Otherwise, stay on `master`
+- checkout the correct branch for your version of Monstache.  See Versions above.
 - in the monstache root directory run `go install`
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
-- import `github.com/rwynn/monstache/monstachemap` for Elasticsearch 6+ or `gopkg.in/rwynn/monstache.v3/monstachemap` for Elasticsearch 2 or 5
-- implement at least one of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
+- implement one or more of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
 
 ```go
 
@@ -365,7 +345,7 @@ the following example plugin simply converts top level string values to uppercas
 ```go
 package main
 import (
-	"github.com/rwynn/monstache/monstachemap" // or gopkg.in/rwynn/monstache.v3/monstachemap for Elasticsearch 2 or 5
+	"github.com/rwynn/monstache/monstachemap"
 	"strings"
 )
 // a plugin to convert document values to uppercase
@@ -759,7 +739,7 @@ will be stored under `_parent`.
 
 The example is based on the Elasticsearch docs for [parent-child](https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child.html)
 
-For more on updating the namespace name, check the [Delete Strategy](../config/#delete-strategy) as there is a change of the default behviour in v4.4.0 & v3.11.0
+For more on updating the namespace name, check the [Delete Strategy](../config/#delete-strategy)
 
 ## Routing
 
@@ -1199,26 +1179,24 @@ There are Docker images available for Monstache on [Docker Hub](https://hub.dock
 You can pull and run the latest images with
 
 ```
-# for Elasticsearch >= 6
-docker run rwynn/monstache:latest -v
+docker run rwynn/monstache:rel6 -v
 
-# for Elasticsearch < 6
-docker run rwynn/monstache:rel3 -v
+docker run rwynn/monstache:rel5 -v
 ```
 
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:4.16.1 -v
+docker run rwynn/monstache:6.0.6 -v
 
-docker run rwynn/monstache:3.23.1 -v
+docker run rwynn/monstache:5.0.6 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:latest -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.6 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
@@ -1256,87 +1234,8 @@ If the pprof setting is enabled the following endpoints are also made available:
 
 ## MongoDB Authentication
 
-If you enable [Authentication](https://docs.mongodb.com/manual/tutorial/enable-authentication/)
-for MongoDB and don't use monstache's `change-stream-namespaces` option
-then you need to give your monstache user additional access such that he may read from the `local` database to
-tail the oplog at `local.oplog.rs`.
-
-```
-db.createUser(
-  {
-    user: "monstache",
-    pwd: "monstache",
-    roles: [ { role: "userAdminAnyDatabase", db: "admin" }, {role: 'read', db: 'local'}, "readWriteAnyDatabase" ]
-  }
-)
-```
-
-After creating the user, starting mongod with [auth enabled](https://docs.mongodb.com/manual/reference/configuration-options/#security.authorization), and authenticating with a username/password, then you can view the previously created user with
-his authorization mechanism.
-
-```
-rs1:PRIMARY> use admin;
-switched to db admin
-rs1:PRIMARY> db.auth('monstache', 'monstache');
-rs1:PRIMARY> show collections;
-rs1:PRIMARY> db.getUser('monstache');
-{
-        "_id" : "admin.monstache",
-        "user" : "monstache",
-        "db" : "admin",
-        "roles" : [
-                {
-                        "role" : "userAdminAnyDatabase",
-                        "db" : "admin"
-                },
-                {
-                        "role" : "read",
-                        "db" : "local"
-                },
-                {
-                        "role" : "readWriteAnyDatabase",
-                        "db" : "admin"
-                }
-        ],
-        "mechanisms" : [
-                "SCRAM-SHA-1",
-                "SCRAM-SHA-256"
-        ]
-}
-
-```
-
-In this the case the auth mechanisms supported for the user are `SCRAM-SHA1` and `SCRAM-SHA-256`.
-Monstache currently supports connecting with `SCRAM-SHA-1`.
-
-```
-monstache -mongo-url mongodb://monstache:monstache@localhost?authMechanism=SCRAM-SHA-1
-INFO 2019/01/18 17:36:13 Started monstache version 4.15.1
-INFO 2019/01/18 17:36:13 Successfully connected to MongoDB version 4.0.5
-INFO 2019/01/18 17:36:13 Successfully connected to Elasticsearch version 6.0.0
-INFO 2019/01/18 17:36:13 Listening for events
-```
-
-Without giving the read permission on `local` you may see errors like the following:
-
-```
-Error tailing oplog entries: not authorized for query on local.oplog.rs
-```
-
-## MongoDB Atlas
-
-Monstache is able to connect to MongoDB Atlas with some configuration.  To connect successfully you will need to make sure you:
-
-* Enable `ssl` by configuring the [mongo-dial-settings](../config/#mongo-dial-settings) toml table with `ssl = true`
-* Use the legacy `mongodb://` scheme instead of the new `mongodb+srv://` scheme.  Atlas should provide you will both connection strings but direct you initially to the new scheme.
-* Append the connection parameter `&authMechanism=SCRAM-SHA-1` to the given URL if your user uses `SCRAM` authentication.
-* If monstache complains about unrecognized params in the connection string given to you by Atlas you can remove those params from your connection string.
-  Newer parameters may be currently unsupported by the underlying  golang driver.
-* Use the `change-stream-namespaces` to listen for changes.  This option uses the MongoDB change stream API and doesn't require access to the `local` database.
-
-!!! note
-	You may be able to omit `change-stream-namespaces` but this will require that your user has access to read the `local` database.  You can follow the instructions
-	[here](https://docs.atlas.mongodb.com/faq/#does-mongodb-service-expose-the-oplog) to configure Atlas to expose the oplog for your user.
+Check the following [link](https://github.com/mongodb/mongo-go-driver/blob/v1.0.2/x/network/connstring/connstring.go)
+for all available options that you can specify in the MongoDB connection string related to authentication.
 
 ## AWS Signature Version 4 
 
