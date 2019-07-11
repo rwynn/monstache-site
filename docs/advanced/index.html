@@ -173,6 +173,26 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use monstache <code>rel5</code> and <code>rel6</code> with MongoDB versions back to 2.6 with the following caveats.</p>
+<p>If you have MongoDB 3.6 then you must explicitly enumerate collections in your <code>change-stream-namespaces</code>
+setting because change streams against databases and entire deployments was not introduced until MongoDB version
+4.0.  Alternatively, you can disable change events entirely with <code>disable-change-events</code>.</p>
+<p>If you have MongoDB 2.6 - 3.5 then you must omit any mention of <code>change-stream-namespaces</code> in your config file
+because change streams were first introduced in 3.6.  To emulate change events you must turn on the option
+<code>enable-oplog</code>. Alternatively, you can disable change events entirely with <code>disable-change-events</code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Your MongoDB binary version does not always mean that the
+<a href="https://docs.mongodb.com/manual/reference/command/setFeatureCompatibilityVersion/">feature compatibility</a>
+is at that same level. Check
+your feature compatibility version from the MongoDB console to ensure that MongoDB is not operating in a lesser
+capability mode. This sometimes happens when MongoDB is upgraded in place or MongoDB is started with a data
+directory of a previous installation. Sometimes there are reasons to stay at a lower feature compatibility
+so check before you upgrade it.</p>
+</div>
 <h2 id="gridfs-support">GridFS Support<a class="headerlink" href="#gridfs-support" title="Permanent link">&para;</a></h2>
 <p>Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
 text search.  This feature requires that you install an Elasticsearch plugin which enables the field type <code>attachment</code>.
@@ -422,7 +442,7 @@ at runtime due to source code mismatches.  </p>
 <p>To create a golang plugin for monstache</p>
 <ul>
 <li>git clone <code>monstache</code> somewhere outside your $GOPATH</li>
-<li>checkout the correct branch for your version of Monstache.  See Versions above.</li>
+<li>git checkout a specific monstache version tag (e.g. <code>v6.0.11</code>) to build the plugin against.  See Versions above.</li>
 <li>in the monstache root directory run <code>go install</code></li>
 <li>create a .go source file for your plugin in the monstache root directory with the package name <code>main</code></li>
 <li>implement one or more of the following functions: <code>Map</code>, <code>Filter</code>, <code>Pipeline</code>, <code>Process</code></li>
@@ -1286,14 +1306,14 @@ docker run rwynn/monstache:rel5 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:6.0.6 -v
+<pre><code>docker run rwynn/monstache:6.0.11 -v
 
-docker run rwynn/monstache:5.0.6 -v
+docker run rwynn/monstache:5.0.11 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.6 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.11 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 
@@ -1386,8 +1406,8 @@ module.exports = function(ns, changeStream) {
 <p>To build complicated change stream pipelines see <a href="https://docs.mongodb.com/manual/reference/change-events/">Change Events</a> 
 for information on the structure of change events. This information will shape your pipeline.</p>
 <h2 id="mongodb-view-replication">MongoDB view replication<a class="headerlink" href="#mongodb-view-replication" title="Permanent link">&para;</a></h2>
-<p>You may have a situation where you want to replicate a MongoDB view in Elasticsearch.  Or you have a collection that should trigger sync of 
-another collection. You can use the <code>relate</code> config to do this.</p>
+<p>You may have a situation where you want to replicate a MongoDB view in Elasticsearch.
+Or you have a collection that should trigger sync of another collection. You can use the <code>relate</code> config to do this.</p>
 <p>Consider you have a collections <code>thing</code> and <code>state</code>.  A thing has an associated state and a thing is linked to a state via
 a field <code>s</code> which points to the <code>_id</code> of the associated state in the <code>state</code> collection.</p>
 <p>You can create a view in MongoDB that uses a <code>$lookup</code> to pull the state information in and present a view of things with the state 
@@ -1415,7 +1435,7 @@ with-namespace = &quot;thingdb.thingview&quot;
 keep-src = false # ignore the original thing that changed and instead just use the lookup of that thing via the view
 
 [[relate]]
-namespace = &quot;thingdb.states&quot; # when a state changes trigger a thing change event since thing is associated to a state
+namespace = &quot;thingdb.state&quot; # when a state changes trigger a thing change event since thing is associated to a state
 with-namespace = &quot;thingdb.thing&quot;
 src-field = &quot;_id&quot; # use the _id field of the state that changed to lookup associated things
 match-field = &quot;s&quot; # only trigger change events for the things where thing.s (match-field) = state._id (src-field).

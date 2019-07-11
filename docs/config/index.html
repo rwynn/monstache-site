@@ -109,7 +109,9 @@
             <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
             <li><a href="#delete-strategy">delete-strategy</a></li>
             <li><a href="#direct-read-concur">direct-read-concur</a></li>
+            <li><a href="#direct-read-dynamic-exclude-regex">direct-read-dynamic-exclude-regex</a></li>
             <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
+            <li><a href="#direct-read-no-timeout">direct-read-no-timeout</a></li>
             <li><a href="#direct-read-split-max">direct-read-split-max</a></li>
             <li><a href="#disable-change-events">disable-change-events</a></li>
             <li><a href="#dropped-databases">dropped-databases</a></li>
@@ -130,6 +132,7 @@
             <li><a href="#elasticsearch-validate-pem-file">elasticsearch-validate-pem-file</a></li>
             <li><a href="#enable-easy-json">enable-easy-json</a></li>
             <li><a href="#enable-http-server">enable-http-server</a></li>
+            <li><a href="#enable-oplog">enable-oplog</a></li>
             <li><a href="#enable-patches">enable-patches</a></li>
             <li><a href="#env-delimiter">env-delimiter</a></li>
             <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
@@ -274,10 +277,21 @@ mydb then you can set this to <code>mydb*</code>.  </p>
 By default monstache starts reading and syncing all namespaces concurrently.  If this places too much stress on MongoDB then
 you can set this option to an integer greater than 0.  If you set it to <code>1</code>, for example, then monstache will sync the
 collections serially.  Numbers greater than 1 allow you to sync collections in batches of that size.</p>
+<h2 id="direct-read-dynamic-exclude-regex">direct-read-dynamic-exclude-regex<a class="headerlink" href="#direct-read-dynamic-exclude-regex" title="Permanent link">&para;</a></h2>
+<p>string (default <code>""</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS_DYNAMIC_EXCLUDE_REGEX</code>)</p>
+<p>This option is only available in monstache v5 and v6.</p>
+<p>This options allows you to filter out any collections that match the given regex when monstache is directed to dynamically
+register <code>direct-read-namespaces</code>.  When direct read namespaces are explicit it is not used.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link">&para;</a></h2>
 <p>[]string (default <code>nil</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS</code>)</p>
 <p>This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
 actually indexed to Elasticsearch, so you need not necessarily copy the entire collection.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In monstache v5 and v6 you can use an array with a single empty string to direct monstache to dynamically discover your
+collections and perform direct reads on them.  When <code>direct-read-dynamic-exclude-regex</code> is configured you can prune 
+from the list that is discovered.  System collections will not be considered for inclusion in the discovery.</p>
+</div>
 <p>Since the oplog is a capped collection it may only contain a subset of all your data.  In this case you can perform a direct
 sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
 like to copy.  Monstache will perform reads directly from the given set of db.collection and sync them to Elasticsearch.</p>
@@ -317,6 +331,13 @@ throughput by controlling replicas and the refresh interval. The index template 
 }
 </code></pre>
 
+<h2 id="direct-read-no-timeout">direct-read-no-timeout<a class="headerlink" href="#direct-read-no-timeout" title="Permanent link">&para;</a></h2>
+<p>boolean (default <code>false</code>)</p>
+<p>When direct-read-no-timeout is true monstache will set the no cursor timeout flag on cursors opened for direct reads.
+The default is not to do this since having cursors without timeouts is not generally a good practice.  However, for
+reading very large collections you may find it necessary to avoid cursor timeout errors.  An alternative to enabling
+this setting is to increase the cursor timeout on your MongoDB server or look into using the <code>direct-read-split-max</code>
+and <code>direct-read-concur</code> options to limit the number of cursors opened for direct reads.</p>
 <h2 id="direct-read-split-max">direct-read-split-max<a class="headerlink" href="#direct-read-split-max" title="Permanent link">&para;</a></h2>
 <p>int (default <code>9</code>)</p>
 <p>The maximum number of times to split a collection for direct reads.  This setting greatly impacts the memory consumption
@@ -415,6 +436,11 @@ pool when connecting to Elasticsearch. This should only be used when Elasticsear
 <h2 id="enable-http-server">enable-http-server<a class="headerlink" href="#enable-http-server" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>Add this flag to enable an embedded HTTP server at localhost:8080</p>
+<h2 id="enable-oplog">enable-oplog<a class="headerlink" href="#enable-oplog" title="Permanent link">&para;</a></h2>
+<p>boolean (default <code>false</code>)</p>
+<p>This option only applies to monstache v5 and v6.  Enabling it turns on change event emulation feature that
+tails the MongoDB oplog directly.  It should only be turned on when pairing monstache v5 or v6 with a MongoDB
+server at a server compatibility version less than 3.6.</p>
 <h2 id="enable-patches">enable-patches<a class="headerlink" href="#enable-patches" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>) </p>
 <p>Set to true to enable storing <a href="https://tools.ietf.org/html/rfc7396">rfc7396</a> patches in your Elasticsearch documents</p>

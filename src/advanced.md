@@ -11,6 +11,26 @@
 | 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 4
 | 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7 | Version 4
 
+!!! note
+    You can use monstache `rel5` and `rel6` with MongoDB versions back to 2.6 with the following caveats.
+
+    If you have MongoDB 3.6 then you must explicitly enumerate collections in your `change-stream-namespaces`
+    setting because change streams against databases and entire deployments was not introduced until MongoDB version
+    4.0.  Alternatively, you can disable change events entirely with `disable-change-events`.
+
+    If you have MongoDB 2.6 - 3.5 then you must omit any mention of `change-stream-namespaces` in your config file
+    because change streams were first introduced in 3.6.  To emulate change events you must turn on the option
+    `enable-oplog`. Alternatively, you can disable change events entirely with `disable-change-events`.
+
+!!! warning
+    Your MongoDB binary version does not always mean that the
+    [feature compatibility](https://docs.mongodb.com/manual/reference/command/setFeatureCompatibilityVersion/)
+    is at that same level. Check
+    your feature compatibility version from the MongoDB console to ensure that MongoDB is not operating in a lesser
+    capability mode. This sometimes happens when MongoDB is upgraded in place or MongoDB is started with a data
+    directory of a previous installation. Sometimes there are reasons to stay at a lower feature compatibility
+    so check before you upgrade it.
+
 ## GridFS Support
 
 Monstache supports indexing the raw content of files stored in GridFS into Elasticsearch for full
@@ -315,7 +335,7 @@ and finally pass the path to your plugin .so file when running monstache.
 To create a golang plugin for monstache
 
 - git clone `monstache` somewhere outside your $GOPATH
-- checkout the correct branch for your version of Monstache.  See Versions above.
+- git checkout a specific monstache version tag (e.g. `v6.0.11`) to build the plugin against.  See Versions above.
 - in the monstache root directory run `go install`
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
 - implement one or more of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
@@ -1187,16 +1207,16 @@ docker run rwynn/monstache:rel5 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:6.0.6 -v
+docker run rwynn/monstache:6.0.11 -v
 
-docker run rwynn/monstache:5.0.6 -v
+docker run rwynn/monstache:5.0.11 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.6 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.11 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
@@ -1319,8 +1339,8 @@ for information on the structure of change events. This information will shape y
 
 ## MongoDB view replication
 
-You may have a situation where you want to replicate a MongoDB view in Elasticsearch.  Or you have a collection that should trigger sync of 
-another collection. You can use the `relate` config to do this.
+You may have a situation where you want to replicate a MongoDB view in Elasticsearch.
+Or you have a collection that should trigger sync of another collection. You can use the `relate` config to do this.
 
 Consider you have a collections `thing` and `state`.  A thing has an associated state and a thing is linked to a state via
 a field `s` which points to the `_id` of the associated state in the `state` collection.
@@ -1354,7 +1374,7 @@ with-namespace = "thingdb.thingview"
 keep-src = false # ignore the original thing that changed and instead just use the lookup of that thing via the view
 
 [[relate]]
-namespace = "thingdb.states" # when a state changes trigger a thing change event since thing is associated to a state
+namespace = "thingdb.state" # when a state changes trigger a thing change event since thing is associated to a state
 with-namespace = "thingdb.thing"
 src-field = "_id" # use the _id field of the state that changed to lookup associated things
 match-field = "s" # only trigger change events for the things where thing.s (match-field) = state._id (src-field).

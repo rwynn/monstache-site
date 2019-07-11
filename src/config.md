@@ -109,12 +109,26 @@ By default monstache starts reading and syncing all namespaces concurrently.  If
 you can set this option to an integer greater than 0.  If you set it to `1`, for example, then monstache will sync the
 collections serially.  Numbers greater than 1 allow you to sync collections in batches of that size.
 
+## direct-read-dynamic-exclude-regex
+
+string (default `""`) (env var name `MONSTACHE_DIRECT_READ_NS_DYNAMIC_EXCLUDE_REGEX`)
+
+This option is only available in monstache v5 and v6.
+
+This options allows you to filter out any collections that match the given regex when monstache is directed to dynamically
+register `direct-read-namespaces`.  When direct read namespaces are explicit it is not used.
+
 ## direct-read-namespaces
 
 []string (default `nil`) (env var name `MONSTACHE_DIRECT_READ_NS`)
 
 This option allows you to directly copy collections from MongoDB to Elasticsearch. Monstache allows filtering the data that is
 actually indexed to Elasticsearch, so you need not necessarily copy the entire collection.
+
+!!! note
+    In monstache v5 and v6 you can use an array with a single empty string to direct monstache to dynamically discover your
+    collections and perform direct reads on them.  When `direct-read-dynamic-exclude-regex` is configured you can prune 
+    from the list that is discovered.  System collections will not be considered for inclusion in the discovery.
 
 Since the oplog is a capped collection it may only contain a subset of all your data.  In this case you can perform a direct
 sync of Mongodb to Elasticsearch.  To do this, set direct-read-namespaces to an array of namespaces that you would 
@@ -160,6 +174,16 @@ throughput by controlling replicas and the refresh interval. The index template 
   }
 }
 ```
+
+## direct-read-no-timeout
+
+boolean (default `false`)
+
+When direct-read-no-timeout is true monstache will set the no cursor timeout flag on cursors opened for direct reads.
+The default is not to do this since having cursors without timeouts is not generally a good practice.  However, for
+reading very large collections you may find it necessary to avoid cursor timeout errors.  An alternative to enabling
+this setting is to increase the cursor timeout on your MongoDB server or look into using the `direct-read-split-max`
+and `direct-read-concur` options to limit the number of cursors opened for direct reads.
 
 ## direct-read-split-max
 
@@ -321,6 +345,14 @@ When enable-easy-json is true monstache will the easy-json library to serialize 
 boolean (default `false`)
 
 Add this flag to enable an embedded HTTP server at localhost:8080
+
+## enable-oplog
+
+boolean (default `false`)
+
+This option only applies to monstache v5 and v6.  Enabling it turns on change event emulation feature that
+tails the MongoDB oplog directly.  It should only be turned on when pairing monstache v5 or v6 with a MongoDB
+server at a server compatibility version less than 3.6.
 
 ## enable-patches
 

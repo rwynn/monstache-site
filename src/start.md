@@ -24,7 +24,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 6.0.6
+# 6.0.11
 ```
 
 You can also build monstache from source. Monstache uses [vgo](https://github.com/golang/go/wiki/Modules). 
@@ -34,7 +34,7 @@ You will need to have golang version `1.11` or greater.
 cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
-git checkout <branch-to-build>
+git checkout <branch-or-tag-to-build>
 go install
 ```
 
