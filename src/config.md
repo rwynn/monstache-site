@@ -33,7 +33,7 @@ Enable support for using a connection to Elasticsearch that uses AWS Signature V
 
 	string (default "") (env var name `MONSTACHE_AWS_SECRET_KEY`)
 
-	AWS Secrete Key
+	AWS Secret Key
 
 	#### region
 
