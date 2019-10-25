@@ -1329,6 +1329,9 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <p>Returns at 200 status code with the text "ok" when monstache is running</p>
 <h4 id="stats">/stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h4>
 <p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
+<h4 id="instance">/instance<a class="headerlink" href="#instance" title="Permanent link">&para;</a></h4>
+<p>Returns information about the running monstache process including whether or not it is currently enabled
+(a cluster will have one enabled process) and the most recent change event timestamp read from MongoDB.</p>
 <h4 id="debug-if-pprof-is-enabled">/debug (if pprof is enabled)<a class="headerlink" href="#debug-if-pprof-is-enabled" title="Permanent link">&para;</a></h4>
 <p>If the pprof setting is enabled the following endpoints are also made available:</p>
 <p>/debug/pprof/

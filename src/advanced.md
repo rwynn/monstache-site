@@ -1242,6 +1242,11 @@ Returns at 200 status code with the text "ok" when monstache is running
 
 Returns the current indexing statistics in JSON format. Only available if stats are enabled
 
+#### /instance
+
+Returns information about the running monstache process including whether or not it is currently enabled
+(a cluster will have one enabled process) and the most recent change event timestamp read from MongoDB.
+
 #### /debug (if pprof is enabled)
 
 If the pprof setting is enabled the following endpoints are also made available:

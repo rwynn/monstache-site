@@ -94,11 +94,20 @@ int (default `0`)
 
 The strategy to use for handling document deletes when custom indexing is done in scripts.
 
-**Strategy 0** -default- will do a term query by document id across all Elasticsearch indexes. Will only perform the delete if one single document is returned by the query.
+**Strategy 0** -default- will do a term query by document id across all Elasticsearch indexes in `delete-index-pattern`.
+Will only perform the delete if one single document is returned by the query.
 
 **Stategy 1** -deprecated- will store indexing metadata in MongoDB in the `monstache.meta` collection and use this metadata to locate and delete the document.
 
 **Stategy 2** will completely ignore document deletes in MongoDB.
+
+## direct-read-bounded
+
+boolean (default `false`)
+
+When this option is enabled monstache will ensure that all direct read queries have a min and max set on the query.
+This ensures that direct reads will complete and not chase new data that is being inserted while the cursor is being
+exhausted.
 
 ## direct-read-concur
 
@@ -205,6 +214,32 @@ boolean (default `false`)
 
 When disable-change-events is true monstache will not listen to change events from the oplog or call watch on any collections.  This option is only
 useful if you are using [direct-read-namespaces](#direct-read-namespaces) to copy collections and would prefer not to sync change events.
+
+## disable-file-pipeline-put
+
+boolean (default `false`)
+
+This setting only applies to monstache versions 5 and 6.
+
+When this option is true monstache will not attempt to auto create an ingest pipeline named `attachment` with a `file` field
+at startup when `index-files` is enabled.  In this case the user must create the pipeline before running monstache.
+For example, the user must issue a command against Elasticsearch as follows prior to running monstache in order 
+to index GridFS files:
+
+```
+PUT _ingest/pipeline/attachment
+{
+  "description" : "Extract file information",
+  "processors" : [
+    {
+      "attachment" : {
+        "field" : "file",
+        "indexed_chars" : -1
+      }
+    }
+  ]
+}
+```
 
 ## dropped-databases
 
