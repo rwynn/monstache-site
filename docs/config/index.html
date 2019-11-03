@@ -638,16 +638,16 @@ When the <code>MONSTACHE_LOG_DIR</code> environment variable is used then a log 
 through to the <a href="https://github.com/natefinch/lumberjack">lumberjack</a> logger.</p>
 <div class="admonition note">
 <h4 id="max-size">max-size<a class="headerlink" href="#max-size" title="Permanent link">&para;</a></h4>
-<p>int (default 500)</p>
+<p>int (default 500) (env var name <code>MONSTACHE_LOG_MAX_SIZE</code>)</p>
 <p>MaxSize is the maximum size in megabytes of the log file before it gets rotated.</p>
 <h4 id="max-age">max-age<a class="headerlink" href="#max-age" title="Permanent link">&para;</a></h4>
-<p>int (default 28)</p>
+<p>int (default 28) (env var name <code>MONSTACHE_LOG_MAX_AGE</code>)</p>
 <p>MaxAge is the maximum number of days to retain old log files based on the
 timestamp encoded in their filename.  Note that a day is defined as 24
 hours and may not exactly correspond to calendar days due to daylight
 savings, leap seconds, etc. Use a value of zero to ignore the age of files.</p>
 <h4 id="max-backups">max-backups<a class="headerlink" href="#max-backups" title="Permanent link">&para;</a></h4>
-<p>int (default 5)</p>
+<p>int (default 5) (env var name <code>MONSTACHE_LOG_MAX_BACKUPS</code>)</p>
 <p>MaxBackups is the maximum number of old log files to retain. Use a value of
 zero to retain all old log files (though MaxAge may still cause them to get
 deleted.)</p>

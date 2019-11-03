@@ -657,13 +657,13 @@ through to the [lumberjack](https://github.com/natefinch/lumberjack) logger.
 
 	#### max-size
 
-	int (default 500)
+	int (default 500) (env var name `MONSTACHE_LOG_MAX_SIZE`)
 
     MaxSize is the maximum size in megabytes of the log file before it gets rotated.
 
 	#### max-age
 
-	int (default 28)
+	int (default 28) (env var name `MONSTACHE_LOG_MAX_AGE`)
 
     MaxAge is the maximum number of days to retain old log files based on the
     timestamp encoded in their filename.  Note that a day is defined as 24
@@ -672,7 +672,7 @@ through to the [lumberjack](https://github.com/natefinch/lumberjack) logger.
 
     #### max-backups
 
-    int (default 5)
+    int (default 5) (env var name `MONSTACHE_LOG_MAX_BACKUPS`)
 
     MaxBackups is the maximum number of old log files to retain. Use a value of
     zero to retain all old log files (though MaxAge may still cause them to get
