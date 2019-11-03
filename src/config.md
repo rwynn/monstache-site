@@ -512,6 +512,14 @@ The following gtm configuration properties are available.  See [gtm](https://git
 	A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
 	fetched in batch from MongoDB and flushed for indexing.
 
+    #### max-await-time
+
+    string (default "")
+
+    A string represetation of a golang duration, e.g. "10s".  If set, will be converted and passed at the
+    `maxAwaitTimeMS` option for change streams.  This determines the maximum amount of time in milliseconds 
+    the server waits for new data changes to report to the change stream cursor before returning an empty batch.
+
 ## gzip
 
 boolean (default `false`)
@@ -637,6 +645,53 @@ When the `MONSTACHE_LOG_DIR` environment variable is used then a log file for ea
 	string (default "")
 
 	The file path to write indexing statistics to. Stats logs are enabled via the stats option.
+
+## log-rotate
+
+TOML table (default `nil`)
+
+Use to configure how log files are rotated/managed when logging to files. These options are passed
+through to the [lumberjack](https://github.com/natefinch/lumberjack) logger.
+
+!!! note ""
+
+	#### max-size
+
+	int (default 500)
+
+    MaxSize is the maximum size in megabytes of the log file before it gets rotated.
+
+	#### max-age
+
+	int (default 28)
+
+    MaxAge is the maximum number of days to retain old log files based on the
+    timestamp encoded in their filename.  Note that a day is defined as 24
+    hours and may not exactly correspond to calendar days due to daylight
+    savings, leap seconds, etc. Use a value of zero to ignore the age of files.
+
+    #### max-backups
+
+    int (default 5)
+
+    MaxBackups is the maximum number of old log files to retain. Use a value of
+    zero to retain all old log files (though MaxAge may still cause them to get
+    deleted.)
+
+	#### localtime
+
+	boolean (default false)
+
+    LocalTime determines if the time used for formatting the timestamps in
+    backup files is the computer's local time.  The default is to use UTC
+    time.
+
+	#### compress
+
+	boolean (default false)
+
+    Compress determines if the rotated log files should be compressed
+    using gzip. The default is not to perform compression.
 
 ## mapper-plugin-path
 

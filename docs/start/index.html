@@ -186,10 +186,15 @@ to initiate and validate your replica set. For local testing your replica set ma
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you have enabled security in MongoDB you will need to give the user in your connection string
-certain privileges.  Specifically, the user will need to be able read the <code>local</code> database (to read
-from the oplog) and any user databases that you wish to synch data from.  Additionally, when using the 
-resume or clustering features the user will need to be able to write to and create indexes for the 
-<code>monstache</code> database. </p>
+certain privileges:</p>
+<p>The user in the connection string will need to be able read the <code>local</code> database (to read
+from the oplog) and any user databases that you wish to synch data from.</p>
+<p>When using the resume or clustering features the user will need to be able to write to and 
+create indexes for the <code>monstache</code> database, or more generally, whatever you configure the 
+option <code>config-database-name</code> to be.</p>
+<p>When using change streams you will need to implement the changes in the documentation for
+<a href="https://docs.mongodb.com/manual/changeStreams/#access-control">access control</a>. Monstache
+defaults to opening the change stream against the entire deployment.</p>
 </div>
 <p>Monstache makes concurrent bulk indexing requests to Elasticsearch.  It is recommended to increase the
 pool of bulk request handlers configured for Elasticsearch to ensure that requests do not begin to time

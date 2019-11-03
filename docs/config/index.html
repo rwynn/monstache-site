@@ -152,6 +152,7 @@
             <li><a href="#index-oplog-time">index-oplog-time</a></li>
             <li><a href="#index-stats">index-stats</a></li>
             <li><a href="#logs">logs</a></li>
+            <li><a href="#log-rotate">log-rotate</a></li>
             <li><a href="#mapper-plugin-path">mapper-plugin-path</a></li>
             <li><a href="#mapping">mapping</a></li>
             <li><a href="#max-file-size">max-file-size</a></li>
@@ -543,6 +544,11 @@ MongoDB.  When many documents are inserted or updated at once it is better to fe
 <p>string (default 75ms)</p>
 <p>A string representation of a golang duration.  Determines the maximum time a buffer is held before it is 
 fetched in batch from MongoDB and flushed for indexing.</p>
+<h4 id="max-await-time">max-await-time<a class="headerlink" href="#max-await-time" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>A string represetation of a golang duration, e.g. "10s".  If set, will be converted and passed at the
+<code>maxAwaitTimeMS</code> option for change streams.  This determines the maximum amount of time in milliseconds 
+the server waits for new data changes to report to the change stream cursor before returning an empty batch.</p>
 </div>
 <h2 id="gzip">gzip<a class="headerlink" href="#gzip" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
@@ -625,6 +631,35 @@ When the <code>MONSTACHE_LOG_DIR</code> environment variable is used then a log 
 <h4 id="stats">stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h4>
 <p>string (default "")</p>
 <p>The file path to write indexing statistics to. Stats logs are enabled via the stats option.</p>
+</div>
+<h2 id="log-rotate">log-rotate<a class="headerlink" href="#log-rotate" title="Permanent link">&para;</a></h2>
+<p>TOML table (default <code>nil</code>)</p>
+<p>Use to configure how log files are rotated/managed when logging to files. These options are passed
+through to the <a href="https://github.com/natefinch/lumberjack">lumberjack</a> logger.</p>
+<div class="admonition note">
+<h4 id="max-size">max-size<a class="headerlink" href="#max-size" title="Permanent link">&para;</a></h4>
+<p>int (default 500)</p>
+<p>MaxSize is the maximum size in megabytes of the log file before it gets rotated.</p>
+<h4 id="max-age">max-age<a class="headerlink" href="#max-age" title="Permanent link">&para;</a></h4>
+<p>int (default 28)</p>
+<p>MaxAge is the maximum number of days to retain old log files based on the
+timestamp encoded in their filename.  Note that a day is defined as 24
+hours and may not exactly correspond to calendar days due to daylight
+savings, leap seconds, etc. Use a value of zero to ignore the age of files.</p>
+<h4 id="max-backups">max-backups<a class="headerlink" href="#max-backups" title="Permanent link">&para;</a></h4>
+<p>int (default 5)</p>
+<p>MaxBackups is the maximum number of old log files to retain. Use a value of
+zero to retain all old log files (though MaxAge may still cause them to get
+deleted.)</p>
+<h4 id="localtime">localtime<a class="headerlink" href="#localtime" title="Permanent link">&para;</a></h4>
+<p>boolean (default false)</p>
+<p>LocalTime determines if the time used for formatting the timestamps in
+backup files is the computer's local time.  The default is to use UTC
+time.</p>
+<h4 id="compress">compress<a class="headerlink" href="#compress" title="Permanent link">&para;</a></h4>
+<p>boolean (default false)</p>
+<p>Compress determines if the rotated log files should be compressed
+using gzip. The default is not to perform compression.</p>
 </div>
 <h2 id="mapper-plugin-path">mapper-plugin-path<a class="headerlink" href="#mapper-plugin-path" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>)</p>
