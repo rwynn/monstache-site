@@ -24,7 +24,7 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 6.0.11
+# 6.4.0
 ```
 
 You can also build monstache from source. Monstache uses [vgo](https://github.com/golang/go/wiki/Modules). 

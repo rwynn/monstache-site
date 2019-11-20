@@ -68,9 +68,7 @@ use an empty string as the namespace value.  For example, `change-stream-namespa
 
 string (default `monstache`) 
 
-The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific
-point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify `cluster-name` or 
-enable `resume`.
+The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify `cluster-name` or enable `resume`.
 
 ## cluster-name
 
@@ -1098,6 +1096,9 @@ the concurrency of queries trying to unload the relate queue.
 
 boolean (default `false`)
 
+!!! warning
+    Replay is currently deprecated in favor of `direct-read-namespaces`.  Replay may be removed in a future release.
+
 When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. 
 
 !!! note ""
@@ -1117,12 +1118,13 @@ boolean (default `false`)
 
 When resume is true, monstache writes the timestamp of MongoDB operations it has successfully synced to Elasticsearch
 to the collection monstache.monstache.  It also reads that timestamp from that collection when it starts in order to replay
-events which it might have missed because monstache was stopped. If monstache is started with the [cluster-name](#cluster-name) option
-set then resume is automatically turned on.  
+events which it might have missed because monstache was stopped. If monstache is started with the [cluster-name](#cluster-name)option set then resume is automatically turned on.
 
 ## resume-from-timestamp
 
 int64 (default `0`)
+
+This option only applies when the `resume-strategy` is 0 for timestamp based resume.
 
 When resume-from-timestamp 
 (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
@@ -1144,6 +1146,21 @@ However, there are some exceptions.  If monstache is started with the [cluster-n
 name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
 from the last timestamp successfully processed.  Another exception occurs when [worker](#worker) is enabled.
 In that case the worker name becomes the resume-name.
+
+## resume-strategy
+
+int (default `0`)
+
+The strategy to use for resuming streams from previous runs of monstache.  Only applies when `resume` is enabled.
+This strategy is also used when `cluster-name` is set to ensure streams are resumed when the active process in the
+cluster switches.
+
+**Strategy 0** -default- Timestamp based resume of change streams.  Compatible with MongoDB API 4.0+.
+
+**Stategy 1** Token based resume of change streams. Compatible with MongoDB API 3.6+.
+
+Timestamps and tokens are written periodically to the database configured in `config-database-name`. Timestamps are
+written to the collection named `monstache`.  Tokens are written to the collection named `tokens`.
 
 ## resume-write-unsafe
 

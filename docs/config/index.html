@@ -187,6 +187,7 @@
             <li><a href="#resume">resume</a></li>
             <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
             <li><a href="#resume-name">resume-name</a></li>
+            <li><a href="#resume-strategy">resume-strategy</a></li>
             <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
             <li><a href="#routing-namespaces">routing-namespaces</a></li>
             <li><a href="#script_2">script</a></li>
@@ -255,9 +256,7 @@ defaults to a comma.  E.g. <code>MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar</c
 </div>
 <h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>monstache</code>) </p>
-<p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific
-point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify <code>cluster-name</code> or 
-enable <code>resume</code>.</p>
+<p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify <code>cluster-name</code> or enable <code>resume</code>.</p>
 <h2 id="cluster-name">cluster-name<a class="headerlink" href="#cluster-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_CLUSTER</code>)</p>
 <p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
@@ -913,6 +912,10 @@ you have a <code>relate</code> config and then do a mass insert or update agains
 the concurrency of queries trying to unload the relate queue.</p>
 <h2 id="replay">replay<a class="headerlink" href="#replay" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Replay is currently deprecated in favor of <code>direct-read-namespaces</code>.  Replay may be removed in a future release.</p>
+</div>
 <p>When replay is true, monstache replays all events from the beginning of the MongoDB oplog and syncs them to Elasticsearch. </p>
 <div class="admonition note">
 <p>If you've previously synced Monstache to Elasticsearch you may see many WARN statments in the log indicating that there was a version conflict.
@@ -926,10 +929,10 @@ occurring after this timestamp (tails starting at the end).  Timestamps are not 
 <p>boolean (default <code>false</code>)</p>
 <p>When resume is true, monstache writes the timestamp of MongoDB operations it has successfully synced to Elasticsearch
 to the collection monstache.monstache.  It also reads that timestamp from that collection when it starts in order to replay
-events which it might have missed because monstache was stopped. If monstache is started with the <a href="#cluster-name">cluster-name</a> option
-set then resume is automatically turned on.  </p>
+events which it might have missed because monstache was stopped. If monstache is started with the <a href="#cluster-name">cluster-name</a>option set then resume is automatically turned on.</p>
 <h2 id="resume-from-timestamp">resume-from-timestamp<a class="headerlink" href="#resume-from-timestamp" title="Permanent link">&para;</a></h2>
 <p>int64 (default <code>0</code>)</p>
+<p>This option only applies when the <code>resume-strategy</code> is 0 for timestamp based resume.</p>
 <p>When resume-from-timestamp 
 (a 64 bit timestamp where the high 32 bytes represent the number of seconds since epoch and the low 32 bits
 represent an offset within a second) is given, monstache will sync events starting immediately after the timestamp.
@@ -947,6 +950,15 @@ However, there are some exceptions.  If monstache is started with the <a href="#
 name of the cluster becomes the resume-name.  This is to ensure that any process in the cluster is able to resume
 from the last timestamp successfully processed.  Another exception occurs when <a href="#worker">worker</a> is enabled.
 In that case the worker name becomes the resume-name.</p>
+<h2 id="resume-strategy">resume-strategy<a class="headerlink" href="#resume-strategy" title="Permanent link">&para;</a></h2>
+<p>int (default <code>0</code>)</p>
+<p>The strategy to use for resuming streams from previous runs of monstache.  Only applies when <code>resume</code> is enabled.
+This strategy is also used when <code>cluster-name</code> is set to ensure streams are resumed when the active process in the
+cluster switches.</p>
+<p><strong>Strategy 0</strong> -default- Timestamp based resume of change streams.  Compatible with MongoDB API 4.0+.</p>
+<p><strong>Stategy 1</strong> Token based resume of change streams. Compatible with MongoDB API 3.6+.</p>
+<p>Timestamps and tokens are written periodically to the database configured in <code>config-database-name</code>. Timestamps are
+written to the collection named <code>monstache</code>.  Tokens are written to the collection named <code>tokens</code>.</p>
 <h2 id="resume-write-unsafe">resume-write-unsafe<a class="headerlink" href="#resume-write-unsafe" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When resume-write-unsafe is true monstache sets the safety mode of the MongoDB session such that writes are fire and forget.

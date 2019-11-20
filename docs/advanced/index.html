@@ -120,6 +120,7 @@
             <li><a href="#aws-signature-version-4">AWS Signature Version 4</a></li>
             <li><a href="#watching-changes-on-specific-fields-only">Watching changes on specific fields only</a></li>
             <li><a href="#mongodb-view-replication">MongoDB view replication</a></li>
+            <li><a href="#amazon-documentdb-with-mongodb-compatibility">Amazon DocumentDB (with MongoDB compatibility)</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -178,7 +179,8 @@
 <p>You can use monstache <code>rel5</code> and <code>rel6</code> with MongoDB versions back to 2.6 with the following caveats.</p>
 <p>If you have MongoDB 3.6 then you must explicitly enumerate collections in your <code>change-stream-namespaces</code>
 setting because change streams against databases and entire deployments was not introduced until MongoDB version
-4.0.  Alternatively, you can disable change events entirely with <code>disable-change-events</code>.</p>
+4.0.  Alternatively, you can disable change events entirely with <code>disable-change-events</code>. You must also set
+<code>resume-strategy</code> to <code>1</code> to use a token-based resume strategy compatibile with MongoDB API 3.6.</p>
 <p>If you have MongoDB 2.6 - 3.5 then you must omit any mention of <code>change-stream-namespaces</code> in your config file
 because change streams were first introduced in 3.6.  To emulate change events you must turn on the option
 <code>enable-oplog</code>. Alternatively, you can disable change events entirely with <code>disable-change-events</code>.</p>
@@ -442,7 +444,7 @@ at runtime due to source code mismatches.  </p>
 <p>To create a golang plugin for monstache</p>
 <ul>
 <li>git clone <code>monstache</code> somewhere outside your $GOPATH</li>
-<li>git checkout a specific monstache version tag (e.g. <code>v6.0.11</code>) to build the plugin against.  See Versions above.</li>
+<li>git checkout a specific monstache version tag (e.g. <code>v6.4.0</code>) to build the plugin against.  See Versions above.</li>
 <li>in the monstache root directory run <code>go install</code></li>
 <li>create a .go source file for your plugin in the monstache root directory with the package name <code>main</code></li>
 <li>implement one or more of the following functions: <code>Map</code>, <code>Filter</code>, <code>Pipeline</code>, <code>Process</code></li>
@@ -1306,14 +1308,14 @@ docker run rwynn/monstache:rel5 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:6.0.11 -v
+<pre><code>docker run rwynn/monstache:6.4.0 -v
 
-docker run rwynn/monstache:5.0.11 -v
+docker run rwynn/monstache:5.4.0 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.11 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.4.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 
@@ -1451,7 +1453,21 @@ keep-src = false
 associated to a single state then a change to that state would trigger n+1 queries to MongoDB when n is the 
 number of things related to the state.  1 query would be used to find all associated things and n queries would be 
 used to lookup each thing in the view.</p>
-</div></div>
+</div>
+<h2 id="amazon-documentdb-with-mongodb-compatibility">Amazon DocumentDB (with MongoDB compatibility)<a class="headerlink" href="#amazon-documentdb-with-mongodb-compatibility" title="Permanent link">&para;</a></h2>
+<p>Monstache support for Amazon DocumentDB is currently experimental.  Support for the change streams API in MongoDB
+was recently added to Amazon DocumentDB. Consult the DocumentDB documentation for instructions on 
+<a href="https://docs.aws.amazon.com/documentdb/latest/developerguide/change-streams.html">enabling change streams</a>
+for your collections.</p>
+<p>Since Amazon DocumentDB only supports compatibility with MongoDB API 3.6 you will want to ensure that your change stream
+configuration targets collections and that your resume strategy is set to use tokens and not the default of timestamps.</p>
+<p>Ensure that your MongoDB connection URI is set with a primary read preference: e.g. <code>?readPreference=primary</code>.</p>
+<pre><code class="toml"># ensure you target collections in your change stream namespaces
+change-stream-namespaces = [&quot;db1.col1&quot;, &quot;db2.col2&quot;]
+# ensure that resuming, if enabled, is done based on tokens and not timestamps
+resume = true
+resume-strategy = 1
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">

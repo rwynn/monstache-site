@@ -16,7 +16,8 @@
 
     If you have MongoDB 3.6 then you must explicitly enumerate collections in your `change-stream-namespaces`
     setting because change streams against databases and entire deployments was not introduced until MongoDB version
-    4.0.  Alternatively, you can disable change events entirely with `disable-change-events`.
+    4.0.  Alternatively, you can disable change events entirely with `disable-change-events`. You must also set
+    `resume-strategy` to `1` to use a token-based resume strategy compatibile with MongoDB API 3.6.
 
     If you have MongoDB 2.6 - 3.5 then you must omit any mention of `change-stream-namespaces` in your config file
     because change streams were first introduced in 3.6.  To emulate change events you must turn on the option
@@ -335,7 +336,7 @@ and finally pass the path to your plugin .so file when running monstache.
 To create a golang plugin for monstache
 
 - git clone `monstache` somewhere outside your $GOPATH
-- git checkout a specific monstache version tag (e.g. `v6.0.11`) to build the plugin against.  See Versions above.
+- git checkout a specific monstache version tag (e.g. `v6.4.0`) to build the plugin against.  See Versions above.
 - in the monstache root directory run `go install`
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
 - implement one or more of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
@@ -1207,16 +1208,16 @@ docker run rwynn/monstache:rel5 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:6.0.11 -v
+docker run rwynn/monstache:6.4.0 -v
 
-docker run rwynn/monstache:5.0.11 -v
+docker run rwynn/monstache:5.4.0 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.0.11 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.4.0 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
@@ -1392,3 +1393,22 @@ keep-src = false
 	number of things related to the state.  1 query would be used to find all associated things and n queries would be 
 	used to lookup each thing in the view.
 
+## Amazon DocumentDB (with MongoDB compatibility)
+
+Monstache support for Amazon DocumentDB is currently experimental.  Support for the change streams API in MongoDB
+was recently added to Amazon DocumentDB. Consult the DocumentDB documentation for instructions on 
+[enabling change streams](https://docs.aws.amazon.com/documentdb/latest/developerguide/change-streams.html)
+for your collections.
+
+Since Amazon DocumentDB only supports compatibility with MongoDB API 3.6 you will want to ensure that your change stream
+configuration targets collections and that your resume strategy is set to use tokens and not the default of timestamps.
+
+Ensure that your MongoDB connection URI is set with a primary read preference: e.g. `?readPreference=primary`.
+
+```toml
+# ensure you target collections in your change stream namespaces
+change-stream-namespaces = ["db1.col1", "db2.col2"]
+# ensure that resuming, if enabled, is done based on tokens and not timestamps
+resume = true
+resume-strategy = 1
+```
