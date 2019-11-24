@@ -234,25 +234,23 @@ elasticsearch-urls = [&quot;https://es1:9200&quot;, &quot;https://es2:9200&quot;
 
 # frequently required settings
 
-# if you don't want to listen for changes to all collections in MongoDB but only a few
-# e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
-# this setting does not initiate a copy, it is a filter on the oplog change listener only
-namespace-regex = '^mydb\.mycollection$'
-
-# additionally, if you need to seed an index from a collection and not just listen for changes from the oplog
+# if you need to seed an index from a collection and not just listen and sync changes events
 # you can copy entire collections or views from MongoDB to Elasticsearch
-direct-read-namespaces = [&quot;mydb.mycollection&quot;, &quot;db.collection&quot;, &quot;test.test&quot;]
+direct-read-namespaces = [&quot;mydb.mycollection&quot;, &quot;db.collection&quot;, &quot;test.test&quot;, &quot;db2.myview&quot;]
 
-# if you want to use MongoDB change streams instead of legacy oplog tailing add the following
-# in this case you don't need regexes to filter collections.
-# change streams require MongoDB version 3.6+
-# change streams can only be combined with resume, replay, or cluster-name options on MongoDB 4+
+# if you want to use MongoDB change streams instead of legacy oplog tailing use change-stream-namespaces
+# change streams require at least MongoDB API 3.6+
 # if you have MongoDB 4+ you can listen for changes to an entire database or entire deployment
+# in this case you usually don't need regexes in your config to filter collections unless you target the deployment.
 # to listen to an entire db use only the database name.  For a deployment use an empty string.
 change-stream-namespaces = [&quot;mydb.mycollection&quot;, &quot;db.collection&quot;, &quot;test.test&quot;]
 
 # additional settings
 
+# if you don't want to listen for changes to all collections in MongoDB but only a few
+# e.g. only listen for inserts, updates, deletes, and drops from mydb.mycollection
+# this setting does not initiate a copy, it is only a filter on the change event listener
+namespace-regex = '^mydb\.mycollection$'
 # compress requests to Elasticsearch
 gzip = true
 # generate indexing statistics
@@ -288,6 +286,9 @@ resume = true
 resume-write-unsafe = false
 # override the name under which resume state is saved
 resume-name = &quot;default&quot;
+# use a custom resume strategy (tokens) instead of the default strategy (timestamps)
+# tokens work with MongoDB API 3.6+ while timestamps work only with MongoDB API 4.0+
+resume-strategy = 1
 # exclude documents whose namespace matches the following pattern
 namespace-exclude-regex = '^mydb\.ignorecollection$'
 # turn on indexing of GridFS file content
