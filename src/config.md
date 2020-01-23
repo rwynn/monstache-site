@@ -34,33 +34,33 @@ Enable support for using a connection to Elasticsearch that uses AWS Signature V
 	remote endpoints such as EC2 or ECS roles.  The 4 strategy chains together strategies 1-3 and uses the first strategy that returns
 	a credential.
 
-	### credentials-file
+	#### credentials-file
 
 	string (default "~/.aws/credentials")
 
 	The credentials file to use.  Normally, you need not set this as it will come from either `AWS_SHARED_CREDENTIALS_FILE` or default
 	to `~/.aws/credentials`.
 
-	### profile
+	#### profile
 
 	string (default "")
 
 	The AWS profile to use from the credentials file.  If not provided a profile named `default` will be used.
 
-	### watch-credentials
+	#### watch-credentials
 
 	bool (default false)
 
 	Set to true to put a watch on the `credentials-watch-dir`.  When a file in the watch dir is changed monstache will invalidate the
 	credentials such that they will be re-established on the next request to Elasticsearch.
 
-	### credentials-watch-dir
+	#### credentials-watch-dir
 
 	string (default "~/.aws")
 
 	The path to a directory to watch for changes if `watch-credentials` is enabled.
 
-	### force-expire
+	#### force-expire
 
 	string (default "")
 
