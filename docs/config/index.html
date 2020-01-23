@@ -226,6 +226,31 @@ interpreted to be part of the table by the parser unless it is ended. See the fo
 <p>TOML table (default <code>nil</code>)</p>
 <p>Enable support for using a connection to Elasticsearch that uses AWS Signature Version 4</p>
 <div class="admonition note">
+<h4 id="strategy">strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h4>
+<p>int (default 0)</p>
+<p>The stategy used to configure the AWS credential provider.  The 0 strategy is static and uses the values of <code>access-key</code>
+and <code>secret-key</code>.  The 1 strategy is file based and loads the credentials from the <code>credentials-file</code> setting or from value 
+of the standard <code>AWS_SHARED_CREDENTIALS_FILE</code>, or <code>~/.aws/credentials</code>. The 2 strategy loads the credentials from the standard
+AWS environment variables <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>. The 3 strategy loads the credentials from the default
+remote endpoints such as EC2 or ECS roles.  The 4 strategy chains together strategies 1-3 and uses the first strategy that returns
+a credential.</p>
+<h3 id="credentials-file">credentials-file<a class="headerlink" href="#credentials-file" title="Permanent link">&para;</a></h3>
+<p>string (default "~/.aws/credentials")</p>
+<p>The credentials file to use.  Normally, you need not set this as it will come from either <code>AWS_SHARED_CREDENTIALS_FILE</code> or default
+to <code>~/.aws/credentials</code>.</p>
+<h3 id="profile">profile<a class="headerlink" href="#profile" title="Permanent link">&para;</a></h3>
+<p>string (default "")</p>
+<p>The AWS profile to use from the credentials file.  If not provided a profile named <code>default</code> will be used.</p>
+<h3 id="watch-credentials">watch-credentials<a class="headerlink" href="#watch-credentials" title="Permanent link">&para;</a></h3>
+<p>bool (default false)</p>
+<p>Set to true to put a watch on the <code>credentials-watch-dir</code>.  When a file in the watch dir is changed monstache will invalidate the
+credentials such that they will be re-established on the next request to Elasticsearch.</p>
+<h3 id="credentials-watch-dir">credentials-watch-dir<a class="headerlink" href="#credentials-watch-dir" title="Permanent link">&para;</a></h3>
+<p>string (default "~/.aws")</p>
+<p>The path to a directory to watch for changes if <code>watch-credentials</code> is enabled.</p>
+<h3 id="force-expire">force-expire<a class="headerlink" href="#force-expire" title="Permanent link">&para;</a></h3>
+<p>string (default "")</p>
+<p>A golang duration string, e.g. 5m.  If given, monstache will force expire the credentials on this interval.</p>
 <h4 id="access-key">access-key<a class="headerlink" href="#access-key" title="Permanent link">&para;</a></h4>
 <p>string (default "") (env var name <code>MONSTACHE_AWS_ACCESS_KEY</code>)</p>
 <p>AWS Access Key</p>

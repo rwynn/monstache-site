@@ -23,6 +23,49 @@ Enable support for using a connection to Elasticsearch that uses AWS Signature V
 
 !!! note ""
 
+	#### strategy
+
+	int (default 0)
+
+	The stategy used to configure the AWS credential provider.  The 0 strategy is static and uses the values of `access-key`
+	and `secret-key`.  The 1 strategy is file based and loads the credentials from the `credentials-file` setting or from value 
+	of the standard `AWS_SHARED_CREDENTIALS_FILE`, or `~/.aws/credentials`. The 2 strategy loads the credentials from the standard
+	AWS environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. The 3 strategy loads the credentials from the default
+	remote endpoints such as EC2 or ECS roles.  The 4 strategy chains together strategies 1-3 and uses the first strategy that returns
+	a credential.
+
+	### credentials-file
+
+	string (default "~/.aws/credentials")
+
+	The credentials file to use.  Normally, you need not set this as it will come from either `AWS_SHARED_CREDENTIALS_FILE` or default
+	to `~/.aws/credentials`.
+
+	### profile
+
+	string (default "")
+
+	The AWS profile to use from the credentials file.  If not provided a profile named `default` will be used.
+
+	### watch-credentials
+
+	bool (default false)
+
+	Set to true to put a watch on the `credentials-watch-dir`.  When a file in the watch dir is changed monstache will invalidate the
+	credentials such that they will be re-established on the next request to Elasticsearch.
+
+	### credentials-watch-dir
+
+	string (default "~/.aws")
+
+	The path to a directory to watch for changes if `watch-credentials` is enabled.
+
+	### force-expire
+
+	string (default "")
+
+	A golang duration string, e.g. 5m.  If given, monstache will force expire the credentials on this interval.
+
 	#### access-key
 
 	string (default "") (env var name `MONSTACHE_AWS_ACCESS_KEY`)

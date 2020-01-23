@@ -1356,6 +1356,8 @@ region = &quot;ZZZ&quot;
 
 </code></pre>
 
+<p>See the docs for <a href="../config/#aws-connect">aws-connect</a> for the different stategies available for configuring a credential
+provider.</p>
 <p>Notice how the <code>elasticsearch-url</code> references the port number <code>443</code> in the connection string.  This is because AWS makes
 your cluster available on the standard https port and not the default Elasticsearch port of <code>9200</code>.  If you have connection
 problems make sure you are using the correct port.  You cannot omit the port because the driver will default to <code>9200</code> if a 

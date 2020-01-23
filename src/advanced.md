@@ -1263,7 +1263,7 @@ If the pprof setting is enabled the following endpoints are also made available:
 Check the following [link](https://github.com/mongodb/mongo-go-driver/blob/v1.0.2/x/network/connstring/connstring.go)
 for all available options that you can specify in the MongoDB connection string related to authentication.
 
-## AWS Signature Version 4 
+## AWS Signature Version 4
 
 Monstache has included AWS Signature Version 4 request signing.  To enable the AWS Signature Version 4 support add the following to your config file:
 
@@ -1277,6 +1277,9 @@ secret-key = "YYY"
 region = "ZZZ"
 
 ```
+
+See the docs for [aws-connect](../config/#aws-connect) for the different stategies available for configuring a credential
+provider.
 
 Notice how the `elasticsearch-url` references the port number `443` in the connection string.  This is because AWS makes
 your cluster available on the standard https port and not the default Elasticsearch port of `9200`.  If you have connection
