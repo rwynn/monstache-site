@@ -1111,11 +1111,19 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 
 	#### max-depth
 
-	bool (default 0)
+	int (default 0)
 
     If max-depth is greater than 0 then the relationship will only fire if the number of relationships between
     this relate and the originating event is less than or equal to the value given.  By default monstache will
     continue following relationships until none are left.
+
+    #### dot-notation
+
+    bool (default "false")
+
+    If `match-field` is a nested field like `foo.bar` then setting `dot-notation` to true
+    produces the query `{ "foo.bar": 1 }` to MongoDB.  If `dot-notation` is not enabled then the query will
+    be an exact match query sent as `{ foo { bar : 1 } }`.
 
 ## relate-buffer
 
