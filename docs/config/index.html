@@ -9,19 +9,14 @@
         <link rel="canonical" href="https://rwynn.github.io/monstache-site/config/">
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Configuration - Monstache</title>
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css">
         <link href="../css/extra.css" rel="stylesheet">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
@@ -37,61 +32,53 @@
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="..">Monstache</a>
-                </div>
+                <a class="navbar-brand" href="..">Monstache</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="..">Home</a>
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
                             </li>
-                            <li >
-                                <a href="../start/">Getting Started</a>
+                            <li class="navitem">
+                                <a href="../start/" class="nav-link">Getting Started</a>
                             </li>
-                            <li class="active">
-                                <a href="./">Configuration</a>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Configuration</a>
                             </li>
-                            <li >
-                                <a href="../advanced/">Advanced</a>
+                            <li class="navitem">
+                                <a href="../advanced/" class="nav-link">Advanced</a>
                             </li>
-                            <li >
-                                <a href="../about/">About</a>
+                            <li class="navitem">
+                                <a href="../about/" class="nav-link">About</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../start/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../start/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../advanced/">
+                            <li class="nav-item">
+                                <a rel="next" href="../advanced/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://github.com/rwynn/monstache-site/edit/master/src/config.md"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/rwynn/monstache-site/edit/master/src/config.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -99,112 +86,426 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#configuration">Configuration</a></li>
-            <li><a href="#aws-connect">aws-connect</a></li>
-            <li><a href="#change-stream-namespaces">change-stream-namespaces</a></li>
-            <li><a href="#config-database-name">config-database-name</a></li>
-            <li><a href="#cluster-name">cluster-name</a></li>
-            <li><a href="#delete-index-pattern">delete-index-pattern</a></li>
-            <li><a href="#delete-strategy">delete-strategy</a></li>
-            <li><a href="#direct-read-bounded">direct-read-bounded</a></li>
-            <li><a href="#direct-read-concur">direct-read-concur</a></li>
-            <li><a href="#direct-read-dynamic-exclude-regex">direct-read-dynamic-exclude-regex</a></li>
-            <li><a href="#direct-read-namespaces">direct-read-namespaces</a></li>
-            <li><a href="#direct-read-no-timeout">direct-read-no-timeout</a></li>
-            <li><a href="#direct-read-split-max">direct-read-split-max</a></li>
-            <li><a href="#disable-change-events">disable-change-events</a></li>
-            <li><a href="#disable-file-pipeline-put">disable-file-pipeline-put</a></li>
-            <li><a href="#dropped-databases">dropped-databases</a></li>
-            <li><a href="#dropped-collections">dropped-collections</a></li>
-            <li><a href="#elasticsearch-user">elasticsearch-user</a></li>
-            <li><a href="#elasticsearch-password">elasticsearch-password</a></li>
-            <li><a href="#elasticsearch-urls">elasticsearch-urls</a></li>
-            <li><a href="#elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup</a></li>
-            <li><a href="#elasticsearch-healthcheck-timeout">elasticsearch-healthcheck-timeout</a></li>
-            <li><a href="#elasticsearch-version">elasticsearch-version</a></li>
-            <li><a href="#elasticsearch-max-conns">elasticsearch-max-conns</a></li>
-            <li><a href="#elasticsearch-retry">elasticsearch-retry</a></li>
-            <li><a href="#elasticsearch-client-timeout">elasticsearch-client-timeout</a></li>
-            <li><a href="#elasticsearch-max-docs">elasticsearch-max-docs</a></li>
-            <li><a href="#elasticsearch-max-bytes">elasticsearch-max-bytes</a></li>
-            <li><a href="#elasticsearch-max-seconds">elasticsearch-max-seconds</a></li>
-            <li><a href="#elasticsearch-pem-file">elasticsearch-pem-file</a></li>
-            <li><a href="#elasticsearch-validate-pem-file">elasticsearch-validate-pem-file</a></li>
-            <li><a href="#enable-easy-json">enable-easy-json</a></li>
-            <li><a href="#enable-http-server">enable-http-server</a></li>
-            <li><a href="#enable-oplog">enable-oplog</a></li>
-            <li><a href="#enable-patches">enable-patches</a></li>
-            <li><a href="#env-delimiter">env-delimiter</a></li>
-            <li><a href="#exit-after-direct-reads">exit-after-direct-reads</a></li>
-            <li><a href="#fail-fast">fail-fast</a></li>
-            <li><a href="#file-downloaders">file-downloaders</a></li>
-            <li><a href="#file-highlighting">file-highlighting</a></li>
-            <li><a href="#file-namespaces">file-namespaces</a></li>
-            <li><a href="#filter">filter</a></li>
-            <li><a href="#graylog-addr">graylog-addr</a></li>
-            <li><a href="#gtm-settings">gtm-settings</a></li>
-            <li><a href="#gzip">gzip</a></li>
-            <li><a href="#http-server-addr">http-server-addr</a></li>
-            <li><a href="#index-as-update">index-as-update</a></li>
-            <li><a href="#index-files">index-files</a></li>
-            <li><a href="#index-oplog-time">index-oplog-time</a></li>
-            <li><a href="#index-stats">index-stats</a></li>
-            <li><a href="#logs">logs</a></li>
-            <li><a href="#log-rotate">log-rotate</a></li>
-            <li><a href="#mapper-plugin-path">mapper-plugin-path</a></li>
-            <li><a href="#mapping">mapping</a></li>
-            <li><a href="#max-file-size">max-file-size</a></li>
-            <li><a href="#merge-patch-attribute">merge-patch-attribute</a></li>
-            <li><a href="#mongo-url">mongo-url</a></li>
-            <li><a href="#mongo-config-url">mongo-config-url</a></li>
-            <li><a href="#mongo-pem-file">mongo-pem-file</a></li>
-            <li><a href="#mongo-validate-pem-file">mongo-validate-pem-file</a></li>
-            <li><a href="#mongo-oplog-database-name">mongo-oplog-database-name</a></li>
-            <li><a href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a></li>
-            <li><a href="#mongo-dial-settings">mongo-dial-settings</a></li>
-            <li><a href="#mongo-session-settings">mongo-session-settings</a></li>
-            <li><a href="#mongo-x509-settings">mongo-x509-settings</a></li>
-            <li><a href="#namespace-drop-exclude-regex">namespace-drop-exclude-regex</a></li>
-            <li><a href="#namespace-drop-regex">namespace-drop-regex</a></li>
-            <li><a href="#namespace-exclude-regex">namespace-exclude-regex</a></li>
-            <li><a href="#namespace-regex">namespace-regex</a></li>
-            <li><a href="#oplog-date-field-format">oplog-date-field-format</a></li>
-            <li><a href="#oplog-date-field-name">oplog-date-field-name</a></li>
-            <li><a href="#oplog-ts-field-name">oplog-ts-field-name</a></li>
-            <li><a href="#patch-namespaces">patch-namespaces</a></li>
-            <li><a href="#pipeline">pipeline</a></li>
-            <li><a href="#pipe-allow-disk">pipe-allow-disk</a></li>
-            <li><a href="#post-processors">post-processors</a></li>
-            <li><a href="#pprof">pprof</a></li>
-            <li><a href="#print-config">print-config</a></li>
-            <li><a href="#prune-invalid-json">prune-invalid-json</a></li>
-            <li><a href="#relate">relate</a></li>
-            <li><a href="#relate-buffer">relate-buffer</a></li>
-            <li><a href="#relate-threads">relate-threads</a></li>
-            <li><a href="#replay">replay</a></li>
-            <li><a href="#resume">resume</a></li>
-            <li><a href="#resume-from-timestamp">resume-from-timestamp</a></li>
-            <li><a href="#resume-name">resume-name</a></li>
-            <li><a href="#resume-strategy">resume-strategy</a></li>
-            <li><a href="#resume-write-unsafe">resume-write-unsafe</a></li>
-            <li><a href="#routing-namespaces">routing-namespaces</a></li>
-            <li><a href="#script_2">script</a></li>
-            <li><a href="#stats_1">stats</a></li>
-            <li><a href="#stats-duration">stats-duration</a></li>
-            <li><a href="#stats-index-format">stats-index-format</a></li>
-            <li><a href="#time-machine-namespaces">time-machine-namespaces</a></li>
-            <li><a href="#time-machine-index-prefix">time-machine-index-prefix</a></li>
-            <li><a href="#time-machine-index-suffix">time-machine-index-suffix</a></li>
-            <li><a href="#time-machine-direct-reads">time-machine-direct-reads</a></li>
-            <li><a href="#tpl">tpl</a></li>
-            <li><a href="#verbose">verbose</a></li>
-            <li><a href="#worker">worker</a></li>
-            <li><a href="#workers">workers</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#configuration" class="nav-link">Configuration</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#aws-connect" class="nav-link">aws-connect</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#change-stream-namespaces" class="nav-link">change-stream-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#config-database-name" class="nav-link">config-database-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#cluster-name" class="nav-link">cluster-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#delete-index-pattern" class="nav-link">delete-index-pattern</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#delete-strategy" class="nav-link">delete-strategy</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-bounded" class="nav-link">direct-read-bounded</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-concur" class="nav-link">direct-read-concur</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-dynamic-exclude-regex" class="nav-link">direct-read-dynamic-exclude-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-namespaces" class="nav-link">direct-read-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-no-timeout" class="nav-link">direct-read-no-timeout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-split-max" class="nav-link">direct-read-split-max</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#disable-change-events" class="nav-link">disable-change-events</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#disable-file-pipeline-put" class="nav-link">disable-file-pipeline-put</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#dropped-databases" class="nav-link">dropped-databases</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#dropped-collections" class="nav-link">dropped-collections</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-user" class="nav-link">elasticsearch-user</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-password" class="nav-link">elasticsearch-password</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-urls" class="nav-link">elasticsearch-urls</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-healthcheck-timeout-startup" class="nav-link">elasticsearch-healthcheck-timeout-startup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-healthcheck-timeout" class="nav-link">elasticsearch-healthcheck-timeout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-version" class="nav-link">elasticsearch-version</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-conns" class="nav-link">elasticsearch-max-conns</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-retry" class="nav-link">elasticsearch-retry</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-client-timeout" class="nav-link">elasticsearch-client-timeout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-docs" class="nav-link">elasticsearch-max-docs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-bytes" class="nav-link">elasticsearch-max-bytes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-seconds" class="nav-link">elasticsearch-max-seconds</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-pem-file" class="nav-link">elasticsearch-pem-file</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-validate-pem-file" class="nav-link">elasticsearch-validate-pem-file</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#enable-easy-json" class="nav-link">enable-easy-json</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#enable-http-server" class="nav-link">enable-http-server</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#enable-oplog" class="nav-link">enable-oplog</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#enable-patches" class="nav-link">enable-patches</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#env-delimiter" class="nav-link">env-delimiter</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exit-after-direct-reads" class="nav-link">exit-after-direct-reads</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#fail-fast" class="nav-link">fail-fast</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#file-downloaders" class="nav-link">file-downloaders</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#file-highlighting" class="nav-link">file-highlighting</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#file-namespaces" class="nav-link">file-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#filter" class="nav-link">filter</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#graylog-addr" class="nav-link">graylog-addr</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#gtm-settings" class="nav-link">gtm-settings</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#gzip" class="nav-link">gzip</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#http-server-addr" class="nav-link">http-server-addr</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#index-as-update" class="nav-link">index-as-update</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#index-files" class="nav-link">index-files</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#index-oplog-time" class="nav-link">index-oplog-time</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#index-stats" class="nav-link">index-stats</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#logs" class="nav-link">logs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#log-rotate" class="nav-link">log-rotate</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mapper-plugin-path" class="nav-link">mapper-plugin-path</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mapping" class="nav-link">mapping</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#max-file-size" class="nav-link">max-file-size</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#merge-patch-attribute" class="nav-link">merge-patch-attribute</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-url" class="nav-link">mongo-url</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-config-url" class="nav-link">mongo-config-url</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-pem-file" class="nav-link">mongo-pem-file</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-validate-pem-file" class="nav-link">mongo-validate-pem-file</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-oplog-database-name" class="nav-link">mongo-oplog-database-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-oplog-collection-name" class="nav-link">mongo-oplog-collection-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-dial-settings" class="nav-link">mongo-dial-settings</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-session-settings" class="nav-link">mongo-session-settings</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mongo-x509-settings" class="nav-link">mongo-x509-settings</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#namespace-drop-exclude-regex" class="nav-link">namespace-drop-exclude-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#namespace-drop-regex" class="nav-link">namespace-drop-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#namespace-exclude-regex" class="nav-link">namespace-exclude-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#namespace-regex" class="nav-link">namespace-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#oplog-date-field-format" class="nav-link">oplog-date-field-format</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#oplog-date-field-name" class="nav-link">oplog-date-field-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#oplog-ts-field-name" class="nav-link">oplog-ts-field-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#patch-namespaces" class="nav-link">patch-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#pipeline" class="nav-link">pipeline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#pipe-allow-disk" class="nav-link">pipe-allow-disk</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#post-processors" class="nav-link">post-processors</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#pprof" class="nav-link">pprof</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#print-config" class="nav-link">print-config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#prune-invalid-json" class="nav-link">prune-invalid-json</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#relate" class="nav-link">relate</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#relate-buffer" class="nav-link">relate-buffer</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#relate-threads" class="nav-link">relate-threads</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#replay" class="nav-link">replay</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resume" class="nav-link">resume</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resume-from-timestamp" class="nav-link">resume-from-timestamp</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resume-name" class="nav-link">resume-name</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resume-strategy" class="nav-link">resume-strategy</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#resume-write-unsafe" class="nav-link">resume-write-unsafe</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#routing-namespaces" class="nav-link">routing-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#script_2" class="nav-link">script</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#stats_1" class="nav-link">stats</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#stats-duration" class="nav-link">stats-duration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#stats-index-format" class="nav-link">stats-index-format</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#time-machine-namespaces" class="nav-link">time-machine-namespaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#time-machine-index-prefix" class="nav-link">time-machine-index-prefix</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#time-machine-index-suffix" class="nav-link">time-machine-index-suffix</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#time-machine-direct-reads" class="nav-link">time-machine-direct-reads</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#tpl" class="nav-link">tpl</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#verbose" class="nav-link">verbose</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#worker" class="nav-link">worker</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#workers" class="nav-link">workers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
 <hr />
@@ -1085,33 +1386,34 @@ same worker and none of the other workers. See the <a href="../advanced/#workers
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --workers w1 --workers w2 </p>
 </div></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
             <hr>
-                <p>Copyright &copy; 2016-2018 Ryan Wynn</p>
+                <p>Copyright &copy; 2016 Ryan Wynn</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
             var base_url = "..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js" defer></script>
         <script src="../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
@@ -1122,12 +1424,12 @@ same worker and none of the other workers. See the <a href="../advanced/#workers
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
