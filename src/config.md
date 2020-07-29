@@ -5,6 +5,10 @@
 Configuration can be specified in environment variables (a limited set of options), in a TOML config file or 
 passed into monstache as program arguments on the command line.
 
+Environment variables names can be suffixed with __FILE.  In this case the value of the environment variable will
+be interpreted as a file path.  Monstache will attempt to read the file at that path and use the contents of the file
+as the value of the variable.
+
 !!! note
 	Command line arguments take precedance over environment variables which in turn take precedance over the 
 	TOML config file. You can verify the final configuration used by Monstache by running monstache with `-print-config`.
@@ -249,6 +253,18 @@ You can decrease this value for a memory constrained Monstache process.
 To disable collection splitting altogether, set this option to `-1`.  In this case monstache will not try to segment the
 collection, but rather use a single cursor for the entire read.
 
+## direct-read-stateful
+
+boolean (default `false`)
+
+When this setting is set to true monstache will mark direct read namespaces as complete after they have been fully read in
+a collection named `directreads` in the monstache config database.
+
+On subsequent restarts monstache will check this collection and only start direct reads for the namespaces not in the completed list.
+
+This allow you to keep the list the direct read namespaces in the configuration but manage the list that has completed and should
+not be run again externally in MongoDB. Deleting the `directreads` collection and restarting monstache will force a full sync.
+
 ## disable-change-events
 
 boolean (default `false`)
@@ -404,9 +420,29 @@ string (default `""`) (env var name `MONSTACHE_ES_PEM`)
 When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.
 
+## elasticsearch-pki-auth
+
+TOML table (default `nil`)
+
+Used to configure client to use PKI user auth for Elasticsearch  
+
+!!! note ""
+
+	#### cert-file
+
+	string (default "") (env var name `MONSTACHE_ES_PKI_CERT`)
+
+	Path to the cert file e.g. the --cert argument to curl
+
+	#### key-file
+
+	string (default "") (env var name `MONSTACHE_ES_PKI_KEY`)
+
+	Path to the key file e.g. the --key argument to curl
+
 ## elasticsearch-validate-pem-file
 
-boolean (default `true`)
+boolean (default `true`) (env var name `MONSTACHE_ES_VALIDATE_PEM`)
 
 When elasticsearch-validate-pem-file is false TLS will be configured to skip verification
 
@@ -768,6 +804,12 @@ See the section [Index Mapping](../advanced/#index-mapping) for more information
 	Allows you to override the default type that monstache will index documents with.  Overriding the type is not recommended for Elasticsearch version
 	6.2+.
 
+	#### pipeline
+
+	string (default "")
+
+	The name of an existing Elasticsearch pipeline to index the data with. A pipeline is a series of Elasticsearch processors to be executed.  An Elasticsearch pipeline is one way to transform MongoDB data before indexing.
+
 ## max-file-size
 
 int (default `0`)
@@ -816,7 +858,7 @@ pool when connecting to MongoDB. This should only be used when MongoDB is config
 
 ## mongo-validate-pem-file
 
-boolean (default `true`)
+boolean (default `true`) (env var name `MONSTACHE_MONGO_VALIDATE_PEM`)
 
 !!! note ""
     This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6

@@ -148,6 +148,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-stateful" class="nav-link">direct-read-stateful</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#disable-change-events" class="nav-link">disable-change-events</a>
               <ul class="nav flex-column">
               </ul>
@@ -213,6 +217,10 @@
               </ul>
             </li>
             <li class="nav-item" data-level="2"><a href="#elasticsearch-pem-file" class="nav-link">elasticsearch-pem-file</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#elasticsearch-pki-auth" class="nav-link">elasticsearch-pki-auth</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -388,7 +396,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#pipeline" class="nav-link">pipeline</a>
+            <li class="nav-item" data-level="2"><a href="#pipeline_1" class="nav-link">pipeline</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -511,6 +519,9 @@
 <hr />
 <p>Configuration can be specified in environment variables (a limited set of options), in a TOML config file or 
 passed into monstache as program arguments on the command line.</p>
+<p>Environment variables names can be suffixed with __FILE.  In this case the value of the environment variable will
+be interpreted as a file path.  Monstache will attempt to read the file at that path and use the contents of the file
+as the value of the variable.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Command line arguments take precedance over environment variables which in turn take precedance over the 
@@ -682,6 +693,13 @@ increase the throughput for reading large collections, but you need to have enou
 You can decrease this value for a memory constrained Monstache process.</p>
 <p>To disable collection splitting altogether, set this option to <code>-1</code>.  In this case monstache will not try to segment the
 collection, but rather use a single cursor for the entire read.</p>
+<h2 id="direct-read-stateful">direct-read-stateful<a class="headerlink" href="#direct-read-stateful" title="Permanent link">&para;</a></h2>
+<p>boolean (default <code>false</code>)</p>
+<p>When this setting is set to true monstache will mark direct read namespaces as complete after they have been fully read in
+a collection named <code>directreads</code> in the monstache config database.</p>
+<p>On subsequent restarts monstache will check this collection and only start direct reads for the namespaces not in the completed list.</p>
+<p>This allow you to keep the list the direct read namespaces in the configuration but manage the list that has completed and should
+not be run again externally in MongoDB. Deleting the <code>directreads</code> collection and restarting monstache will force a full sync.</p>
 <h2 id="disable-change-events">disable-change-events<a class="headerlink" href="#disable-change-events" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When disable-change-events is true monstache will not listen to change events from the oplog or call watch on any collections.  This option is only
@@ -782,8 +800,19 @@ case which would cut performance.</p>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_ES_PEM</code>)</p>
 <p>When elasticsearch-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to Elasticsearch. This should only be used when Elasticsearch is configured with SSL enabled.</p>
+<h2 id="elasticsearch-pki-auth">elasticsearch-pki-auth<a class="headerlink" href="#elasticsearch-pki-auth" title="Permanent link">&para;</a></h2>
+<p>TOML table (default <code>nil</code>)</p>
+<p>Used to configure client to use PKI user auth for Elasticsearch  </p>
+<div class="admonition note">
+<h4 id="cert-file">cert-file<a class="headerlink" href="#cert-file" title="Permanent link">&para;</a></h4>
+<p>string (default "") (env var name <code>MONSTACHE_ES_PKI_CERT</code>)</p>
+<p>Path to the cert file e.g. the --cert argument to curl</p>
+<h4 id="key-file">key-file<a class="headerlink" href="#key-file" title="Permanent link">&para;</a></h4>
+<p>string (default "") (env var name <code>MONSTACHE_ES_PKI_KEY</code>)</p>
+<p>Path to the key file e.g. the --key argument to curl</p>
+</div>
 <h2 id="elasticsearch-validate-pem-file">elasticsearch-validate-pem-file<a class="headerlink" href="#elasticsearch-validate-pem-file" title="Permanent link">&para;</a></h2>
-<p>boolean (default <code>true</code>)</p>
+<p>boolean (default <code>true</code>) (env var name <code>MONSTACHE_ES_VALIDATE_PEM</code>)</p>
 <p>When elasticsearch-validate-pem-file is false TLS will be configured to skip verification</p>
 <h2 id="enable-easy-json">enable-easy-json<a class="headerlink" href="#enable-easy-json" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
@@ -1004,6 +1033,9 @@ See the section <a href="../advanced/#index-mapping">Index Mapping</a> for more 
 <p>string (default "_doc for ES 6.2+ and the name of the MongoDB collection otherwise")</p>
 <p>Allows you to override the default type that monstache will index documents with.  Overriding the type is not recommended for Elasticsearch version
 6.2+.</p>
+<h4 id="pipeline">pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>The name of an existing Elasticsearch pipeline to index the data with. A pipeline is a series of Elasticsearch processors to be executed.  An Elasticsearch pipeline is one way to transform MongoDB data before indexing.</p>
 </div>
 <h2 id="max-file-size">max-file-size<a class="headerlink" href="#max-file-size" title="Permanent link">&para;</a></h2>
 <p>int (default <code>0</code>)</p>
@@ -1035,7 +1067,7 @@ uses the connection string for all settings.</p>
 <p>When mongo-pem-file is given monstache will use the given file path to add a local certificate to x509 cert
 pool when connecting to MongoDB. This should only be used when MongoDB is configured with SSL enabled.</p>
 <h2 id="mongo-validate-pem-file">mongo-validate-pem-file<a class="headerlink" href="#mongo-validate-pem-file" title="Permanent link">&para;</a></h2>
-<p>boolean (default <code>true</code>)</p>
+<p>boolean (default <code>true</code>) (env var name <code>MONSTACHE_MONGO_VALIDATE_PEM</code>)</p>
 <div class="admonition note">
 <p>This setting only applies to the mgo driver in monstache versions 3 and 4. The driver in monstache 5 and 6
 uses the connection string for all settings.</p>
@@ -1162,7 +1194,7 @@ values to use in the layout.</p>
 <p>If specified as an environment variable the value should be namespaces separated only by the <code>env-delimiter</code> which
 defaults to a comma.  E.g. <code>MONSTACHE_PATCH_NS=test.foo,test.bar</code></p>
 </div>
-<h2 id="pipeline">pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
+<h2 id="pipeline_1">pipeline<a class="headerlink" href="#pipeline_1" title="Permanent link">&para;</a></h2>
 <p>[] array of TOML table (default <code>nil</code>)</p>
 <p>When pipeline is given monstache will call the function specified to determine an array of aggregation pipeline stages to run.
 See the section <a href="../advanced/#middleware">Middleware</a> for more information.</p>
@@ -1415,7 +1447,7 @@ same worker and none of the other workers. See the <a href="../advanced/#workers
                 </p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
