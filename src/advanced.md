@@ -1263,8 +1263,11 @@ If the pprof setting is enabled the following endpoints are also made available:
 
 ## MongoDB Authentication
 
-Check the following [link](https://github.com/mongodb/mongo-go-driver/blob/v1.0.2/x/network/connstring/connstring.go)
+Check the following [link](https://github.com/mongodb/mongo-go-driver/blob/v1.4.4/x/mongo/driver/connstring/connstring.go)
 for all available options that you can specify in the MongoDB connection string related to authentication.
+
+For more information on how the MongoDB driver processes authentication configuration see
+[the driver docs](https://pkg.go.dev/go.mongodb.org/mongo-driver/mongo#Connect).
 
 ## AWS Signature Version 4
 

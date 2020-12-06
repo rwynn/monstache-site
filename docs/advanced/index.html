@@ -1405,8 +1405,10 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 /debug/pprof/symbol
 /debug/pprof/trace</p>
 <h2 id="mongodb-authentication">MongoDB Authentication<a class="headerlink" href="#mongodb-authentication" title="Permanent link">&para;</a></h2>
-<p>Check the following <a href="https://github.com/mongodb/mongo-go-driver/blob/v1.0.2/x/network/connstring/connstring.go">link</a>
+<p>Check the following <a href="https://github.com/mongodb/mongo-go-driver/blob/v1.4.4/x/mongo/driver/connstring/connstring.go">link</a>
 for all available options that you can specify in the MongoDB connection string related to authentication.</p>
+<p>For more information on how the MongoDB driver processes authentication configuration see
+<a href="https://pkg.go.dev/go.mongodb.org/mongo-driver/mongo#Connect">the driver docs</a>.</p>
 <h2 id="aws-signature-version-4">AWS Signature Version 4<a class="headerlink" href="#aws-signature-version-4" title="Permanent link">&para;</a></h2>
 <p>Monstache has included AWS Signature Version 4 request signing.  To enable the AWS Signature Version 4 support add the following to your config file:</p>
 <pre><code>
