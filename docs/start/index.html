@@ -135,24 +135,18 @@ Go but you don't need to install the Go language unless you decide to write your
 <th>Description</th>
 <th>Elasticsearch</th>
 <th>MongoDB</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>3</td>
-<td>rel3</td>
-<td>rel3</td>
-<td>mgo community go driver</td>
-<td>Versions 2 and 5</td>
-<td>Version 3</td>
-</tr>
-<tr>
-<td>4</td>
-<td>master</td>
-<td>rel4 (note this used to be latest)</td>
-<td>mgo community go driver</td>
-<td>Version 6</td>
-<td>Version 3</td>
+<td>6</td>
+<td>rel6</td>
+<td>rel6, latest</td>
+<td>MongoDB, Inc. go driver</td>
+<td>Version 7+</td>
+<td>Version 2.6+</td>
+<td>Supported</td>
 </tr>
 <tr>
 <td>5</td>
@@ -160,31 +154,42 @@ Go but you don't need to install the Go language unless you decide to write your
 <td>rel5</td>
 <td>MongoDB, Inc. go driver</td>
 <td>Version 6</td>
-<td>Version 4</td>
+<td>Version 2.6+</td>
+<td>Supported</td>
 </tr>
 <tr>
-<td>6</td>
-<td>rel6</td>
-<td>rel6, latest</td>
-<td>MongoDB, Inc. go driver</td>
-<td>Version 7</td>
-<td>Version 4</td>
+<td>4</td>
+<td>master</td>
+<td>rel4</td>
+<td>mgo community go driver</td>
+<td>Version 6</td>
+<td>Version 3</td>
+<td>Deprecated</td>
+</tr>
+<tr>
+<td>3</td>
+<td>rel3</td>
+<td>rel3</td>
+<td>mgo community go driver</td>
+<td>Versions 2 and 5</td>
+<td>Version 3</td>
+<td>Deprecated</td>
 </tr>
 </tbody>
 </table>
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
 <pre><code class="sh">monstache -v
-# 6.4.0
+# 6.7.2
 </code></pre>
 
-<p>You can also build monstache from source. Monstache uses <a href="https://github.com/golang/go/wiki/Modules">vgo</a>. 
-You will need to have golang version <code>1.11</code> or greater.</p>
+<p>You can also build monstache from source. Monstache uses <a href="https://github.com/golang/go/wiki/Modules">vgo</a>. </p>
 <pre><code class="sh">cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
 git checkout &lt;branch-or-tag-to-build&gt;
 go install
+# monstache binary should now be in $GOPATH/bin
 </code></pre>
 
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
@@ -197,8 +202,7 @@ to initiate and validate your replica set. For local testing your replica set ma
 <p class="admonition-title">Note</p>
 <p>If you have enabled security in MongoDB you will need to give the user in your connection string
 certain privileges:</p>
-<p>The user in the connection string will need to be able read the <code>local</code> database (to read
-from the oplog) and any user databases that you wish to synch data from.</p>
+<p>For MongoDB versions prior to 3.6 the user in the connection string will need to be able read the <code>local</code> database (to read from the oplog) and any user databases that you wish to synch data from.</p>
 <p>When using the resume or clustering features the user will need to be able to write to and 
 create indexes for the <code>monstache</code> database, or more generally, whatever you configure the 
 option <code>config-database-name</code> to be.</p>
@@ -257,10 +261,6 @@ gzip = true
 stats = true
 # index statistics into Elasticsearch
 index-stats = true
-# use the following PEM file for connections to MongoDB
-mongo-pem-file = &quot;/path/to/mongoCert.pem&quot;
-# disable PEM validation
-mongo-validate-pem-file = false
 # use the following user name for Elasticsearch basic auth
 elasticsearch-user = &quot;someuser&quot;
 # use the following password for Elasticsearch basic auth

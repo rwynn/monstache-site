@@ -4,12 +4,12 @@
 
 ## Versions
 
-| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB
-| --- | --- |---|---|---|---
-| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3
-| 4 | master | rel4 (note this used to be latest) | mgo community go driver | Version 6 | Version 3
-| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 4
-| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7 | Version 4
+| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB | Status
+| --- | --- |---|---|---|---|---
+| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7+ | Version 2.6+ | Supported
+| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 2.6+ | Supported
+| 4 | master | rel4 | mgo community go driver | Version 6 | Version 3 | Deprecated
+| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3 | Deprecated
 
 !!! note
     You can use monstache `rel5` and `rel6` with MongoDB versions back to 2.6 with the following caveats.
@@ -327,17 +327,17 @@ To implement a plugin for monstache you need to implement specific function sign
 use the go command to build a .so file for your plugin, 
 and finally pass the path to your plugin .so file when running monstache.
 
+See [this wiki page](https://github.com/rwynn/monstache/wiki/Build-and-run-a-monstache-docker-container-image-with-an-embedded-go-plugin) for an example using Docker.
+
 !!! warning
 	Golang plugins must be built with the exact same source code (including dependencies) of the loading program.
-	So it is very important that when you build your plugin that you do so in a directory that contains the `go.mod`
-	and `go.sum` files that monstache uses.  If you don't build your plugin this way then monstache may fail to load it
-	at runtime due to source code mismatches.  
+  If you don't build your plugin this way then monstache may fail to load it at runtime due to source code mismatches.
 
 To create a golang plugin for monstache
 
 - git clone `monstache` somewhere outside your $GOPATH
-- git checkout a specific monstache version tag (e.g. `v6.4.0`) to build the plugin against.  See Versions above.
-- in the monstache root directory run `go install`
+- git checkout a specific monstache version tag (e.g. `v6.7.2`).  See Versions above.
+- in the monstache root directory run `go install` to build the `monstache` binary. It should now be in $GOPATH/bin
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
 - implement one or more of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
 
@@ -353,15 +353,15 @@ func Process(input*monstachemap.ProcessPluginInput) error
 
 ```
 
-plugins can be compiled using
+Compile your plugin to a .so with
 
-	go build -buildmode=plugin -o myplugin.so myplugin.go
+  go build -buildmode=plugin -o myplugin.so myplugin.go
 
-to enable the plugin, start monstache with
+Run the binary, the one you built above with `go install` (not a release binary), with the following arguments
 
-    monstache -mapper-plugin-path /path/to/myplugin.so
+  $GOPATH/bin/monstache -mapper-plugin-path /path/to/myplugin.so
 
-the following example plugin simply converts top level string values to uppercase
+The following example plugin simply converts top-level string values to uppercase
 
 ```go
 package main
@@ -448,8 +448,7 @@ When you implement a `Process` function the function will be called after monsta
 | `Timestamp`             | The MongoDB [timestamp](https://docs.mongodb.com/manual/reference/bson-types/#timestamps) of the change event from the oplog. In the case of direct reads the timestamp is the time at which the document was read from MongoDB.                      |
 
 !!! note
-	Under the `docker/plugin` folder there is a `build.sh` script to help you build a plugin. There is a README file in that directory
-	with instructions.
+	Under the `docker/plugin` folder there is a `build.sh` script to help you build a plugin. There is a README file in that directory with instructions.
 
 ### Javascript
 
@@ -1208,16 +1207,16 @@ docker run rwynn/monstache:rel5 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:6.4.0 -v
+docker run rwynn/monstache:6.7.2 -v
 
-docker run rwynn/monstache:5.4.0 -v
+docker run rwynn/monstache:5.7.2 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.4.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.2 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 

@@ -195,24 +195,18 @@
 <th>Description</th>
 <th>Elasticsearch</th>
 <th>MongoDB</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>3</td>
-<td>rel3</td>
-<td>rel3</td>
-<td>mgo community go driver</td>
-<td>Versions 2 and 5</td>
-<td>Version 3</td>
-</tr>
-<tr>
-<td>4</td>
-<td>master</td>
-<td>rel4 (note this used to be latest)</td>
-<td>mgo community go driver</td>
-<td>Version 6</td>
-<td>Version 3</td>
+<td>6</td>
+<td>rel6</td>
+<td>rel6, latest</td>
+<td>MongoDB, Inc. go driver</td>
+<td>Version 7+</td>
+<td>Version 2.6+</td>
+<td>Supported</td>
 </tr>
 <tr>
 <td>5</td>
@@ -220,15 +214,26 @@
 <td>rel5</td>
 <td>MongoDB, Inc. go driver</td>
 <td>Version 6</td>
-<td>Version 4</td>
+<td>Version 2.6+</td>
+<td>Supported</td>
 </tr>
 <tr>
-<td>6</td>
-<td>rel6</td>
-<td>rel6, latest</td>
-<td>MongoDB, Inc. go driver</td>
-<td>Version 7</td>
-<td>Version 4</td>
+<td>4</td>
+<td>master</td>
+<td>rel4</td>
+<td>mgo community go driver</td>
+<td>Version 6</td>
+<td>Version 3</td>
+<td>Deprecated</td>
+</tr>
+<tr>
+<td>3</td>
+<td>rel3</td>
+<td>rel3</td>
+<td>mgo community go driver</td>
+<td>Versions 2 and 5</td>
+<td>Version 3</td>
+<td>Deprecated</td>
 </tr>
 </tbody>
 </table>
@@ -492,18 +497,17 @@ change in the future but for now the choice of middleware language is mutually e
 <p>To implement a plugin for monstache you need to implement specific function signatures,
 use the go command to build a .so file for your plugin, 
 and finally pass the path to your plugin .so file when running monstache.</p>
+<p>See <a href="https://github.com/rwynn/monstache/wiki/Build-and-run-a-monstache-docker-container-image-with-an-embedded-go-plugin">this wiki page</a> for an example using Docker.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Golang plugins must be built with the exact same source code (including dependencies) of the loading program.
-So it is very important that when you build your plugin that you do so in a directory that contains the <code>go.mod</code>
-and <code>go.sum</code> files that monstache uses.  If you don't build your plugin this way then monstache may fail to load it
-at runtime due to source code mismatches.  </p>
+<p>Golang plugins must be built with the exact same source code (including dependencies) of the loading program.</p>
 </div>
+<p>If you don't build your plugin this way then monstache may fail to load it at runtime due to source code mismatches.</p>
 <p>To create a golang plugin for monstache</p>
 <ul>
 <li>git clone <code>monstache</code> somewhere outside your $GOPATH</li>
-<li>git checkout a specific monstache version tag (e.g. <code>v6.4.0</code>) to build the plugin against.  See Versions above.</li>
-<li>in the monstache root directory run <code>go install</code></li>
+<li>git checkout a specific monstache version tag (e.g. <code>v6.7.2</code>).  See Versions above.</li>
+<li>in the monstache root directory run <code>go install</code> to build the <code>monstache</code> binary. It should now be in $GOPATH/bin</li>
 <li>create a .go source file for your plugin in the monstache root directory with the package name <code>main</code></li>
 <li>implement one or more of the following functions: <code>Map</code>, <code>Filter</code>, <code>Pipeline</code>, <code>Process</code></li>
 </ul>
@@ -518,13 +522,11 @@ func Process(input*monstachemap.ProcessPluginInput) error
 
 </code></pre>
 
-<p>plugins can be compiled using</p>
-<pre><code>go build -buildmode=plugin -o myplugin.so myplugin.go
-</code></pre>
-<p>to enable the plugin, start monstache with</p>
-<pre><code>monstache -mapper-plugin-path /path/to/myplugin.so
-</code></pre>
-<p>the following example plugin simply converts top level string values to uppercase</p>
+<p>Compile your plugin to a .so with</p>
+<p>go build -buildmode=plugin -o myplugin.so myplugin.go</p>
+<p>Run the binary, the one you built above with <code>go install</code> (not a release binary), with the following arguments</p>
+<p>$GOPATH/bin/monstache -mapper-plugin-path /path/to/myplugin.so</p>
+<p>The following example plugin simply converts top-level string values to uppercase</p>
 <pre><code class="go">package main
 import (
     &quot;github.com/rwynn/monstache/monstachemap&quot;
@@ -691,8 +693,7 @@ before indexing, you can access the <code>*mgo.Session</code> pointer as <code>i
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Under the <code>docker/plugin</code> folder there is a <code>build.sh</code> script to help you build a plugin. There is a README file in that directory
-with instructions.</p>
+<p>Under the <code>docker/plugin</code> folder there is a <code>build.sh</code> script to help you build a plugin. There is a README file in that directory with instructions.</p>
 </div>
 <h3 id="javascript">Javascript<a class="headerlink" href="#javascript" title="Permanent link">&para;</a></h3>
 <p>Monstache supports plugins written in Javascript.  You may find that Javascript plugins give you much less performance than
@@ -1366,14 +1367,14 @@ docker run rwynn/monstache:rel5 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:6.4.0 -v
+<pre><code>docker run rwynn/monstache:6.7.2 -v
 
-docker run rwynn/monstache:5.4.0 -v
+docker run rwynn/monstache:5.7.2 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.4.0 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.2 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 

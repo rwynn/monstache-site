@@ -11,12 +11,12 @@ If you simply want to run Monstache you just need to [download the latest versio
 
 ## Which version should I use?
 
-| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB
-| --- | --- |---|---|---|---
-| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3
-| 4 | master | rel4 (note this used to be latest) | mgo community go driver | Version 6 | Version 3
-| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 4
-| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7 | Version 4
+| Monstache version | Git branch (used to build plugin) | Docker tag | Description | Elasticsearch | MongoDB | Status
+| --- | --- |---|---|---|---|---
+| 6 | rel6   | rel6, latest | MongoDB, Inc. go driver | Version 7+ | Version 2.6+ | Supported
+| 5 | rel5   | rel5 | MongoDB, Inc. go driver | Version 6| Version 2.6+ | Supported
+| 4 | master | rel4 | mgo community go driver | Version 6 | Version 3 | Deprecated
+| 3 | rel3   | rel3 | mgo community go driver | Versions 2 and 5 | Version 3 | Deprecated
 
 Unzip the download and adjust your PATH variable to include the path to the folder for your platform.
 
@@ -24,11 +24,10 @@ Let's make sure Monstache is set up as expected. You should see a similar versio
 
 ```sh
 monstache -v
-# 6.4.0
+# 6.7.2
 ```
 
 You can also build monstache from source. Monstache uses [vgo](https://github.com/golang/go/wiki/Modules). 
-You will need to have golang version `1.11` or greater.
 
 ```sh
 cd ~/build # somewhere outside your $GOPATH
@@ -36,6 +35,7 @@ git clone https://github.com/rwynn/monstache.git
 cd monstache
 git checkout <branch-or-tag-to-build>
 go install
+# monstache binary should now be in $GOPATH/bin
 ```
 
 ## Usage
@@ -50,8 +50,7 @@ to initiate and validate your replica set. For local testing your replica set ma
 	If you have enabled security in MongoDB you will need to give the user in your connection string
 	certain privileges:
     
-    The user in the connection string will need to be able read the `local` database (to read
-	from the oplog) and any user databases that you wish to synch data from.
+    For MongoDB versions prior to 3.6 the user in the connection string will need to be able read the `local` database (to read from the oplog) and any user databases that you wish to synch data from.
 
     When using the resume or clustering features the user will need to be able to write to and 
     create indexes for the `monstache` database, or more generally, whatever you configure the 
@@ -118,10 +117,6 @@ gzip = true
 stats = true
 # index statistics into Elasticsearch
 index-stats = true
-# use the following PEM file for connections to MongoDB
-mongo-pem-file = "/path/to/mongoCert.pem"
-# disable PEM validation
-mongo-validate-pem-file = false
 # use the following user name for Elasticsearch basic auth
 elasticsearch-user = "someuser"
 # use the following password for Elasticsearch basic auth
