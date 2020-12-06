@@ -355,11 +355,15 @@ func Process(input*monstachemap.ProcessPluginInput) error
 
 Compile your plugin to a .so with
 
-  go build -buildmode=plugin -o myplugin.so myplugin.go
+```sh
+go build -buildmode=plugin -o myplugin.so myplugin.go
+```
 
 Run the binary, the one you built above with `go install` (not a release binary), with the following arguments
 
-  $GOPATH/bin/monstache -mapper-plugin-path /path/to/myplugin.so
+```sh
+$GOPATH/bin/monstache -mapper-plugin-path /path/to/myplugin.so
+```
 
 The following example plugin simply converts top-level string values to uppercase
 
