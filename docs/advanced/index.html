@@ -506,7 +506,7 @@ and finally pass the path to your plugin .so file when running monstache.</p>
 <p>To create a golang plugin for monstache</p>
 <ul>
 <li>git clone <code>monstache</code> somewhere outside your $GOPATH</li>
-<li>git checkout a specific monstache version tag (e.g. <code>v6.7.2</code>).  See Versions above.</li>
+<li>git checkout a specific monstache version tag (e.g. <code>v6.7.3</code>).  See Versions above.</li>
 <li>in the monstache root directory run <code>go install</code> to build the <code>monstache</code> binary. It should now be in $GOPATH/bin</li>
 <li>create a .go source file for your plugin in the monstache root directory with the package name <code>main</code></li>
 <li>implement one or more of the following functions: <code>Map</code>, <code>Filter</code>, <code>Pipeline</code>, <code>Process</code></li>
@@ -1371,14 +1371,14 @@ docker run rwynn/monstache:rel5 -v
 </code></pre>
 
 <p>You can pull and run release images with</p>
-<pre><code>docker run rwynn/monstache:6.7.2 -v
+<pre><code>docker run rwynn/monstache:6.7.3 -v
 
-docker run rwynn/monstache:5.7.2 -v
+docker run rwynn/monstache:5.7.3 -v
 </code></pre>
 
 <p>For example, to run monstache via Docker with a golang plugin that resides at <code>~/plugin/plugin.so</code> on the host you can use a bind mount</p>
 <pre><code>
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.2 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.3 -mapper-plugin-path /tmp/plugin/plugin.so
 
 </code></pre>
 
