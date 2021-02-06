@@ -1144,6 +1144,12 @@ Allows one to relate 2 namespaces together such that a change to one causes a sy
 
 	The name of the field in with-namespace that will be used as the field name to match side of the query into with-namespace
 
+	#### match-field-type
+
+	string (default "")
+
+	Valid values for this property are `objectId`, `string`, `int`, `long` and `decimal`. If the property is given the value of the `src-field` will be converted into the type given (if possible) before being used to query against `match-field`.
+
 	#### keep-src
 
 	bool (default "false")

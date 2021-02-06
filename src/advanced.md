@@ -336,7 +336,7 @@ See [this wiki page](https://github.com/rwynn/monstache/wiki/Build-and-run-a-mon
 To create a golang plugin for monstache
 
 - git clone `monstache` somewhere outside your $GOPATH
-- git checkout a specific monstache version tag (e.g. `v6.7.3`).  See Versions above.
+- git checkout a specific monstache version tag (e.g. `v6.7.4`).  See Versions above.
 - in the monstache root directory run `go install` to build the `monstache` binary. It should now be in $GOPATH/bin
 - create a .go source file for your plugin in the monstache root directory with the package name `main`
 - implement one or more of the following functions: `Map`, `Filter`, `Pipeline`, `Process`
@@ -1211,16 +1211,16 @@ docker run rwynn/monstache:rel5 -v
 You can pull and run release images with
 
 ```
-docker run rwynn/monstache:6.7.3 -v
+docker run rwynn/monstache:6.7.4 -v
 
-docker run rwynn/monstache:5.7.3 -v
+docker run rwynn/monstache:5.7.4 -v
 ```
 
 For example, to run monstache via Docker with a golang plugin that resides at `~/plugin/plugin.so` on the host you can use a bind mount
 
 ```
 
-docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.3 -mapper-plugin-path /tmp/plugin/plugin.so
+docker run --rm --net=host -v ~/plugin:/tmp/plugin rwynn/monstache:6.7.4 -mapper-plugin-path /tmp/plugin/plugin.so
 
 ```
 
@@ -1255,11 +1255,11 @@ Returns information about the running monstache process including whether or not
 
 If the pprof setting is enabled the following endpoints are also made available:
 
-/debug/pprof/
-/debug/pprof/cmdline
-/debug/pprof/profile
-/debug/pprof/symbol
-/debug/pprof/trace
+* /debug/pprof/
+* /debug/pprof/cmdline
+* /debug/pprof/profile
+* /debug/pprof/symbol
+* /debug/pprof/trace
 
 ## MongoDB Authentication
 

@@ -1246,6 +1246,9 @@ is set to true Monstache will drop those fields so that indexing errors do not o
 <h4 id="match-field">match-field<a class="headerlink" href="#match-field" title="Permanent link">&para;</a></h4>
 <p>string (default "_id")</p>
 <p>The name of the field in with-namespace that will be used as the field name to match side of the query into with-namespace</p>
+<h4 id="match-field-type">match-field-type<a class="headerlink" href="#match-field-type" title="Permanent link">&para;</a></h4>
+<p>string (default "")</p>
+<p>Valid values for this property are <code>objectId</code>, <code>string</code>, <code>int</code>, <code>long</code> and <code>decimal</code>. If the property is given the value of the <code>src-field</code> will be converted into the type given (if possible) before being used to query against <code>match-field</code>.</p>
 <h4 id="keep-src">keep-src<a class="headerlink" href="#keep-src" title="Permanent link">&para;</a></h4>
 <p>bool (default "false")</p>
 <p>Whether or not to sync the original change event in addition to the one looked up in with-namespace.
