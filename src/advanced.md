@@ -1421,3 +1421,6 @@ change-stream-namespaces = ["db1.col1", "db2.col2"]
 resume = true
 resume-strategy = 1
 ```
+
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>

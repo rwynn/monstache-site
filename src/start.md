@@ -164,3 +164,5 @@ exit-after-direct-reads = false
 See [Configuration](../config/) for details about each configuration
 option.
 
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>

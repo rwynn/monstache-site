@@ -70,3 +70,5 @@ it up and running.
 
 See [Release Notes](./about/#release-notes) for updates.
 
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>

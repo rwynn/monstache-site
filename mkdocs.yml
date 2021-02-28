@@ -7,7 +7,6 @@ site_dir: docs
 repo_url: https://github.com/rwynn/monstache-site/
 edit_uri: edit/master/src/
 copyright: Copyright &copy; 2016 Ryan Wynn
-google_analytics: ['UA-113057322-1', 'rwynn.github.io']
 extra_css:
     - css/extra.css
 nav:

@@ -1414,3 +1414,6 @@ An array of worker names to be used in conjunction with the worker option.
 
 !!! note
 	This option may be passed on the command line as ./monstache --workers w1 --workers w2 
+
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>

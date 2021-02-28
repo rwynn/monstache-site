@@ -1138,3 +1138,5 @@ Note when you specify elasticseach-max-bytes the value must be in bytes not MB
 
 - 64-bit Linux binary built with go1.6.2
 
+
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>
