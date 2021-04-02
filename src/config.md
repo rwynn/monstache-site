@@ -169,8 +169,18 @@ string (default `""`) (env var name `MONSTACHE_DIRECT_READ_NS_DYNAMIC_EXCLUDE_RE
 
 This option is only available in monstache v5 and v6.
 
-This options allows you to filter out any collections that match the given regex when monstache is directed to dynamically
+This options allows you to exclude any collections that match the given regex when monstache is directed to dynamically
 register `direct-read-namespaces`.  When direct read namespaces are explicit it is not used.
+
+## direct-read-dynamic-include-regex
+
+string (default `""`) (env var name `MONSTACHE_DIRECT_READ_NS_DYNAMIC_INCLUDE_REGEX`)
+
+This option is only available in monstache v5 and v6.
+
+This options allows you to only include collections that match the given regex when monstache is directed to dynamically
+register `direct-read-namespaces`.  When direct read namespaces are explicit it is not used.
+
 
 ## direct-read-namespaces
 

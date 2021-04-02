@@ -127,6 +127,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#direct-read-dynamic-include-regex" class="nav-link">direct-read-dynamic-include-regex</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#direct-read-namespaces" class="nav-link">direct-read-namespaces</a>
               <ul class="nav flex-column">
               </ul>
@@ -616,7 +620,12 @@ collections serially.  Numbers greater than 1 allow you to sync collections in b
 <h2 id="direct-read-dynamic-exclude-regex">direct-read-dynamic-exclude-regex<a class="headerlink" href="#direct-read-dynamic-exclude-regex" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS_DYNAMIC_EXCLUDE_REGEX</code>)</p>
 <p>This option is only available in monstache v5 and v6.</p>
-<p>This options allows you to filter out any collections that match the given regex when monstache is directed to dynamically
+<p>This options allows you to exclude any collections that match the given regex when monstache is directed to dynamically
+register <code>direct-read-namespaces</code>.  When direct read namespaces are explicit it is not used.</p>
+<h2 id="direct-read-dynamic-include-regex">direct-read-dynamic-include-regex<a class="headerlink" href="#direct-read-dynamic-include-regex" title="Permanent link">&para;</a></h2>
+<p>string (default <code>""</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS_DYNAMIC_INCLUDE_REGEX</code>)</p>
+<p>This option is only available in monstache v5 and v6.</p>
+<p>This options allows you to only include collections that match the given regex when monstache is directed to dynamically
 register <code>direct-read-namespaces</code>.  When direct read namespaces are explicit it is not used.</p>
 <h2 id="direct-read-namespaces">direct-read-namespaces<a class="headerlink" href="#direct-read-namespaces" title="Permanent link">&para;</a></h2>
 <p>[]string (default <code>nil</code>) (env var name <code>MONSTACHE_DIRECT_READ_NS</code>)</p>
