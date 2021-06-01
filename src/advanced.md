@@ -415,7 +415,7 @@ The output parameter will contain information about how the document should be t
 | `VersionType`     | the version type of the document (internal, external, external_gte)         |
 | `Pipeline`        | the pipeline to index with                                                  |
 | `RetryOnConflict` | how many times to retry updates before failing                              |
-| `Skip`            | set to true to indicate the the document should be ignored                  |
+| `Skip`            | set to true to indicate that the document should be ignored                 |
 
 *For detailed information see [monstachemap/plugin.go](https://github.com/rwynn/monstache/blob/master/monstachemap/plugin.go)*
 
