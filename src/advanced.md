@@ -316,7 +316,7 @@ monstache supports embedding user defined middleware between MongoDB and Elastic
 	need to perform locking on the javascript environment.  Javascript plugins are very useful for quickly prototyping a
 	solution, however at some point it is recommended to convert them to golang plugins.
 
-	If you enable a Golang plugin then monstache will ignore an javascript middleware in your configuration. This may
+	If you enable a Golang plugin then monstache will ignore any javascript middleware in your configuration. This may
 	change in the future but for now the choice of middleware language is mutually exclusive.
 
 ### Golang
@@ -435,7 +435,7 @@ To set custom indexing metadata on the document use `output.Index`, `output.Type
 
     This instructs Monstache to query the document metadata so that deletes of the document work correctly.
 
-If would like to embed other MongoDB documents (possibly from a different collection) within the current document 
+If you would like to embed other MongoDB documents (possibly from a different collection) within the current document 
 before indexing, you can access the `*mgo.Session` pointer as `input.Session`.  With the mgo session you can use the [mgo API](https://godoc.org/github.com/globalsign/mgo) to find documents in MongoDB and embed them in the Document set on output.
 
 When you implement a `Filter` function the function is called immediately after reading inserts and updates from the oplog.  You can return false from this function to completely ignore a document.  This is different than setting `output.Drop` from the mapping function because when you set `output.Drop` to true, a delete request is issued to Elasticsearch in case the document had previously been indexed.  By contrast, returning false from the `Filter` function causes the operation to be completely ignored and there is no corresponding delete request issued to Elasticsearch.
@@ -514,7 +514,7 @@ For these purposes an object is a javascript non-primitive, excluding `Function`
 
 #### Filtering
 
-You can completely ignore documents by adding filter configurations to your TOML config file.  The filter functions are executing immediately after inserts or updates are read from the oplog.  The correspding document is passed into the function and you can return true or false to include or ignore the document.
+You can completely ignore documents by adding filter configurations to your TOML config file.  The filter functions are executing immediately after inserts or updates are read from the oplog.  The corresponding document is passed into the function and you can return true or false to include or ignore the document.
 
 ```toml
 [[filter]]
@@ -598,7 +598,7 @@ no extra charge.  Feel free to abuse the power of the `_`.
 
 #### Embedding Documents
 
-In your javascript function you have access to the following global functions to retreive documents from MongoDB for
+In your javascript function you have access to the following global functions to retrieve documents from MongoDB for
 embedding in the current document before indexing.  Using this approach you can pull in related data.
 
 ```javascript
@@ -835,16 +835,16 @@ document was originally routed in order to tell Elasticsearch where to look for 
 
 Monstache has 3 available strategies for handling deletes in this situation.  The default strategy is stateless and uses
 a term query into Elasticsearch based on the ID of the document deleted in MongoDB.  If the search into Elasticsearch returns
-exactly 1 document then monstache will schedule that document for deletion. The 2nd stategy monstache uses is stateful and requires
+exactly 1 document then monstache will schedule that document for deletion. The 2nd strategy monstache uses is stateful and requires
 giving monstache the ability to write to the collection `monstache.meta`.  In this collection monstache stores information about
-documents that were given custom indexing metadata.  This stategy slows down indexing and takes up space in MongoDB.  
-However, it is precise because it records exactly how each document was indexed. The final stategy simply punts on deletes and
+documents that were given custom indexing metadata.  This strategy slows down indexing and takes up space in MongoDB.  
+However, it is precise because it records exactly how each document was indexed. The final strategy simply punts on deletes and
 leaves document deletion to the user.  If you don't generally delete documents in MongoDB or don't care if Elasticsearch contains
 documents which have been deleted in MongoDB, this option is available. See [Delete Strategy](../config/#delete-strategy) for more information.
 
 For more information see [Customizing Document Routing](https://www.elastic.co/blog/customizing-your-document-routing)
 
-In addition to letting your customize the shard routing for a specific document, you can also customize the Elasticsearch
+In addition to letting you customize the shard routing for a specific document, you can also customize the Elasticsearch
 `index` and `type` using a script by putting the custom information in the meta attribute. 
 
 ```toml
@@ -897,11 +897,11 @@ curl -XPUT 'localhost:9200/test.test?pretty' -H 'Content-Type: application/json'
     versions Elasticsearch but it only works with Elasticsearch versions 6.2 and greater.  Monstache
     defaults to using _doc as the type when it detects Elasticsearch version 6.2 or greater.  If you
     are using a previous version of Elasticsearch monstache defaults to using the MongoDB collection
-    name as the Elasticsearch type. The type Monstache uses can be overriden but it is not
+    name as the Elasticsearch type. The type Monstache uses can be overridden but it is not
     recommended from Elasticsearch 6.2 on. 
 
 
-Next will will configure Monstache with custom Javascript middleware that does transformation and routing.  In a file called CONFIG.toml.
+Next we will configure Monstache with custom Javascript middleware that does transformation and routing.  In a file called CONFIG.toml.
 
 ```
 [[script]]
@@ -1139,7 +1139,7 @@ To get version 2 of the document above we start with {}
 - apply the 2nd merge patch to v1 to get v2
 
 The timestamps associated with these merge patches are in seconds since the epoch, taken from the
-timestamp recorded in the oplog when the insert or update occured. 
+timestamp recorded in the oplog when the insert or update occurred. 
 
 To enable the merge patches feature in monstache you need to add the following to you TOML config:
 
@@ -1194,7 +1194,7 @@ You can enable the service to start on boot with `systemctl enable monstache.ser
 
 With the configuration above monstache will notify systemd when it has started successfully and then notify 
 systemd repeatedly at half the WatchDog interval to signal liveness.  The configuration above causes systemd
-to restart monstache if it does not start or respond within the WatchdDog interval.
+to restart monstache if it does not start or respond within the WatchDog interval.
 
 ## Docker
 
@@ -1284,7 +1284,7 @@ region = "ZZZ"
 
 ```
 
-See the docs for [aws-connect](../config/#aws-connect) for the different stategies available for configuring a credential
+See the docs for [aws-connect](../config/#aws-connect) for the different strategies available for configuring a credential
 provider.
 
 Notice how the `elasticsearch-url` references the port number `443` in the connection string.  This is because AWS makes
