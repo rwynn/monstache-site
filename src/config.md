@@ -115,7 +115,7 @@ use an empty string as the namespace value.  For example, `change-stream-namespa
 
 string (default `monstache`) 
 
-The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify `cluster-name` or enable `resume`.
+The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify `cluster-name`, enable `resume` or set `direct-read-stateful`. WARNING: If you are listening to changes via `change-stream-namespaces`, you cannot set the same database to both listen to changes & store the configs in.
 
 ## cluster-name
 
