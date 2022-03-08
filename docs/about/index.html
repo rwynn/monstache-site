@@ -1,116 +1,450 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <meta name="author" content="Monstache Team">
-        <link rel="canonical" href="https://rwynn.github.io/monstache-site/about/">
-        <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>About - Monstache</title>
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/ocean.min.css">
-        <link href="../css/extra.css" rel="stylesheet">
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Monstache Team">
+  <link rel="canonical" href="https://rwynn.github.io/monstache-site/about/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>About - Monstache</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-        <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script> 
-    </head>
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "About";
+    var mkdocs_page_input_path = "about.md";
+    var mkdocs_page_url = "/monstache-site/about/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
 
-    <body>
-        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" href="..">Monstache</a>
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="wy-body-for-nav" role="document">
 
-                <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                        <!-- Main navigation -->
-                        <ul class="nav navbar-nav">
-                            <li class="navitem">
-                                <a href=".." class="nav-link">Home</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../start/" class="nav-link">Getting Started</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../config/" class="nav-link">Configuration</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../advanced/" class="nav-link">Advanced</a>
-                            </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">About</a>
-                            </li>
-                        </ul>
-
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
-                                <i class="fa fa-search"></i> Search
-                            </a>
-                        </li>
-                            <li class="nav-item">
-                                <a rel="prev" href="../advanced/" class="nav-link">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" class="nav-link disabled">
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://github.com/rwynn/monstache-site/edit/master/src/about.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
-                            </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
-            <span class="fa fa-angle-down"></span>
-        </button>
-    </div>
+  <div class="wy-grid-for-nav">
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
-        <ul class="nav flex-column">
-            
-            <li class="nav-item" data-level="1"><a href="#about" class="nav-link">About</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#license" class="nav-link">License</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#contributing" class="nav-link">Contributing</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#release-notes" class="nav-link">Release Notes</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-              </ul>
-            </li>
-        </ul>
-    </div>
-</div></div>
-                    <div class="col-md-9" role="main">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Monstache</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
 
-<h1 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h1>
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../start/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../advanced/">Advanced</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">About</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#license">License</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#reporting-an-issue">Reporting an Issue</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#testing-the-development-version">Testing the Development Version</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#running-the-tests">Running the tests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#submitting-pull-requests">Submitting Pull Requests</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#release-notes">Release Notes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4161">monstache v4.16.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3231">monstache v3.23.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4160-4tsb">monstache v4.16.0 (4tsb)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3230-4tsb">monstache v3.23.0 (4tsb)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4152">monstache v4.15.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3222">monstache v3.22.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4151">monstache v4.15.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3221">monstache v3.22.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4150">monstache v4.15.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3220">monstache v3.22.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4142">monstache v4.14.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3212">monstache v3.21.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4141">monstache v4.14.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3211">monstache v3.21.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4140">monstache v4.14.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3210">monstache v3.21.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4134">monstache v4.13.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3204">monstache v3.20.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4133">monstache v4.13.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3203">monstache v3.20.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4132">monstache v4.13.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3202">monstache v3.20.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4131">monstache v4.13.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3201">monstache v3.20.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4130">monstache v4.13.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3200">monstache v3.20.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4125">monstache v4.12.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3195">monstache v3.19.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4124">monstache v4.12.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3194">monstache v3.19.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4123">monstache v4.12.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3193">monstache v3.19.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4122">monstache v4.12.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3192">monstache v3.19.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4121">monstache v4.12.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3191">monstache v3.19.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4120">monstache v4.12.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3190">monstache v3.19.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4119">monstache v4.11.9</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3189">monstache v3.18.9</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4118">monstache v4.11.8</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3188">monstache v3.18.8</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4117">monstache v4.11.7</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3187">monstache v3.18.7</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4116">monstache v4.11.6</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3186">monstache v3.18.6</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4115">monstache v4.11.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3185">monstache v3.18.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4114">monstache v4.11.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3184">monstache v3.18.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4113">monstache v4.11.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3183">monstache v3.18.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4112">monstache v4.11.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3182">monstache v3.18.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4111">monstache v4.11.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3181">monstache v3.18.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4110">monstache v4.11.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3180">monstache v3.18.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4102">monstache v4.10.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3172">monstache v3.17.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4101">monstache v4.10.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3171">monstache v3.17.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v4100">monstache v4.10.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3170">monstache v3.17.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v490">monstache v4.9.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3160">monstache v3.16.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v480">monstache v4.8.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3150">monstache v3.15.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v470">monstache v4.7.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3140">monstache v3.14.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v465">monstache v4.6.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3135">monstache v3.13.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v464">monstache v4.6.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3134">monstache v3.13.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v463">monstache v4.6.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3133">monstache v3.13.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v462">monstache v4.6.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3132">monstache v3.13.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v461">monstache v4.6.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3131">monstache v3.13.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v460">monstache v4.6.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3130">monstache v3.13.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v450">monstache v4.5.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3120">monstache v3.12.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v440">monstache v4.4.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3110">monstache v3.11.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v432">monstache v4.3.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3102">monstache v3.10.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v431">monstache v4.3.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3101">monstache v3.10.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v430">monstache v4.3.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v3100">monstache v3.10.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v421">monstache v4.2.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v391">monstache v3.9.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v420">monstache v4.2.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v390">monstache v3.9.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v412">monstache v4.1.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v382">monstache v3.8.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v411">monstache v4.1.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v381">monstache v3.8.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v410">monstache v4.1.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v380">monstache v3.8.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v401">monstache v4.0.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v370">monstache v3.7.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v400">monstache v4.0.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v365">monstache v3.6.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v364">monstache v3.6.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v363">monstache v3.6.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v362">monstache v3.6.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v361">monstache v3.6.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v360">monstache v3.6.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v352">monstache v3.5.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v351">monstache v3.5.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v350">monstache v3.5.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v342">monstache v3.4.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v341">monstache v3.4.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v340">monstache v3.4.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v331">monstache v3.3.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v330">monstache v3.3.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v320">monstache v3.2.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v312">monstache v3.1.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v311">monstache v3.1.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v310">monstache v3.1.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v307">monstache v3.0.7</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v306">monstache v3.0.6</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v305">monstache v3.0.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v304">monstache v3.0.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v303">monstache v3.0.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v302">monstache v3.0.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v301">monstache v3.0.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v300">monstache v3.0.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2140">monstache v2.14.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2130">monstache v2.13.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2120">monstache v2.12.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2112">monstache v2.11.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2111">monstache v2.11.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v2100">monstache v2.10.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v293">monstache v2.9.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v292">monstache v2.9.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v291">monstache v2.9.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v29">monstache v2.9</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v281">monstache v2.8.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v28">monstache v2.8</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v27">monstache v2.7</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v26">monstache v2.6</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v25">monstache v2.5</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v24">monstache v2.4</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v23">monstache v2.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v22">monstache v2.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v21">monstache v2.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v20">monstache v2.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v131">monstache v1.3.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v13">monstache v1.3</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v12">monstache v1.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v11">monstache v1.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v10">monstache v1.0</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v08-beta2">monstache v0.8-beta.2</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v08-beta1">monstache v0.8-beta.1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v08-beta">monstache v0.8-beta</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monstache-v08-alpha">monstache v0.8-alpha</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Monstache</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>About</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/rwynn/monstache-site/edit/master/src/about.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="about">About<a class="headerlink" href="#about" title="Permanent link">&para;</a></h1>
 <hr />
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>The MIT License (MIT)</p>
@@ -1174,82 +1508,61 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
 <ul>
 <li>64-bit Linux binary built with go1.6.2</li>
 </ul>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script></div>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>
+              
             </div>
-        </div>
-
-        <footer class="col-md-12">
-            <hr>
-                <p>Copyright &copy; 2016 Ryan Wynn</p>
-            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
-        </footer>
-        <script>
-            var base_url = "..",
-                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
-        </script>
-        <script src="../js/base.js" defer></script>
-        <script src="../search/main.js" defer></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-                <p>From here you can search these documents. Enter your search terms below.</p>
-                <form>
-                    <div class="form-group">
-                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../advanced/" class="btn btn-neutral" title="Advanced"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>Copyright &copy; 2016 Ryan Wynn</p>
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
         </div>
-    </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/rwynn/monstache-site/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../advanced/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
 </div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
-    </body>
+</body>
 </html>

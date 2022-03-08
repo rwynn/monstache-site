@@ -21,7 +21,7 @@ markdown_extensions:
     - admonition
     - def_list
 theme:
-    name: mkdocs
+    name: readthedocs
     highlightjs: True
     hljs_style: ocean
     hljs_languages:

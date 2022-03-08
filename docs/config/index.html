@@ -1,516 +1,470 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <meta name="author" content="Monstache Team">
-        <link rel="canonical" href="https://rwynn.github.io/monstache-site/config/">
-        <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Configuration - Monstache</title>
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/ocean.min.css">
-        <link href="../css/extra.css" rel="stylesheet">
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Monstache Team">
+  <link rel="canonical" href="https://rwynn.github.io/monstache-site/config/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Configuration - Monstache</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-        <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script> 
-    </head>
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  <link href="../css/extra.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Configuration";
+    var mkdocs_page_input_path = "config.md";
+    var mkdocs_page_url = "/monstache-site/config/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
 
-    <body>
-        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" href="..">Monstache</a>
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="wy-body-for-nav" role="document">
 
-                <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                        <!-- Main navigation -->
-                        <ul class="nav navbar-nav">
-                            <li class="navitem">
-                                <a href=".." class="nav-link">Home</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../start/" class="nav-link">Getting Started</a>
-                            </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Configuration</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../advanced/" class="nav-link">Advanced</a>
-                            </li>
-                            <li class="navitem">
-                                <a href="../about/" class="nav-link">About</a>
-                            </li>
-                        </ul>
-
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
-                                <i class="fa fa-search"></i> Search
-                            </a>
-                        </li>
-                            <li class="nav-item">
-                                <a rel="prev" href="../start/" class="nav-link">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" href="../advanced/" class="nav-link">
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://github.com/rwynn/monstache-site/edit/master/src/config.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
-                            </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
-            <span class="fa fa-angle-down"></span>
-        </button>
-    </div>
+  <div class="wy-grid-for-nav">
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
-        <ul class="nav flex-column">
-            
-            <li class="nav-item" data-level="1"><a href="#configuration" class="nav-link">Configuration</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#aws-connect" class="nav-link">aws-connect</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#change-stream-namespaces" class="nav-link">change-stream-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#config-database-name" class="nav-link">config-database-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#cluster-name" class="nav-link">cluster-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#delete-index-pattern" class="nav-link">delete-index-pattern</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#delete-strategy" class="nav-link">delete-strategy</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-bounded" class="nav-link">direct-read-bounded</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-concur" class="nav-link">direct-read-concur</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-dynamic-exclude-regex" class="nav-link">direct-read-dynamic-exclude-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-dynamic-include-regex" class="nav-link">direct-read-dynamic-include-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-namespaces" class="nav-link">direct-read-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-no-timeout" class="nav-link">direct-read-no-timeout</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-split-max" class="nav-link">direct-read-split-max</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#direct-read-stateful" class="nav-link">direct-read-stateful</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#disable-change-events" class="nav-link">disable-change-events</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#disable-file-pipeline-put" class="nav-link">disable-file-pipeline-put</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#dropped-databases" class="nav-link">dropped-databases</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#dropped-collections" class="nav-link">dropped-collections</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-user" class="nav-link">elasticsearch-user</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-password" class="nav-link">elasticsearch-password</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-urls" class="nav-link">elasticsearch-urls</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-healthcheck-timeout-startup" class="nav-link">elasticsearch-healthcheck-timeout-startup</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-healthcheck-timeout" class="nav-link">elasticsearch-healthcheck-timeout</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-version" class="nav-link">elasticsearch-version</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-conns" class="nav-link">elasticsearch-max-conns</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-retry" class="nav-link">elasticsearch-retry</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-client-timeout" class="nav-link">elasticsearch-client-timeout</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-docs" class="nav-link">elasticsearch-max-docs</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-bytes" class="nav-link">elasticsearch-max-bytes</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-max-seconds" class="nav-link">elasticsearch-max-seconds</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-pem-file" class="nav-link">elasticsearch-pem-file</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-pki-auth" class="nav-link">elasticsearch-pki-auth</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#elasticsearch-validate-pem-file" class="nav-link">elasticsearch-validate-pem-file</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#enable-easy-json" class="nav-link">enable-easy-json</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#enable-http-server" class="nav-link">enable-http-server</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#enable-oplog" class="nav-link">enable-oplog</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#enable-patches" class="nav-link">enable-patches</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#env-delimiter" class="nav-link">env-delimiter</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#exit-after-direct-reads" class="nav-link">exit-after-direct-reads</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#fail-fast" class="nav-link">fail-fast</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#file-downloaders" class="nav-link">file-downloaders</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#file-highlighting" class="nav-link">file-highlighting</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#file-namespaces" class="nav-link">file-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#filter" class="nav-link">filter</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#graylog-addr" class="nav-link">graylog-addr</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#gtm-settings" class="nav-link">gtm-settings</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#gzip" class="nav-link">gzip</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#http-server-addr" class="nav-link">http-server-addr</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#index-as-update" class="nav-link">index-as-update</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#index-files" class="nav-link">index-files</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#index-oplog-time" class="nav-link">index-oplog-time</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#index-stats" class="nav-link">index-stats</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#logs" class="nav-link">logs</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#log-rotate" class="nav-link">log-rotate</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mapper-plugin-path" class="nav-link">mapper-plugin-path</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mapping" class="nav-link">mapping</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#max-file-size" class="nav-link">max-file-size</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#merge-patch-attribute" class="nav-link">merge-patch-attribute</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-url" class="nav-link">mongo-url</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-config-url" class="nav-link">mongo-config-url</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-pem-file" class="nav-link">mongo-pem-file</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-validate-pem-file" class="nav-link">mongo-validate-pem-file</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-oplog-database-name" class="nav-link">mongo-oplog-database-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-oplog-collection-name" class="nav-link">mongo-oplog-collection-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-dial-settings" class="nav-link">mongo-dial-settings</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-session-settings" class="nav-link">mongo-session-settings</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#mongo-x509-settings" class="nav-link">mongo-x509-settings</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#namespace-drop-exclude-regex" class="nav-link">namespace-drop-exclude-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#namespace-drop-regex" class="nav-link">namespace-drop-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#namespace-exclude-regex" class="nav-link">namespace-exclude-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#namespace-regex" class="nav-link">namespace-regex</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#oplog-date-field-format" class="nav-link">oplog-date-field-format</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#oplog-date-field-name" class="nav-link">oplog-date-field-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#oplog-ts-field-name" class="nav-link">oplog-ts-field-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#patch-namespaces" class="nav-link">patch-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#pipeline_1" class="nav-link">pipeline</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#pipe-allow-disk" class="nav-link">pipe-allow-disk</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#post-processors" class="nav-link">post-processors</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#pprof" class="nav-link">pprof</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#print-config" class="nav-link">print-config</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#prune-invalid-json" class="nav-link">prune-invalid-json</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#relate" class="nav-link">relate</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#relate-buffer" class="nav-link">relate-buffer</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#relate-threads" class="nav-link">relate-threads</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#replay" class="nav-link">replay</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#resume" class="nav-link">resume</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#resume-from-timestamp" class="nav-link">resume-from-timestamp</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#resume-name" class="nav-link">resume-name</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#resume-strategy" class="nav-link">resume-strategy</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#resume-write-unsafe" class="nav-link">resume-write-unsafe</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#routing-namespaces" class="nav-link">routing-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#script_2" class="nav-link">script</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#stats_1" class="nav-link">stats</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#stats-duration" class="nav-link">stats-duration</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#stats-index-format" class="nav-link">stats-index-format</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#time-machine-namespaces" class="nav-link">time-machine-namespaces</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#time-machine-index-prefix" class="nav-link">time-machine-index-prefix</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#time-machine-index-suffix" class="nav-link">time-machine-index-suffix</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#time-machine-direct-reads" class="nav-link">time-machine-direct-reads</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#tpl" class="nav-link">tpl</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#verbose" class="nav-link">verbose</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#worker" class="nav-link">worker</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#workers" class="nav-link">workers</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-              </ul>
-            </li>
-        </ul>
-    </div>
-</div></div>
-                    <div class="col-md-9" role="main">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Monstache</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
 
-<h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../start/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#aws-connect">aws-connect</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#strategy">strategy</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#credentials-file">credentials-file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#profile">profile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#watch-credentials">watch-credentials</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#credentials-watch-dir">credentials-watch-dir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#force-expire">force-expire</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#access-key">access-key</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#secret-key">secret-key</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#region">region</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#change-stream-namespaces">change-stream-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#config-database-name">config-database-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cluster-name">cluster-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#delete-index-pattern">delete-index-pattern</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#delete-strategy">delete-strategy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-bounded">direct-read-bounded</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-concur">direct-read-concur</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-dynamic-exclude-regex">direct-read-dynamic-exclude-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-dynamic-include-regex">direct-read-dynamic-include-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-namespaces">direct-read-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-no-timeout">direct-read-no-timeout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-split-max">direct-read-split-max</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-read-stateful">direct-read-stateful</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#disable-change-events">disable-change-events</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#disable-file-pipeline-put">disable-file-pipeline-put</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dropped-databases">dropped-databases</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dropped-collections">dropped-collections</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-user">elasticsearch-user</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-password">elasticsearch-password</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-urls">elasticsearch-urls</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-healthcheck-timeout-startup">elasticsearch-healthcheck-timeout-startup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-healthcheck-timeout">elasticsearch-healthcheck-timeout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-version">elasticsearch-version</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-max-conns">elasticsearch-max-conns</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-retry">elasticsearch-retry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-client-timeout">elasticsearch-client-timeout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-max-docs">elasticsearch-max-docs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-max-bytes">elasticsearch-max-bytes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-max-seconds">elasticsearch-max-seconds</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-pem-file">elasticsearch-pem-file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-pki-auth">elasticsearch-pki-auth</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cert-file">cert-file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#key-file">key-file</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#elasticsearch-validate-pem-file">elasticsearch-validate-pem-file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enable-easy-json">enable-easy-json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enable-http-server">enable-http-server</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enable-oplog">enable-oplog</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enable-patches">enable-patches</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#env-delimiter">env-delimiter</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#exit-after-direct-reads">exit-after-direct-reads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fail-fast">fail-fast</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#file-downloaders">file-downloaders</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#file-highlighting">file-highlighting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#file-namespaces">file-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#filter">filter</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace">namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#script">script</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#path">path</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#graylog-addr">graylog-addr</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gtm-settings">gtm-settings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#channel-size">channel-size</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#buffer-size">buffer-size</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#buffer-duration">buffer-duration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#max-await-time">max-await-time</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gzip">gzip</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#http-server-addr">http-server-addr</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#index-as-update">index-as-update</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#index-files">index-files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#index-oplog-time">index-oplog-time</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#index-stats">index-stats</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#logs">logs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#info">info</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#warn">warn</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error">error</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#trace">trace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stats">stats</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#log-rotate">log-rotate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#max-size">max-size</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#max-age">max-age</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#max-backups">max-backups</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#localtime">localtime</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compress">compress</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mapper-plugin-path">mapper-plugin-path</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mapping">mapping</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace_1">namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#index">index</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type">type</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pipeline">pipeline</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#max-file-size">max-file-size</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#merge-patch-attribute">merge-patch-attribute</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-url">mongo-url</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-config-url">mongo-config-url</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-pem-file">mongo-pem-file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-validate-pem-file">mongo-validate-pem-file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-oplog-database-name">mongo-oplog-database-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-oplog-collection-name">mongo-oplog-collection-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-dial-settings">mongo-dial-settings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ssl">ssl</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#bool-default-false">bool (default false)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#timeout">timeout</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#int-default-15">int (default 15)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#read-timeout">read-timeout</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#int-default-30">int (default 30)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#write-timeout">write-timeout</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#int-default-30_1">int (default 30)</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-session-settings">mongo-session-settings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#socket-timeout">socket-timeout</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sync-timeout">sync-timeout</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo-x509-settings">mongo-x509-settings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#client-cert-pem-file">client-cert-pem-file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#client-key-pem-file">client-key-pem-file</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#namespace-drop-exclude-regex">namespace-drop-exclude-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#namespace-drop-regex">namespace-drop-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#namespace-exclude-regex">namespace-exclude-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#namespace-regex">namespace-regex</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#oplog-date-field-format">oplog-date-field-format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#oplog-date-field-name">oplog-date-field-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#oplog-ts-field-name">oplog-ts-field-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#patch-namespaces">patch-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pipeline_1">pipeline</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace_2">namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#script_1">script</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#path_1">path</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pipe-allow-disk">pipe-allow-disk</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#post-processors">post-processors</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pprof">pprof</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#print-config">print-config</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#prune-invalid-json">prune-invalid-json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#relate">relate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace_3">namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#with-namespace">with-namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#src-field">src-field</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#match-field">match-field</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#match-field-type">match-field-type</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#keep-src">keep-src</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#max-depth">max-depth</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dot-notation">dot-notation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#relate-buffer">relate-buffer</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#relate-threads">relate-threads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#replay">replay</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume">resume</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume-from-timestamp">resume-from-timestamp</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume-name">resume-name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume-strategy">resume-strategy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resume-write-unsafe">resume-write-unsafe</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#routing-namespaces">routing-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#script_2">script</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namespace_4">namespace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#routing">routing</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#script_3">script</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#path_2">path</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stats_1">stats</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stats-duration">stats-duration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stats-index-format">stats-index-format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#time-machine-namespaces">time-machine-namespaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#time-machine-index-prefix">time-machine-index-prefix</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#time-machine-index-suffix">time-machine-index-suffix</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#time-machine-direct-reads">time-machine-direct-reads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tpl">tpl</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#verbose">verbose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#worker">worker</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workers">workers</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../advanced/">Advanced</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Monstache</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/rwynn/monstache-site/edit/master/src/config.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
 <hr />
 <p>Configuration can be specified in environment variables (a limited set of options), in a TOML config file or 
 passed into monstache as program arguments on the command line.</p>
@@ -1417,82 +1371,65 @@ same worker and none of the other workers. See the <a href="../advanced/#workers
 <p class="admonition-title">Note</p>
 <p>This option may be passed on the command line as ./monstache --workers w1 --workers w2 </p>
 </div>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script></div>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script>
+              
             </div>
-        </div>
-
-        <footer class="col-md-12">
-            <hr>
-                <p>Copyright &copy; 2016 Ryan Wynn</p>
-            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
-        </footer>
-        <script>
-            var base_url = "..",
-                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
-        </script>
-        <script src="../js/base.js" defer></script>
-        <script src="../search/main.js" defer></script>
-
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-                <p>From here you can search these documents. Enter your search terms below.</p>
-                <form>
-                    <div class="form-group">
-                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../advanced/" class="btn btn-neutral float-right" title="Advanced">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../start/" class="btn btn-neutral" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>Copyright &copy; 2016 Ryan Wynn</p>
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
         </div>
-    </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/rwynn/monstache-site/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../start/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../advanced/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
-    </body>
+</body>
 </html>
