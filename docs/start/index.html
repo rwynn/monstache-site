@@ -12,13 +12,13 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/ocean.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/ocean.min.css">
         <link href="../css/extra.css" rel="stylesheet">
 
         <script src="../js/jquery-1.10.2.min.js" defer></script>
         <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
@@ -170,19 +170,17 @@ Go but you don't need to install the Go language unless you decide to write your
 </table>
 <p>Unzip the download and adjust your PATH variable to include the path to the folder for your platform.</p>
 <p>Let's make sure Monstache is set up as expected. You should see a similar version number in your terminal:</p>
-<pre><code class="sh">monstache -v
+<pre><code class="language-sh">monstache -v
 # 6.7.4
 </code></pre>
-
 <p>You can also build monstache from source. Monstache uses <a href="https://github.com/golang/go/wiki/Modules">vgo</a>. </p>
-<pre><code class="sh">cd ~/build # somewhere outside your $GOPATH
+<pre><code class="language-sh">cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
 git checkout &lt;branch-or-tag-to-build&gt;
 go install
 # monstache binary should now be in $GOPATH/bin
 </code></pre>
-
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>Monstache uses the MongoDB <a href="https://docs.mongodb.com/manual/core/replica-set-oplog/">oplog</a> as an event source. You will need to ensure
 that MongoDB is configured to produce an oplog by <a href="http://docs.mongodb.org/manual/tutorial/deploy-replica-set/">deploying a replica set</a>.
@@ -205,16 +203,14 @@ defaults to opening the change stream against the entire deployment.</p>
 on the default ports and begin tailing the MongoDB oplog.  Any changes to MongoDB while Monstache is running will be reflected in Elasticsearch.</p>
 <p>To see the indexes created by Monstache you may want to issue the following command which will show the indices in Elasticsearch. By default, the
 index names will match the db.collection name in MongoDB.</p>
-<pre><code class="sh">
+<pre><code class="language-sh">
 curl localhost:9200/_cat/indices?v
 
 </code></pre>
-
 <p>Monstache uses the <a href="https://github.com/toml-lang/toml">TOML</a> format for its configuration.  You can run 
 monstache with an explicit configuration by passing the -f flag.</p>
-<pre><code class="sh">monstache -f /path/to/config.toml
+<pre><code class="language-sh">monstache -f /path/to/config.toml
 </code></pre>
-
 <p>The following shows how to specify options in a TOML config file.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -295,7 +291,6 @@ cluster-name = 'apollo'
 # do not exit after full-sync, rather continue tailing the oplog
 exit-after-direct-reads = false
 </code></pre>
-
 <p>See <a href="../config/">Configuration</a> for details about each configuration
 option.</p>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "72240423b033493f80acd2f95b8e0f69"}'></script></div>
@@ -322,16 +317,13 @@ option.</p>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>

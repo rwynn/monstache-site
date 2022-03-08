@@ -12,13 +12,13 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/ocean.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/ocean.min.css">
         <link href="../css/extra.css" rel="stylesheet">
 
         <script src="../js/jquery-1.10.2.min.js" defer></script>
         <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
@@ -588,7 +588,7 @@ defaults to a comma.  E.g. <code>MONSTACHE_CHANGE_STREAM_NS=test.foo,test.bar</c
 </div>
 <h2 id="config-database-name">config-database-name<a class="headerlink" href="#config-database-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>monstache</code>) </p>
-<p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify <code>cluster-name</code> or enable <code>resume</code>.</p>
+<p>The name of the MongoDB database that monstache will store metadata under.  This metadata includes information to support resuming from a specific point in the oplog and managing cluster mode. This database is only written to for some configurations.  Namely, if you specify <code>cluster-name</code>, enable <code>resume</code> or set <code>direct-read-stateful</code>. WARNING: If you are listening to changes via <code>change-stream-namespaces</code>, you cannot set the same database to both listen to changes &amp; store the configs in.</p>
 <h2 id="cluster-name">cluster-name<a class="headerlink" href="#cluster-name" title="Permanent link">&para;</a></h2>
 <p>string (default <code>""</code>) (env var name <code>MONSTACHE_CLUSTER</code>)</p>
 <p>When cluster-name is given monstache will enter a high availablity mode. Processes with cluster name set to the same value will coordinate.  Only one of the
@@ -675,7 +675,6 @@ throughput by controlling replicas and the refresh interval. The index template 
   }
 }
 </code></pre>
-
 <h2 id="direct-read-no-timeout">direct-read-no-timeout<a class="headerlink" href="#direct-read-no-timeout" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When direct-read-no-timeout is true monstache will set the no cursor timeout flag on cursors opened for direct reads.
@@ -724,7 +723,6 @@ to index GridFS files:</p>
   ]
 }
 </code></pre>
-
 <h2 id="dropped-databases">dropped-databases<a class="headerlink" href="#dropped-databases" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>true</code>)</p>
 <p>When dropped-databases is false monstache will not delete the mapped indexes in Elasticsearch if a MongoDB database is dropped</p>
@@ -935,7 +933,6 @@ correctly then you can mitigate this problem with the following settings:</p>
 buffer-size = 2048
 buffer-duration = 4s
 </code></pre>
-
 <h2 id="index-files">index-files<a class="headerlink" href="#index-files" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When index-files is true monstache will index the raw content of files stored in GridFS into Elasticsearch as an attachment type.
@@ -1405,7 +1402,6 @@ module.exports = function(doc) {
 }
 &quot;&quot;&quot;
 </code></pre>
-
 <h2 id="verbose">verbose<a class="headerlink" href="#verbose" title="Permanent link">&para;</a></h2>
 <p>boolean (default <code>false</code>)</p>
 <p>When verbose is true monstache with enable debug logging including a trace of requests to Elasticsearch</p>
@@ -1445,16 +1441,13 @@ same worker and none of the other workers. See the <a href="../advanced/#workers
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>

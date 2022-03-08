@@ -12,13 +12,13 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/ocean.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/ocean.min.css">
         <link href="../css/extra.css" rel="stylesheet">
 
         <script src="../js/jquery-1.10.2.min.js" defer></script>
         <script src="../js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
@@ -147,25 +147,22 @@ Monstache you can do so with the following commands. This can be useful if you
 want to provide feedback for a new feature or want to confirm if a bug you
 have encountered is fixed in the git master. You will need at least golang <code>1.11</code>
 which includes native go modules support.</p>
-<pre><code class="bash">cd ~/build # somewhere outside your $GOPATH
+<pre><code class="language-bash">cd ~/build # somewhere outside your $GOPATH
 git clone https://github.com/rwynn/monstache.git
 cd monstache
 git checkout &lt;branch-to-build&gt;
 go install
 # the resulting monstache binary will be in $GOPATH/bin
 </code></pre>
-
 <h3 id="running-the-tests">Running the tests<a class="headerlink" href="#running-the-tests" title="Permanent link">&para;</a></h3>
 <p>To run the tests without Docker, you will need to have local mongod and elasticsearch servers running.<br />
 Then you will need to start a monstache process in one terminal or in the background.</p>
-<pre><code class="bash">monstache -verbose
+<pre><code class="language-bash">monstache -verbose
 </code></pre>
-
 <p>Finally in another terminal you can run the tests by issuing the following commands </p>
-<pre><code class="bash">cd monstache
+<pre><code class="language-bash">cd monstache
 go test -v
 </code></pre>
-
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Running the Monstache tests will perform modifications to the <code>test.test</code> namespace in 
@@ -538,7 +535,6 @@ write-timeout=0
 socket-timeout=0
 sync-timeout=0
 </code></pre>
-
 <h3 id="monstache-v3172"><a href="https://github.com/rwynn/monstache/releases/tag/v3.17.2">monstache v3.17.2</a><a class="headerlink" href="#monstache-v3172" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixes related to i/o timeout errors</li>
@@ -553,7 +549,6 @@ write-timeout=0
 socket-timeout=0
 sync-timeout=0
 </code></pre>
-
 <h3 id="monstache-v4101"><a href="https://github.com/rwynn/monstache/releases/tag/v4.10.1">monstache v4.10.1</a><a class="headerlink" href="#monstache-v4101" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Clean up timeout configurations and increase default timeout values</li>
@@ -568,7 +563,6 @@ write-timeout=30
 socket-timeout=600
 sync-timeout=600
 </code></pre>
-
 <h3 id="monstache-v3171"><a href="https://github.com/rwynn/monstache/releases/tag/v3.17.1">monstache v3.17.1</a><a class="headerlink" href="#monstache-v3171" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Clean up timeout configurations and increase default timeout values</li>
@@ -583,7 +577,6 @@ write-timeout=30
 socket-timeout=600
 sync-timeout=600
 </code></pre>
-
 <h3 id="monstache-v4100"><a href="https://github.com/rwynn/monstache/releases/tag/v4.10.0">monstache v4.10.0</a><a class="headerlink" href="#monstache-v4100" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for issue #97 where monstache would exit before syncing all documents with <code>-exit-after-direct-reads</code> enabled</li>
@@ -622,7 +615,6 @@ module.exports = function(doc, ns) {
 }
 &quot;&quot;&quot;
 </code></pre>
-
 <h3 id="monstache-v3170"><a href="https://github.com/rwynn/monstache/releases/tag/v3.16.0">monstache v3.17.0</a><a class="headerlink" href="#monstache-v3170" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix for issue #97 where monstache would exit before syncing all documents with <code>-exit-after-direct-reads</code> enabled</li>
@@ -1206,16 +1198,13 @@ elasticsearch-max-bytes went from 5MB -&gt; 8MB</p>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
+                <p>From here you can search these documents. Enter your search terms below.</p>
                 <form>
                     <div class="form-group">
                         <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
