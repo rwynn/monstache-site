@@ -370,7 +370,7 @@ The following example plugin simply converts top-level string values to uppercas
 ```go
 package main
 import (
-	"github.com/rwynn/monstache/monstachemap"
+	"github.com/rwynn/monstache/v6/monstachemap"
 	"strings"
 )
 // a plugin to convert document values to uppercase
