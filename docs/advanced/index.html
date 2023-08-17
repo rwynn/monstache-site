@@ -1349,10 +1349,40 @@ listens on :8080 by default but you can change this with --http-server-addr.</p>
 <h4 id="healthz">/healthz<a class="headerlink" href="#healthz" title="Permanent link">&para;</a></h4>
 <p>Returns at 200 status code with the text "ok" when monstache is running</p>
 <h4 id="stats">/stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h4>
-<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled</p>
+<p>Returns the current indexing statistics in JSON format. Only available if stats are enabled. Stats are populated by the Olivere Elasticsearch Go client</p>
+<p>
+<table>
+<tbody>
+<tr><th>Flushed</th><td>The number of times the flush interval has been invoked</td></tr>
+<tr><th>Committed</th>
+<td>The number of times workers committed bulk requests</td></tr>
+<tr><th>Indexed</th><td>The number of requests indexed</td></tr>
+<tr><th>Created</th><td>The number of requests that ES reported as creates (201)</td></tr>
+<tr><th>Updated</th><td>The number of requests that ES reported as updates</td></tr>
+<tr><th>Deleted</th><td>The number of requests that ES reported as deletes</td></tr>
+<tr><th>Succeeded</th><td>The number of requests that ES reported as successful</td></tr>
+<tr><th>Failed</th><td>The number of requests that ES reported as failed</td></tr>
+<tr><th>Workers[i].Queued</th><td>The number of ES requests queued in this worker</td></tr>
+<tr><th>Workers[i].LastDuration</th><td>The duration of last commit in Nanoseconds</td></tr>
+</tbody>
+</table>
+</p>
 <h4 id="instance">/instance<a class="headerlink" href="#instance" title="Permanent link">&para;</a></h4>
 <p>Returns information about the running monstache process including whether or not it is currently enabled
 (a cluster will have one enabled process) and the most recent change event timestamp read from MongoDB.</p>
+<p>
+<table>
+<tbody>
+<tr><th>enabled</th><td>true if this instance is enabled</td></tr>
+<tr><th>pid</th><td>The process id of the monstache process</td></tr>
+<tr><th>hostname</th><td>The hostname</td></tr>
+<tr><th>cluster</th><td>The <a href="../config/#cluster-name">cluster-name</a>, if one is set</td></tr>
+<tr><th>resumeName</th><td>The <a href="../config/#resume-name">resume-name</a>, if one is set</td></tr>
+<tr><th>lastTs</th><td><p>Last Timestamp processed from the oplog. BSON Timestamp object. <ul><li>T is the number of seconds since the Unix epoch</li><li>I is an incrementing ordinal for ops processed in the same second</li></ul></td></tr>
+<tr><th>lastTsFormat</th><td>Formatted version of last timestamp processed from the oplog</td></tr>
+</tbody>
+</table>
+</p>
 <h4 id="debug-if-pprof-is-enabled">/debug (if pprof is enabled)<a class="headerlink" href="#debug-if-pprof-is-enabled" title="Permanent link">&para;</a></h4>
 <p>If the pprof setting is enabled the following endpoints are also made available:</p>
 <ul>
