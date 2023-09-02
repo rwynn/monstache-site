@@ -460,7 +460,7 @@ When elasticsearch-validate-pem-file is false TLS will be configured to skip ver
 
 boolean (default `false`)
 
-When enable-easy-json is true monstache will the easy-json library to serialize requests to Elasticsearch
+When enable-easy-json is true monstache will use the easy-json library to serialize requests to Elasticsearch
 
 ## enable-http-server
 
